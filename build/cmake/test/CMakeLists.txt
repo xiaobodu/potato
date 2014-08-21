@@ -22,14 +22,17 @@ SET (LINK_PATH_LIST
   )
 link_directories(${LINK_PATH_LIST})
 
-set(LINK_FILE_LIST
-  potato
-  )
-link_libraries(${LINK_FILE_LIST})
-
 set(EXECUTABLE_OUTPUT_PATH ${OUT_PATH}/bin)
 
+add_definitions(-DENGINE_FILE=$<TARGET_FILE:engine>)
+
 ADD_EXECUTABLE (test ${CODE_FILE_LIST})
+
+set(LINK_FILE_LIST
+  potato
+  dl
+  )
+target_link_libraries(test ${LINK_FILE_LIST})
 
 # build dependicies
 SET (DEP_PROJ_LIST

@@ -7,6 +7,7 @@ set(SRC_PATH_engine ${SRC_PATH_potato}/engine)
 set(INC_PATH_LIST
   ${INC_PATH_potato}
   ${SRC_PATH_engine}
+  ${SRC_PATH_potato}/base
   )
 
 set(SRC_FILE_LIST
@@ -20,17 +21,17 @@ set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
 
 include_directories(${INC_PATH_LIST})
 
+add_library(engine SHARED ${SRC_FILE_LIST})
+
 set(LINK_FILE_LIST
-  common
+  base
   potato
   )
-link_libraries(${LINK_FILE_LIST})
-
-add_library(engine SHARED ${SRC_FILE_LIST})
+target_link_libraries(engine ${LINK_FILE_LIST})
 
 # build dependicies
 set(DEP_PROJ_LIST
-  common
+  base
   potato
   )
 add_dependencies(engine ${DEP_PROJ_LIST})

@@ -8,12 +8,10 @@ set(INC_PATH_potato "${CODE_PATH_potato}/inc")
 set(SRC_PATH_potato "${CODE_PATH_potato}/src")
 
 # add sub-project
-add_subdirectory(common)
 
 set(INC_PATH_LIST
   ${INC_PATH_potato}
   ${SRC_PATH_potato}
-  ${SRC_PATH_potato}/common
   )
 
 include_directories(${INC_PATH_LIST})
@@ -21,8 +19,9 @@ include_directories(${INC_PATH_LIST})
 set(SRC_FILE_LIST
   ${INC_PATH_potato}/potato.h
   ${SRC_PATH_potato}/potato.cpp
-  ${SRC_PATH_potato}/common/dynamiclibrary.h
-  ${SRC_PATH_potato}/common/dynamiclibrary.cpp
+  ${SRC_PATH_potato}/common.h
+  ${SRC_PATH_potato}/dynamiclibrary.h
+  ${SRC_PATH_potato}/dynamiclibrary.cpp
   )
 
 source_group("source" FILES ${SRC_FILE_LIST})
@@ -31,4 +30,6 @@ set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
 
 add_library(potato STATIC ${SRC_FILE_LIST})
 
+
+add_subdirectory(base)
 add_subdirectory(engine)

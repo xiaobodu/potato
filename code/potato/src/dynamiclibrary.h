@@ -1,7 +1,5 @@
 #pragma once
 
-#include "common.h"
-
 #include <map>
 #include <string>
 
@@ -9,22 +7,21 @@ namespace ac{
 namespace tool{
 
 // a dynamic library manage interface
-class CDynamicLibraryManager
+class DynamicLibraryManager
 {
-  class CDynamicLibraryHandler;
-
 public:
-  static CDynamicLibraryManager& Instance();
+  static DynamicLibraryManager& Instance();
 
 protected:
-  CDynamicLibraryManager();
-  virtual ~CDynamicLibraryManager();
+  DynamicLibraryManager();
+  virtual ~DynamicLibraryManager();
 
 public:
   virtual void* GetFunc(const std::string& rsFileName, const std::string& rsFuncName);
 
 private:
-  typedef std::map<std::string, CDynamicLibraryHandler> MapString2Handler;
+  class CDynamicLibraryHandler;
+  typedef std::map<std::string, CDynamicLibraryHandler*> MapString2Handler;
   MapString2Handler m_mapFileName2Handler;
 
   // help to call by template

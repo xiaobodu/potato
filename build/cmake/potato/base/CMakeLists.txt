@@ -1,0 +1,24 @@
+CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+
+PROJECT (base)
+
+SET (SRC_PATH_base ${SRC_PATH_potato}/base)
+
+SET (INC_PATH_LIST
+  ${SRC_PATH_base}
+  )
+
+SET (SRC_FILE_LIST
+  ${SRC_PATH_base}/base.h
+  ${SRC_PATH_base}/base.cpp
+  )
+
+SOURCE_GROUP ("source" FILES ${SRC_FILE_LIST})
+
+SET (LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
+
+INCLUDE_DIRECTORIES (${INC_PATH_LIST})
+
+ADD_LIBRARY (base STATIC ${SRC_FILE_LIST})
+
+
