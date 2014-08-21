@@ -1,0 +1,35 @@
+branches:
+  only:
+    - master
+
+language: cpp
+
+compiler:
+  - gcc
+
+before_install:
+  - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+  - sudo apt-get update
+  - sudo apt-get install cppcheck valgrind
+
+before_script:
+  - cppcheck code/ --quiet --error-exitcode=1
+  - mkdir build/make/
+  - cd build/make
+  - cmake ../cmake/
+  - cd ../../
+
+script:
+  - cd build/make/
+  - make
+  - cd ../../
+
+after_success:
+  - valgrind --leak-check=yes out/bin/test
+
+notifications:
+  email:
+    - alex@alexchi.me
+  on_success: change
+  on_failure: always
+

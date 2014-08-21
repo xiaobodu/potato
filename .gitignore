@@ -22,6 +22,7 @@
 
 # for vim
 *~
+*.swp
 
 # for eclipse
 .*project
