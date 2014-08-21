@@ -1,7 +1,8 @@
 CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 
-PROJECT (potato)
+PROJECT (all)
 
+# define/check environment
 IF ("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
   SET (OS_IS_LINUX TRUE)
 ELSEIF ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
@@ -18,9 +19,13 @@ ELSE ()
   MESSAGE (FATAL_ERROR "Sorry, don't support your compiler - ${CMAKE_CXX_COMPILER_ID}")
 ENDIF ()
 
+# define path
+SET (ROOT_PATH "${all_SOURCE_DIR}/../..")
+SET (CODE_PATH "${ROOT_PATH}/code")
+SET (OUT_PATH "${ROOT_PATH}/out")
 
-#ADD_SUBDIRECTORY ()
-~                                                                                    
-~                                                                                    
-~                                                                                    
-~                
+# add sub-project
+ADD_SUBDIRECTORY (potato)
+
+ADD_SUBDIRECTORY (test)
+

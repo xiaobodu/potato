@@ -19,3 +19,13 @@
 *.exe
 *.out
 *.app
+
+# for vim
+*~
+
+# for eclipse
+.*project
+
+# for Build
+build/*
+!build/cmake/
