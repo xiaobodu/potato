@@ -24,7 +24,7 @@ link_directories(${LINK_PATH_LIST})
 
 set(EXECUTABLE_OUTPUT_PATH ${OUT_PATH}/bin)
 
-add_definitions(-DENGINE_FILE=$<TARGET_FILE:engine>)
+add_definitions(-DENGINE_FILE="$<TARGET_FILE:engine>")
 
 ADD_EXECUTABLE (test ${CODE_FILE_LIST})
 

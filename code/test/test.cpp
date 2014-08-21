@@ -3,7 +3,7 @@
 #include <string>
 
 #if !defined(ENGINE_FILE)
-# define ENGINE_FILE ""
+#error "can't find the engine dynamic library?"
 #endif
 
 int main(int argc, char* argv[])
