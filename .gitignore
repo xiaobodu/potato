@@ -26,6 +26,7 @@
 # for eclipse
 .*project
 
-# for Build
+# for build
 build/*
 !build/cmake/
+out/
