@@ -1,14 +1,10 @@
 #pragma once
 
-#include <cassert>
-#include <cstring>
-
-#if !defined(NULL)
-# define NULL 0
-#endif
+#include <string>
 
 namespace ac {
-namespace tool {
+
+namespace core {
 
 class IEngine
 {
@@ -22,54 +18,22 @@ public:
 };
 
 }
-}
 
-extern "C" bool CreateEngine(ac::tool::IEngine*& rpEngine);
-extern "C" bool DestroyEngine(ac::tool::IEngine*& rpEngine);
-
-namespace ac {
-namespace tool {
-
-class CPotato
+class Potato
 {
 public:
-  static CPotato& Instance()
-  {
-    static CPotato gs_potato;
-    return gs_potato;
-  }
-
-public:
-  inline IEngine*& GetEngine()
-  {
-    return m_pEngine;
-  }
+  static Potato& Instance(const std::string& rsConfigPath);
 
 protected:
-  CPotato() :
-      m_pEngine(NULL), m_iError(0)
-  {
-    if (!CreateEngine(m_pEngine))
-    {
-      assert(0);
-    }
-  }
-
-  virtual ~CPotato()
-  {
-    DestroyEngine(m_pEngine);
-  }
+  Potato(const std::string& rsConfigPath);
+  virtual ~Potato();
 
 public:
-  int GetError()
-  {
-    return m_iError;
-  }
+  core::IEngine*& GetEngine();
 
 private:
-  int m_iError;
-  IEngine* m_pEngine;
+  std::string m_sConfigPath;
+  core::IEngine* m_pEngine;
 };
 
-}
 }

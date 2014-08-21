@@ -1,37 +1,34 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT (potato)
+project(potato)
 
-SET (CODE_PATH_potato ${CODE_PATH}/potato)
+set(CODE_PATH_potato ${CODE_PATH}/potato)
 
-SET (INC_PATH_potato "${CODE_PATH_potato}/inc")
-SET (SRC_PATH_potato "${CODE_PATH_potato}/src")
+set(INC_PATH_potato "${CODE_PATH_potato}/inc")
+set(SRC_PATH_potato "${CODE_PATH_potato}/src")
 
 # add sub-project
-ADD_SUBDIRECTORY (common)
+add_subdirectory(common)
 
-SET (INC_PATH_LIST
+set(INC_PATH_LIST
   ${INC_PATH_potato}
   ${SRC_PATH_potato}
+  ${SRC_PATH_potato}/common
   )
 
-SET (SRC_FILE_LIST
+include_directories(${INC_PATH_LIST})
+
+set(SRC_FILE_LIST
   ${INC_PATH_potato}/potato.h
   ${SRC_PATH_potato}/potato.cpp
+  ${SRC_PATH_potato}/common/dynamiclibrary.h
+  ${SRC_PATH_potato}/common/dynamiclibrary.cpp
   )
 
-SOURCE_GROUP ("source" FILES ${SRC_FILE_LIST})
+source_group("source" FILES ${SRC_FILE_LIST})
 
-SET (LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
+set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
 
-INCLUDE_DIRECTORIES (${INC_PATH_LIST})
+add_library(potato STATIC ${SRC_FILE_LIST})
 
-ADD_LIBRARY (potato STATIC ${SRC_FILE_LIST})
-
-# build dependicies
-SET (DEP_PROJ_LIST
-  common
-  )
-
-ADD_DEPENDENCIES (potato ${DEP_PROJ_LIST})
-
+add_subdirectory(engine)

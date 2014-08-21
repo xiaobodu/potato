@@ -11,6 +11,8 @@ SET (INC_PATH_LIST
 SET (SRC_FILE_LIST
   ${SRC_PATH_common}/common.h
   ${SRC_PATH_common}/common.cpp
+  ${SRC_PATH_common}/dynamiclibrary.h
+  ${SRC_PATH_common}/dynamiclibrary.cpp
   )
 
 SOURCE_GROUP ("source" FILES ${SRC_FILE_LIST})
