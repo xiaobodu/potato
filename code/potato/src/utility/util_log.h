@@ -2,9 +2,13 @@
 
 #include <cstdio>
 #include <cassert>
+#include <cstdarg>
+#include <cstdio>
 
 namespace ac{
 namespace utility{
+
+#define TEXT_BUFFER_SIZE_MAX            512
 
 // define the style/color code
 #define TEXT_STYLE_END                  "\x1b[0m"
@@ -34,6 +38,13 @@ const static char* TextStyleCode[] = {TEXT_STYLE_END,
     TEXT_STYLE_BGCOLOR_BLACK, TEXT_STYLE_BGCOLOR_RED, TEXT_STYLE_BGCOLOR_GREEN, TEXT_STYLE_BGCOLOR_YELLOW,
     TEXT_STYLE_BGCOLOR_BLUE, TEXT_STYLE_BGCOLOR_MAGENTA, TEXT_STYLE_BGCOLOR_CYAN, TEXT_STYLE_BGCOLOR_WHITE
 };
+
+#define GET_ARGS_TEXT(text, result)\
+    static char result[TEXT_BUFFER_SIZE_MAX];\
+    va_list args;\
+    va_start(args, rcText);\
+    vsprintf(gs_aLogBuffer, rcText, args);\
+    va_end(args)
 
 class Log
 {
@@ -76,48 +87,57 @@ protected:
 public:
   void Fatal(const char* const& rcText) const
   {
-    (*this)(stderr, EStyle_BGColor_Red, "FATA", rcText);
+    GET_ARGS_TEXT(rcText, gs_aLogBuffer);
+    (*this)(stderr, EStyle_BGColor_Red, "FATA", gs_aLogBuffer);
   }
 
   void Error(const char* const& rcText) const
   {
-    (*this)(stderr, EStyle_Color_Red, "ERRO", rcText);
+    GET_ARGS_TEXT(rcText, gs_aLogBuffer);
+    (*this)(stderr, EStyle_Color_Red, "ERRO", gs_aLogBuffer);
   }
 
   void Warning(const char* const& rcText) const
   {
-    (*this)(stdout, EStyle_Color_Yellow, "WARN", rcText);
+    GET_ARGS_TEXT(rcText, gs_aLogBuffer);
+    (*this)(stdout, EStyle_Color_Yellow, "WARN", gs_aLogBuffer);
   }
 
-  void System(const char* const& rcText) const
+  void System(const char* const& rcText, ...) const
   {
-    (*this)(stdout, EStyle_Color_Cyan, "SYST", rcText);
+    GET_ARGS_TEXT(rcText, gs_aLogBuffer);
+    (*this)(stdout, EStyle_Color_Cyan, "SYST", gs_aLogBuffer);
   }
 
   void Info(const char* const& rcText) const
   {
-    (*this)(stdout, EStyle_None, "INFO", rcText);
+    GET_ARGS_TEXT(rcText, gs_aLogBuffer);
+    (*this)(stdout, EStyle_None, "INFO", gs_aLogBuffer);
   }
 
   void Debug(const char* const& rcText) const
   {
-    (*this)(stdout, EStyle_Color_Magenta, "DEBU", rcText);
+    GET_ARGS_TEXT(rcText, gs_aLogBuffer);
+    (*this)(stdout, EStyle_Color_Magenta, "DEBU", gs_aLogBuffer);
   }
 
   void User(const char* const& rcText) const
   {
-    (*this)(stdout, EStyle_Color_Green, "USER", rcText);
+    GET_ARGS_TEXT(rcText, gs_aLogBuffer);
+    (*this)(stdout, EStyle_Color_Green, "USER", gs_aLogBuffer);
   }
 
-  void operator()(FILE* pFile, const LogStyle& eStyle, const char* const& rcTitle, const char* const& rcText) const
+  void operator()(FILE* pFile, const LogStyle& eStyle, const char* const& rcTitle, const char* const& rcText, ...) const
   {
     assert(pFile != NULL);
     assert(rcTitle != NULL);
     assert(rcText != NULL);
 
+    GET_ARGS_TEXT(rcText, gs_aLogBuffer);
+
     switch (eStyle) {
     case EStyle_None:
-      fprintf(pFile, "[%s] %s\n", rcTitle, rcText);
+      fprintf(pFile, "[%s] %s\n", rcTitle, gs_aLogBuffer);
       break;
 
     case EStyle_Bold:
@@ -137,7 +157,7 @@ public:
     case EStyle_BGColor_Magenta:
     case EStyle_BGColor_Cyan:
     case EStyle_BGColor_White:
-      fprintf(stdout, "[%s%s"TEXT_STYLE_END"] %s%s"TEXT_STYLE_END"\n", TextStyleCode[eStyle], rcTitle, TextStyleCode[eStyle], rcText);
+      fprintf(stdout, "[%s%s"TEXT_STYLE_END"] %s%s"TEXT_STYLE_END"\n", TextStyleCode[eStyle], rcTitle, TextStyleCode[eStyle], gs_aLogBuffer);
       break;
 
     default:
@@ -148,12 +168,12 @@ public:
   }
 
 public:
-  void TestAll() const
+  void TestAllLogTypes()
   {
     Fatal("TestAll");
     Error("TestAll");
     Warning("TestAll");
-    System("TestAll");
+    System("TestAll %d", 212);
     Info("TestAll");
     Debug("TestAll");
     User("TestAll");

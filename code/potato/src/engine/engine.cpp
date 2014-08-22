@@ -51,7 +51,7 @@ public:
     int i = 0;
     while (Status)
     {
-      utility::Log::Instance().System("dd 8978456q123d4789ewr");
+      utility::Log::Instance().System("second %d", i++);
       //std::cout << "second is " << i++ << std::endl;
       sleep(1);
     }
