@@ -46,15 +46,16 @@ public:
 
   virtual void Do()
   {
-    utility::Log::Instance().System("do the render work");
+    utility::Log::Instance().System("start the render work");
 
     int i = 0;
     while (Status)
     {
-      utility::Log::Instance().System("second %d", i++);
+      utility::Log::Instance().System("%d the render worker", i++);
       //std::cout << "second is " << i++ << std::endl;
       sleep(1);
     }
+    utility::Log::Instance().System("end the render work");
   }
   volatile int Status;
 };
@@ -69,9 +70,20 @@ public:
 
   virtual void Do()
   {
-    utility::Log::Instance().System("do the net work");
-    sleep(5);
+    utility::Log::Instance().System("start the net work");
+    int i = 0;
+    while (1)
+    {
+      utility::Log::Instance().System("%d the net worker", i++);
+      //std::cout << "second is " << i++ << std::endl;
+      sleep(1);
+      if (5 == i)
+      {
+        break;
+      }
+    }
     m_pRenderWorker->Status = 0;
+    utility::Log::Instance().System("end the net work");
   }
 
 private:
@@ -80,6 +92,7 @@ private:
 
 void CEngine::Run()
 {
+  utility::Log::Instance().TestAllLogTypes();
   utility::Log::Instance().System("engine is running");
 
   RendWorker render_worker;
