@@ -4,5 +4,5 @@ mkdir -p out/bin
 mkdir -p out/lib
 
 cd build/make/
-cmake -D CMAKE_BUILD_TYPE=Debug ../cmake/
+cmake -D CMAKE_BUILD_TYPE=DEBUG ../cmake/
 cd ../../

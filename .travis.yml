@@ -16,7 +16,7 @@ before_script:
   - cppcheck code/ --quiet --error-exitcode=1
   - mkdir build/make/
   - cd build/make
-  - cmake ../cmake/
+  - cmake -D CMAKE_BUILD_TYPE=RELEASE ../cmake/
   - cd ../../
 
 script:
