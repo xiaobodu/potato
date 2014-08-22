@@ -18,6 +18,7 @@ public:
   virtual ~CEngine();
 
 public:
+  virtual void Run();
 };
 
 }

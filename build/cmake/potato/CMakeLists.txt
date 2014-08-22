@@ -34,4 +34,5 @@ add_library(potato STATIC ${SRC_FILE_LIST})
 
 
 add_subdirectory(base)
+add_subdirectory(thread)
 add_subdirectory(engine)

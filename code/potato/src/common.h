@@ -18,6 +18,7 @@
     typedef bool (*FUNC_API_TYPE(function_name))(class_class*& rpClass, config_class& roConfig);
 
 namespace ac{
+
 namespace base{
 
 typedef struct tagConfig
@@ -39,5 +40,22 @@ typedef struct tagConfig
 
 } Config;
 
-}
-}
+} // end of namespace base
+
+namespace core {
+
+class IEngine
+{
+public:
+  virtual ~IEngine()
+  {
+    ;
+  }
+
+public:
+  virtual void Run() = 0;
+};
+
+} // end of namespace core
+
+} // end of namespace ac
