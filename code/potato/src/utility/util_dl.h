@@ -4,7 +4,7 @@
 #include <string>
 
 namespace ac{
-namespace tool{
+namespace utility{
 
 // a dynamic library manage interface
 class DynamicLibraryManager

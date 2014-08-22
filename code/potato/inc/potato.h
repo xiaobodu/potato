@@ -22,17 +22,16 @@ public:
 class Potato
 {
 public:
-  static Potato& Instance(const std::string& rsConfigPath);
+  static Potato& Instance(const std::string& rsDataPath, const std::string& rsConfigFile);
 
 protected:
-  Potato(const std::string& rsConfigPath);
+  Potato(const std::string& rsDataPath, const std::string& rsConfigFile);
   virtual ~Potato();
 
 public:
   core::IEngine*& GetEngine();
 
 private:
-  std::string m_sConfigPath;
   core::IEngine* m_pEngine;
 };
 

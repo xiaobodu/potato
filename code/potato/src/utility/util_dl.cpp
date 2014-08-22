@@ -1,10 +1,10 @@
-#include "dynamiclibrary.h"
+#include "util_dl.h"
 
 #include <dlfcn.h>
 #include <cassert>
 
 namespace ac{
-namespace tool{
+namespace utility{
 
 DynamicLibraryManager& DynamicLibraryManager::Instance()
 {

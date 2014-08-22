@@ -1,15 +1,17 @@
 #include "engine.h"
 
+#include "utility/util_log.h"
+
 #include <cassert>
 
-bool CreateEngine(ac::core::IEngine*& rpEngine)
+bool CreateEngine(ac::core::IEngine*& rpEngine, const ac::base::Config& roConfig)
 {
   assert(rpEngine == NULL);
-  rpEngine = new ac::core::CEngine;
+  rpEngine = new ac::core::CEngine(roConfig);
   return true;
 }
 
-bool DestroyEngine(ac::core::IEngine*& rpEngine)
+bool DestroyEngine(ac::core::IEngine*& rpEngine, const ac::base::Config& roConfig)
 {
   assert(rpEngine != NULL);
   delete rpEngine;
@@ -20,14 +22,15 @@ bool DestroyEngine(ac::core::IEngine*& rpEngine)
 namespace ac{
 namespace core{
 
-CEngine::CEngine()
+CEngine::CEngine(const ac::base::Config& roConfig)
 {
-  ;
+  utility::Log::Instance().TestAll();
+  utility::Log::Instance().Info("call the 'CEngine' constructor");
 }
 
 CEngine::~CEngine()
 {
-  ;
+  utility::Log::Instance().Info("call the 'CEngine' destructor");
 }
 
 }

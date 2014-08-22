@@ -8,6 +8,7 @@ set(INC_PATH_LIST
   ${INC_PATH_potato}
   ${SRC_PATH_engine}
   ${SRC_PATH_potato}/base
+  ${SRC_PATH_potato}/utility
   )
 
 set(SRC_FILE_LIST
