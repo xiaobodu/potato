@@ -51,7 +51,8 @@ public:
     int i = 0;
     while (Status)
     {
-      std::cout << i++ << std::endl;
+      utility::Log::Instance().System("dd 8978456q123d4789ewr");
+      //std::cout << "second is " << i++ << std::endl;
       sleep(1);
     }
   }
@@ -77,32 +78,15 @@ private:
   RendWorker* m_pRenderWorker;
 };
 
-class EngineWorker : public thread::IWorker
-{
-public:
-  EngineWorker() { ; }
-  virtual ~EngineWorker() { ; }
-
-public:
-  virtual void Do()
-  {
-    utility::Log::Instance().System("do the engine work");
-
-    RendWorker render_worker;
-    NetWorker net_worker;
-    net_worker.SetRenderWorker(&render_worker);
-    thread::IWorker* workers[] = {&render_worker, &net_worker};
-    thread::DoJob(workers, 2);
-  }
-};
-
 void CEngine::Run()
 {
   utility::Log::Instance().System("engine is running");
 
-  EngineWorker worker;
-  thread::IWorker* workers[] = {&worker};
-  thread::DoJob(workers, 1);
+  RendWorker render_worker;
+  NetWorker net_worker;
+  net_worker.SetRenderWorker(&render_worker);
+  thread::IWorker* workers[] = {&render_worker, &net_worker};
+  thread::DoJob(workers, 2);
 }
 
 }
