@@ -1,9 +1,5 @@
 #pragma once
 
-#include "common.h"
-
-#include <pthread.h>
-
 namespace ac {
 
 namespace thread {

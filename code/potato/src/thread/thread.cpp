@@ -1,14 +1,15 @@
-#include "thread.h"
-
 #include <cassert>
 #include <pthread.h>
+
+#include "thread.h"
 
 namespace ac{
 namespace thread{
 
 void *DoWork(void* pData)
 {
-  IWorker* worker_ptr = (IWorker*)pData;
+  /// force to cast
+  IWorker* worker_ptr = reinterpret_cast<IWorker*>(pData);
   worker_ptr->Do();
 
   /// terminate the thread
