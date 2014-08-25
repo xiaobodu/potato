@@ -4,6 +4,10 @@
 
 #include "display/display.h"
 
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <GL/glx.h>
+
 namespace ac{
 namespace core{
 
@@ -14,6 +18,13 @@ public:
   virtual ~CDisplay();
 
 public:
+
+private:
+  Display*      m_pDisplay;
+  int           m_iScreen;
+  Window        m_lWindow;
+  XVisualInfo*  m_pVisualInfo;
+  GLXContext    m_pContext;
 };
 
 }

@@ -26,6 +26,7 @@ add_library(render STATIC ${SRC_FILE_LIST})
 
 set(LINK_FILE_LIST
   base
+  GL
   )
 target_link_libraries(render ${LINK_FILE_LIST})
 

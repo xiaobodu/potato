@@ -25,6 +25,8 @@ add_library(render_gl SHARED ${SRC_FILE_LIST})
 set(LINK_FILE_LIST
   base
   render
+  GL
+  GLU
   )
 target_link_libraries(render_gl ${LINK_FILE_LIST})
 

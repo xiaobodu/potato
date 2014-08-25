@@ -25,6 +25,8 @@ add_library(display_linux SHARED ${SRC_FILE_LIST})
 set(LINK_FILE_LIST
   base
   display
+  X11
+  GL
   )
 target_link_libraries(display_linux ${LINK_FILE_LIST})
 
