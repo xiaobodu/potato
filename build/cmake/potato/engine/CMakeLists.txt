@@ -7,9 +7,6 @@ set(SRC_PATH_engine ${SRC_PATH_potato}/engine)
 set(INC_PATH_LIST
   ${INC_PATH_potato}
   ${SRC_PATH_engine}
-  ${SRC_PATH_potato}/base
-  ${SRC_PATH_potato}/thread
-  ${SRC_PATH_potato}/utility
   )
 
 set(SRC_FILE_LIST
@@ -27,16 +24,23 @@ add_library(engine SHARED ${SRC_FILE_LIST})
 
 set(LINK_FILE_LIST
   base
+  display
+  render
   thread
+  ui
   potato
   pthread
+  dl
   )
 target_link_libraries(engine ${LINK_FILE_LIST})
 
 # build dependicies
 set(DEP_PROJ_LIST
   base
+  display
+  render
   thread
+  ui
   potato
   )
 add_dependencies(engine ${DEP_PROJ_LIST})

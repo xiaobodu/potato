@@ -1,0 +1,18 @@
+{
+  "display": {
+    "library": {
+      "file": "out/lib/libdisplay_linux.so"
+    },
+    "configure": {
+      "file": "data/display.json"
+    }
+  },
+  "render": {
+    "library": {
+      "file": "out/lib/librender_gl.so"
+    },
+    "configure": {
+      "file": "data/render.json"
+    }
+  }
+}

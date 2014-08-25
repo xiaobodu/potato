@@ -16,7 +16,7 @@ set(SRC_FILE_LIST
 
 source_group("source" FILES ${SRC_FILE_LIST})
 
-# compile the thread project with position independance code
+# compile the thread project with position independence code
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
@@ -24,3 +24,8 @@ set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
 include_directories(${INC_PATH_LIST})
 
 add_library(thread STATIC ${SRC_FILE_LIST})
+
+set(LINK_FILE_LIST
+  pthread
+  )
+target_link_libraries(thread ${LINK_FILE_LIST})

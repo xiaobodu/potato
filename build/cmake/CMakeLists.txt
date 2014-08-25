@@ -55,6 +55,5 @@ SET (OUT_PATH "${ROOT_PATH}/out")
 
 # add sub-project
 ADD_SUBDIRECTORY (potato)
-
 ADD_SUBDIRECTORY (test)
 

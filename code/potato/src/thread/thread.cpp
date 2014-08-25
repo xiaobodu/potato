@@ -1,3 +1,7 @@
+/*!
+ * \file thread.cpp
+ * \brief the implement for the thread.h file
+ */
 #include <cassert>
 #include <pthread.h>
 
@@ -6,8 +10,10 @@
 namespace ac{
 namespace thread{
 
-void *DoWork(void* pData)
+void *DoWorkFuncPtr(void* pData)
 {
+  assert(NULL != pData);
+
   /// force to cast
   IWorker* worker_ptr = reinterpret_cast<IWorker*>(pData);
   worker_ptr->Do();
@@ -18,6 +24,10 @@ void *DoWork(void* pData)
 
 void DoJob(thread::IWorker* pWorkers[], const int& riCount)
 {
+  if (0 >= riCount) {
+    return;
+  }
+
   void* status_ptr;
   pthread_attr_t attr;
   pthread_attr_init(&attr);
@@ -27,13 +37,16 @@ void DoJob(thread::IWorker* pWorkers[], const int& riCount)
   pthread_t* threads = new pthread_t[riCount];
 
   int i = 0;
+
+  /// create a thread for every workers
   for (i = 0; i < riCount; ++i)
   {
-    assert(0 == pthread_create(&threads[i], &attr, DoWork, (void*)pWorkers[i]));
+    assert(0 == pthread_create(&threads[i], &attr, DoWorkFuncPtr, (void*)pWorkers[i]));
   }
 
   pthread_attr_destroy(&attr);
 
+  /// run all threads
   for (i = 0; i < riCount; ++i)
   {
     pthread_join(threads[i], &status_ptr);
@@ -43,7 +56,7 @@ void DoJob(thread::IWorker* pWorkers[], const int& riCount)
   delete[] threads;
 
   /// terminate the thread
-  pthread_exit(NULL);
+  //pthread_exit(NULL);
 }
 
 } // end of namespace thread
