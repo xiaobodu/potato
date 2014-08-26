@@ -12,6 +12,8 @@ set(INC_PATH_LIST
 set(SRC_FILE_LIST
   ${SRC_PATH_engine}/engine.h
   ${SRC_PATH_engine}/engine.cpp
+  ${SRC_PATH_potato}/utility/util_dl.h
+  ${SRC_PATH_potato}/utility/util_dl.cpp
   )
 
 source_group("source" FILES ${SRC_FILE_LIST})

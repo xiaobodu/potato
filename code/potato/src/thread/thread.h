@@ -20,11 +20,11 @@ public:
   virtual void Ready() = 0;
   virtual void Start() = 0;
   /*!
-   * \func Run(const float& rfDeltaS)
-   * \param rfDeltaS the delta time in second
+   * \func Run(const double& rdDeltaS)
+   * \param rdDeltaS the delta time in second
    */
-  virtual void Run(const float& rfDeltaS) = 0;
-  virtual void Stop() = 0;
+  virtual void Tick(const double& rdDeltaS) = 0;
+  virtual void End() = 0;
 };
 
 /*!

@@ -51,7 +51,9 @@ DynamicLibraryManager::CDynamicLibraryHandler::CDynamicLibraryHandler(const std:
 
 DynamicLibraryManager::CDynamicLibraryHandler::~CDynamicLibraryHandler()
 {
+#if !defined(BUILD_DEBUG)
   dlclose(m_pLib);
+#endif
 }
 
 void* DynamicLibraryManager::CDynamicLibraryHandler::GetFunc(const std::string& rsFuncName)

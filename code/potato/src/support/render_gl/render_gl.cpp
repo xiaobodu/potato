@@ -1,5 +1,7 @@
 #include "render_gl.h"
 
+#include "utility/util_log.h"
+
 #include <cassert>
 #include <GL/gl.h>
 #include <GL/glx.h>
@@ -8,27 +10,53 @@
 namespace ac{
 namespace core{
 
-void resizeGL(unsigned int width, unsigned int height)
+void resizeGL(int width, int height)
 {
   if (height == 0)
+  {
       height = 1;
+  }
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
   glMatrixMode(GL_MODELVIEW);
+  glFlush();
 }
 
 void drawGL()
 {
   glClearColor(0.2, 0.4, 0.6, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  //
-  //glXSwapBuffers();
+
+  glLoadIdentity();
+  glTranslatef(-1.5f, 0.0f, -6.0f);
+  glBegin(GL_TRIANGLES);
+      glVertex3f(0.0f, 1.0f, 0.0f);
+      glVertex3f(-1.0f, -1.0f, 0.0f);
+      glVertex3f(1.0f, -1.0f, 0.0f);
+  glEnd();
+  glTranslatef(3.0f, 0.0f, 0.0f);
+  glBegin(GL_QUADS);
+      glVertex3f(-1.0f, 1.0f, 0.0f);
+      glVertex3f(1.0f, 1.0f, 0.0f);
+      glVertex3f(1.0f, -1.0f, 0.0f);
+      glVertex3f(-1.0f, -1.0f, 0.0f);
+  glEnd();
 }
 
 
 CRender::CRender(const base::Config& roConfig)
+{
+  ;
+}
+
+CRender::~CRender()
+{
+  ;
+}
+
+void CRender::Start()
 {
   glShadeModel(GL_SMOOTH);
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -36,15 +64,26 @@ CRender::CRender(const base::Config& roConfig)
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-  /* we use resizeGLScene once to set up our initial perspective */
-  resizeGL(200, 200);
-  glFlush();
-  drawGL();
 }
 
-CRender::~CRender()
+bool CRender::Tick(const double& rdDeltaS)
 {
-  ;
+  drawGL();
+
+  //utility::Log::Instance().Info("second: %f", rdDeltaS);
+  //
+
+  return true;
+}
+
+void CRender::End()
+{
+  //
+}
+
+void CRender::Resize(const int& riWidth, const int& riHeight)
+{
+  resizeGL(riWidth, riHeight);
 }
 
 }

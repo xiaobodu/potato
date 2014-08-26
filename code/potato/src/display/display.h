@@ -2,6 +2,8 @@
 
 #include "common.h"
 
+#include "render/render.h"
+
 namespace ac{
 namespace core{
 
@@ -11,6 +13,8 @@ public:
   virtual ~IDisplay() { ; }
 
 public:
+  virtual void BindRender(IRender*& rpRender) = 0;
+  virtual void Run() = 0;
 };
 
 } // end of namespace core

@@ -13,6 +13,12 @@ public:
   virtual ~CRender();
 
 public:
+  virtual void Start();
+  virtual bool Tick(const double& rdDeltaS);
+  virtual void End();
+  virtual void Resize(const int& riWidth, const int& riHeight);
+
+private:
 };
 
 }

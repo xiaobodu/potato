@@ -8,6 +8,7 @@
 #include "render/render.h"
 
 #include "thread/thread.h"
+
 #include "utility/util_log.h"
 #include "utility/util_file.h"
 #include "utility/util_dl.h"
@@ -78,6 +79,9 @@ CEngine::CEngine(const ac::base::Config& roConfig)
     /// create the display with configure
     func_create_func_ptr(m_pRender, m_oConfigDisplay);
   }
+
+  /// bind the render to the display
+  m_pDisplay->BindRender(m_pRender);
 }
 
 CEngine::~CEngine()
@@ -101,60 +105,27 @@ CEngine::~CEngine()
   }
 }
 
-class RendWorker : public thread::IWorker
+class DisplayWorker : public thread::IWorker
 {
 public:
-  RendWorker()
-    : Status(1)
+  DisplayWorker(IDisplay*& rpDisplay)
+    : m_pDisplay(rpDisplay)
   {
-    ;
+    assert(NULL != rpDisplay);
   }
-  virtual ~RendWorker() { ; }
+  virtual ~DisplayWorker() { ; }
 
   virtual void Do()
   {
-    utility::Log::Instance().System("start the render work");
+    utility::Log::Instance().System("start the display work");
 
-    int i = 0;
-    while (Status)
-    {
-      utility::Log::Instance().System("%d the render worker", i++);
-      //std::cout << "second is " << i++ << std::endl;
-      sleep(1);
-    }
-    utility::Log::Instance().System("end the render work");
-  }
-  volatile int Status;
-};
+    m_pDisplay->Run();
 
-class NetWorker : public thread::IWorker
-{
-public:
-  void SetRenderWorker(RendWorker* pWorker)
-  {
-    m_pRenderWorker = pWorker;
-  }
-
-  virtual void Do()
-  {
-    utility::Log::Instance().System("start the net work");
-    int i = 0;
-    while (1)
-    {
-      utility::Log::Instance().System("%d the net worker", i++);
-      //std::cout << "second is " << i++ << std::endl;
-      sleep(1);
-      if (5 == i)
-      {
-        break;
-      }
-    }
-    m_pRenderWorker->Status = 0;
-    utility::Log::Instance().System("end the net work");
+    utility::Log::Instance().System("end the display work");
   }
 
 private:
-  RendWorker* m_pRenderWorker;
+  IDisplay* m_pDisplay;
 };
 
 void CEngine::Run()
@@ -162,11 +133,9 @@ void CEngine::Run()
   utility::Log::Instance().TestAllLogTypes();
   utility::Log::Instance().System("engine is running");
 
-  RendWorker render_worker;
-  NetWorker net_worker;
-  net_worker.SetRenderWorker(&render_worker);
-  thread::IWorker* workers[] = {&render_worker, &net_worker};
-  thread::DoJob(workers, 2);
+  DisplayWorker display_worker(m_pDisplay);
+  thread::IWorker* workers[] = {&display_worker};
+  thread::DoJob(workers, 1);
 }
 
 }

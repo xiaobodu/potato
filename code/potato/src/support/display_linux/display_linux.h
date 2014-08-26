@@ -3,6 +3,7 @@
 #include "common.h"
 
 #include "display/display.h"
+#include "render/render.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -18,13 +19,22 @@ public:
   virtual ~CDisplay();
 
 public:
+  virtual void BindRender(IRender*& rpRender);
+  virtual void Run();
+
+protected:
+  void CreateWindow();
+  void DestroyWindow();
 
 private:
   Display*      m_pDisplay;
-  int           m_iScreen;
   Window        m_lWindow;
-  XVisualInfo*  m_pVisualInfo;
   GLXContext    m_pContext;
+  bool          m_bIsRunning;
+  int           m_iWidth;
+  int           m_iHeight;
+
+  IRender*      m_pRender;
 };
 
 }
