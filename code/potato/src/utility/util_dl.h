@@ -17,7 +17,7 @@ protected:
   virtual ~DynamicLibraryManager();
 
 public:
-  virtual void* GetFunc(const std::string& rsFileName, const std::string& rsFuncName);
+  virtual void* GetFuncPtr(const std::string& rsFileName, const std::string& rsFuncName);
 
 private:
   class CDynamicLibraryHandler;
@@ -29,7 +29,7 @@ public:
   template<typename TFuncPtr>
   TFuncPtr GetFunc(const std::string& rsFileName, const std::string& rsFuncName)
   {
-    return reinterpret_cast<TFuncPtr>(GetFunc(rsFileName, rsFuncName));
+    return reinterpret_cast<TFuncPtr>(GetFuncPtr(rsFileName, rsFuncName));
   }
 
 private:

@@ -1,15 +1,16 @@
 #include <cassert>
 #include <unistd.h>
-#include <iostream>
 #include <string>
 
+//#define RAPIDJSON_NOMEMBERITERATORCLASS
 #include <rapidjson/document.h>
+//#undef RAPIDJSON_NOMEMBERITERATORCLASS
 
 #include "engine.h"
-#include "display/display.h"
-#include "render/render.h"
+#include "display.h"
+#include "render.h"
 
-#include "thread/thread.h"
+#include "utility/thread.h"
 
 #include "utility/util_log.h"
 #include "utility/util_file.h"

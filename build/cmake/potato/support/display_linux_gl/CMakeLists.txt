@@ -6,6 +6,7 @@ set(SRC_PATH_display_linux_gl ${SRC_PATH_support}/display_linux_gl)
 
 set(INC_PATH_LIST
   ${SRC_PATH_potato}
+  ${SRC_PATH_potato}/engine
   ${SRC_PATH_display_linux_gl}
   )
 
@@ -23,16 +24,7 @@ include_directories(${INC_PATH_LIST})
 add_library(display_linux_gl SHARED ${SRC_FILE_LIST})
 
 set(LINK_FILE_LIST
-  base
-  display
   X11
   GL
   )
 target_link_libraries(display_linux_gl ${LINK_FILE_LIST})
-
-# build dependicies
-set(DEP_PROJ_LIST
-  base
-  display
-  )
-add_dependencies(display_linux_gl ${DEP_PROJ_LIST})

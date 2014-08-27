@@ -30,4 +30,5 @@
 # for build
 build/*
 !build/cmake/
+!build/android/jni/
 out/

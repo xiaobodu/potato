@@ -32,12 +32,6 @@ set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
 
 add_library(potato STATIC ${SRC_FILE_LIST})
 
-
-add_subdirectory(base)
-add_subdirectory(display)
-add_subdirectory(render)
-add_subdirectory(ui)
-add_subdirectory(thread)
 add_subdirectory(engine)
 
 add_subdirectory(support)

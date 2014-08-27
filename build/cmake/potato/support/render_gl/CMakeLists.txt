@@ -6,6 +6,7 @@ set(SRC_PATH_render_gl ${SRC_PATH_support}/render_gl)
 
 set(INC_PATH_LIST
   ${SRC_PATH_potato}
+  ${SRC_PATH_potato}/engine
   ${SRC_PATH_render_gl}
   )
 
@@ -23,16 +24,7 @@ include_directories(${INC_PATH_LIST})
 add_library(render_gl SHARED ${SRC_FILE_LIST})
 
 set(LINK_FILE_LIST
-  base
-  render
   GL
   GLU
   )
 target_link_libraries(render_gl ${LINK_FILE_LIST})
-
-# build dependicies
-set(DEP_PROJ_LIST
-  base
-  render
-  )
-add_dependencies(render_gl ${DEP_PROJ_LIST})

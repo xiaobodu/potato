@@ -1,7 +1,7 @@
 #pragma once
 
 #include "common.h"
-#include "render/render.h"
+#include "render.h"
 
 namespace ac{
 namespace render{

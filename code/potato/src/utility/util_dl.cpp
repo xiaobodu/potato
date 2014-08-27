@@ -29,7 +29,7 @@ DynamicLibraryManager::~DynamicLibraryManager()
   m_mapFileName2Handler.clear();
 }
 
-void* DynamicLibraryManager::GetFunc(const std::string& rsFileName, const std::string& rsFuncName)
+void* DynamicLibraryManager::GetFuncPtr(const std::string& rsFileName, const std::string& rsFuncName)
 {
   MapString2Handler::iterator it = m_mapFileName2Handler.find(rsFileName);
   if (it != m_mapFileName2Handler.end())

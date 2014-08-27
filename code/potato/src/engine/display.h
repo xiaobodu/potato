@@ -1,7 +1,5 @@
 #pragma once
 
-#include <X11/Xlib.h>
-
 namespace ac{
 namespace core{
 

@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-#include "display/display.h"
+#include "display.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>

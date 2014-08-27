@@ -6,6 +6,7 @@ set(SRC_PATH_render_gles ${SRC_PATH_support}/render_gles)
 
 set(INC_PATH_LIST
   ${SRC_PATH_potato}
+  ${SRC_PATH_potato}/engine
   ${SRC_PATH_render_gles}
   )
 
@@ -23,16 +24,7 @@ include_directories(${INC_PATH_LIST})
 add_library(render_gles SHARED ${SRC_FILE_LIST})
 
 set(LINK_FILE_LIST
-  base
-  render
   EGL
   GLESv1_CM
   )
 target_link_libraries(render_gles ${LINK_FILE_LIST})
-
-# build dependicies
-set(DEP_PROJ_LIST
-  base
-  render
-  )
-add_dependencies(render_gles ${DEP_PROJ_LIST})

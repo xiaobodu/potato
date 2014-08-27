@@ -10,10 +10,18 @@ set(INC_PATH_LIST
   )
 
 set(SRC_FILE_LIST
+  ${SRC_PATH_engine}/base.h
+  ${SRC_PATH_engine}/display.h
+  ${SRC_PATH_engine}/render.h
+  ${SRC_PATH_engine}/ui.h
+  ${SRC_PATH_engine}/package.h
   ${SRC_PATH_engine}/engine.h
   ${SRC_PATH_engine}/engine.cpp
+  ${SRC_PATH_potato}/utility/thread.h
+  ${SRC_PATH_potato}/utility/thread.cpp
   ${SRC_PATH_potato}/utility/util_dl.h
   ${SRC_PATH_potato}/utility/util_dl.cpp
+  ${SRC_PATH_potato}/utility/util_file.h
   )
 
 source_group("source" FILES ${SRC_FILE_LIST})
@@ -25,11 +33,6 @@ include_directories(${INC_PATH_LIST})
 add_library(engine SHARED ${SRC_FILE_LIST})
 
 set(LINK_FILE_LIST
-  base
-  display
-  render
-  thread
-  ui
   potato
   pthread
   dl
@@ -38,11 +41,6 @@ target_link_libraries(engine ${LINK_FILE_LIST})
 
 # build dependicies
 set(DEP_PROJ_LIST
-  base
-  display
-  render
-  thread
-  ui
   potato
   )
 add_dependencies(engine ${DEP_PROJ_LIST})

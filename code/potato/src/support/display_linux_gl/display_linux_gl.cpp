@@ -2,8 +2,7 @@
 
 #include "display_linux_gl.h"
 
-#include "render/render.h"
-#include "thread/thread.h"
+#include "render.h"
 
 #include "utility/util_file.h"
 

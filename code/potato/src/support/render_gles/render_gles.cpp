@@ -1,7 +1,5 @@
 #include "render_gles.h"
 
-#include "display/display.h"
-
 #include "utility/util_log.h"
 
 #include <cassert>
@@ -29,7 +27,11 @@ void CRender::Start()
   glDepthFunc(GL_LEQUAL);
   //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-  GLuint tex;
+  /*GLuint tex;
+  glGenTextures(1, &tex);
+  glBindTexture(GL_TEXTURE_2D, tex);
+  //
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);*/
 }
 
 void CRender::Resize(int iWidth, int iHeight)

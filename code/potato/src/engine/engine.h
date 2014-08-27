@@ -3,13 +3,13 @@
 #include "common.h"
 #include "potato.h"
 
-#include "display/display.h"
-#include "render/render.h"
-
 #include <string>
 
 namespace ac{
 namespace core{
+
+class IDisplay;
+class IRender;
 
 class CEngine : public IEngine
 {
