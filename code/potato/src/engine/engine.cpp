@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 
+#include <rapidjson/document.h>
+
 #include "engine.h"
 #include "display/display.h"
 #include "render/render.h"
@@ -12,8 +14,6 @@
 #include "utility/util_log.h"
 #include "utility/util_file.h"
 #include "utility/util_dl.h"
-
-#include <rapidjson/document.h>
 
 FUNC_API_TYPEDEF(CreateDisplay, ac::core::IDisplay, const ac::base::Config);
 FUNC_API_TYPEDEF(DestroyDisplay, ac::core::IDisplay, const ac::base::Config);
@@ -130,7 +130,6 @@ private:
 
 void CEngine::Run()
 {
-  utility::Log::Instance().TestAllLogTypes();
   utility::Log::Instance().System("engine is running");
 
   DisplayWorker display_worker(m_pDisplay);

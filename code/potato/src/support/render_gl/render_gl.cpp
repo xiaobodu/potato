@@ -4,11 +4,11 @@
 
 #include <cassert>
 #include <GL/gl.h>
-#include <GL/glx.h>
 #include <GL/glu.h>
 
 namespace ac{
-namespace core{
+namespace render{
+namespace gl{
 
 void resizeGL(int width, int height)
 {
@@ -19,10 +19,19 @@ void resizeGL(int width, int height)
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
+  glViewport(0, 0, width, height);
+  gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 1.0f, 100.0f);
+
   glMatrixMode(GL_MODELVIEW);
   glFlush();
 }
+
+GLfloat square[] = {
+  0.25, 0.25, 0.0,
+  0.75, 0.25, 0.0,
+  0.25, 0.75, 0.0,
+  0.75, 0.75, 0.0
+    };
 
 void drawGL()
 {
@@ -30,7 +39,13 @@ void drawGL()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glLoadIdentity();
-  glTranslatef(-1.5f, 0.0f, -6.0f);
+
+  glTranslatef(0.0f, 0.0f, -6.0f);
+  glVertexPointer(3, GL_FLOAT, 0, square);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+  /*glTranslatef(-1.5f, 0.0f, -6.0f);
   glBegin(GL_TRIANGLES);
       glVertex3f(0.0f, 1.0f, 0.0f);
       glVertex3f(-1.0f, -1.0f, 0.0f);
@@ -42,11 +57,12 @@ void drawGL()
       glVertex3f(1.0f, 1.0f, 0.0f);
       glVertex3f(1.0f, -1.0f, 0.0f);
       glVertex3f(-1.0f, -1.0f, 0.0f);
-  glEnd();
+  glEnd();*/
 }
 
 
 CRender::CRender(const base::Config& roConfig)
+  : m_pDisplay(NULL)
 {
   ;
 }
@@ -81,18 +97,19 @@ void CRender::End()
   //
 }
 
-void CRender::Resize(const int& riWidth, const int& riHeight)
+void CRender::Resize(int iWidth, int iHeight)
 {
-  resizeGL(riWidth, riHeight);
+  resizeGL(iWidth, iHeight);
 }
 
+}
 }
 }
 
 bool CreateRender(ac::core::IRender*& rpRender, const ac::base::Config& roConfig)
 {
   assert(rpRender == NULL);
-  rpRender = new ac::core::CRender(roConfig);
+  rpRender = new ac::render::gl::CRender(roConfig);
   return true;
 }
 

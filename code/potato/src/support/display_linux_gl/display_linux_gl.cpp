@@ -1,37 +1,22 @@
 #include <rapidjson/document.h>
 
-#include "display_linux.h"
+#include "display_linux_gl.h"
+
+#include "render/render.h"
 #include "thread/thread.h"
 
 #include "utility/util_file.h"
-#include "utility/util_dl.h"
 
 #include <cassert>
 #include <unistd.h>
 #include <sys/time.h>
-
 #include <GL/glx.h>
 
-FUNC_API_TYPEDEF(CreateRender, ac::core::IRender, const ac::base::Config);
-FUNC_API_TYPEDEF(DestroyRender, ac::core::IRender, const ac::base::Config);
+namespace ac {
+namespace display {
 
-namespace ac{
-namespace core{
-
-static int gs_aAttrList[] = { GLX_RGBA, GLX_DOUBLEBUFFER,
-    GLX_RED_SIZE, 4,
-    GLX_GREEN_SIZE, 4,
-    GLX_BLUE_SIZE, 4,
-    GLX_ALPHA_SIZE, 4,
-    GLX_DEPTH_SIZE, 16,
-    None };
-
-CDisplay::CDisplay(const ac::base::Config& roConfig)
-  : m_pDisplay(NULL)
-  , m_lWindow(0)
-  , m_pContext(NULL)
-  , m_bIsRunning(true)
-  , m_pRender(NULL)
+CDisplay::CDisplay(const ac::base::Config& roConfig) :
+    m_pDisplay(NULL), m_lWindow(0), m_pGLContext(NULL), m_bIsRunning(true), m_pRender(NULL)
 {
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
 
@@ -54,7 +39,7 @@ CDisplay::~CDisplay()
   ;
 }
 
-void CDisplay::BindRender(IRender*& rpRender)
+void CDisplay::BindRender(core::IRender*& rpRender)
 {
   assert(NULL != rpRender && NULL == m_pRender);
   m_pRender = rpRender;
@@ -84,15 +69,15 @@ void CDisplay::Run()
       switch (event.type)
       {
       /*case Expose:
-        if (event.xexpose.count != 0)
-        {
-          break;
-        }
-        if (m_pRender->Tick(second_delta))
-        {
-          glXSwapBuffers(m_pDisplay, m_lWindow);
-        }
-        break;*/
+       if (event.xexpose.count != 0)
+       {
+       break;
+       }
+       if (m_pRender->Tick(second_delta))
+       {
+       glXSwapBuffers(m_pDisplay, m_lWindow);
+       }
+       break;*/
 
       case ConfigureNotify:
         if (event.xconfigure.width != m_iWidth || event.xconfigure.height != m_iHeight)
@@ -129,7 +114,7 @@ void CDisplay::Run()
     if (0.001 < second_sleep)
     {
       //printf("%d time: s-%f | temp-%f | delta-%f | spf-%f | sleep-%f\n", ++count, second, second_temp, second_delta, second_per_frame_min, second_sleep);
-      usleep(static_cast<__useconds_t>(second_sleep * 1000000));
+      usleep(static_cast<__useconds_t >(second_sleep * 1000000));
     }
   }
 
@@ -141,33 +126,40 @@ void CDisplay::CreateWindow()
 {
   m_pDisplay = XOpenDisplay(NULL);
   assert(NULL != m_pDisplay);
+  int screen_id = DefaultScreen(m_pDisplay);
 
-  XVisualInfo* visual_info_ptr = glXChooseVisual(m_pDisplay, DefaultScreen(m_pDisplay), gs_aAttrList);
+  static int attrListDbl[] = {
+      GLX_RGBA, GLX_DOUBLEBUFFER,
+      GLX_RED_SIZE, 8,
+      GLX_GREEN_SIZE, 8,
+      GLX_BLUE_SIZE, 8,
+      GLX_ALPHA_SIZE, 8,
+      GLX_DEPTH_SIZE, 8,
+      None };
+  XVisualInfo* visual_info_ptr = glXChooseVisual(m_pDisplay, screen_id, attrListDbl);
   assert(NULL != visual_info_ptr);
+
+  m_pGLContext = glXCreateContext(m_pDisplay, visual_info_ptr, 0, GL_TRUE);
+  assert(NULL != m_pGLContext);
 
   XSetWindowAttributes attr;
   attr.colormap = XCreateColormap(m_pDisplay, RootWindow(m_pDisplay, visual_info_ptr->screen), visual_info_ptr->visual, AllocNone);
   attr.border_pixel = 0;
-  attr.override_redirect = True;
   attr.event_mask = ExposureMask | KeyReleaseMask | ButtonReleaseMask | StructureNotifyMask;
-  /// can't resize the window size
-  //attr.do_not_propagate_mask = ResizeRedirectMask;
-  m_lWindow = XCreateWindow(m_pDisplay, RootWindow(m_pDisplay, visual_info_ptr->screen), 0, 0, m_iWidth, m_iHeight, 0,
-      visual_info_ptr->depth, InputOutput, visual_info_ptr->visual,
-      CWBorderPixel | CWColormap | CWEventMask, &attr);
-  XMapRaised(m_pDisplay, m_lWindow);
 
-  m_pContext = glXCreateContext(m_pDisplay, visual_info_ptr, 0, GL_TRUE);
-  //TODO: how to release all memory about x window
+  m_lWindow = XCreateWindow(m_pDisplay, RootWindow(m_pDisplay, visual_info_ptr->screen),
+              0, 0, m_iWidth, m_iHeight, 0, visual_info_ptr->depth, InputOutput, visual_info_ptr->visual,
+              CWBorderPixel | CWColormap | CWEventMask, &attr);
+  XMapWindow(m_pDisplay, m_lWindow);
   XFree(visual_info_ptr);
 
-  glXMakeCurrent(m_pDisplay, m_lWindow, m_pContext);
+  glXMakeCurrent(m_pDisplay, m_lWindow, m_pGLContext);
 }
 
 void CDisplay::DestroyWindow()
 {
   glXMakeCurrent(m_pDisplay, None, NULL);
-  glXDestroyContext(m_pDisplay, m_pContext);
+  glXDestroyContext(m_pDisplay, m_pGLContext);
   XDestroyWindow(m_pDisplay, m_lWindow);
   XCloseDisplay(m_pDisplay);
 }
@@ -178,7 +170,7 @@ void CDisplay::DestroyWindow()
 bool CreateDisplay(ac::core::IDisplay*& rpDisplay, const ac::base::Config& roConfig)
 {
   assert(rpDisplay == NULL);
-  rpDisplay = new ac::core::CDisplay(roConfig);
+  rpDisplay = new ac::display::CDisplay(roConfig);
   return true;
 }
 

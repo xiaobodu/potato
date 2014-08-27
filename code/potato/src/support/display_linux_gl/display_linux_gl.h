@@ -3,23 +3,22 @@
 #include "common.h"
 
 #include "display/display.h"
-#include "render/render.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <GL/glx.h>
 
 namespace ac{
-namespace core{
+namespace display{
 
-class CDisplay : public IDisplay
+class CDisplay : public core::IDisplay
 {
 public:
   CDisplay(const ac::base::Config& roConfig);
   virtual ~CDisplay();
 
 public:
-  virtual void BindRender(IRender*& rpRender);
+  virtual void BindRender(core::IRender*& rpRender);
   virtual void Run();
 
 protected:
@@ -29,19 +28,15 @@ protected:
 private:
   Display*      m_pDisplay;
   Window        m_lWindow;
-  GLXContext    m_pContext;
+
+  GLXContext    m_pGLContext;
+
   bool          m_bIsRunning;
   int           m_iWidth;
   int           m_iHeight;
 
-  IRender*      m_pRender;
+  core::IRender*      m_pRender;
 };
-
-}
-
-namespace display{
-
-
 
 }
 }

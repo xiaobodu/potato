@@ -1,11 +1,11 @@
 #pragma once
 
-#include "common.h"
-
-#include "render/render.h"
+#include <X11/Xlib.h>
 
 namespace ac{
 namespace core{
+
+class IRender;
 
 class IDisplay
 {

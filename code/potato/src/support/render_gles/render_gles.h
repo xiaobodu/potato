@@ -5,7 +5,6 @@
 
 namespace ac{
 namespace render{
-namespace gl{
 
 class CRender : public core::IRender
 {
@@ -15,15 +14,14 @@ public:
 
 public:
   virtual void Start();
-  virtual bool Tick(const double& rdDeltaS);
   virtual void Resize(int iWidth, int iHeight);
+  virtual bool Tick(const double& rdDeltaS);
   virtual void End();
 
 private:
-  core::IDisplay* m_pDisplay;
+  void Perspective(double fovy, double aspect, double near, double far);
 };
 
-}
 }
 }
 
