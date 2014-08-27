@@ -28,7 +28,7 @@
 .*project
 
 # for build
-build/*
+build/
 !build/cmake/
 !build/android/jni/
 out/
