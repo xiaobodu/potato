@@ -8,10 +8,10 @@
 #include <X11/Xutil.h>
 #include <GL/glx.h>
 
-namespace ac{
-namespace display{
+namespace ac {
+namespace display {
 
-class CDisplay : public core::IDisplay
+class CDisplay: public core::IDisplay
 {
 public:
   CDisplay(const ac::base::Config& roConfig);
@@ -26,16 +26,16 @@ protected:
   void DestroyWindow();
 
 private:
-  Display*      m_pDisplay;
-  Window        m_lWindow;
+  Display* m_pDisplay;
+  Window m_lWindow;
 
-  GLXContext    m_pGLContext;
+  GLXContext m_pGLContext;
 
-  bool          m_bIsRunning;
-  int           m_iWidth;
-  int           m_iHeight;
+  bool m_bIsRunning;
+  int m_iWidth;
+  int m_iHeight;
 
-  core::IRender*      m_pRender;
+  core::IRender* m_pRender;
 };
 
 }

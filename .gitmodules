@@ -1,3 +1,6 @@
 [submodule "code/external/rapidjson"]
 	path = code/external/rapidjson
 	url = https://github.com/miloyip/rapidjson.git
+[submodule "code/external/libpng"]
+	path = code/external/libpng
+	url = https://github.com/code4game/libpng.git

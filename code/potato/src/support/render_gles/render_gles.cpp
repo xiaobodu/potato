@@ -11,9 +11,6 @@
 namespace ac {
 namespace render {
 
-GLfloat square1[] = { 0.25, 0.25, 0.0, 0.75, 0.25, 0.0, 0.25, 0.75, 0.0, 0.75, 0.75, 0.0 };
-GLfloat square2[] = { 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.5, 0.0, 0.5, 0.5, 0.0 };
-
 CRender::CRender(const base::Config& roConfig)
 {
   ;
@@ -27,11 +24,12 @@ CRender::~CRender()
 void CRender::Start()
 {
   glShadeModel(GL_SMOOTH);
-  GLenum err = glGetError();
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
   //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+  GLuint tex;
 }
 
 void CRender::Resize(int iWidth, int iHeight)
@@ -40,22 +38,18 @@ void CRender::Resize(int iWidth, int iHeight)
   {
     iHeight = 1;
   }
-  GLenum err = glGetError();
   glViewport(0, 0, iWidth, iHeight);
-  err = glGetError();
   glMatrixMode(GL_PROJECTION);
-  err = glGetError();
   glLoadIdentity();
-  err = glGetError();
 
   glViewport(0, 0, iWidth, iHeight);
-  err = glGetError();
   Perspective(45.0f, (GLfloat) iWidth / (GLfloat) iHeight, 1.0f, 100.0f);
   glMatrixMode(GL_MODELVIEW);
-  err = glGetError();
-  err = 0;
   //glFlush();
 }
+
+GLfloat square1[] = { 0.25, 0.25, 0.0, 0.75, 0.25, 0.0, 0.25, 0.75, 0.0, 0.75, 0.75, 0.0 };
+GLfloat square2[] = { 0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5, 1.0, 0.5, 0.5, 1.0 };
 
 bool CRender::Tick(const double& rdDeltaS)
 {
@@ -64,7 +58,7 @@ bool CRender::Tick(const double& rdDeltaS)
 
   glLoadIdentity();
 
-  /*glTranslatef(0.0f, 0.0f, 6.0f);
+  glTranslatef(0.0f, 0.0f, -6.0f);
   glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
   glVertexPointer(3, GL_FLOAT, 0, square1);
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -73,7 +67,7 @@ bool CRender::Tick(const double& rdDeltaS)
   glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
   glVertexPointer(3, GL_FLOAT, 0, square2);
   glEnableClientState(GL_VERTEX_ARRAY);
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);*/
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
   //utility::Log::Instance().Info("second: %f", rdDeltaS);
 
@@ -87,24 +81,17 @@ void CRender::End()
 
 void CRender::Perspective(double fovy, double aspect, double near, double far)
 {
-  GLenum err = glGetError();
   glMatrixMode(GL_PROJECTION);
-  err = glGetError();
   glLoadIdentity();
-  err = glGetError();
 
-  double left, right, top, bottom;
+  double top = tan(M_PI * fovy * 0.5 / 360.0) * near;
+  double bottom = 0.0 - top;
 
-  top = tan(M_PI * fovy * 0.5 / 360.0) * near;
-  bottom = 0.0 - top;
+  double right = top * aspect;
+  double left = 0.0 - right;
 
-  right = top * aspect;
-  left = 0.0 - right;
-
-  glFrustumf(left, right, top, bottom, near, far);
-  err = glGetError();
-  err = 0;
-  //assert(GL_NO_ERROR == err);
+  glFrustumf(left, right, bottom, top, near, far);
+  assert(GL_NO_ERROR == glGetError());
 }
 
 }

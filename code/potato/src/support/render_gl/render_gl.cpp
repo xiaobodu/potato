@@ -6,63 +6,50 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-namespace ac{
-namespace render{
-namespace gl{
+namespace ac {
+namespace render {
+namespace gl {
 
 void resizeGL(int width, int height)
 {
   if (height == 0)
   {
-      height = 1;
+    height = 1;
   }
   glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   glViewport(0, 0, width, height);
-  gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 1.0f, 100.0f);
+  gluPerspective(45.0f, (GLfloat) width / (GLfloat) height, 1.0f, 100.0f);
 
   glMatrixMode(GL_MODELVIEW);
   glFlush();
 }
 
-GLfloat square[] = {
-  0.25, 0.25, 0.0,
-  0.75, 0.25, 0.0,
-  0.25, 0.75, 0.0,
-  0.75, 0.75, 0.0
-    };
+GLfloat square1[] = { 0.25, 0.25, 0.0, 0.75, 0.25, 0.0, 0.25, 0.75, 0.0, 0.75, 0.75, 0.0 };
+GLfloat square2[] = { 0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5, 1.0, 0.5, 0.5, 1.0 };
 
 void drawGL()
 {
   glClearColor(0.2, 0.4, 0.6, 1.0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
   glLoadIdentity();
 
   glTranslatef(0.0f, 0.0f, -6.0f);
-  glVertexPointer(3, GL_FLOAT, 0, square);
+  glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+  glVertexPointer(3, GL_FLOAT, 0, square1);
   glEnableClientState(GL_VERTEX_ARRAY);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-  /*glTranslatef(-1.5f, 0.0f, -6.0f);
-  glBegin(GL_TRIANGLES);
-      glVertex3f(0.0f, 1.0f, 0.0f);
-      glVertex3f(-1.0f, -1.0f, 0.0f);
-      glVertex3f(1.0f, -1.0f, 0.0f);
-  glEnd();
-  glTranslatef(3.0f, 0.0f, 0.0f);
-  glBegin(GL_QUADS);
-      glVertex3f(-1.0f, 1.0f, 0.0f);
-      glVertex3f(1.0f, 1.0f, 0.0f);
-      glVertex3f(1.0f, -1.0f, 0.0f);
-      glVertex3f(-1.0f, -1.0f, 0.0f);
-  glEnd();*/
+  glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+  glVertexPointer(3, GL_FLOAT, 0, square2);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-
-CRender::CRender(const base::Config& roConfig)
-  : m_pDisplay(NULL)
+CRender::CRender(const base::Config& roConfig) :
+    m_pDisplay(NULL)
 {
   ;
 }

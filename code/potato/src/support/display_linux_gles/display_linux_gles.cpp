@@ -24,7 +24,7 @@ namespace display {
 
 CDisplay::CDisplay(const ac::base::Config& roConfig) :
     m_pDisplay(NULL), m_lWindow(0), m_pGLConfig(NULL), m_pGLDisplay(NULL), m_pGLContext(NULL), m_pGLSurface(
-        NULL), m_bIsRunning(true), m_pRender(NULL)
+    NULL), m_bIsRunning(true), m_pRender(NULL)
 {
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
 
@@ -142,17 +142,17 @@ void CDisplay::CreateWindow()
   assert(eglInitialize(m_pGLDisplay, &egl_major, &egl_minor));
 
   static const EGLint attribs[] = {
-      EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
-      EGL_RED_SIZE, 8,
-      EGL_GREEN_SIZE, 8,
-      EGL_BLUE_SIZE, 8,
-      EGL_ALPHA_SIZE, 8,
-      EGL_BUFFER_SIZE, 32,
-      EGL_DEPTH_SIZE, 8,
-      EGL_STENCIL_SIZE, 1,
-      EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-      EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
-      EGL_NONE };
+  EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
+  EGL_RED_SIZE, 8,
+  EGL_GREEN_SIZE, 8,
+  EGL_BLUE_SIZE, 8,
+  EGL_ALPHA_SIZE, 8,
+  EGL_BUFFER_SIZE, 32,
+  EGL_DEPTH_SIZE, 8,
+  EGL_STENCIL_SIZE, 1,
+  EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+  EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
+  EGL_NONE };
 
   int num_configs = 0;
   assert(eglChooseConfig(m_pGLDisplay, attribs, &m_pGLConfig, 1, &num_configs));
@@ -180,20 +180,18 @@ void CDisplay::CreateWindow()
   attr.colormap = XCreateColormap(m_pDisplay, root_window, visual_info_ptr->visual, AllocNone);
   attr.event_mask = StructureNotifyMask | ExposureMask | KeyReleaseMask | ButtonReleaseMask;
   unsigned long mask = CWBackPixel | CWBorderPixel | CWColormap | CWEventMask;
-  m_lWindow = XCreateWindow(m_pDisplay, root_window, 0, 0, m_iWidth, m_iHeight,
-           0, visual_info_ptr->depth, InputOutput,
-           visual_info_ptr->visual, mask, &attr);
+  m_lWindow = XCreateWindow(m_pDisplay, root_window, 0, 0, m_iWidth, m_iHeight, 0, visual_info_ptr->depth, InputOutput,
+      visual_info_ptr->visual, mask, &attr);
 
   eglBindAPI(EGL_OPENGL_ES_API);
 
-  static const EGLint ctx_attribs[] = {
-        EGL_NONE
-     };
-  m_pGLContext = eglCreateContext(m_pGLDisplay, m_pGLConfig, EGL_NO_CONTEXT, ctx_attribs);
-  assert(NULL != m_pGLContext);
-
   m_pGLSurface = eglCreateWindowSurface(m_pGLDisplay, m_pGLConfig, m_lWindow, NULL);
   assert(NULL != m_pGLSurface);
+
+  static const EGLint ctx_attribs[] = {
+  EGL_NONE };
+  m_pGLContext = eglCreateContext(m_pGLDisplay, m_pGLConfig, EGL_NO_CONTEXT, ctx_attribs);
+  assert(NULL != m_pGLContext);
 
   //TODO: how to release all memory about x window
   XFree(visual_info_ptr);

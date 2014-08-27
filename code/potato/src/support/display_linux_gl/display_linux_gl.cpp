@@ -129,13 +129,13 @@ void CDisplay::CreateWindow()
   int screen_id = DefaultScreen(m_pDisplay);
 
   static int attrListDbl[] = {
-      GLX_RGBA, GLX_DOUBLEBUFFER,
-      GLX_RED_SIZE, 8,
-      GLX_GREEN_SIZE, 8,
-      GLX_BLUE_SIZE, 8,
-      GLX_ALPHA_SIZE, 8,
-      GLX_DEPTH_SIZE, 8,
-      None };
+  GLX_RGBA, GLX_DOUBLEBUFFER,
+  GLX_RED_SIZE, 8,
+  GLX_GREEN_SIZE, 8,
+  GLX_BLUE_SIZE, 8,
+  GLX_ALPHA_SIZE, 8,
+  GLX_DEPTH_SIZE, 8,
+  None };
   XVisualInfo* visual_info_ptr = glXChooseVisual(m_pDisplay, screen_id, attrListDbl);
   assert(NULL != visual_info_ptr);
 
@@ -143,13 +143,14 @@ void CDisplay::CreateWindow()
   assert(NULL != m_pGLContext);
 
   XSetWindowAttributes attr;
-  attr.colormap = XCreateColormap(m_pDisplay, RootWindow(m_pDisplay, visual_info_ptr->screen), visual_info_ptr->visual, AllocNone);
+  attr.colormap = XCreateColormap(m_pDisplay, RootWindow(m_pDisplay, visual_info_ptr->screen), visual_info_ptr->visual,
+      AllocNone);
   attr.border_pixel = 0;
   attr.event_mask = ExposureMask | KeyReleaseMask | ButtonReleaseMask | StructureNotifyMask;
 
-  m_lWindow = XCreateWindow(m_pDisplay, RootWindow(m_pDisplay, visual_info_ptr->screen),
-              0, 0, m_iWidth, m_iHeight, 0, visual_info_ptr->depth, InputOutput, visual_info_ptr->visual,
-              CWBorderPixel | CWColormap | CWEventMask, &attr);
+  m_lWindow = XCreateWindow(m_pDisplay, RootWindow(m_pDisplay, visual_info_ptr->screen), 0, 0, m_iWidth, m_iHeight, 0,
+      visual_info_ptr->depth, InputOutput, visual_info_ptr->visual,
+      CWBorderPixel | CWColormap | CWEventMask, &attr);
   XMapWindow(m_pDisplay, m_lWindow);
   XFree(visual_info_ptr);
 
