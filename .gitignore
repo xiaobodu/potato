@@ -27,10 +27,5 @@
 # for eclipse
 .*project
 
-# for build
-build/
-!build/cmake/
-!build/android/jni/
-
 # for output
 out/
