@@ -1,14 +1,12 @@
 #include "potato.h"
 
-#include "common.h"
-
 #include "utility/util_dl.h"
 #include "utility/util_file.h"
 
 #include <rapidjson/document.h>
 
-FUNC_API_TYPEDEF(CreateEngine, ac::core::IEngine, const ac::base::Config);
-FUNC_API_TYPEDEF(DestroyEngine, ac::core::IEngine, const ac::base::Config);
+#if !defined(BUILD_ANDROID)
+#include "common.h"
 
 namespace ac {
 
@@ -32,6 +30,14 @@ private:
   ac::base::Config m_oConfigEngine;
   core::IEngine* m_pEngine;
 };
+
+}
+#endif
+
+FUNC_API_TYPEDEF(CreateEngine, ac::core::IEngine, const ac::base::Config);
+FUNC_API_TYPEDEF(DestroyEngine, ac::core::IEngine, const ac::base::Config);
+
+namespace ac {
 
 Potato& Potato::Instance(const std::string& rsDataPath, const std::string& rsConfigFile)
 {
@@ -84,8 +90,10 @@ core::IEngine*& Potato::GetEngine()
 {
   return m_pEngine;
 }
+
 }
 
+#if !defined(BUILD_ANDROID)
 int main(int argc, char* argv[])
 {
   std::string path;
@@ -95,3 +103,4 @@ int main(int argc, char* argv[])
   engine->Run();
   return 0;
 }
+#endif
