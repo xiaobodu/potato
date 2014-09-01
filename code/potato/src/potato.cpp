@@ -41,8 +41,8 @@ namespace ac {
 
 Potato& Potato::Instance(const std::string& rsDataPath, const std::string& rsConfigFile)
 {
-  static Potato gs_potato(rsDataPath, rsConfigFile);
-  return gs_potato;
+  static Potato s_potato(rsDataPath, rsConfigFile);
+  return s_potato;
 }
 
 Potato::Potato(const std::string& rsRootPath, const std::string& rsConfigFile) :

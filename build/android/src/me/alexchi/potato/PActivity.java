@@ -6,19 +6,18 @@ import android.os.Bundle;
 public abstract class PActivity extends Activity {
 	
 	PView m_pView = null;
+	
+	// load the shared library
+	Potato m_pNativePotato = Potato.instance;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		m_pView = new PView(this);
-		setContentView(m_pView);
-		
-		Potato.instance.create();
 	}
 	
-	public void toDebug() {
-		Potato.instance.create();
+	public void runEngine() {
+		m_pView = new PView(this);
+		setContentView(m_pView);
 	}
 
 }

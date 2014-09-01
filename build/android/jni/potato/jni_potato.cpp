@@ -20,9 +20,9 @@ JNIEXPORT void JNICALL Java_me_alexchi_potato_Potato_create
   (JNIEnv *, jobject)
 {
   LOGI("create");
-  /*std::string path = "";
+  std::string path = "";
   std::string file = "";
-  ac::Potato::Instance(path, file);*/
+  ac::Potato::Instance(path, file);
   //
 }
 

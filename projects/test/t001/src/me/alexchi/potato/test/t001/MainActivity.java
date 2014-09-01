@@ -15,11 +15,11 @@ public class MainActivity extends PActivity {
 
 		setContentView(R.layout.main);
 
-		Button btn = (Button) findViewById(R.id.button1);
+		Button btn = (Button) findViewById(R.id.btnRun);
 		btn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				toDebug();
+				runEngine();
 			}
 		});
 	}
