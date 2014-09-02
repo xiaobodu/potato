@@ -26,7 +26,7 @@ public abstract class PActivity extends Activity {
 		if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 			return;
 		}
-		String engine_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/potato/";
+		String engine_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/potato";
 		Potato.instance.create(engine_path, "potato.json");
 	}
 

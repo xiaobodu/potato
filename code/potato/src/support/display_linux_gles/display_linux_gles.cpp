@@ -142,12 +142,12 @@ void CDisplay::CreateWindow()
 
   static const EGLint attribs[] = {
   EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
-  EGL_RED_SIZE, 8,
-  EGL_GREEN_SIZE, 8,
-  EGL_BLUE_SIZE, 8,
-  EGL_ALPHA_SIZE, 8,
-  EGL_BUFFER_SIZE, 32,
-  EGL_DEPTH_SIZE, 8,
+  EGL_RED_SIZE, 4,
+  EGL_GREEN_SIZE, 4,
+  EGL_BLUE_SIZE, 4,
+  EGL_ALPHA_SIZE, 4,
+  EGL_BUFFER_SIZE, 16,
+  EGL_DEPTH_SIZE, 16,
   EGL_STENCIL_SIZE, 1,
   EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
   EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
@@ -156,11 +156,6 @@ void CDisplay::CreateWindow()
   int num_configs = 0;
   assert(eglChooseConfig(m_pGLDisplay, attribs, &m_pGLConfig, 1, &num_configs));
   assert(NULL != m_pGLConfig && num_configs > 0);
-
-  int value = 0;
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_COLOR_BUFFER_TYPE, &value));
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_RED_SIZE, &value));
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_BUFFER_SIZE, &value));
 
   EGLint vid = 0;
   assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_NATIVE_VISUAL_ID, &vid));
@@ -188,7 +183,8 @@ void CDisplay::CreateWindow()
   assert(NULL != m_pGLSurface);
 
   static const EGLint ctx_attribs[] = {
-  EGL_NONE };
+      EGL_CONTEXT_CLIENT_VERSION, 2,
+      EGL_NONE };
   m_pGLContext = eglCreateContext(m_pGLDisplay, m_pGLConfig, EGL_NO_CONTEXT, ctx_attribs);
   assert(NULL != m_pGLContext);
 

@@ -22,7 +22,7 @@ CRender::~CRender()
 void CRender::Start()
 {
   glShadeModel(GL_SMOOTH);
-  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+  glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
   //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -55,7 +55,7 @@ GLfloat square2[] = { 0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5, 1.0, 0.5, 0.5, 1.0
 
 bool CRender::Tick(const double& rdDeltaS)
 {
-  glClearColor(0.2, 0.4, 0.6, 1.0);
+  glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
   glLoadIdentity();

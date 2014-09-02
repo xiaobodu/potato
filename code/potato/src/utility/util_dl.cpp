@@ -45,7 +45,12 @@ void* DynamicLibraryManager::GetFuncPtr(const std::string& rsFileName, const std
 DynamicLibraryManager::CDynamicLibraryHandler::CDynamicLibraryHandler(const std::string& rsFileName)
   : m_pLib(NULL)
 {
-  m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
+#if defined(BUILD_ANDROID)
+  m_pLib = dlopen(rsFileName.c_str(), RTLD_DEEPBIND);
+#else
+  //m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
+  m_pLib = dlopen(rsFileName.c_str(), RTLD_NOW);
+#endif
   assert(m_pLib != NULL);
 }
 
