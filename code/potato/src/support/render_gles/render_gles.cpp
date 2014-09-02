@@ -21,6 +21,7 @@ CRender::~CRender()
 
 void CRender::Start()
 {
+  GLenum err = glGetError();
   glShadeModel(GL_SMOOTH);
   glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
   glEnable(GL_DEPTH_TEST);

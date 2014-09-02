@@ -136,6 +136,7 @@ void CEngine::Run()
   DisplayWorker display_worker(m_pDisplay);
   thread::IWorker* workers[] = {&display_worker};
   thread::DoJob(workers, 1);
+  //m_pDisplay->Run();
 }
 
 }
