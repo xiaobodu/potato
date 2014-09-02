@@ -13,14 +13,6 @@
 namespace ac {
 namespace display {
 
-/*static int gs_aAttrList[] = { GLX_RGBA, GLX_DOUBLEBUFFER,
- GLX_RED_SIZE, 4,
- GLX_GREEN_SIZE, 4,
- GLX_BLUE_SIZE, 4,
- GLX_ALPHA_SIZE, 4,
- GLX_DEPTH_SIZE, 16,
- None };*/
-
 CDisplay::CDisplay(const ac::base::Config& roConfig) :
     m_pDisplay(NULL), m_lWindow(0), m_pGLConfig(NULL), m_pGLDisplay(NULL), m_pGLContext(NULL), m_pGLSurface(
     NULL), m_bIsRunning(true), m_pRender(NULL)
@@ -141,21 +133,26 @@ void CDisplay::CreateWindow()
   assert(eglInitialize(m_pGLDisplay, &egl_major, &egl_minor));
 
   static const EGLint attribs[] = {
-  EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
-  EGL_RED_SIZE, 4,
-  EGL_GREEN_SIZE, 4,
-  EGL_BLUE_SIZE, 4,
-  EGL_ALPHA_SIZE, 4,
-  EGL_BUFFER_SIZE, 16,
-  EGL_DEPTH_SIZE, 16,
-  EGL_STENCIL_SIZE, 1,
-  EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-  EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
-  EGL_NONE };
+    EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
+    EGL_RED_SIZE, 4,
+    EGL_GREEN_SIZE, 4,
+    EGL_BLUE_SIZE, 4,
+    EGL_ALPHA_SIZE, 4,
+    EGL_BUFFER_SIZE, 16,
+    EGL_DEPTH_SIZE, 16,
+    EGL_STENCIL_SIZE, 1,
+    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
+    EGL_NONE };
 
   int num_configs = 0;
   assert(eglChooseConfig(m_pGLDisplay, attribs, &m_pGLConfig, 1, &num_configs));
   assert(NULL != m_pGLConfig && num_configs > 0);
+
+  int value = 0;
+  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_COLOR_BUFFER_TYPE, &value));
+  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_RED_SIZE, &value));
+  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_BUFFER_SIZE, &value));
 
   EGLint vid = 0;
   assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_NATIVE_VISUAL_ID, &vid));
