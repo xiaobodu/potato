@@ -16,12 +16,18 @@ void GetConfig(std::string& rsPath, std::string& rsFile)
   rsFile = "data/config.json";
 }
 
+
 JNIEXPORT void JNICALL Java_me_alexchi_potato_Potato_create
-  (JNIEnv *, jobject)
+  (JNIEnv * pEnv, jobject pObj, jstring sPath, jstring sFile)
 {
-  LOGI("create");
-  std::string path = "";
-  std::string file = "";
+  LOGI("to create");
+
+  const char* c_path = pEnv->GetStringUTFChars(sPath, NULL);
+  std::string path = c_path;
+  pEnv->ReleaseStringUTFChars(sPath, c_path);
+  const char* c_file = pEnv->GetStringUTFChars(sFile, NULL);
+  std::string file = c_file;
+  pEnv->ReleaseStringUTFChars(sFile, c_file);
   ac::Potato::Instance(path, file);
   //
 }

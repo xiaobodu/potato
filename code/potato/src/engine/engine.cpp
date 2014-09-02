@@ -54,7 +54,11 @@ CEngine::CEngine(const ac::base::Config& roConfig)
 
     /// load the dynamic library
     typedef FUNC_API_TYPE(CreateDisplay) CreateDisplayFuncPtr;
+#if defined(BUILD_ANDROID)
+    CreateDisplayFuncPtr func_create_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<CreateDisplayFuncPtr>(m_oConfigDisplay._sLibraryFile, TOSTRING(CreateDisplay));
+#else
     CreateDisplayFuncPtr func_create_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<CreateDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(CreateDisplay));
+#endif
     /// create the display with configure
     func_create_func_ptr(m_pDisplay, m_oConfigDisplay);
   }
@@ -76,7 +80,11 @@ CEngine::CEngine(const ac::base::Config& roConfig)
 
     /// load the dynamic library
     typedef FUNC_API_TYPE(CreateRender) CreateRenderFuncPtr;
+#if defined(BUILD_ANDROID)
+    CreateRenderFuncPtr func_create_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<CreateRenderFuncPtr>(m_oConfigRender._sLibraryFile, TOSTRING(CreateRender));
+#else
     CreateRenderFuncPtr func_create_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<CreateRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(CreateRender));
+#endif
     /// create the display with configure
     func_create_func_ptr(m_pRender, m_oConfigDisplay);
   }

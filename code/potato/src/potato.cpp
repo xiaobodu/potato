@@ -72,7 +72,11 @@ Potato::Potato(const std::string& rsRootPath, const std::string& rsConfigFile) :
 
   /// load the dynamic library
   typedef FUNC_API_TYPE(CreateEngine) CreateEngineFuncPtr;
+#if defined(BUILD_ANDROID)
+  CreateEngineFuncPtr func_create_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<CreateEngineFuncPtr>(m_oConfigEngine._sLibraryFile, TOSTRING(CreateEngine));
+#else
   CreateEngineFuncPtr func_create_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<CreateEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(CreateEngine));
+#endif
   /// create the engine with configure
   func_create_func_ptr(m_pEngine, m_oConfigEngine);
 }
@@ -81,7 +85,11 @@ Potato::~Potato()
 {
   /// load the dynamic library
   typedef FUNC_API_TYPE(DestroyEngine) DestroyEngineFuncPtr;
+#if defined(BUILD_ANDROID)
+  DestroyEngineFuncPtr func_destroy_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<DestroyEngineFuncPtr>(m_oConfigEngine._sLibraryFile, TOSTRING(DestroyEngine));
+#else
   DestroyEngineFuncPtr func_destroy_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<DestroyEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(DestroyEngine));
+#endif
   /// destroy the engine with configure
   func_destroy_func_ptr(m_pEngine, m_oConfigEngine);
 }

@@ -12,7 +12,7 @@ public class Potato {
 		//
 	}
 	
-	public native void create();
+	public native void create(String sPath, String sFile);
 	public native void destroy();
 
 	public class Render {
