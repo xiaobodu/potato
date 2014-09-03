@@ -15,10 +15,10 @@ namespace ac {
 class Potato
 {
 public:
-  static Potato& Instance(const std::string& rsDataPath, const std::string& rsConfigFile);
+  static Potato& Instance(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile);
 
 protected:
-  Potato(const std::string& rsDataPath, const std::string& rsConfigFile);
+  Potato(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile);
   virtual ~Potato();
 
 public:

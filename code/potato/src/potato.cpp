@@ -17,7 +17,8 @@ namespace ac {
 class Potato
 {
 public:
-  static Potato& Instance(const std::string& rsDataPath, const std::string& rsConfigFile);
+  static Potato& Instance(const std::string& rsDataPath,
+      const std::string& rsConfigFile);
 
 protected:
   Potato(const std::string& rsDataPath, const std::string& rsConfigFile);
@@ -39,16 +40,27 @@ FUNC_API_TYPEDEF(DestroyEngine, ac::core::IEngine, const ac::base::Config);
 
 namespace ac {
 
+#if defined(BUILD_ANDROID)
+Potato& Potato::Instance(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile)
+{
+  static Potato s_potato(rsLibPath, rsDataPath, rsConfigFile);
+#else
 Potato& Potato::Instance(const std::string& rsDataPath, const std::string& rsConfigFile)
 {
   static Potato s_potato(rsDataPath, rsConfigFile);
+#endif
   return s_potato;
 }
 
-Potato::Potato(const std::string& rsRootPath, const std::string& rsConfigFile) :
+#if defined(BUILD_ANDROID)
+Potato::Potato(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile) :
     m_pEngine(NULL)
+#else
+Potato::Potato(const std::string& rsDataPath, const std::string& rsConfigFile) :
+    m_pEngine(NULL)
+#endif
 {
-  std::string file_context = utility::ReadFile((rsRootPath + "/" + rsConfigFile).c_str());
+  std::string file_context = utility::ReadFile((rsDataPath + "/" + rsConfigFile).c_str());
 
   /// parse the configure file
   /// and check the value's type
@@ -66,7 +78,12 @@ Potato::Potato(const std::string& rsRootPath, const std::string& rsConfigFile) :
   const rapidjson::Value& configure_file = configure["file"];
   assert(configure_file.IsString());
 
-  m_oConfigEngine._sPath = rsRootPath;
+#if defined(BUILD_ANDROID)
+  m_oConfigEngine._sLibrPath = rsLibPath;
+#else
+  m_oConfigEngine._sLibrPath = rsDataPath;
+#endif
+  m_oConfigEngine._sDataPath = rsDataPath;
   m_oConfigEngine._sLibraryFile = library_file.GetString();
   m_oConfigEngine._sConfigureFile = configure_file.GetString();
 
@@ -99,8 +116,8 @@ int main(int argc, char* argv[])
   std::string path;
   std::string file;
   GetConfig(path, file);
-  ac::core::IEngine*& engine = ac::Potato::Instance(path, file).GetEngine();
-  engine->Run();
+  ac::core::IEngine*& engine_ptr = ac::Potato::Instance(path, file).GetEngine();
+  engine_ptr->Run();
   return 0;
 }
 #endif

@@ -1,7 +1,7 @@
 {
   "display": {
     "library": {
-      "file": "bin/libdisplay_android_gles.so"
+      "file": "lib/libdisplay_android_gles.so"
     },
     "configure": {
       "file": "config/display.json"
@@ -9,7 +9,7 @@
   },
   "render": {
     "library": {
-      "file": "bin/librender_gles.so"
+      "file": "lib/librender_gles.so"
     },
     "configure": {
       "file": "config/render.json"

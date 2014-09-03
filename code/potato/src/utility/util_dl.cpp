@@ -2,6 +2,7 @@
 
 #include <dlfcn.h>
 #include <cassert>
+#include <iostream>
 
 namespace ac{
 namespace utility{
@@ -46,10 +47,10 @@ DynamicLibraryManager::CDynamicLibraryHandler::CDynamicLibraryHandler(const std:
   : m_pLib(NULL)
 {
 #if defined(BUILD_ANDROID)
-  m_pLib = dlopen(rsFileName.c_str(), RTLD_DEEPBIND);
+  m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
 #else
-  //m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
-  m_pLib = dlopen(rsFileName.c_str(), RTLD_NOW);
+  m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
+  //m_pLib = dlopen(rsFileName.c_str(), RTLD_NOW);
 #endif
   assert(m_pLib != NULL);
 }

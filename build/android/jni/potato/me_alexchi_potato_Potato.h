@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     me_alexchi_potato_Potato
  * Method:    create
- * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
  */
 JNIEXPORT void JNICALL Java_me_alexchi_potato_Potato_create
-  (JNIEnv *, jobject, jstring, jstring);
+  (JNIEnv *, jobject, jstring, jstring, jstring);
 
 /*
  * Class:     me_alexchi_potato_Potato

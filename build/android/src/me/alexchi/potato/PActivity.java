@@ -1,6 +1,7 @@
 package me.alexchi.potato;
 
 import android.app.Activity;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Environment;
 
@@ -24,10 +25,17 @@ public abstract class PActivity extends Activity {
 		setContentView(m_pView);
 		
 		if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			// TODO Auto-generated catch block
 			return;
 		}
-		String engine_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/potato";
-		Potato.instance.create(engine_path, "potato.json");
+		try {
+			String libr_path = getPackageManager().getApplicationInfo(getPackageName(), 0).dataDir;
+			String data_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/potato";
+			//Potato.instance.create(libr_path, data_path, "potato.json");
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

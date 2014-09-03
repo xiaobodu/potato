@@ -21,7 +21,6 @@ CRender::~CRender()
 
 void CRender::Start()
 {
-  GLenum err = glGetError();
   glShadeModel(GL_SMOOTH);
   glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
   glEnable(GL_DEPTH_TEST);
@@ -94,13 +93,7 @@ void CRender::Perspective(double fovy, double aspect, double near, double far)
   double left = 0.0 - right;
 
   glFrustumf(left, right, bottom, top, near, far);
-  GLenum err = glGetError();
-  if (GL_NO_ERROR != err)
-  {
-    const GLubyte* msg = glGetString(err);
-    //printf("%s\n", msg);
-    //assert(0);
-  }
+  assert(GL_NO_ERROR == glGetError());
 }
 
 }

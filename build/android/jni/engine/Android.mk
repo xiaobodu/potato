@@ -9,7 +9,7 @@ REAL_ROOT_PATH := $(LOCAL_PATH)/../../../../
 REAL_CODE_PATH := $(REAL_ROOT_PATH)/code/
 
 LOCAL_MODULE    		:= engine
-LOCAL_CFLAGS 				:= -Wall -g -DBUILD_ANDROID
+LOCAL_CFLAGS 				:= -Wall -g -fPIC -DBUILD_ANDROID
 
 LOCAL_SRC_FILES 		:= $(CODE_PATH)/potato/src/engine/engine.cpp\
                        $(CODE_PATH)//potato/src/utility/thread.cpp\

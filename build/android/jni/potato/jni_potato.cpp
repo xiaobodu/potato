@@ -1,5 +1,6 @@
 #include <jni.h>
 #include <android/log.h>
+#include <cassert>
 
 #include "me_alexchi_potato_Potato.h"
 #include "me_alexchi_potato_Potato_Render.h"
@@ -18,18 +19,25 @@ void GetConfig(std::string& rsPath, std::string& rsFile)
 
 
 JNIEXPORT void JNICALL Java_me_alexchi_potato_Potato_create
-  (JNIEnv * pEnv, jobject pObj, jstring sPath, jstring sFile)
+  (JNIEnv * pEnv, jobject pObj, jstring sLibrPath, jstring sDataPath, jstring sFile)
 {
   LOGI("to create");
 
-  const char* c_path = pEnv->GetStringUTFChars(sPath, NULL);
-  std::string path = c_path;
-  pEnv->ReleaseStringUTFChars(sPath, c_path);
+  const char* c_libr_path = pEnv->GetStringUTFChars(sLibrPath, NULL);
+  std::string libr_path = c_libr_path;
+  pEnv->ReleaseStringUTFChars(sLibrPath, c_libr_path);
+
+  const char* c_data_path = pEnv->GetStringUTFChars(sDataPath, NULL);
+  std::string data_path = c_data_path;
+  pEnv->ReleaseStringUTFChars(sDataPath, c_data_path);
+
   const char* c_file = pEnv->GetStringUTFChars(sFile, NULL);
   std::string file = c_file;
   pEnv->ReleaseStringUTFChars(sFile, c_file);
-  ac::Potato::Instance(path, file);
-  //
+
+  ac::core::IEngine*& engine_ptr = ac::Potato::Instance(libr_path, data_path, file).GetEngine();
+  assert(NULL != engine_ptr);
+  engine_ptr->Run();
 }
 
 JNIEXPORT void JNICALL Java_me_alexchi_potato_Potato_destroy

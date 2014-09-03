@@ -48,7 +48,8 @@ CEngine::CEngine(const ac::base::Config& roConfig)
     const rapidjson::Value& configure_file = configure["file"];
     assert(configure_file.IsString());
 
-    m_oConfigDisplay._sPath = roConfig._sPath;
+    m_oConfigDisplay._sLibrPath = roConfig._sLibrPath;
+    m_oConfigDisplay._sDataPath = roConfig._sDataPath;
     m_oConfigDisplay._sLibraryFile = library_file.GetString();
     m_oConfigDisplay._sConfigureFile = configure_file.GetString();
 
@@ -70,7 +71,8 @@ CEngine::CEngine(const ac::base::Config& roConfig)
     const rapidjson::Value& configure_file = configure["file"];
     assert(configure_file.IsString());
 
-    m_oConfigRender._sPath = roConfig._sPath;
+    m_oConfigRender._sLibrPath = roConfig._sLibrPath;
+    m_oConfigRender._sDataPath = roConfig._sDataPath;
     m_oConfigRender._sLibraryFile = library_file.GetString();
     m_oConfigRender._sConfigureFile = configure_file.GetString();
 

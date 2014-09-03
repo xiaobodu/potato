@@ -23,19 +23,20 @@ namespace base{
 
 typedef struct tagConfig
 {
-  std::string _sPath;
+  std::string _sLibrPath;
+  std::string _sDataPath;
   std::string _sConfigureFile;
   std::string _sLibraryFile;
 
   std::string GetConfigureFile() const
   {
-    return _sPath + "/" + _sConfigureFile;
+    return _sDataPath + "/" + _sConfigureFile;
   }
 
 
   std::string GetLibraryFile() const
   {
-    return _sPath + "/" + _sLibraryFile;
+    return _sLibrPath + "/" + _sLibraryFile;
   }
 
 } Config;
