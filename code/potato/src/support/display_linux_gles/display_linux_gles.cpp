@@ -181,7 +181,7 @@ void CDisplay::CreateWindow()
   assert(NULL != m_pGLSurface);
 
   static const EGLint ctx_attribs[] = {
-      EGL_CONTEXT_CLIENT_VERSION, 2,
+      EGL_CONTEXT_CLIENT_VERSION, 1,
       EGL_NONE };
   m_pGLContext = eglCreateContext(m_pGLDisplay, m_pGLConfig, EGL_NO_CONTEXT, ctx_attribs);
   assert(NULL != m_pGLContext);
