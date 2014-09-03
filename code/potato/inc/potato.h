@@ -32,7 +32,7 @@ private:
 
 }
 
-extern void potato_main(struct android_app* pApp);
+extern "C" void potato_main(struct android_app* state);
 
 #endif
 

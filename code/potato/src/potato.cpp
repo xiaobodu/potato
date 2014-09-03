@@ -24,7 +24,7 @@ protected:
   virtual ~Potato();
 
 public:
-  void Initialize(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile);
+  Potato& Initialize(const std::string& rsDataPath, const std::string& rsConfigFile);
   core::IEngine*& GetEngine();
 
 private:
