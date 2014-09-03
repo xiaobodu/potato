@@ -94,7 +94,13 @@ void CRender::Perspective(double fovy, double aspect, double near, double far)
   double left = 0.0 - right;
 
   glFrustumf(left, right, bottom, top, near, far);
-  assert(GL_NO_ERROR == glGetError());
+  GLenum err = glGetError();
+  if (GL_NO_ERROR != err)
+  {
+    const GLubyte* msg = glGetString(err);
+    //printf("%s\n", msg);
+    //assert(0);
+  }
 }
 
 }

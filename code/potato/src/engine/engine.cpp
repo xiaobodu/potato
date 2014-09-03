@@ -133,10 +133,10 @@ void CEngine::Run()
 {
   utility::Log::Instance().System("engine is running");
 
-  DisplayWorker display_worker(m_pDisplay);
-  thread::IWorker* workers[] = {&display_worker};
-  thread::DoJob(workers, 1);
-  //m_pDisplay->Run();
+  //DisplayWorker display_worker(m_pDisplay);
+  //thread::IWorker* workers[] = {&display_worker};
+  //thread::DoJob(workers, 1);
+  m_pDisplay->Run();
 }
 
 }

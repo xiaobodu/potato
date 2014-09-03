@@ -146,7 +146,8 @@ void CDisplay::CreateWindow()
     EGL_NONE };
 
   int num_configs = 0;
-  assert(eglChooseConfig(m_pGLDisplay, attribs, &m_pGLConfig, 1, &num_configs));
+  assert(eglGetConfigs(m_pGLDisplay, &m_pGLConfig, 1, &num_configs));
+  //assert(eglChooseConfig(m_pGLDisplay, attribs, &m_pGLConfig, 1, &num_configs));
   assert(NULL != m_pGLConfig && num_configs > 0);
 
   int value = 0;
