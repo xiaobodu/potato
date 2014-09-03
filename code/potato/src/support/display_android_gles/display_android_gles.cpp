@@ -14,22 +14,10 @@ namespace ac {
 namespace display {
 
 CDisplay::CDisplay(const ac::base::Config& roConfig) :
-    m_bIsRunning(true), m_pRender(NULL)
+    m_pGLDisplay(EGL_NO_DISPLAY), m_pGLSurface(EGL_NO_SURFACE), m_pGLContext(EGL_NO_CONTEXT), m_pGLConfig(NULL), m_bIsRunning(true), m_pRender(NULL)
 {
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
-
-  rapidjson::Document jdoc;
-  jdoc.Parse(file_context.c_str());
-  assert(jdoc.IsObject());
-  const rapidjson::Value& jsize = jdoc["size"];
-  assert(jsize.IsObject());
-  const rapidjson::Value& jwidth = jsize["width"];
-  assert(jwidth.IsInt());
-  const rapidjson::Value& jheight = jsize["height"];
-  assert(jheight.IsInt());
-
-  m_iWidth = jwidth.GetInt();
-  m_iHeight = jheight.GetInt();
+  //
 }
 
 CDisplay::~CDisplay()
@@ -45,9 +33,12 @@ void CDisplay::BindRender(core::IRender*& rpRender)
 
 void CDisplay::Run()
 {
+  //Initialize(NULL);
+
+  assert(NULL != m_pGLContext);
   //CreateWindow();
   m_pRender->Start();
-  m_pRender->Resize(m_iWidth, m_iHeight);
+  //m_pRender->Resize(m_pGLContext->GetScreenWidth(), m_pGLContext->GetScreenHeight());
 
   timeval time;
   gettimeofday(&time, NULL);
@@ -66,7 +57,7 @@ void CDisplay::Run()
     second_delta = second - second_temp;
     if (m_pRender->Tick(second_delta))
     {
-      /*eglSwapBuffers(m_pGLDisplay, m_pGLSurface);*/
+      eglSwapBuffers(m_pGLDisplay, m_pGLSurface);
     }
 
     gettimeofday(&time, NULL);
@@ -80,6 +71,33 @@ void CDisplay::Run()
 
   m_pRender->End();
   //DestroyWindow();
+}
+
+void CDisplay::Initialize(EGLNativeWindowType pWindow)
+{
+  m_pGLDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+  assert(EGL_NO_DISPLAY != m_pGLDisplay);
+
+  EGLint egl_major, egl_minor;
+  assert(eglInitialize(m_pGLDisplay, &egl_major, &egl_minor));
+
+  const EGLint attribs[] = {
+    EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
+    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
+    EGL_NONE };
+  EGLint num_configs;
+  assert(eglChooseConfig(m_pGLDisplay, attribs, &m_pGLConfig, 1, &num_configs));
+  assert(NULL != m_pGLConfig && num_configs > 0);
+
+  m_pGLSurface = eglCreateWindowSurface(m_pGLDisplay, m_pGLConfig, pWindow, NULL);
+  assert(EGL_NO_SURFACE != m_pGLSurface);
+
+  const EGLint context_attribs[] = {
+    EGL_CONTEXT_CLIENT_VERSION, 1,
+    EGL_NONE };
+  m_pGLContext = eglCreateContext(m_pGLDisplay, m_pGLConfig, NULL, context_attribs);
+  assert(EGL_NO_DISPLAY != m_pGLContext);
+  assert(EGL_FALSE != eglMakeCurrent(m_pGLDisplay, m_pGLSurface, m_pGLSurface, m_pGLContext));
 }
 
 }
@@ -98,4 +116,9 @@ bool DestroyDisplay(ac::core::IDisplay*& rpDisplay, const ac::base::Config& roCo
   delete rpDisplay;
   rpDisplay = NULL;
   return true;
+}
+
+void android_main(struct android_app* app)
+{
+  //
 }

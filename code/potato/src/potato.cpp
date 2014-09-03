@@ -17,14 +17,14 @@ namespace ac {
 class Potato
 {
 public:
-  static Potato& Instance(const std::string& rsDataPath,
-      const std::string& rsConfigFile);
+  static Potato& Instance();
 
 protected:
-  Potato(const std::string& rsDataPath, const std::string& rsConfigFile);
+  Potato();
   virtual ~Potato();
 
 public:
+  void Initialize(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile);
   core::IEngine*& GetEngine();
 
 private:
@@ -40,24 +40,31 @@ FUNC_API_TYPEDEF(DestroyEngine, ac::core::IEngine, const ac::base::Config);
 
 namespace ac {
 
-#if defined(BUILD_ANDROID)
-Potato& Potato::Instance(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile)
+Potato& Potato::Instance()
 {
-  static Potato s_potato(rsLibPath, rsDataPath, rsConfigFile);
-#else
-Potato& Potato::Instance(const std::string& rsDataPath, const std::string& rsConfigFile)
-{
-  static Potato s_potato(rsDataPath, rsConfigFile);
-#endif
+  static Potato s_potato;
   return s_potato;
 }
 
+Potato::Potato() :
+    m_pEngine(NULL)
+{
+  ;
+}
+
+Potato::~Potato()
+{
+  /// load the dynamic library
+  typedef FUNC_API_TYPE(DestroyEngine) DestroyEngineFuncPtr;
+  DestroyEngineFuncPtr func_destroy_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<DestroyEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(DestroyEngine));
+  /// destroy the engine with configure
+  func_destroy_func_ptr(m_pEngine, m_oConfigEngine);
+}
+
 #if defined(BUILD_ANDROID)
-Potato::Potato(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile) :
-    m_pEngine(NULL)
+Potato& Potato::Initialize(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile)
 #else
-Potato::Potato(const std::string& rsDataPath, const std::string& rsConfigFile) :
-    m_pEngine(NULL)
+Potato& Potato::Initialize(const std::string& rsDataPath, const std::string& rsConfigFile)
 #endif
 {
   std::string file_context = utility::ReadFile((rsDataPath + "/" + rsConfigFile).c_str());
@@ -92,15 +99,8 @@ Potato::Potato(const std::string& rsDataPath, const std::string& rsConfigFile) :
   CreateEngineFuncPtr func_create_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<CreateEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(CreateEngine));
   /// create the engine with configure
   func_create_func_ptr(m_pEngine, m_oConfigEngine);
-}
 
-Potato::~Potato()
-{
-  /// load the dynamic library
-  typedef FUNC_API_TYPE(DestroyEngine) DestroyEngineFuncPtr;
-  DestroyEngineFuncPtr func_destroy_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<DestroyEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(DestroyEngine));
-  /// destroy the engine with configure
-  func_destroy_func_ptr(m_pEngine, m_oConfigEngine);
+  return *this;
 }
 
 core::IEngine*& Potato::GetEngine()
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
   std::string path;
   std::string file;
   GetConfig(path, file);
-  ac::core::IEngine*& engine_ptr = ac::Potato::Instance(path, file).GetEngine();
+  ac::core::IEngine*& engine_ptr = ac::Potato::Instance().Initialize(path, file).GetEngine();
   engine_ptr->Run();
   return 0;
 }

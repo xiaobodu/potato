@@ -20,11 +20,15 @@ public:
   virtual void Run();
 
 protected:
+  void Initialize(EGLNativeWindowType pWindow);
 
 private:
+  EGLDisplay m_pGLDisplay;
+  EGLSurface m_pGLSurface;
+  EGLContext m_pGLContext;
+  EGLConfig m_pGLConfig;
+
   bool m_bIsRunning;
-  int m_iWidth;
-  int m_iHeight;
 
   core::IRender* m_pRender;
 };

@@ -10,16 +10,15 @@ REAL_CODE_PATH := $(REAL_ROOT_PATH)/code/
 
 #------------------
 LOCAL_MODULE    		:= potato
-LOCAL_CFLAGS 				:= -Wall -g -DBUILD_ANDROID
+LOCAL_CFLAGS 			:= -Wall -g -DBUILD_ANDROID
 
-LOCAL_CPP_FEATURES 	:= rtti exceptions
+LOCAL_CPP_FEATURES 		:= rtti exceptions
 
 LOCAL_SRC_FILES 		+= jni_potato.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/potato.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/util_dl.cpp
 
-LOCAL_LDLIBS    		:= -ldl -llog
-LOCAL_LDFLAGS				:= -g
+LOCAL_LDLIBS    		:= -ldl -landroid -llog
 
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/inc
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src

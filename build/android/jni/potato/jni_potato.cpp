@@ -7,9 +7,11 @@
 
 #include "potato.h"
 
-#define  LOG_TAG    "jni_potato"
-#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#define LOG_TAG    "jni_potato"
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__))
+#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__))
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__))
+
 
 void GetConfig(std::string& rsPath, std::string& rsFile)
 {
@@ -21,7 +23,7 @@ void GetConfig(std::string& rsPath, std::string& rsFile)
 JNIEXPORT void JNICALL Java_me_alexchi_potato_Potato_create
   (JNIEnv * pEnv, jobject pObj, jstring sLibrPath, jstring sDataPath, jstring sFile)
 {
-  LOGI("to create");
+  LOGI("call Java_me_alexchi_potato_Potato_create");
 
   const char* c_libr_path = pEnv->GetStringUTFChars(sLibrPath, NULL);
   std::string libr_path = c_libr_path;
@@ -35,9 +37,7 @@ JNIEXPORT void JNICALL Java_me_alexchi_potato_Potato_create
   std::string file = c_file;
   pEnv->ReleaseStringUTFChars(sFile, c_file);
 
-  ac::core::IEngine*& engine_ptr = ac::Potato::Instance(libr_path, data_path, file).GetEngine();
-  assert(NULL != engine_ptr);
-  engine_ptr->Run();
+  ac::Potato::Instance().Initialize(libr_path, data_path, file);
 }
 
 JNIEXPORT void JNICALL Java_me_alexchi_potato_Potato_destroy
@@ -49,7 +49,9 @@ JNIEXPORT void JNICALL Java_me_alexchi_potato_Potato_destroy
 JNIEXPORT void JNICALL Java_me_alexchi_potato_Potato_00024Render_start
  (JNIEnv *, jobject)
 {
-  //
+  ac::core::IEngine*& engine_ptr = ac::Potato::Instance().GetEngine();
+  assert(NULL != engine_ptr);
+  engine_ptr->Run();
 }
 
 JNIEXPORT void JNICALL Java_me_alexchi_potato_Potato_00024Render_resize

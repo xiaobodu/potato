@@ -1,11 +1,10 @@
 package me.alexchi.potato;
 
-import android.app.Activity;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.app.NativeActivity;
 import android.os.Bundle;
-import android.os.Environment;
+import android.util.Log;
 
-public abstract class PActivity extends Activity {
+public abstract class PActivity extends NativeActivity {
 	
 	PView m_pView = null;
 	
@@ -15,27 +14,7 @@ public abstract class PActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		String[] paths = this.getAssets().getLocales();
-		String ss = paths.toString();
-	}
-	
-	public void runEngine() {
-		m_pView = new PView(this);
-		setContentView(m_pView);
-		
-		if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-			// TODO Auto-generated catch block
-			return;
-		}
-		try {
-			String libr_path = getPackageManager().getApplicationInfo(getPackageName(), 0).dataDir;
-			String data_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/potato";
-			//Potato.instance.create(libr_path, data_path, "potato.json");
-		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Log.d("PActivity", "onCreate");
 	}
 
 }

@@ -15,13 +15,14 @@ namespace ac {
 class Potato
 {
 public:
-  static Potato& Instance(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile);
+  static Potato& Instance();
 
 protected:
-  Potato(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile);
+  Potato();
   virtual ~Potato();
 
 public:
+  Potato& Initialize(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile);
   core::IEngine*& GetEngine();
 
 private:
