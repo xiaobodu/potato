@@ -1,14 +1,10 @@
+MY_LOCAL_PATH := $(call my-dir)
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := t001
-LOCAL_CFLAGS    := -Werror
-LOCAL_SRC_FILES := t001.cpp
-LOCAL_LDLIBS    := -llog
+LOCAL_PATH := $(MY_LOCAL_PATH)
+include $(LOCAL_PATH)/../../../../build/android/jni/potato/Android.mk
 
-LOCAL_SHARED_LIBRARIES := libstlport_static
-
-include $(BUILD_SHARED_LIBRARY)
-
-$(call import-module,cxx-stl/stlport)
+LOCAL_PATH := $(MY_LOCAL_PATH)
+include $(LOCAL_PATH)/t001/Android.mk

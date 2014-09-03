@@ -18,7 +18,7 @@ LOCAL_SRC_FILES 		+= jni_potato.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/potato.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/util_dl.cpp
 
-LOCAL_LDLIBS    		:= -ldl -landroid -llog
+#LOCAL_LDLIBS    		:= -ldl -landroid -llog
 
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/inc
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src
@@ -27,7 +27,9 @@ LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/utility
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/external/rapidjson/include
 
 LOCAL_SHARED_LIBRARIES := libstlport_static
+LOCAL_STATIC_LIBRARIES := android_native_app_glue
 
-include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)
 
 $(call import-module,cxx-stl/stlport)
+$(call import-module,android/native_app_glue)

@@ -6,10 +6,11 @@ import android.util.Log;
 
 public abstract class PActivity extends NativeActivity {
 	
-	PView m_pView = null;
+	public static PActivity instance = null;
 	
-	// load the shared library
-	Potato m_pNativePotato = Potato.instance;
+	public PActivity() {
+		PActivity.instance = this;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

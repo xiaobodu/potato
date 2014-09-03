@@ -31,6 +31,9 @@ private:
 };
 
 }
+
+extern void potato_main(struct android_app* pApp);
+
 #endif
 
 extern void GetConfig(std::string& rsPath, std::string& rsFile);
