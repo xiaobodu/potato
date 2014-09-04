@@ -24,9 +24,9 @@ LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/engine
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/utility
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/external/rapidjson/include
 
-LOCAL_LDLIBS    := -ldl -landroid -llog
+LOCAL_LDLIBS    		:= -ldl -llog -landroid -lEGL
 
-LOCAL_STATIC_LIBRARIES := android_native_app_glue
+LOCAL_STATIC_LIBRARIES 	:= android_native_app_glue
 
 include $(BUILD_SHARED_LIBRARY)
 

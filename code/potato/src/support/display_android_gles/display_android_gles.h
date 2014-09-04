@@ -24,6 +24,7 @@ public:
   void Stop();
   void Continue();
   void Pause();
+  void Resize(const int& riWidth, const int& riHeight);
 
 private:
   EGLDisplay m_pGLDisplay;

@@ -17,7 +17,7 @@ public abstract class PActivity extends NativeActivity {
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d("PActivity", "onCreate");
 	}

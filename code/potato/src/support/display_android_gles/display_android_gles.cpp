@@ -33,37 +33,87 @@ void CDisplay::BindRender(core::IRender*& rpRender)
   m_pRender = rpRender;
 }
 
-static void engine_handle_cmd(struct android_app* app, int32_t cmd)
+static void handle_cmd(struct android_app* app, int32_t cmd)
 {
   ac::display::CDisplay* display_ptr = (ac::display::CDisplay*)app->userData;
+  assert(NULL != display_ptr);
+
   switch (cmd)
   {
+  case APP_CMD_INPUT_CHANGED:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_INPUT_CHANGED");
+    break;
+
   case APP_CMD_INIT_WINDOW:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_INIT_WINDOW");
     if (NULL != app->window)
     {
-      assert(NULL != display_ptr);
       display_ptr->Initialize(app);
     }
     break;
 
   case APP_CMD_TERM_WINDOW:
-    assert(NULL != display_ptr);
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_TERM_WINDOW");
     display_ptr->Stop();
     break;
 
+  case APP_CMD_WINDOW_RESIZED:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_WINDOW_RESIZED");
+    break;
+
+  case APP_CMD_WINDOW_REDRAW_NEEDED:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_WINDOW_REDRAW_NEEDED");
+    break;
+
+  case APP_CMD_CONTENT_RECT_CHANGED:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_CONTENT_RECT_CHANGED");
+    break;
+
   case APP_CMD_GAINED_FOCUS:
-    assert(NULL != display_ptr);
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_GAINED_FOCUS");
     display_ptr->Continue();
     break;
 
   case APP_CMD_LOST_FOCUS:
-    assert(NULL != display_ptr);
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_LOST_FOCUS");
     display_ptr->Pause();
+    break;
+
+  case APP_CMD_CONFIG_CHANGED:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_CONFIG_CHANGED");
+    break;
+
+  case APP_CMD_LOW_MEMORY:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_LOW_MEMORY");
+    break;
+
+  case APP_CMD_START:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_START");
+    break;
+
+  case APP_CMD_RESUME:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_RESUME");
+    break;
+
+  case APP_CMD_SAVE_STATE:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_SAVE_STATE");
+    break;
+
+  case APP_CMD_PAUSE:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_PAUSE");
+    break;
+
+  case APP_CMD_STOP:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_STOP");
+    break;
+
+  case APP_CMD_DESTROY:
+    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_DESTROY");
     break;
   }
 }
 
-static int32_t engine_handle_input(struct android_app* app, AInputEvent* event)
+static int32_t handle_input(struct android_app* app, AInputEvent* event)
 {
   //
   ac::utility::Log::Instance().Info("engine_handle_input");
@@ -77,8 +127,8 @@ void CDisplay::Run(android_app* pApp)
   m_bCanRender = true;
 
   pApp->userData = this;
-  pApp->onAppCmd = engine_handle_cmd;
-  pApp->onInputEvent = engine_handle_input;
+  pApp->onAppCmd = handle_cmd;
+  pApp->onInputEvent = handle_input;
 
   timeval time;
   gettimeofday(&time, NULL);
@@ -148,13 +198,13 @@ void CDisplay::Initialize(android_app* pApp)
 {
   ac::utility::Log::Instance().Info("CDisplay::Initialize");
   m_pGLDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+  ac::utility::Log::Instance().Info("display: %d", (int)m_pGLDisplay);
   assert(EGL_NO_DISPLAY != m_pGLDisplay);
 
   EGLint egl_major = 0;
   EGLint egl_minor = 0;
-  assert(eglInitialize(m_pGLDisplay, &egl_major, &egl_minor));
+  if (EGL_TRUE != eglInitialize(m_pGLDisplay, &egl_major, &egl_minor)) assert(0);
   ac::utility::Log::Instance().Info("using EGL v%d.%d", egl_major, egl_minor);
-  assert(EGL_SUCCESS == eglGetError());
 
   const EGLint config_attribs[] = {
     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
@@ -170,7 +220,7 @@ void CDisplay::Initialize(android_app* pApp)
   }
   assert(NULL != m_pGLConfig && num_configs > 0);
 
-  EGLint vid;
+  EGLint vid = 0;
   eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_NATIVE_VISUAL_ID, &vid);
 
   ANativeWindow_setBuffersGeometry(pApp->window, 0, 0, vid);
@@ -183,7 +233,7 @@ void CDisplay::Initialize(android_app* pApp)
     EGL_NONE };
   m_pGLContext = eglCreateContext(m_pGLDisplay, m_pGLConfig, NULL, context_attribs);
   assert(EGL_NO_DISPLAY != m_pGLContext);
-  assert(EGL_FALSE != eglMakeCurrent(m_pGLDisplay, m_pGLSurface, m_pGLSurface, m_pGLContext));
+  if (EGL_TRUE != eglMakeCurrent(m_pGLDisplay, m_pGLSurface, m_pGLSurface, m_pGLContext)) assert(0);
 
   m_pRender->Start();
 
@@ -200,36 +250,43 @@ void CDisplay::Initialize(android_app* pApp)
 void CDisplay::Stop()
 {
   ac::utility::Log::Instance().Info("CDisplay::Stop");
-  if (m_pGLDisplay != EGL_NO_DISPLAY)
+  if (m_pGLDisplay != EGL_NO_DISPLAY && m_bIsEGLReady)
   {
-      eglMakeCurrent(m_pGLDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-      if (m_pGLContext != EGL_NO_CONTEXT)
-      {
-          eglDestroyContext(m_pGLDisplay, m_pGLContext);
-          m_pGLContext = EGL_NO_CONTEXT;
-      }
-      if (m_pGLSurface != EGL_NO_SURFACE)
-      {
-          eglDestroySurface(m_pGLDisplay, m_pGLSurface);
-          m_pGLSurface = EGL_NO_SURFACE;
-      }
-      eglTerminate(m_pGLDisplay);
-      m_pGLDisplay = EGL_NO_DISPLAY;
+    eglMakeCurrent(m_pGLDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+    if (m_pGLContext != EGL_NO_CONTEXT)
+    {
+      eglDestroyContext(m_pGLDisplay, m_pGLContext);
+      m_pGLContext = EGL_NO_CONTEXT;
+    }
+    if (m_pGLSurface != EGL_NO_SURFACE)
+    {
+      eglDestroySurface(m_pGLDisplay, m_pGLSurface);
+      m_pGLSurface = EGL_NO_SURFACE;
+    }
+    eglTerminate(m_pGLDisplay);
+    m_pGLDisplay = EGL_NO_DISPLAY;
   }
 
   m_bIsRunning = false;
   m_bIsEGLReady = false;
   m_bCanRender = false;
 }
+
 void CDisplay::Continue()
 {
   ac::utility::Log::Instance().Info("CDisplay::Continue");
   m_bCanRender = true;
 }
+
 void CDisplay::Pause()
 {
   ac::utility::Log::Instance().Info("CDisplay::Pause");
   m_bCanRender = false;
+}
+
+void CDisplay::Resize(const int& riWidth, const int& riHeight)
+{
+  m_pRender->Resize(riWidth, riHeight);
 }
 
 }
@@ -248,9 +305,4 @@ bool DestroyDisplay(ac::core::IDisplay*& rpDisplay, const ac::base::Config& roCo
   delete rpDisplay;
   rpDisplay = NULL;
   return true;
-}
-
-void android_main(struct android_app* app)
-{
-  //
 }

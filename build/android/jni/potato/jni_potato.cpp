@@ -7,11 +7,14 @@
 #include "potato.h"
 #include "utility/util_log.h"
 
-#define CLASS_NAME "android/app/NativeActivity"
-#define HELPER_CLASS_NAME "me/alexchi/potato/PNativeHelper"
+#include <EGL/egl.h>
+#include <GLES/gl.h>
 
 #define PLOG_TAG             "potato"
 #define PLOGI(...)           ((void)__android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__))
+
+#define CLASS_NAME "android/app/NativeActivity"
+#define HELPER_CLASS_NAME "me/alexchi/potato/PNativeHelper"
 
 namespace scope {
 
@@ -56,6 +59,7 @@ protected:
 
 public:
   void Initialize(struct android_app*& rpApp, const std::string& rsClassName);
+  void Destroy();
 
 public:
   std::string GetLibraryPath();
@@ -88,19 +92,7 @@ NativeHelper::NativeHelper()
 
 NativeHelper::~NativeHelper()
 {
-  if (!m_bIsReady)
-  {
-    return;
-  }
-  pthread_mutex_lock(&m_Mutex);
-
-  JNIEnv* env = NULL;
-  m_pActivity->vm->AttachCurrentThread( &env, NULL );
-
-  env->DeleteGlobalRef(m_JNIObject);
-  env->DeleteGlobalRef(m_JNIClass);
-
-  pthread_mutex_destroy(&m_Mutex);
+  ;
 }
 
 void NativeHelper::Initialize(struct android_app*& rpApp, const std::string& rsClassName)
@@ -131,6 +123,23 @@ void NativeHelper::Initialize(struct android_app*& rpApp, const std::string& rsC
   env->ReleaseStringUTFChars(packageName, appname);
 
   m_bIsReady = true;
+}
+
+void NativeHelper::Destroy()
+{
+  if (!m_bIsReady)
+  {
+    return;
+  }
+  pthread_mutex_lock(&m_Mutex);
+
+  JNIEnv* env = NULL;
+  m_pActivity->vm->AttachCurrentThread( &env, NULL );
+
+  env->DeleteGlobalRef(m_JNIObject);
+  env->DeleteGlobalRef(m_JNIClass);
+
+  pthread_mutex_destroy(&m_Mutex);
 }
 
 std::string NativeHelper::GetLibraryPath()
@@ -179,23 +188,137 @@ jclass NativeHelper::RetrieveClass(JNIEnv*& rpEnv, const std::string& rsClassNam
   return class_retrieved;
 }
 
+/*static void handle_cmd(struct android_app* app, int32_t cmd)
+{
+  switch (cmd)
+  {
+  case APP_CMD_INPUT_CHANGED:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_INPUT_CHANGED");
+    break;
+
+  case APP_CMD_INIT_WINDOW:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_INIT_WINDOW");
+    if (NULL != app->window)
+    {
+      EGLDisplay dpy = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+      ac::utility::Log::Instance().Info("display: %d", (int)dpy);
+      assert(EGL_NO_DISPLAY != m_pGLDisplay);
+      EGLint egl_major = 0;
+      EGLint egl_minor = 0;
+      if (EGL_TRUE == eglInitialize(dpy, &egl_major, &egl_minor))
+      {
+        assert(0);
+      }
+      ac::utility::Log::Instance().Info("using EGL v%d.%d", egl_major, egl_minor);
+    }
+    break;
+
+  case APP_CMD_TERM_WINDOW:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_TERM_WINDOW");
+    break;
+
+  case APP_CMD_WINDOW_RESIZED:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_WINDOW_RESIZED");
+    break;
+
+  case APP_CMD_WINDOW_REDRAW_NEEDED:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_WINDOW_REDRAW_NEEDED");
+    break;
+
+  case APP_CMD_CONTENT_RECT_CHANGED:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_CONTENT_RECT_CHANGED");
+    break;
+
+  case APP_CMD_GAINED_FOCUS:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_GAINED_FOCUS");
+    break;
+
+  case APP_CMD_LOST_FOCUS:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_LOST_FOCUS");
+    break;
+
+  case APP_CMD_CONFIG_CHANGED:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_CONFIG_CHANGED");
+    break;
+
+  case APP_CMD_LOW_MEMORY:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_LOW_MEMORY");
+    break;
+
+  case APP_CMD_START:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_START");
+    break;
+
+  case APP_CMD_RESUME:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_RESUME");
+    break;
+
+  case APP_CMD_SAVE_STATE:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_SAVE_STATE");
+    break;
+
+  case APP_CMD_PAUSE:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_PAUSE");
+    break;
+
+  case APP_CMD_STOP:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_STOP");
+    break;
+
+  case APP_CMD_DESTROY:
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_DESTROY");
+    break;
+  }
+}*/
+
 void potato_main(struct android_app* state)
 {
   PLOGI("potato_main");
 
   app_dummy();
 
+  /*NativeHelper::Instance().Destroy();
   NativeHelper::Instance().Initialize(state, HELPER_CLASS_NAME);
 
   std::string libr_path = NativeHelper::Instance().GetLibraryPath();
   ac::utility::Log::Instance().Info("libr_path: %s", libr_path.c_str());
   std::string data_path = NativeHelper::Instance().GetExternalPath();
   ac::utility::Log::Instance().Info("data_path: %s", data_path.c_str());
-  PLOGI("potato_main1");
-  ac::Potato::Instance().Initialize(libr_path, data_path, "potato.json");
 
-  PLOGI("potato_main2");
+  ac::Potato::Instance().Initialize(libr_path, data_path, "potato.json");*/
+  ac::Potato::Instance().Initialize("/data/data/me.alexchi.test", "/mnt/sdcard/potato", "potato.json");
+
   ac::core::IEngine*& engine_ptr = ac::Potato::Instance().GetEngine();
   assert(NULL != engine_ptr);
   engine_ptr->Run(state);
+
+  /*state->onAppCmd = handle_cmd;
+
+  bool bIsRunning = true;
+  while (bIsRunning)
+  {
+    // Read all pending events.
+    int ident;
+    int events;
+    struct android_poll_source* source = NULL;
+
+    while ((ident=ALooper_pollAll(bIsRunning ? 0 : -1, NULL, &events, (void**)&source)) >= 0)
+    {
+      // Process this event.
+      if (source != NULL)
+      {
+        source->process(state, source);
+      }
+
+      // If a sensor has data, process it now.
+      if (ident == LOOPER_ID_USER) { ; }
+
+      // Check if we are exiting.
+      if (state->destroyRequested != 0)
+      {
+        bIsRunning = false;
+        break;
+      }
+    }
+  }*/
 }
