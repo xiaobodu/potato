@@ -8,21 +8,20 @@ CODE_PATH := $(ROOT_PATH)/code/
 REAL_ROOT_PATH := $(LOCAL_PATH)/../../../../
 REAL_CODE_PATH := $(REAL_ROOT_PATH)/code/
 
-#------------------
 LOCAL_MODULE    		:= potato
 LOCAL_CFLAGS 			:= -Wall -DBUILD_ANDROID
 
 LOCAL_CPP_FEATURES 		:= rtti exceptions
 
+LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/inc
+LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src
+LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/utility
+LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/engine
+LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/external/rapidjson/include
+
 LOCAL_SRC_FILES 		+= jni_potato.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/potato.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/util_dl.cpp
-
-LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/inc
-LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src
-LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/engine
-LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/utility
-LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/external/rapidjson/include
 
 #LOCAL_LDLIBS    		:= -ldl -landroid -llog
 

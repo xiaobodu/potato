@@ -13,7 +13,7 @@
 #define PLOG_TAG             "potato"
 #define PLOGI(...)           ((void)__android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__))
 
-#define CLASS_NAME "android/app/NativeActivity"
+#define NATIVE_CLASS_NAME "android/app/NativeActivity"
 #define HELPER_CLASS_NAME "me/alexchi/potato/PNativeHelper"
 
 namespace scope {
@@ -31,6 +31,7 @@ public:
     m_pActivity->vm->AttachCurrentThread(&m_pEnv, NULL);
     assert(NULL != m_pEnv);
   }
+
   ~ThreadMutex()
   {
     m_pActivity->vm->DetachCurrentThread();
@@ -58,22 +59,19 @@ protected:
   virtual ~NativeHelper();
 
 public:
-  void Initialize(struct android_app*& rpApp, const std::string& rsClassName);
-  void Destroy();
+  void Initialize(struct android_app*& rpApp);
 
 public:
   std::string GetLibraryPath();
   std::string GetExternalPath();
 
 protected:
-  jclass RetrieveClass(JNIEnv*& rpEnv, const std::string& rsClassName);
+  jclass RetrieveClass(JNIEnv*& rpEnv, const std::string& rsNativeClassName, const std::string& rsHelperClassName);
 
 private:
-  bool m_bIsReady;
   mutable pthread_mutex_t m_Mutex;
   ANativeActivity* m_pActivity;
   std::string m_sAppName;
-  std::string m_sClassName;
   jobject m_JNIObject;
   jclass m_JNIClass;
 };
@@ -85,22 +83,29 @@ NativeHelper& NativeHelper::Instance()
 }
 
 NativeHelper::NativeHelper()
-  : m_bIsReady(false), m_pActivity(NULL), m_sClassName("")
+  : m_pActivity(NULL)
 {
   ;
 }
 
 NativeHelper::~NativeHelper()
 {
-  ;
+  pthread_mutex_lock(&m_Mutex);
+
+  JNIEnv* env = NULL;
+  m_pActivity->vm->AttachCurrentThread( &env, NULL );
+
+  env->DeleteGlobalRef(m_JNIObject);
+  env->DeleteGlobalRef(m_JNIClass);
+
+  pthread_mutex_destroy(&m_Mutex);
 }
 
-void NativeHelper::Initialize(struct android_app*& rpApp, const std::string& rsClassName)
+void NativeHelper::Initialize(struct android_app*& rpApp)
 {
   pthread_mutex_init(&m_Mutex, NULL);
   assert(NULL != rpApp);
   m_pActivity = rpApp->activity;
-  m_sClassName = rsClassName;
 
   scope::ThreadMutex jni_env = scope::ThreadMutex(&m_Mutex, m_pActivity);
   JNIEnv*& env = jni_env.GetEnv();
@@ -113,33 +118,14 @@ void NativeHelper::Initialize(struct android_app*& rpApp, const std::string& rsC
   const char* appname = env->GetStringUTFChars(packageName, NULL);
   m_sAppName = std::string(appname);
 
-  jclass cls = RetrieveClass(env, rsClassName);
+  jclass cls = RetrieveClass(env, NATIVE_CLASS_NAME, HELPER_CLASS_NAME);
   m_JNIClass = (jclass) env->NewGlobalRef(cls);
 
-  jmethodID constructor = env->GetMethodID(m_JNIClass, "<init>", "()V" );
+  jmethodID constructor = env->GetMethodID(m_JNIClass, "<init>", "()V");
   m_JNIObject = env->NewObject(m_JNIClass, constructor);
   m_JNIObject = env->NewGlobalRef(m_JNIObject);
 
   env->ReleaseStringUTFChars(packageName, appname);
-
-  m_bIsReady = true;
-}
-
-void NativeHelper::Destroy()
-{
-  if (!m_bIsReady)
-  {
-    return;
-  }
-  pthread_mutex_lock(&m_Mutex);
-
-  JNIEnv* env = NULL;
-  m_pActivity->vm->AttachCurrentThread( &env, NULL );
-
-  env->DeleteGlobalRef(m_JNIObject);
-  env->DeleteGlobalRef(m_JNIClass);
-
-  pthread_mutex_destroy(&m_Mutex);
 }
 
 std::string NativeHelper::GetLibraryPath()
@@ -174,151 +160,33 @@ std::string NativeHelper::GetExternalPath()
   return res_str;
 }
 
-jclass NativeHelper::RetrieveClass(JNIEnv*& rpEnv, const std::string& rsClassName)
+jclass NativeHelper::RetrieveClass(JNIEnv*& rpEnv, const std::string& rsNativeClassName, const std::string& rsHelperClassName)
 {
-  jclass activity_class = rpEnv->FindClass(CLASS_NAME);
+  jclass activity_class = rpEnv->FindClass(rsNativeClassName.c_str());
   jmethodID get_class_loader = rpEnv->GetMethodID(activity_class, "getClassLoader", "()Ljava/lang/ClassLoader;");
   jobject cls = rpEnv->CallObjectMethod(m_pActivity->clazz, get_class_loader);
   jclass class_loader = rpEnv->FindClass("java/lang/ClassLoader");
   jmethodID find_class = rpEnv->GetMethodID(class_loader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
 
-  jstring str_class_name = rpEnv->NewStringUTF(rsClassName.c_str());
+  jstring str_class_name = rpEnv->NewStringUTF(HELPER_CLASS_NAME);
   jclass class_retrieved = (jclass)rpEnv->CallObjectMethod(cls, find_class, str_class_name);
   rpEnv->DeleteLocalRef(str_class_name);
   return class_retrieved;
 }
 
-/*static void handle_cmd(struct android_app* app, int32_t cmd)
-{
-  switch (cmd)
-  {
-  case APP_CMD_INPUT_CHANGED:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_INPUT_CHANGED");
-    break;
-
-  case APP_CMD_INIT_WINDOW:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_INIT_WINDOW");
-    if (NULL != app->window)
-    {
-      EGLDisplay dpy = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-      ac::utility::Log::Instance().Info("display: %d", (int)dpy);
-      assert(EGL_NO_DISPLAY != m_pGLDisplay);
-      EGLint egl_major = 0;
-      EGLint egl_minor = 0;
-      if (EGL_TRUE == eglInitialize(dpy, &egl_major, &egl_minor))
-      {
-        assert(0);
-      }
-      ac::utility::Log::Instance().Info("using EGL v%d.%d", egl_major, egl_minor);
-    }
-    break;
-
-  case APP_CMD_TERM_WINDOW:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_TERM_WINDOW");
-    break;
-
-  case APP_CMD_WINDOW_RESIZED:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_WINDOW_RESIZED");
-    break;
-
-  case APP_CMD_WINDOW_REDRAW_NEEDED:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_WINDOW_REDRAW_NEEDED");
-    break;
-
-  case APP_CMD_CONTENT_RECT_CHANGED:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_CONTENT_RECT_CHANGED");
-    break;
-
-  case APP_CMD_GAINED_FOCUS:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_GAINED_FOCUS");
-    break;
-
-  case APP_CMD_LOST_FOCUS:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_LOST_FOCUS");
-    break;
-
-  case APP_CMD_CONFIG_CHANGED:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_CONFIG_CHANGED");
-    break;
-
-  case APP_CMD_LOW_MEMORY:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_LOW_MEMORY");
-    break;
-
-  case APP_CMD_START:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_START");
-    break;
-
-  case APP_CMD_RESUME:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_RESUME");
-    break;
-
-  case APP_CMD_SAVE_STATE:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_SAVE_STATE");
-    break;
-
-  case APP_CMD_PAUSE:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_PAUSE");
-    break;
-
-  case APP_CMD_STOP:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_STOP");
-    break;
-
-  case APP_CMD_DESTROY:
-    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_DESTROY");
-    break;
-  }
-}*/
-
 void potato_main(struct android_app* state)
 {
-  PLOGI("potato_main");
+  ac::utility::Log::Instance().Info("potato_main");
 
   app_dummy();
 
-  /*NativeHelper::Instance().Destroy();
-  NativeHelper::Instance().Initialize(state, HELPER_CLASS_NAME);
+  NativeHelper::Instance().Initialize(state);
 
   std::string libr_path = NativeHelper::Instance().GetLibraryPath();
-  ac::utility::Log::Instance().Info("libr_path: %s", libr_path.c_str());
   std::string data_path = NativeHelper::Instance().GetExternalPath();
-  ac::utility::Log::Instance().Info("data_path: %s", data_path.c_str());
-
-  ac::Potato::Instance().Initialize(libr_path, data_path, "potato.json");*/
-  ac::Potato::Instance().Initialize("/data/data/me.alexchi.test", "/mnt/sdcard/potato", "potato.json");
+  ac::Potato::Instance().Initialize(libr_path, data_path, "potato.json");
 
   ac::core::IEngine*& engine_ptr = ac::Potato::Instance().GetEngine();
   assert(NULL != engine_ptr);
   engine_ptr->Run(state);
-
-  /*state->onAppCmd = handle_cmd;
-
-  bool bIsRunning = true;
-  while (bIsRunning)
-  {
-    // Read all pending events.
-    int ident;
-    int events;
-    struct android_poll_source* source = NULL;
-
-    while ((ident=ALooper_pollAll(bIsRunning ? 0 : -1, NULL, &events, (void**)&source)) >= 0)
-    {
-      // Process this event.
-      if (source != NULL)
-      {
-        source->process(state, source);
-      }
-
-      // If a sensor has data, process it now.
-      if (ident == LOOPER_ID_USER) { ; }
-
-      // Check if we are exiting.
-      if (state->destroyRequested != 0)
-      {
-        bIsRunning = false;
-        break;
-      }
-    }
-  }*/
 }

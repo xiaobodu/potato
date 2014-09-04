@@ -12,6 +12,7 @@ public abstract class PActivity extends NativeActivity {
 	
 	public PActivity() {
 		PActivity.instance = this;
+
 		/// declare the class in dvm
 		helper = new PNativeHelper();
 	}

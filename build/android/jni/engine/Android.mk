@@ -11,16 +11,18 @@ REAL_CODE_PATH := $(REAL_ROOT_PATH)/code/
 LOCAL_MODULE    		:= engine
 LOCAL_CFLAGS 			:= -Wall -fPIC -DBUILD_ANDROID
 
-LOCAL_SRC_FILES 		:= $(CODE_PATH)/potato/src/engine/engine.cpp\
-                       $(CODE_PATH)//potato/src/utility/thread.cpp\
-                       $(CODE_PATH)/potato/src/utility/util_dl.cpp
-
-LOCAL_LDLIBS    		:= -ldl -llog
+LOCAL_CPP_FEATURES 		:= rtti exceptions
 
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/inc
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/engine
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/external/rapidjson/include
+
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/engine/engine.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)//potato/src/utility/thread.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/util_dl.cpp
+
+LOCAL_LDLIBS    		:= -ldl -llog
 
 LOCAL_SHARED_LIBRARIES := libstlport_static
 
