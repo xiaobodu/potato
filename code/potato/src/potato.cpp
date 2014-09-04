@@ -67,38 +67,41 @@ Potato& Potato::Initialize(const std::string& rsLibPath, const std::string& rsDa
 Potato& Potato::Initialize(const std::string& rsDataPath, const std::string& rsConfigFile)
 #endif
 {
-  std::string file_context = utility::ReadFile((rsDataPath + "/" + rsConfigFile).c_str());
+  if (NULL == m_pEngine)
+  {
+    std::string file_context = utility::ReadFile((rsDataPath + "/" + rsConfigFile).c_str());
 
-  /// parse the configure file
-  /// and check the value's type
-  rapidjson::Document doc;
-  doc.Parse(file_context.c_str());
-  assert(doc.IsObject());
-  const rapidjson::Value& engine = doc["engine"];
-  assert(engine.IsObject());
-  const rapidjson::Value& library = engine["library"];
-  assert(library.IsObject());
-  const rapidjson::Value& library_file = library["file"];
-  assert(library_file.IsString());
-  const rapidjson::Value& configure = engine["configure"];
-  assert(configure.IsObject());
-  const rapidjson::Value& configure_file = configure["file"];
-  assert(configure_file.IsString());
+    /// parse the configure file
+    /// and check the value's type
+    rapidjson::Document doc;
+    doc.Parse(file_context.c_str());
+    assert(doc.IsObject());
+    const rapidjson::Value& engine = doc["engine"];
+    assert(engine.IsObject());
+    const rapidjson::Value& library = engine["library"];
+    assert(library.IsObject());
+    const rapidjson::Value& library_file = library["file"];
+    assert(library_file.IsString());
+    const rapidjson::Value& configure = engine["configure"];
+    assert(configure.IsObject());
+    const rapidjson::Value& configure_file = configure["file"];
+    assert(configure_file.IsString());
 
 #if defined(BUILD_ANDROID)
-  m_oConfigEngine._sLibrPath = rsLibPath;
+    m_oConfigEngine._sLibrPath = rsLibPath;
 #else
-  m_oConfigEngine._sLibrPath = rsDataPath;
+    m_oConfigEngine._sLibrPath = rsDataPath;
 #endif
-  m_oConfigEngine._sDataPath = rsDataPath;
-  m_oConfigEngine._sLibraryFile = library_file.GetString();
-  m_oConfigEngine._sConfigureFile = configure_file.GetString();
+    m_oConfigEngine._sDataPath = rsDataPath;
+    m_oConfigEngine._sLibraryFile = library_file.GetString();
+    m_oConfigEngine._sConfigureFile = configure_file.GetString();
 
-  /// load the dynamic library
-  typedef FUNC_API_TYPE(CreateEngine) CreateEngineFuncPtr;
-  CreateEngineFuncPtr func_create_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<CreateEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(CreateEngine));
-  /// create the engine with configure
-  func_create_func_ptr(m_pEngine, m_oConfigEngine);
+    /// load the dynamic library
+    typedef FUNC_API_TYPE(CreateEngine) CreateEngineFuncPtr;
+    CreateEngineFuncPtr func_create_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<CreateEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(CreateEngine));
+    /// create the engine with configure
+    func_create_func_ptr(m_pEngine, m_oConfigEngine);
+  }
 
   return *this;
 }

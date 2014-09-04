@@ -2,9 +2,7 @@
 #include <unistd.h>
 #include <string>
 
-//#define RAPIDJSON_NOMEMBERITERATORCLASS
 #include <rapidjson/document.h>
-//#undef RAPIDJSON_NOMEMBERITERATORCLASS
 
 #include "engine.h"
 #include "display.h"
@@ -36,6 +34,7 @@ CEngine::CEngine(const ac::base::Config& roConfig)
   rapidjson::Document doc;
   doc.Parse(file_context.c_str());
   assert(doc.IsObject());
+  if (NULL == m_pDisplay)
   {
     const rapidjson::Value& display = doc["display"];
     assert(display.IsObject());
@@ -59,6 +58,7 @@ CEngine::CEngine(const ac::base::Config& roConfig)
     /// create the display with configure
     func_create_func_ptr(m_pDisplay, m_oConfigDisplay);
   }
+  if (NULL == m_pRender)
   {
     const rapidjson::Value& render = doc["render"];
     assert(render.IsObject());
@@ -122,7 +122,7 @@ public:
   {
     utility::Log::Instance().System("start the display work");
 
-    m_pDisplay->Run();
+    //m_pDisplay->Run();
 
     utility::Log::Instance().System("end the display work");
   }
@@ -131,14 +131,22 @@ private:
   IDisplay* m_pDisplay;
 };
 
+#if defined(BUILD_ANDROID)
+void CEngine::Run(android_app* pApp)
+#else
 void CEngine::Run()
+#endif
 {
   utility::Log::Instance().System("engine is running");
 
   //DisplayWorker display_worker(m_pDisplay);
   //thread::IWorker* workers[] = {&display_worker};
   //thread::DoJob(workers, 1);
+#if defined(BUILD_ANDROID)
+  m_pDisplay->Run(pApp);
+#else
   m_pDisplay->Run();
+#endif
 }
 
 }

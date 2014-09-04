@@ -10,7 +10,7 @@ REAL_CODE_PATH := $(REAL_ROOT_PATH)/code/
 
 #------------------
 LOCAL_MODULE    		:= potato
-LOCAL_CFLAGS 			:= -Wall -g -DBUILD_ANDROID
+LOCAL_CFLAGS 			:= -Wall -DBUILD_ANDROID
 
 LOCAL_CPP_FEATURES 		:= rtti exceptions
 

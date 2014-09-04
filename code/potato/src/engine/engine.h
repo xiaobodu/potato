@@ -18,7 +18,11 @@ public:
   virtual ~CEngine();
 
 public:
+#if defined(BUILD_ANDROID)
+  virtual void Run(android_app* pApp);
+#else
   virtual void Run();
+#endif
 
 private:
   base::Config m_oConfigDisplay;

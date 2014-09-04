@@ -2,17 +2,16 @@
 #include <cassert>
 #include <pthread.h>
 #include <android/log.h>
-#include <android/native_activity.h>
 #include <android_native_app_glue.h>
 
 #include "potato.h"
-
-#define PLOG_TAG    "jni_potato"
-#define PLOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, PLOG_TAG, __VA_ARGS__))
-#define PLOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, PLOG_TAG, __VA_ARGS__))
-#define PLOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, PLOG_TAG, __VA_ARGS__))
+#include "utility/util_log.h"
 
 #define CLASS_NAME "android/app/NativeActivity"
+#define HELPER_CLASS_NAME "me/alexchi/potato/PNativeHelper"
+
+#define PLOG_TAG             "potato"
+#define PLOGI(...)           ((void)__android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__))
 
 namespace scope {
 
@@ -56,7 +55,7 @@ protected:
   virtual ~NativeHelper();
 
 public:
-  void Initialize(ANativeActivity*& rpActivity, const std::string& rsClassName);
+  void Initialize(struct android_app*& rpApp, const std::string& rsClassName);
 
 public:
   std::string GetLibraryPath();
@@ -104,11 +103,11 @@ NativeHelper::~NativeHelper()
   pthread_mutex_destroy(&m_Mutex);
 }
 
-void NativeHelper::Initialize(ANativeActivity*& rpActivity, const std::string& rsClassName)
+void NativeHelper::Initialize(struct android_app*& rpApp, const std::string& rsClassName)
 {
   pthread_mutex_init(&m_Mutex, NULL);
-  assert(NULL != rpActivity);
-  m_pActivity = rpActivity;
+  assert(NULL != rpApp);
+  m_pActivity = rpApp->activity;
   m_sClassName = rsClassName;
 
   scope::ThreadMutex jni_env = scope::ThreadMutex(&m_Mutex, m_pActivity);
@@ -176,17 +175,27 @@ jclass NativeHelper::RetrieveClass(JNIEnv*& rpEnv, const std::string& rsClassNam
 
   jstring str_class_name = rpEnv->NewStringUTF(rsClassName.c_str());
   jclass class_retrieved = (jclass)rpEnv->CallObjectMethod(cls, find_class, str_class_name);
-  rpEnv->DeleteLocalRef( str_class_name );
+  rpEnv->DeleteLocalRef(str_class_name);
   return class_retrieved;
 }
 
 void potato_main(struct android_app* state)
 {
+  PLOGI("potato_main");
+
   app_dummy();
 
-  NativeHelper::Instance().Initialize(state->activity, "me/alexchi/potato/PNativeHelper");
+  NativeHelper::Instance().Initialize(state, HELPER_CLASS_NAME);
+
   std::string libr_path = NativeHelper::Instance().GetLibraryPath();
-  PLOGI("libr_path: %s", libr_path.c_str());
+  ac::utility::Log::Instance().Info("libr_path: %s", libr_path.c_str());
   std::string data_path = NativeHelper::Instance().GetExternalPath();
-  PLOGI("data_path: %s", data_path.c_str());
+  ac::utility::Log::Instance().Info("data_path: %s", data_path.c_str());
+  PLOGI("potato_main1");
+  ac::Potato::Instance().Initialize(libr_path, data_path, "potato.json");
+
+  PLOGI("potato_main2");
+  ac::core::IEngine*& engine_ptr = ac::Potato::Instance().GetEngine();
+  assert(NULL != engine_ptr);
+  engine_ptr->Run(state);
 }

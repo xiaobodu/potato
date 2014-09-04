@@ -9,7 +9,7 @@ REAL_ROOT_PATH := $(LOCAL_PATH)/../../../../
 REAL_CODE_PATH := $(REAL_ROOT_PATH)/code/
 
 LOCAL_MODULE    		:= t001
-LOCAL_CFLAGS    		:= -g -Wall -DBUILD_ANDROID
+LOCAL_CFLAGS    		:= -Wall -DBUILD_ANDROID
 
 LOCAL_CPP_FEATURES 		:= rtti exceptions
 

@@ -17,10 +17,13 @@ public:
 
 public:
   virtual void BindRender(core::IRender*& rpRender);
-  virtual void Run();
+  virtual void Run(android_app* pApp);
 
-protected:
-  void Initialize(EGLNativeWindowType pWindow);
+public:
+  void Initialize(android_app* pApp);
+  void Stop();
+  void Continue();
+  void Pause();
 
 private:
   EGLDisplay m_pGLDisplay;
@@ -29,6 +32,8 @@ private:
   EGLConfig m_pGLConfig;
 
   bool m_bIsRunning;
+  bool m_bIsEGLReady;
+  bool m_bCanRender;
 
   core::IRender* m_pRender;
 };

@@ -9,11 +9,11 @@ REAL_ROOT_PATH := $(LOCAL_PATH)/../../../../../
 REAL_CODE_PATH := $(REAL_ROOT_PATH)/code/
 
 LOCAL_MODULE    		:= render_gles
-LOCAL_CFLAGS 				:= -Wall -g -fPIC -DBUILD_ANDROID
+LOCAL_CFLAGS 			:= -Wall -fPIC -DBUILD_ANDROID
 
 LOCAL_SRC_FILES 		:= $(CODE_PATH)/potato/src/support/render_gles/render_gles.cpp
 
-LOCAL_LDLIBS    		:= -lEGL -lGLESv1_CM
+LOCAL_LDLIBS    		:= -llog -lEGL -lGLESv1_CM
 
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/engine

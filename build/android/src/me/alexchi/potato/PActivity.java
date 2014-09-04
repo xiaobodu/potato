@@ -8,8 +8,12 @@ public abstract class PActivity extends NativeActivity {
 	
 	public static PActivity instance = null;
 	
+	protected PNativeHelper helper = null;
+	
 	public PActivity() {
 		PActivity.instance = this;
+		/// declare the class in dvm
+		helper = new PNativeHelper();
 	}
 
 	@Override

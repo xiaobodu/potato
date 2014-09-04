@@ -4,6 +4,10 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 
 public class PNativeHelper {
+	
+	public PNativeHelper() {
+		;
+	}
 
 	public String GetLibraryPath() {
 		assert null != PActivity.instance : "the instance of PActivity is null";
@@ -17,12 +21,12 @@ public class PNativeHelper {
 	}
 
 	public String GetExternalPath() {
-		try {
-			Thread.sleep(10000);
+		/*try {
+			Thread.sleep(15000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		return Environment.getExternalStorageDirectory().getAbsolutePath() + "/potato";
 	}
 

@@ -5,9 +5,27 @@
 #include <cstdarg>
 #include <cstdio>
 
+#if defined(BUILD_ANDROID)
+
+#include <android/log.h>
+
+#define LOG_TAG             "potato"
+#define LOGUNKNOWN(...)     ((void)__android_log_print(ANDROID_LOG_UNKNOWN, LOG_TAG, __VA_ARGS__))
+#define LOGDEFAULT(...)     ((void)__android_log_print(ANDROID_LOG_DEFAULT, LOG_TAG, __VA_ARGS__))
+#define LOGV(...)           ((void)__android_log_print(ANDROID_LOG_VERBOSE, LOG_TAG, __VA_ARGS__))
+#define LOGD(...)           ((void)__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__))
+#define LOGI(...)           ((void)__android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__))
+#define LOGW(...)           ((void)__android_log_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__))
+#define LOGE(...)           ((void)__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__))
+#define LOGF(...)           ((void)__android_log_print(ANDROID_LOG_FATAL, LOG_TAG, __VA_ARGS__))
+#define LOGSILENT(...)      ((void)__android_log_print(ANDROID_LOG_SILENT, LOG_TAG, __VA_ARGS__))
+
+#endif
+
 namespace ac{
 namespace utility{
 
+#if !defined(BUILD_ANDROID)
 // define the style/color code
 #define TEXT_STYLE_END                  "\x1b[0m"
 #define TEXT_STYLE_BOLD                 "\x1b[1m"
@@ -36,7 +54,7 @@ const static char* TextStyleCode[] = {TEXT_STYLE_END,
     TEXT_STYLE_BGCOLOR_BLACK, TEXT_STYLE_BGCOLOR_RED, TEXT_STYLE_BGCOLOR_GREEN, TEXT_STYLE_BGCOLOR_YELLOW,
     TEXT_STYLE_BGCOLOR_BLUE, TEXT_STYLE_BGCOLOR_MAGENTA, TEXT_STYLE_BGCOLOR_CYAN, TEXT_STYLE_BGCOLOR_WHITE
 };
-
+#endif
 
 #define TEXT_BUFFER_SIZE_MAX            256
 #define GET_ARGS_TEXT(text, result)\
@@ -49,6 +67,7 @@ const static char* TextStyleCode[] = {TEXT_STYLE_END,
 class Log
 {
 public:
+#if !defined(BUILD_ANDROID)
   typedef enum enmLogStyle
   {
     EStyle_End = 0,
@@ -72,6 +91,7 @@ public:
     EStyle_BGColor_White,
     EStyle_None,
   } LogStyle;
+#endif
 
 public:
   static const Log& Instance()
@@ -88,45 +108,74 @@ public:
   void Fatal(const char* const& rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
+#if defined(BUILD_ANDROID)
+    LOGF("[FATA] %s", result);
+#else
     (*this)(stderr, EStyle_BGColor_Red, "FATA", result);
+#endif
   }
 
   void Error(const char* const& rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
+#if defined(BUILD_ANDROID)
+    LOGE("[ERRO] %s", result);
+#else
     (*this)(stderr, EStyle_Color_Red, "ERRO", result);
+#endif
   }
 
   void Warning(const char* const& rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
+#if defined(BUILD_ANDROID)
+    LOGW("[WARN] %s", result);
+#else
     (*this)(stdout, EStyle_Color_Yellow, "WARN", result);
+#endif
   }
 
   void System(const char* const& rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
+#if defined(BUILD_ANDROID)
+    LOGV("[SYST] %s", result);
+#else
     (*this)(stdout, EStyle_Color_Cyan, "SYST", result);
+#endif
   }
 
   void Info(const char* const& rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
+#if defined(BUILD_ANDROID)
+    LOGI("[INFO] %s", result);
+#else
     (*this)(stdout, EStyle_None, "INFO", result);
+#endif
   }
 
   void Debug(const char* const& rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
+#if defined(BUILD_ANDROID)
+    LOGD("[DEBU] %s", result);
+#else
     (*this)(stdout, EStyle_Color_Magenta, "DEBU", result);
+#endif
   }
 
   void User(const char* const& rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
+#if defined(BUILD_ANDROID)
+    LOGV("[USER] %s", result);
+#else
     (*this)(stdout, EStyle_Color_Green, "USER", result);
+#endif
   }
 
+#if !defined(BUILD_ANDROID)
   void operator()(FILE* pFile, const LogStyle& eStyle, const char* const& rcTitle, const char* const& rcText, ...) const
   {
     assert(pFile != NULL);
@@ -164,8 +213,8 @@ public:
       assert(0);
       break;
     }
-    //
   }
+#endif
 
 public:
   void TestAllLogTypes() const

@@ -17,6 +17,9 @@
 #define FUNC_API_TYPEDEF(function_name, class_class, config_class)\
     typedef bool (*FUNC_API_TYPE(function_name))(class_class*& rpClass, config_class& roConfig);
 
+#if defined(BUILD_ANDROID)
+struct android_app;
+#endif
 namespace ac{
 
 namespace base{
@@ -54,7 +57,11 @@ public:
   }
 
 public:
+#if defined(BUILD_ANDROID)
+  virtual void Run(android_app* pApp) = 0;
+#else
   virtual void Run() = 0;
+#endif
 };
 
 } // end of namespace core
