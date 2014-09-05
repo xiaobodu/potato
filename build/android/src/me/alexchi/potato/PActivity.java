@@ -4,17 +4,17 @@ import android.app.NativeActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-public abstract class PActivity extends NativeActivity {
+public abstract class PActivity extends NativeActivity implements IPActivity {
 	
 	public static PActivity instance = null;
 	
-	protected PNativeHelper helper = null;
+	@SuppressWarnings("unused")
+	private IPNativeHelper m_pHelper = null;
 	
 	public PActivity() {
 		PActivity.instance = this;
-
-		/// declare the class in dvm
-		helper = new PNativeHelper();
+		
+		m_pHelper = getHelper();
 	}
 
 	@Override

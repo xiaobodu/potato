@@ -8,6 +8,7 @@
 
 namespace ac {
 namespace display {
+namespace android_gles {
 
 class CDisplay: public core::IDisplay
 {
@@ -41,5 +42,6 @@ private:
   struct android_app* m_pApp;
 };
 
+}
 }
 }

@@ -1,6 +1,30 @@
-#include "asset.h"
+#include "asset_impl.h"
 
 #include <cassert>
+
+namespace ac{
+
+namespace asset{
+
+CAsset::CAsset(const ac::base::Config& roConfig)
+{
+  ;
+}
+
+CAsset::~CAsset()
+{
+  ;
+}
+
+void CAsset::Load(const std::string& rsFileName)
+{
+  ;
+}
+
+}
+
+}
+
 
 bool CreateAsset(ac::core::IAsset*& rpAsset, const ac::base::Config& roConfig)
 {
@@ -9,7 +33,7 @@ bool CreateAsset(ac::core::IAsset*& rpAsset, const ac::base::Config& roConfig)
   {
     return false;
   }
-  //rpAsset = new ac::display::CAsset(roConfig);
+  rpAsset = new ac::asset::CAsset(roConfig);
   return true;
 }
 

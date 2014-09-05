@@ -32,7 +32,7 @@ private:
 
 }
 
-extern "C" void potato_main(struct android_app* state);
+extern "C" void potato_main(struct android_app* pApp, const std::string& rsNativeClassName, const std::string& rsHelperClassName);
 
 #endif
 

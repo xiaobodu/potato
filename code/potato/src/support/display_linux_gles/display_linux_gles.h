@@ -10,6 +10,7 @@
 
 namespace ac {
 namespace display {
+namespace linux_gles {
 
 class CDisplay: public core::IDisplay
 {
@@ -41,5 +42,6 @@ private:
   core::IRender* m_pRender;
 };
 
+}
 }
 }

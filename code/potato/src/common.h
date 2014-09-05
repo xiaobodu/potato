@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 
 #define TOSTRING1(num)             #num
 #define TOSTRING(num)              TOSTRING1(num)

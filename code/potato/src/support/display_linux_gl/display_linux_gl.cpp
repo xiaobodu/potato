@@ -13,6 +13,7 @@
 
 namespace ac {
 namespace display {
+namespace linux_gl {
 
 CDisplay::CDisplay(const ac::base::Config& roConfig) :
     m_pDisplay(NULL), m_lWindow(0), m_pGLContext(NULL), m_bIsRunning(true), m_pRender(NULL)
@@ -165,11 +166,12 @@ void CDisplay::DestroyWindow()
 
 }
 }
+}
 
 bool CreateDisplay(ac::core::IDisplay*& rpDisplay, const ac::base::Config& roConfig)
 {
   assert(rpDisplay == NULL);
-  rpDisplay = new ac::display::CDisplay(roConfig);
+  rpDisplay = new ac::display::linux_gl::CDisplay(roConfig);
   return true;
 }
 

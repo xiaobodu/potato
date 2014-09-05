@@ -3,7 +3,7 @@ package me.alexchi.potato;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 
-public class PNativeHelper {
+public abstract class PNativeHelper implements IPNativeHelper {
 	
 	public PNativeHelper() {
 		;
@@ -27,7 +27,7 @@ public class PNativeHelper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
-		return Environment.getExternalStorageDirectory().getAbsolutePath() + "/potato";
+		return Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + GetAppName();
 	}
 
 }

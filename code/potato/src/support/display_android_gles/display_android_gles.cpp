@@ -14,9 +14,18 @@
 
 namespace ac {
 namespace display {
+namespace android_gles {
 
-CDisplay::CDisplay(const ac::base::Config& roConfig) :
-    m_pGLDisplay(EGL_NO_DISPLAY), m_pGLSurface(EGL_NO_SURFACE), m_pGLContext(EGL_NO_CONTEXT), m_pGLConfig(NULL), m_bIsRunning(false), m_bIsEGLReady(false), m_bCanRender(false), m_pRender(NULL)
+CDisplay::CDisplay(const ac::base::Config& roConfig)
+  : m_pGLDisplay(EGL_NO_DISPLAY)
+  , m_pGLSurface(EGL_NO_SURFACE)
+  , m_pGLContext(EGL_NO_CONTEXT)
+  , m_pGLConfig(NULL)
+  , m_bIsRunning(false)
+  , m_bIsEGLReady(false)
+  , m_bCanRender(false)
+  , m_pRender(NULL)
+  , m_pApp(NULL)
 {
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
   //
@@ -40,7 +49,7 @@ void CDisplay::BindAndroidApp(struct android_app* pApp)
 
 static void handle_cmd(struct android_app* app, int32_t cmd)
 {
-  ac::display::CDisplay* display_ptr = (ac::display::CDisplay*)app->userData;
+  ac::display::android_gles::CDisplay* display_ptr = (ac::display::android_gles::CDisplay*) app->userData;
   assert(NULL != display_ptr);
 
   switch (cmd)
@@ -120,9 +129,33 @@ static void handle_cmd(struct android_app* app, int32_t cmd)
 
 static int32_t handle_input(struct android_app* app, AInputEvent* event)
 {
+  int32_t type = AInputEvent_getType(event);
+  ac::utility::Log::Instance().Info("engine_handle_input %d", type);
+  if (type == AINPUT_EVENT_TYPE_MOTION)
+  {
+    return 1;
+  }
   //
-  ac::utility::Log::Instance().Info("engine_handle_input");
   return 0;
+}
+
+// NOTE: from http://ps3computing.blogspot.ca/2012/12/anr-application-not-responding.html
+static void process_input(struct android_app* app, struct android_poll_source* source)
+{
+  AInputEvent* event = NULL;
+  while (AInputQueue_hasEvents(app->inputQueue))
+  {
+    if (AInputQueue_getEvent(app->inputQueue, &event) >= 0)
+    {
+      int32_t handled = 0;
+      //uint32_t devid = AInputEvent_getDeviceId(event);
+      //uint32_t src = AInputEvent_getSource(event);
+      //LOGV("New input event: type=%d devid=%x src=%x\n", AInputEvent_getType(event), devid, src);
+      int32_t predispatched = AInputQueue_preDispatchEvent(app->inputQueue, event);
+      if (app->onInputEvent != NULL && !predispatched) handled = app->onInputEvent(app, event);
+      if (!predispatched) AInputQueue_finishEvent(app->inputQueue, event, handled);
+    }
+  }
 }
 
 void CDisplay::Run()
@@ -136,6 +169,7 @@ void CDisplay::Run()
   m_pApp->userData = this;
   m_pApp->onAppCmd = handle_cmd;
   m_pApp->onInputEvent = handle_input;
+  m_pApp->inputPollSource.process = process_input;
 
   timeval time;
   gettimeofday(&time, NULL);
@@ -156,7 +190,7 @@ void CDisplay::Run()
     // If not animating, we will block forever waiting for events.
     // If animating, we loop until all events are read, then continue
     // to draw the next frame of animation.
-    while ((ident=ALooper_pollAll(m_bIsRunning ? 0 : -1, NULL, &events, (void**)&source)) >= 0)
+    while ((ident = ALooper_pollAll(m_bIsRunning ? 0 : -1, NULL, &events, (void**) &source)) >= 0)
     {
       // Process this event.
       if (source != NULL)
@@ -165,7 +199,10 @@ void CDisplay::Run()
       }
 
       // If a sensor has data, process it now.
-      if (ident == LOOPER_ID_USER) { ; }
+      if (ident == LOOPER_ID_USER)
+      {
+        ;
+      }
 
       // Check if we are exiting.
       if (m_pApp->destroyRequested != 0)
@@ -205,21 +242,21 @@ void CDisplay::Initialize(android_app* pApp)
 {
   ac::utility::Log::Instance().Info("CDisplay::Initialize");
   m_pGLDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-  ac::utility::Log::Instance().Info("display: %d", (int)m_pGLDisplay);
+  ac::utility::Log::Instance().Info("display: %d", (int) m_pGLDisplay);
   assert(EGL_NO_DISPLAY != m_pGLDisplay);
 
   EGLint egl_major = 0;
   EGLint egl_minor = 0;
-  if (EGL_TRUE != eglInitialize(m_pGLDisplay, &egl_major, &egl_minor)) assert(0);
+  if (EGL_TRUE != eglInitialize(m_pGLDisplay, &egl_major, &egl_minor))
+  assert(0);
   ac::utility::Log::Instance().Info("using EGL v%d.%d", egl_major, egl_minor);
 
   const EGLint config_attribs[] = {
-    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-    EGL_BLUE_SIZE, 8,
-    EGL_GREEN_SIZE, 8,
-    EGL_RED_SIZE, 8,
-    EGL_NONE
-    };
+  EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+  EGL_BLUE_SIZE, 8,
+  EGL_GREEN_SIZE, 8,
+  EGL_RED_SIZE, 8,
+  EGL_NONE };
   EGLint num_configs = 0;
   if (!eglChooseConfig(m_pGLDisplay, config_attribs, &m_pGLConfig, 1, &num_configs))
   {
@@ -232,15 +269,16 @@ void CDisplay::Initialize(android_app* pApp)
 
   ANativeWindow_setBuffersGeometry(pApp->window, 0, 0, vid);
 
-  m_pGLSurface = eglCreateWindowSurface(m_pGLDisplay, m_pGLConfig, pApp->window, NULL);
+  m_pGLSurface = eglCreateWindowSurface(m_pGLDisplay, m_pGLConfig, (EGLNativeWindowType)pApp->window, NULL);
   assert(EGL_NO_SURFACE != m_pGLSurface);
 
   const EGLint context_attribs[] = {
-    EGL_CONTEXT_CLIENT_VERSION, 1,
-    EGL_NONE };
+  EGL_CONTEXT_CLIENT_VERSION, 1,
+  EGL_NONE };
   m_pGLContext = eglCreateContext(m_pGLDisplay, m_pGLConfig, NULL, context_attribs);
   assert(EGL_NO_DISPLAY != m_pGLContext);
-  if (EGL_TRUE != eglMakeCurrent(m_pGLDisplay, m_pGLSurface, m_pGLSurface, m_pGLContext)) assert(0);
+  if (EGL_TRUE != eglMakeCurrent(m_pGLDisplay, m_pGLSurface, m_pGLSurface, m_pGLContext))
+  assert(0);
 
   m_pRender->Start();
 
@@ -259,7 +297,8 @@ void CDisplay::Stop()
   ac::utility::Log::Instance().Info("CDisplay::Stop");
   if (m_pGLDisplay != EGL_NO_DISPLAY && m_bIsEGLReady)
   {
-    eglMakeCurrent(m_pGLDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+    eglMakeCurrent(m_pGLDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE,
+    EGL_NO_CONTEXT);
     if (m_pGLContext != EGL_NO_CONTEXT)
     {
       eglDestroyContext(m_pGLDisplay, m_pGLContext);
@@ -298,11 +337,12 @@ void CDisplay::Resize(const int& riWidth, const int& riHeight)
 
 }
 }
+}
 
 bool CreateDisplay(ac::core::IDisplay*& rpDisplay, const ac::base::Config& roConfig)
 {
   assert(rpDisplay == NULL);
-  rpDisplay = new ac::display::CDisplay(roConfig);
+  rpDisplay = new ac::display::android_gles::CDisplay(roConfig);
   return true;
 }
 

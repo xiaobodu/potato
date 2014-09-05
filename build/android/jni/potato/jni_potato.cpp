@@ -13,9 +13,6 @@
 #define PLOG_TAG             "potato"
 #define PLOGI(...)           ((void)__android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__))
 
-#define NATIVE_CLASS_NAME "android/app/NativeActivity"
-#define HELPER_CLASS_NAME "me/alexchi/potato/PNativeHelper"
-
 namespace scope {
 
 class ThreadMutex
@@ -59,7 +56,7 @@ protected:
   virtual ~NativeHelper();
 
 public:
-  void Initialize(struct android_app*& rpApp);
+  void Initialize(struct android_app*& rpApp, const std::string& rsNativeClassName, const std::string& rsHelperClassName);
 
 public:
   std::string GetLibraryPath();
@@ -84,6 +81,8 @@ NativeHelper& NativeHelper::Instance()
 
 NativeHelper::NativeHelper()
   : m_pActivity(NULL)
+  , m_JNIObject(NULL)
+  , m_JNIClass(NULL)
 {
   ;
 }
@@ -95,13 +94,13 @@ NativeHelper::~NativeHelper()
   JNIEnv* env = NULL;
   m_pActivity->vm->AttachCurrentThread( &env, NULL );
 
-  env->DeleteGlobalRef(m_JNIObject);
-  env->DeleteGlobalRef(m_JNIClass);
+  if (NULL != m_JNIObject) env->DeleteGlobalRef(m_JNIObject);
+  if (NULL != m_JNIClass) env->DeleteGlobalRef(m_JNIClass);
 
   pthread_mutex_destroy(&m_Mutex);
 }
 
-void NativeHelper::Initialize(struct android_app*& rpApp)
+void NativeHelper::Initialize(struct android_app*& rpApp, const std::string& rsNativeClassName, const std::string& rsHelperClassName)
 {
   pthread_mutex_init(&m_Mutex, NULL);
   assert(NULL != rpApp);
@@ -118,7 +117,7 @@ void NativeHelper::Initialize(struct android_app*& rpApp)
   const char* appname = env->GetStringUTFChars(packageName, NULL);
   m_sAppName = std::string(appname);
 
-  jclass cls = RetrieveClass(env, NATIVE_CLASS_NAME, HELPER_CLASS_NAME);
+  jclass cls = RetrieveClass(env, rsNativeClassName, rsHelperClassName);
   m_JNIClass = (jclass) env->NewGlobalRef(cls);
 
   jmethodID constructor = env->GetMethodID(m_JNIClass, "<init>", "()V");
@@ -168,19 +167,19 @@ jclass NativeHelper::RetrieveClass(JNIEnv*& rpEnv, const std::string& rsNativeCl
   jclass class_loader = rpEnv->FindClass("java/lang/ClassLoader");
   jmethodID find_class = rpEnv->GetMethodID(class_loader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;");
 
-  jstring str_class_name = rpEnv->NewStringUTF(HELPER_CLASS_NAME);
+  jstring str_class_name = rpEnv->NewStringUTF(rsHelperClassName.c_str());
   jclass class_retrieved = (jclass)rpEnv->CallObjectMethod(cls, find_class, str_class_name);
   rpEnv->DeleteLocalRef(str_class_name);
   return class_retrieved;
 }
 
-void potato_main(struct android_app* state)
+void potato_main(android_app* pApp, const std::string& rsNativeClassName, const std::string& rsHelperClassName)
 {
   ac::utility::Log::Instance().Info("potato_main");
 
   app_dummy();
 
-  NativeHelper::Instance().Initialize(state);
+  NativeHelper::Instance().Initialize(pApp, rsNativeClassName, rsHelperClassName);
 
   std::string libr_path = NativeHelper::Instance().GetLibraryPath();
   std::string data_path = NativeHelper::Instance().GetExternalPath();
@@ -188,5 +187,5 @@ void potato_main(struct android_app* state)
 
   ac::core::IEngine*& engine_ptr = ac::Potato::Instance().GetEngine();
   assert(NULL != engine_ptr);
-  engine_ptr->Run(state);
+  engine_ptr->Run(pApp);
 }
