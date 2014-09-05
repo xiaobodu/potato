@@ -36,7 +36,6 @@ typedef struct tagConfig
     return _sDataPath + "/" + _sConfigureFile;
   }
 
-
   std::string GetLibraryFile() const
   {
     return _sLibrPath + "/" + _sLibraryFile;

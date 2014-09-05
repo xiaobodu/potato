@@ -26,8 +26,9 @@ namespace core{
 CEngine::CEngine(const ac::base::Config& roConfig)
   : m_pDisplay(NULL)
   , m_pRender(NULL)
+  , m_pLibraryManager(NULL)
 {
-  utility::Log::Instance().System("call the 'CEngine' constructor");
+  m_pLibraryManager = new utility::DynamicLibraryManager();
 
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
 
@@ -54,7 +55,7 @@ CEngine::CEngine(const ac::base::Config& roConfig)
 
     /// load the dynamic library
     typedef FUNC_API_TYPE(CreateDisplay) CreateDisplayFuncPtr;
-    CreateDisplayFuncPtr func_create_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<CreateDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(CreateDisplay));
+    CreateDisplayFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(CreateDisplay));
     /// create the display with configure
     func_create_func_ptr(m_pDisplay, m_oConfigDisplay);
   }
@@ -78,7 +79,7 @@ CEngine::CEngine(const ac::base::Config& roConfig)
 
     /// load the dynamic library
     typedef FUNC_API_TYPE(CreateRender) CreateRenderFuncPtr;
-    CreateRenderFuncPtr func_create_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<CreateRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(CreateRender));
+    CreateRenderFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(CreateRender));
     /// create the display with configure
     func_create_func_ptr(m_pRender, m_oConfigDisplay);
   }
@@ -89,22 +90,28 @@ CEngine::CEngine(const ac::base::Config& roConfig)
 
 CEngine::~CEngine()
 {
-  utility::Log::Instance().System("call the 'CEngine' destructor");
-
+  if (NULL != m_pRender)
   {
     /// load the dynamic library
     typedef FUNC_API_TYPE(DestroyRender) DestroyRenderFuncPtr;
-    DestroyRenderFuncPtr func_destroy_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<DestroyRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(DestroyRender));
+    DestroyRenderFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(DestroyRender));
     /// create the display with configure
     func_destroy_func_ptr(m_pRender, m_oConfigDisplay);
   }
 
+  if (NULL != m_pDisplay)
   {
     /// load the dynamic library
     typedef FUNC_API_TYPE(DestroyDisplay) DestroyDisplayFuncPtr;
-    DestroyDisplayFuncPtr func_destroy_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<DestroyDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(DestroyDisplay));
+    DestroyDisplayFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(DestroyDisplay));
     /// create the display with configure
     func_destroy_func_ptr(m_pDisplay, m_oConfigDisplay);
+  }
+
+  if (NULL != m_pLibraryManager)
+  {
+    delete m_pLibraryManager;
+    m_pLibraryManager = NULL;
   }
 }
 
@@ -122,7 +129,7 @@ public:
   {
     utility::Log::Instance().System("start the display work");
 
-    //m_pDisplay->Run();
+    m_pDisplay->Run();
 
     utility::Log::Instance().System("end the display work");
   }
@@ -139,14 +146,14 @@ void CEngine::Run()
 {
   utility::Log::Instance().System("engine is running");
 
+#if defined(BUILD_ANDROID)
+  m_pDisplay->BindAndroidApp(pApp);
+#endif
+  m_pDisplay->Run();
+
   //DisplayWorker display_worker(m_pDisplay);
   //thread::IWorker* workers[] = {&display_worker};
   //thread::DoJob(workers, 1);
-#if defined(BUILD_ANDROID)
-  m_pDisplay->Run(pApp);
-#else
-  m_pDisplay->Run();
-#endif
 }
 
 }

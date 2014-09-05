@@ -3,6 +3,8 @@
 #include "common.h"
 #include "potato.h"
 
+#include "utility/util_dl.h"
+
 #include <string>
 
 namespace ac{
@@ -29,6 +31,7 @@ private:
   core::IDisplay* m_pDisplay;
   base::Config m_oConfigRender;
   core::IRender* m_pRender;
+  utility::DynamicLibraryManager* m_pLibraryManager;
 };
 
 }

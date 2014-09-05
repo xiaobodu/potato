@@ -1,4 +1,5 @@
 #include "util_dl.h"
+#include "util_log.h"
 
 #include <dlfcn.h>
 #include <cassert>
@@ -7,10 +8,31 @@
 namespace ac{
 namespace utility{
 
-DynamicLibraryManager& DynamicLibraryManager::Instance()
+CDynamicLibraryHandler::CDynamicLibraryHandler(const std::string& rsFileName)
+  : m_pLib(NULL)
 {
-  static DynamicLibraryManager gs_instance;
-  return gs_instance;
+#if defined(BUILD_ANDROID)
+  m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
+#else
+  m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
+  //m_pLib = dlopen(rsFileName.c_str(), RTLD_NOW);
+#endif
+  assert(m_pLib != NULL);
+}
+
+CDynamicLibraryHandler::~CDynamicLibraryHandler()
+{
+//#if !defined(BUILD_DEBUG)
+  dlclose(m_pLib);
+//#endif
+}
+
+void* CDynamicLibraryHandler::GetFunc(const std::string& rsFuncName)
+{
+  void* func_ptr = dlsym(m_pLib, rsFuncName.c_str());
+  assert(func_ptr != NULL);
+  m_mapFuncName2FunPtr.insert(std::make_pair(rsFuncName, func_ptr));
+  return func_ptr;
 }
 
 DynamicLibraryManager::DynamicLibraryManager()
@@ -41,33 +63,6 @@ void* DynamicLibraryManager::GetFuncPtr(const std::string& rsFileName, const std
   CDynamicLibraryHandler* handler_ptr = new CDynamicLibraryHandler(rsFileName);
   m_mapFileName2Handler.insert(std::make_pair(rsFileName, handler_ptr));
   return handler_ptr->GetFunc(rsFuncName);
-}
-
-DynamicLibraryManager::CDynamicLibraryHandler::CDynamicLibraryHandler(const std::string& rsFileName)
-  : m_pLib(NULL)
-{
-#if defined(BUILD_ANDROID)
-  m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
-#else
-  m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
-  //m_pLib = dlopen(rsFileName.c_str(), RTLD_NOW);
-#endif
-  assert(m_pLib != NULL);
-}
-
-DynamicLibraryManager::CDynamicLibraryHandler::~CDynamicLibraryHandler()
-{
-#if !defined(BUILD_DEBUG)
-  dlclose(m_pLib);
-#endif
-}
-
-void* DynamicLibraryManager::CDynamicLibraryHandler::GetFunc(const std::string& rsFuncName)
-{
-  void* func_ptr = dlsym(m_pLib, rsFuncName.c_str());
-  assert(func_ptr != NULL);
-  m_mapFuncName2FunPtr.insert(std::make_pair(rsFuncName, func_ptr));
-  return func_ptr;
 }
 
 }

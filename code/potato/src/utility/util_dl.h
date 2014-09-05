@@ -6,13 +6,24 @@
 namespace ac{
 namespace utility{
 
+class CDynamicLibraryHandler
+{
+public:
+  CDynamicLibraryHandler(const std::string& rsFileName);
+  virtual ~CDynamicLibraryHandler();
+
+public:
+  void* GetFunc(const std::string& rsFuncName);
+
+private:
+  void* m_pLib;
+  std::map<std::string, void*> m_mapFuncName2FunPtr;
+};
+
 // a dynamic library manage interface
 class DynamicLibraryManager
 {
 public:
-  static DynamicLibraryManager& Instance();
-
-protected:
   DynamicLibraryManager();
   virtual ~DynamicLibraryManager();
 
@@ -20,7 +31,6 @@ public:
   virtual void* GetFuncPtr(const std::string& rsFileName, const std::string& rsFuncName);
 
 private:
-  class CDynamicLibraryHandler;
   typedef std::map<std::string, CDynamicLibraryHandler*> MapString2Handler;
   MapString2Handler m_mapFileName2Handler;
 
@@ -31,21 +41,6 @@ public:
   {
     return reinterpret_cast<TFuncPtr>(GetFuncPtr(rsFileName, rsFuncName));
   }
-
-private:
-  class CDynamicLibraryHandler
-  {
-  public:
-    CDynamicLibraryHandler(const std::string& rsFileName);
-    virtual ~CDynamicLibraryHandler();
-
-  public:
-    void* GetFunc(const std::string& rsFuncName);
-
-  private:
-    void* m_pLib;
-    std::map<std::string, void*> m_mapFuncName2FunPtr;
-  };
 };
 
 }

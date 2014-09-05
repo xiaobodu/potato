@@ -103,7 +103,7 @@ void CDisplay::Run()
     second_temp = second;
     second = time.tv_sec * 1.0 + time.tv_usec / 1000000.0;
     second_delta = second - second_temp;
-    if (m_pRender->Tick(second_delta))
+    if (m_pRender->Render(static_cast<float>(second_delta), NULL))
     {
       glXSwapBuffers(m_pDisplay, m_lWindow);
     }

@@ -17,7 +17,8 @@ public:
 
 public:
   virtual void BindRender(core::IRender*& rpRender);
-  virtual void Run(android_app* pApp);
+  virtual void BindAndroidApp(struct android_app* pApp);
+  virtual void Run();
 
 public:
   void Initialize(android_app* pApp);
@@ -37,10 +38,8 @@ private:
   bool m_bCanRender;
 
   core::IRender* m_pRender;
+  struct android_app* m_pApp;
 };
 
 }
 }
-
-FUNC_API_DECLARE(CreateDisplay, ac::core::IDisplay, const ac::base::Config);
-FUNC_API_DECLARE(DestroyDisplay, ac::core::IDisplay, const ac::base::Config);

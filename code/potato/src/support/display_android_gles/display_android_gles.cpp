@@ -33,6 +33,11 @@ void CDisplay::BindRender(core::IRender*& rpRender)
   m_pRender = rpRender;
 }
 
+void CDisplay::BindAndroidApp(struct android_app* pApp)
+{
+  m_pApp = pApp;
+}
+
 static void handle_cmd(struct android_app* app, int32_t cmd)
 {
   ac::display::CDisplay* display_ptr = (ac::display::CDisplay*)app->userData;
@@ -120,15 +125,17 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
   return 0;
 }
 
-void CDisplay::Run(android_app* pApp)
+void CDisplay::Run()
 {
   ac::utility::Log::Instance().Info("CDisplay::Run");
+  assert(NULL != m_pRender);
+  assert(NULL != m_pApp);
   m_bIsRunning = true;
   m_bCanRender = true;
 
-  pApp->userData = this;
-  pApp->onAppCmd = handle_cmd;
-  pApp->onInputEvent = handle_input;
+  m_pApp->userData = this;
+  m_pApp->onAppCmd = handle_cmd;
+  m_pApp->onInputEvent = handle_input;
 
   timeval time;
   gettimeofday(&time, NULL);
@@ -154,14 +161,14 @@ void CDisplay::Run(android_app* pApp)
       // Process this event.
       if (source != NULL)
       {
-        source->process(pApp, source);
+        source->process(m_pApp, source);
       }
 
       // If a sensor has data, process it now.
       if (ident == LOOPER_ID_USER) { ; }
 
       // Check if we are exiting.
-      if (pApp->destroyRequested != 0)
+      if (m_pApp->destroyRequested != 0)
       {
         Stop();
         m_bIsRunning = false;
@@ -175,7 +182,7 @@ void CDisplay::Run(android_app* pApp)
       second_temp = second;
       second = time.tv_sec * 1.0 + time.tv_usec / 1000000.0;
       second_delta = second - second_temp;
-      if (m_pRender->Tick(second_delta))
+      if (m_pRender->Render(static_cast<float>(second_delta), NULL))
       {
         eglSwapBuffers(m_pGLDisplay, m_pGLSurface);
       }

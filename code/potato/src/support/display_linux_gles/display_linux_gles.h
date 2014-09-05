@@ -43,6 +43,3 @@ private:
 
 }
 }
-
-FUNC_API_DECLARE(CreateDisplay, ac::core::IDisplay, const ac::base::Config);
-FUNC_API_DECLARE(DestroyDisplay, ac::core::IDisplay, const ac::base::Config);

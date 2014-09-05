@@ -13,8 +13,8 @@ set(SRC_FILE_LIST
   ${SRC_PATH_engine}/base.h
   ${SRC_PATH_engine}/display.h
   ${SRC_PATH_engine}/render.h
-  ${SRC_PATH_engine}/ui.h
-  ${SRC_PATH_engine}/package.h
+  ${SRC_PATH_engine}/asset.h
+  ${SRC_PATH_engine}/scene.h
   ${SRC_PATH_engine}/engine.h
   ${SRC_PATH_engine}/engine.cpp
   ${SRC_PATH_potato}/utility/thread.h

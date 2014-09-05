@@ -5,6 +5,7 @@
 #include "render.h"
 
 #include "utility/util_file.h"
+#include "utility/util_log.h"
 
 #include <cassert>
 #include <unistd.h>
@@ -13,9 +14,9 @@
 namespace ac {
 namespace display {
 
-CDisplay::CDisplay(const ac::base::Config& roConfig) :
-    m_pDisplay(NULL), m_lWindow(0), m_pGLConfig(NULL), m_pGLDisplay(NULL), m_pGLContext(NULL), m_pGLSurface(
-    NULL), m_bIsRunning(true), m_pRender(NULL)
+CDisplay::CDisplay(const ac::base::Config& roConfig)
+  : m_pDisplay(NULL), m_lWindow(0), m_pGLConfig(NULL), m_pGLDisplay(EGL_NO_DISPLAY)
+  , m_pGLContext(EGL_NO_CONTEXT), m_pGLSurface(EGL_NO_SURFACE), m_bIsRunning(true), m_pRender(NULL)
 {
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
 
@@ -46,7 +47,9 @@ void CDisplay::BindRender(core::IRender*& rpRender)
 
 void CDisplay::Run()
 {
+  utility::Log::Instance().Info("%s", __PRETTY_FUNCTION__);
   CreateWindow();
+
   m_pRender->Start();
   m_pRender->Resize(m_iWidth, m_iHeight);
 
@@ -103,7 +106,7 @@ void CDisplay::Run()
     second_temp = second;
     second = time.tv_sec * 1.0 + time.tv_usec / 1000000.0;
     second_delta = second - second_temp;
-    if (m_pRender->Tick(second_delta))
+    if (m_pRender->Render(static_cast<float>(second_delta), NULL))
     {
       eglSwapBuffers(m_pGLDisplay, m_pGLSurface);
     }
@@ -118,6 +121,7 @@ void CDisplay::Run()
   }
 
   m_pRender->End();
+
   DestroyWindow();
 }
 
@@ -127,6 +131,7 @@ void CDisplay::CreateWindow()
   assert(NULL != m_pDisplay);
 
   m_pGLDisplay = eglGetDisplay(m_pDisplay);
+  assert(EGL_NO_DISPLAY != m_pGLDisplay);
   assert(EGL_SUCCESS == eglGetError());
 
   EGLint egl_major, egl_minor;
@@ -150,10 +155,10 @@ void CDisplay::CreateWindow()
   //assert(eglChooseConfig(m_pGLDisplay, attribs, &m_pGLConfig, 1, &num_configs));
   assert(NULL != m_pGLConfig && num_configs > 0);
 
-  int value = 0;
+  /*int value = 0;
   assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_COLOR_BUFFER_TYPE, &value));
   assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_RED_SIZE, &value));
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_BUFFER_SIZE, &value));
+  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_BUFFER_SIZE, &value));*/
 
   EGLint vid = 0;
   assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_NATIVE_VISUAL_ID, &vid));
@@ -178,13 +183,13 @@ void CDisplay::CreateWindow()
   eglBindAPI(EGL_OPENGL_ES_API);
 
   m_pGLSurface = eglCreateWindowSurface(m_pGLDisplay, m_pGLConfig, m_lWindow, NULL);
-  assert(NULL != m_pGLSurface);
+  assert(EGL_NO_SURFACE != m_pGLSurface);
 
   static const EGLint ctx_attribs[] = {
       EGL_CONTEXT_CLIENT_VERSION, 1,
       EGL_NONE };
   m_pGLContext = eglCreateContext(m_pGLDisplay, m_pGLConfig, EGL_NO_CONTEXT, ctx_attribs);
-  assert(NULL != m_pGLContext);
+  assert(EGL_NO_CONTEXT != m_pGLContext);
 
   //TODO: how to release all memory about x window
   XFree(visual_info_ptr);
@@ -195,12 +200,18 @@ void CDisplay::CreateWindow()
 
 void CDisplay::DestroyWindow()
 {
-  eglDestroyContext(m_pGLDisplay, m_pGLContext);
-  eglDestroySurface(m_pGLDisplay, m_pGLSurface);
-  eglTerminate(m_pGLDisplay);
+  if (EGL_NO_DISPLAY != m_pGLDisplay)
+  {
+    if (EGL_NO_CONTEXT != m_pGLContext) eglDestroyContext(m_pGLDisplay, m_pGLContext);
+    if (EGL_NO_SURFACE != m_pGLSurface) eglDestroySurface(m_pGLDisplay, m_pGLSurface);
+    eglTerminate(m_pGLDisplay);
+  }
 
-  XDestroyWindow(m_pDisplay, m_lWindow);
-  XCloseDisplay(m_pDisplay);
+  if (NULL != m_pDisplay)
+  {
+    if (0 != m_lWindow) XDestroyWindow(m_pDisplay, m_lWindow);
+    XCloseDisplay(m_pDisplay);
+  }
 }
 
 }

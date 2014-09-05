@@ -1,4 +1,5 @@
 #include "render_gles.h"
+#include "scene.h"
 
 #include "utility/util_log.h"
 
@@ -8,6 +9,8 @@
 
 namespace ac {
 namespace render {
+
+namespace gles {
 
 CRender::CRender(const base::Config& roConfig)
 {
@@ -34,26 +37,30 @@ void CRender::Start()
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);*/
 }
 
-void CRender::Resize(int iWidth, int iHeight)
+bool CRender::Resize(const int& riWidth, const int& riHeight)
 {
-  if (iHeight == 0)
+  int width = riWidth;
+  int height = riHeight;
+  if (height == 0)
   {
-    iHeight = 1;
+    height = 1;
   }
-  glViewport(0, 0, iWidth, iHeight);
+  glViewport(0, 0, width, height);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  glViewport(0, 0, iWidth, iHeight);
-  Perspective(45.0f, (GLfloat) iWidth / (GLfloat) iHeight, 1.0f, 100.0f);
+  glViewport(0, 0, width, height);
+  Perspective(45.0f, (GLfloat) width / (GLfloat) height, 1.0f, 100.0f);
   glMatrixMode(GL_MODELVIEW);
   //glFlush();
+
+  return true;
 }
 
 GLfloat square1[] = { 0.25, 0.25, 0.0, 0.75, 0.25, 0.0, 0.25, 0.75, 0.0, 0.75, 0.75, 0.0 };
 GLfloat square2[] = { 0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5, 1.0, 0.5, 0.5, 1.0 };
 
-bool CRender::Tick(const double& rdDeltaS)
+bool CRender::Render(const float& rfDelta, core::IScene* pScene)
 {
   glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -71,7 +78,7 @@ bool CRender::Tick(const double& rdDeltaS)
   glEnableClientState(GL_VERTEX_ARRAY);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-  //utility::Log::Instance().Info("second: %f", rdDeltaS);
+  //utility::Log::Instance().Info("second: %f", rfDelta);
 
   return true;
 }
@@ -98,11 +105,12 @@ void CRender::Perspective(double fovy, double aspect, double near, double far)
 
 }
 }
+}
 
 bool CreateRender(ac::core::IRender*& rpRender, const ac::base::Config& roConfig)
 {
   assert(rpRender == NULL);
-  rpRender = new ac::render::CRender(roConfig);
+  rpRender = new ac::render::gles::CRender(roConfig);
   return true;
 }
 

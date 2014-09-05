@@ -2,6 +2,7 @@
 
 #include "utility/util_dl.h"
 #include "utility/util_file.h"
+#include "utility/util_log.h"
 
 #include <rapidjson/document.h>
 
@@ -40,6 +41,8 @@ FUNC_API_TYPEDEF(DestroyEngine, ac::core::IEngine, const ac::base::Config);
 
 namespace ac {
 
+static utility::DynamicLibraryManager gs_DynamicLibraryManager;
+
 Potato& Potato::Instance()
 {
   static Potato s_potato;
@@ -54,11 +57,14 @@ Potato::Potato() :
 
 Potato::~Potato()
 {
-  /// load the dynamic library
-  typedef FUNC_API_TYPE(DestroyEngine) DestroyEngineFuncPtr;
-  DestroyEngineFuncPtr func_destroy_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<DestroyEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(DestroyEngine));
-  /// destroy the engine with configure
-  func_destroy_func_ptr(m_pEngine, m_oConfigEngine);
+  if (NULL != m_pEngine)
+  {
+    /// load the dynamic library
+    typedef FUNC_API_TYPE(DestroyEngine) DestroyEngineFuncPtr;
+    DestroyEngineFuncPtr func_destroy_func_ptr = gs_DynamicLibraryManager.GetFunc<DestroyEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(DestroyEngine));
+    /// destroy the engine with configure
+    func_destroy_func_ptr(m_pEngine, m_oConfigEngine);
+  }
 }
 
 #if defined(BUILD_ANDROID)
@@ -67,6 +73,7 @@ Potato& Potato::Initialize(const std::string& rsLibPath, const std::string& rsDa
 Potato& Potato::Initialize(const std::string& rsDataPath, const std::string& rsConfigFile)
 #endif
 {
+  utility::Log::Instance().Info("call %s", __FUNCTION__);
   if (NULL == m_pEngine)
   {
     std::string file_context = utility::ReadFile((rsDataPath + "/" + rsConfigFile).c_str());
@@ -98,7 +105,7 @@ Potato& Potato::Initialize(const std::string& rsDataPath, const std::string& rsC
 
     /// load the dynamic library
     typedef FUNC_API_TYPE(CreateEngine) CreateEngineFuncPtr;
-    CreateEngineFuncPtr func_create_func_ptr = utility::DynamicLibraryManager::Instance().GetFunc<CreateEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(CreateEngine));
+    CreateEngineFuncPtr func_create_func_ptr = gs_DynamicLibraryManager.GetFunc<CreateEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(CreateEngine));
     /// create the engine with configure
     func_create_func_ptr(m_pEngine, m_oConfigEngine);
   }
@@ -108,6 +115,7 @@ Potato& Potato::Initialize(const std::string& rsDataPath, const std::string& rsC
 
 core::IEngine*& Potato::GetEngine()
 {
+  assert(NULL != m_pEngine);
   return m_pEngine;
 }
 

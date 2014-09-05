@@ -1,11 +1,17 @@
 #pragma once
 
 #include "common.h"
+
 #include "render.h"
 
-namespace ac{
-namespace render{
-namespace gl{
+namespace ac {
+
+namespace core {
+class IScene;
+}
+
+namespace render {
+namespace gl {
 
 class CRender : public core::IRender
 {
@@ -15,17 +21,11 @@ public:
 
 public:
   virtual void Start();
-  virtual bool Tick(const double& rdDeltaS);
-  virtual void Resize(int iWidth, int iHeight);
+  virtual bool Resize(const int& riWidth, const int& riHeight);
+  virtual bool Render(const float& rfDeltaTime, core::IScene* pScene);
   virtual void End();
-
-private:
-  core::IDisplay* m_pDisplay;
 };
 
 }
 }
 }
-
-FUNC_API_DECLARE(CreateRender, ac::core::IRender, const ac::base::Config);
-FUNC_API_DECLARE(DestroyRender, ac::core::IRender, const ac::base::Config);
