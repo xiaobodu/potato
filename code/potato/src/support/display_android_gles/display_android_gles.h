@@ -23,23 +23,29 @@ public:
 
 public:
   void Initialize(android_app* pApp);
-  void Stop();
+  void Terminated();
   void Continue();
   void Pause();
+  void Stop();
   void Resize(const int& riWidth, const int& riHeight);
 
 private:
-  EGLDisplay m_pGLDisplay;
-  EGLSurface m_pGLSurface;
-  EGLContext m_pGLContext;
-  EGLConfig m_pGLConfig;
+  EGLDisplay    m_pGLDisplay;
+  EGLSurface    m_pGLSurface;
+  EGLContext    m_pGLContext;
+  EGLConfig     m_pGLConfig;
 
-  bool m_bIsRunning;
-  bool m_bIsEGLReady;
-  bool m_bCanRender;
+  bool          m_bIsInitialized;
+  bool          m_bIsRunning;
+  bool          m_bIsEGLReady;
+  bool          m_bCanRender;
 
-  core::IRender* m_pRender;
-  struct android_app* m_pApp;
+  core::IRender*                m_pRender;
+
+  // android
+  struct android_app*           m_pApp;
+  const struct ASensor*         m_pAccelerometerSensor;
+  struct ASensorEventQueue*     m_pAccelerometerSensorEventQueue;
 };
 
 }

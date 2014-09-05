@@ -1,4 +1,5 @@
 #include <rapidjson/document.h>
+#include <android/sensor.h>
 #include <android_native_app_glue.h>
 
 #include "display_android_gles.h"
@@ -21,11 +22,12 @@ CDisplay::CDisplay(const ac::base::Config& roConfig)
   , m_pGLSurface(EGL_NO_SURFACE)
   , m_pGLContext(EGL_NO_CONTEXT)
   , m_pGLConfig(NULL)
-  , m_bIsRunning(false)
-  , m_bIsEGLReady(false)
-  , m_bCanRender(false)
+  , m_bIsInitialized(false)
+  , m_bIsRunning(false), m_bIsEGLReady(false), m_bCanRender(false)
   , m_pRender(NULL)
   , m_pApp(NULL)
+  , m_pAccelerometerSensor(NULL)
+  , m_pAccelerometerSensorEventQueue(NULL)
 {
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
   //
@@ -55,11 +57,11 @@ static void handle_cmd(struct android_app* app, int32_t cmd)
   switch (cmd)
   {
   case APP_CMD_INPUT_CHANGED:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_INPUT_CHANGED");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_INPUT_CHANGED");
     break;
 
   case APP_CMD_INIT_WINDOW:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_INIT_WINDOW");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_INIT_WINDOW");
     if (NULL != app->window)
     {
       display_ptr->Initialize(app);
@@ -67,62 +69,63 @@ static void handle_cmd(struct android_app* app, int32_t cmd)
     break;
 
   case APP_CMD_TERM_WINDOW:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_TERM_WINDOW");
-    display_ptr->Stop();
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_TERM_WINDOW");
+    display_ptr->Terminated();
     break;
 
   case APP_CMD_WINDOW_RESIZED:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_WINDOW_RESIZED");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_WINDOW_RESIZED");
     break;
 
   case APP_CMD_WINDOW_REDRAW_NEEDED:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_WINDOW_REDRAW_NEEDED");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_WINDOW_REDRAW_NEEDED");
     break;
 
   case APP_CMD_CONTENT_RECT_CHANGED:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_CONTENT_RECT_CHANGED");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_CONTENT_RECT_CHANGED");
     break;
 
   case APP_CMD_GAINED_FOCUS:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_GAINED_FOCUS");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_GAINED_FOCUS");
     display_ptr->Continue();
     break;
 
   case APP_CMD_LOST_FOCUS:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_LOST_FOCUS");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_LOST_FOCUS");
     display_ptr->Pause();
     break;
 
   case APP_CMD_CONFIG_CHANGED:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_CONFIG_CHANGED");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_CONFIG_CHANGED");
     break;
 
   case APP_CMD_LOW_MEMORY:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_LOW_MEMORY");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_LOW_MEMORY");
     break;
 
   case APP_CMD_START:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_START");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_START");
     break;
 
   case APP_CMD_RESUME:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_RESUME");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_RESUME");
     break;
 
   case APP_CMD_SAVE_STATE:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_SAVE_STATE");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_SAVE_STATE");
     break;
 
   case APP_CMD_PAUSE:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_PAUSE");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_PAUSE");
     break;
 
   case APP_CMD_STOP:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_STOP");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_STOP");
+    display_ptr->Stop();
     break;
 
   case APP_CMD_DESTROY:
-    ac::utility::Log::Instance().Info("engine_handle_cmd APP_CMD_DESTROY");
+    ac::utility::Log::Instance().Info("handle_cmd APP_CMD_DESTROY");
     break;
   }
 }
@@ -131,29 +134,54 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
 {
   int32_t type = AInputEvent_getType(event);
   ac::utility::Log::Instance().Info("engine_handle_input %d", type);
-  if (type == AINPUT_EVENT_TYPE_MOTION)
+  if (AINPUT_EVENT_TYPE_KEY == type)
   {
+    int32_t action = AKeyEvent_getAction(event);
+    ac::utility::Log::Instance().Info("handle_input action:%d", action);
+  }
+  else if (AINPUT_EVENT_TYPE_MOTION == type)
+  {
+    int32_t action = AMotionEvent_getAction(event);
+    int32_t count = AMotionEvent_getPointerCount(event);
+    for (int i = 0; i < count; ++i)
+    {
+      float raw_x = AMotionEvent_getRawX(event, i);
+      float raw_y = AMotionEvent_getRawY(event, i);
+      float x = AMotionEvent_getX(event, i);
+      float y = AMotionEvent_getY(event, i);
+      float pressure = AMotionEvent_getPressure(event, i);
+      float size = AMotionEvent_getSize(event, i);
+
+      ac::utility::Log::Instance().Info("handle_input %d action:%d raw:(%.3f, %.3f) | pos:(%.3f, %.3f) | pressure:%.3f | size:%.3f", i + 1, action, raw_x, raw_y, x, y, pressure, size);
+    }
     return 1;
   }
   //
   return 0;
 }
 
-// NOTE: from http://ps3computing.blogspot.ca/2012/12/anr-application-not-responding.html
+// NOTE: based on the file 'android-ndk-r10/sources/android/native_app_glue/android_native_app_glue.c'
+// Android has a bug in this function
+// I make it don't report error when receive and handle the input event
+// But it still report error when don't handle the input event
 static void process_input(struct android_app* app, struct android_poll_source* source)
 {
   AInputEvent* event = NULL;
-  while (AInputQueue_hasEvents(app->inputQueue))
+  while (AInputQueue_getEvent(app->inputQueue, &event) >= 0)
   {
-    if (AInputQueue_getEvent(app->inputQueue, &event) >= 0)
+    if (AInputQueue_preDispatchEvent(app->inputQueue, event))
     {
-      int32_t handled = 0;
-      //uint32_t devid = AInputEvent_getDeviceId(event);
-      //uint32_t src = AInputEvent_getSource(event);
-      //LOGV("New input event: type=%d devid=%x src=%x\n", AInputEvent_getType(event), devid, src);
-      int32_t predispatched = AInputQueue_preDispatchEvent(app->inputQueue, event);
-      if (app->onInputEvent != NULL && !predispatched) handled = app->onInputEvent(app, event);
-      if (!predispatched) AInputQueue_finishEvent(app->inputQueue, event, handled);
+      continue;
+    }
+
+    int32_t handled = 0;
+    if (app->onInputEvent != NULL) handled = app->onInputEvent(app, event);
+    AInputQueue_finishEvent(app->inputQueue, event, handled);
+
+    // FIXED: Need check the input queue again
+    if (!AInputQueue_hasEvents(app->inputQueue))
+    {
+      break;
     }
   }
 }
@@ -171,6 +199,11 @@ void CDisplay::Run()
   m_pApp->onInputEvent = handle_input;
   m_pApp->inputPollSource.process = process_input;
 
+  ASensorManager* sensor_manager_ptr = ASensorManager_getInstance();
+  m_pAccelerometerSensor = ASensorManager_getDefaultSensor(sensor_manager_ptr, ASENSOR_TYPE_ACCELEROMETER);
+  m_pAccelerometerSensorEventQueue = ASensorManager_createEventQueue(sensor_manager_ptr, m_pApp->looper, LOOPER_ID_USER, NULL, NULL);
+  ac::utility::Log::Instance().Info("%d %d", (int)m_pAccelerometerSensor, (int)m_pAccelerometerSensorEventQueue);
+
   timeval time;
   gettimeofday(&time, NULL);
   double second = time.tv_sec * 1.0 + time.tv_usec / 1000000.0;
@@ -180,16 +213,19 @@ void CDisplay::Run()
   double second_per_frame_min = 1.0 / 60.0;
   //int count = 0;
 
+  int ident = 0;
+  int events = 0;
+  android_poll_source* source = NULL;
+  ASensorEvent accelerometer_sensor_event;
+
   while (m_bIsRunning)
   {
-    // Read all pending events.
-    int ident;
-    int events;
-    struct android_poll_source* source;
+    ident = 0;
+    events = 0;
+    source = NULL;
 
-    // If not animating, we will block forever waiting for events.
-    // If animating, we loop until all events are read, then continue
-    // to draw the next frame of animation.
+    // If not running, we will block forever waiting for events.
+    // If running, we loop until all events are read, then continue to draw the next frame.
     while ((ident = ALooper_pollAll(m_bIsRunning ? 0 : -1, NULL, &events, (void**) &source)) >= 0)
     {
       // Process this event.
@@ -201,15 +237,26 @@ void CDisplay::Run()
       // If a sensor has data, process it now.
       if (ident == LOOPER_ID_USER)
       {
-        ;
+        if (m_pAccelerometerSensor != NULL)
+        {
+          while (ASensorEventQueue_getEvents(m_pAccelerometerSensorEventQueue, &accelerometer_sensor_event, 1) > 0)
+          {
+            ac::utility::Log::Instance().Info("vec: x=%.3f y=%.3f z=%.3f | acc: x=%.3f y=%.3f z=%.3f  mag: x=%.3f y=%.3f z=%.3f"
+                , accelerometer_sensor_event.vector.x, accelerometer_sensor_event.vector.y, accelerometer_sensor_event.vector.z
+                , accelerometer_sensor_event.acceleration.x, accelerometer_sensor_event.acceleration.y, accelerometer_sensor_event.acceleration.z
+                , accelerometer_sensor_event.magnetic.x, accelerometer_sensor_event.magnetic.y, accelerometer_sensor_event.magnetic.z);
+          }
+        }
       }
 
       // Check if we are exiting.
       if (m_pApp->destroyRequested != 0)
       {
-        Stop();
-        m_bIsRunning = false;
+        //Stop();
+        //break;
+        Terminated();
         break;
+        //return;
       }
     }
 
@@ -228,14 +275,11 @@ void CDisplay::Run()
       second_sleep = second_per_frame_min - (time.tv_sec * 1.0 + time.tv_usec / 1000000.0 - second);
       if (0.001 < second_sleep)
       {
-        //printf("%d time: s-%f | temp-%f | delta-%f | spf-%f | sleep-%f\n", ++count, second, second_temp, second_delta, second_per_frame_min, second_sleep);
+        //ac::utility::Log::Instance().Info("%d time: s-%f | temp-%f | delta-%f | spf-%f | sleep-%f\n", ++count, second, second_temp, second_delta, second_per_frame_min, second_sleep);
         usleep(static_cast<__useconds_t >(second_sleep * 1000000));
       }
     }
   }
-
-  m_pRender->End();
-  //DestroyWindow();
 }
 
 void CDisplay::Initialize(android_app* pApp)
@@ -252,10 +296,14 @@ void CDisplay::Initialize(android_app* pApp)
   ac::utility::Log::Instance().Info("using EGL v%d.%d", egl_major, egl_minor);
 
   const EGLint config_attribs[] = {
-  EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-  EGL_BLUE_SIZE, 8,
-  EGL_GREEN_SIZE, 8,
+  EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
   EGL_RED_SIZE, 8,
+  EGL_GREEN_SIZE, 8,
+  EGL_BLUE_SIZE, 8,
+  EGL_ALPHA_SIZE, 8,
+  EGL_BUFFER_SIZE, 32,
+  EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+  EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
   EGL_NONE };
   EGLint num_configs = 0;
   if (!eglChooseConfig(m_pGLDisplay, config_attribs, &m_pGLConfig, 1, &num_configs))
@@ -269,7 +317,7 @@ void CDisplay::Initialize(android_app* pApp)
 
   ANativeWindow_setBuffersGeometry(pApp->window, 0, 0, vid);
 
-  m_pGLSurface = eglCreateWindowSurface(m_pGLDisplay, m_pGLConfig, (EGLNativeWindowType)pApp->window, NULL);
+  m_pGLSurface = eglCreateWindowSurface(m_pGLDisplay, m_pGLConfig, (EGLNativeWindowType) pApp->window, NULL);
   assert(EGL_NO_SURFACE != m_pGLSurface);
 
   const EGLint context_attribs[] = {
@@ -289,12 +337,20 @@ void CDisplay::Initialize(android_app* pApp)
 
   m_pRender->Resize(width, height);
 
+  m_bIsInitialized = true;
   m_bIsEGLReady = true;
 }
 
-void CDisplay::Stop()
+void CDisplay::Terminated()
 {
-  ac::utility::Log::Instance().Info("CDisplay::Stop");
+  if (!m_bIsInitialized)
+  {
+    return;
+  }
+  ac::utility::Log::Instance().Info("CDisplay::Terminated");
+
+  m_pRender->End();
+
   if (m_pGLDisplay != EGL_NO_DISPLAY && m_bIsEGLReady)
   {
     eglMakeCurrent(m_pGLDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE,
@@ -313,6 +369,7 @@ void CDisplay::Stop()
     m_pGLDisplay = EGL_NO_DISPLAY;
   }
 
+  m_bIsInitialized = false;
   m_bIsRunning = false;
   m_bIsEGLReady = false;
   m_bCanRender = false;
@@ -321,13 +378,30 @@ void CDisplay::Stop()
 void CDisplay::Continue()
 {
   ac::utility::Log::Instance().Info("CDisplay::Continue");
+  if (NULL != m_pAccelerometerSensor)
+  {
+      ASensorEventQueue_enableSensor(m_pAccelerometerSensorEventQueue, m_pAccelerometerSensor);
+      // We'd like to get 60 events per second (in us).
+      ASensorEventQueue_setEventRate(m_pAccelerometerSensorEventQueue, m_pAccelerometerSensor, (1000000L/3));
+  }
   m_bCanRender = true;
 }
 
 void CDisplay::Pause()
 {
   ac::utility::Log::Instance().Info("CDisplay::Pause");
+
+  if (NULL != m_pAccelerometerSensor)
+  {
+      ASensorEventQueue_disableSensor(m_pAccelerometerSensorEventQueue, m_pAccelerometerSensor);
+  }
+
   m_bCanRender = false;
+}
+
+void CDisplay::Stop()
+{
+  ac::utility::Log::Instance().Info("CDisplay::Stop");
 }
 
 void CDisplay::Resize(const int& riWidth, const int& riHeight)

@@ -1,6 +1,7 @@
 {
-  "size": {
-    "width": 480,
-    "height": 800
+  "title":"test",
+  "size":{
+    "width":480,
+    "height":800
   }
 }

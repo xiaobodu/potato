@@ -36,6 +36,8 @@ private:
   EGLSurface m_pGLSurface;
 
   bool m_bIsRunning;
+
+  std::string m_sTitle;
   int m_iWidth;
   int m_iHeight;
 

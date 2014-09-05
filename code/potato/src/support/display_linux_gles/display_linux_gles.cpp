@@ -24,6 +24,8 @@ CDisplay::CDisplay(const ac::base::Config& roConfig)
   rapidjson::Document jdoc;
   jdoc.Parse(file_context.c_str());
   assert(jdoc.IsObject());
+  const rapidjson::Value& jtitle = jdoc["title"];
+  assert(jtitle.IsString());
   const rapidjson::Value& jsize = jdoc["size"];
   assert(jsize.IsObject());
   const rapidjson::Value& jwidth = jsize["width"];
@@ -31,6 +33,7 @@ CDisplay::CDisplay(const ac::base::Config& roConfig)
   const rapidjson::Value& jheight = jsize["height"];
   assert(jheight.IsInt());
 
+  m_sTitle = jtitle.GetString();
   m_iWidth = jwidth.GetInt();
   m_iHeight = jheight.GetInt();
 }
@@ -140,12 +143,12 @@ void CDisplay::CreateWindow()
 
   static const EGLint attribs[] = {
     EGL_COLOR_BUFFER_TYPE, EGL_RGB_BUFFER,
-    EGL_RED_SIZE, 4,
-    EGL_GREEN_SIZE, 4,
-    EGL_BLUE_SIZE, 4,
-    EGL_ALPHA_SIZE, 4,
-    EGL_BUFFER_SIZE, 16,
-    EGL_DEPTH_SIZE, 16,
+    EGL_RED_SIZE, 8,
+    EGL_GREEN_SIZE, 8,
+    EGL_BLUE_SIZE, 8,
+    EGL_ALPHA_SIZE, 8,
+    EGL_BUFFER_SIZE, 32,
+    EGL_DEPTH_SIZE, 32,
     EGL_STENCIL_SIZE, 1,
     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
     EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
@@ -172,14 +175,34 @@ void CDisplay::CreateWindow()
   assert(NULL != visual_info_ptr);
 
   Window root_window = RootWindow(m_pDisplay, DefaultScreen(m_pDisplay));
+  int window_pos_x = 0;
+  {
+    int display_width = DisplayWidth(m_pDisplay, DefaultScreen(m_pDisplay));
+    window_pos_x = (display_width - m_iWidth) / 2;
+  }
+  int window_pos_y = 0;
+  {
+    int display_height = DisplayHeight(m_pDisplay, DefaultScreen(m_pDisplay));
+    window_pos_y = (display_height - m_iHeight) / 2;
+  }
+
   XSetWindowAttributes attr;
   attr.background_pixel = 0;
   attr.border_pixel = 0;
   attr.colormap = XCreateColormap(m_pDisplay, root_window, visual_info_ptr->visual, AllocNone);
   attr.event_mask = StructureNotifyMask | ExposureMask | KeyReleaseMask | ButtonReleaseMask;
   unsigned long mask = CWBackPixel | CWBorderPixel | CWColormap | CWEventMask;
-  m_lWindow = XCreateWindow(m_pDisplay, root_window, 0, 0, m_iWidth, m_iHeight, 0, visual_info_ptr->depth, InputOutput,
+  m_lWindow = XCreateWindow(m_pDisplay, root_window, window_pos_x, window_pos_y, m_iWidth, m_iHeight, 0, visual_info_ptr->depth, InputOutput,
       visual_info_ptr->visual, mask, &attr);
+  XSizeHints size_hints;
+  size_hints.flags = PPosition | PSize | PMinSize;
+  size_hints.x = window_pos_x;
+  size_hints.y = window_pos_y;
+  size_hints.width = m_iWidth;
+  size_hints.height = m_iHeight;
+  size_hints.min_width = m_iWidth;
+  size_hints.min_height = m_iHeight;
+  XSetStandardProperties(m_pDisplay, m_lWindow, m_sTitle.c_str(), None, None, 0, 0, &size_hints);
 
   eglBindAPI(EGL_OPENGL_ES_API);
 
