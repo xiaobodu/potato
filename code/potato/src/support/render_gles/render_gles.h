@@ -27,6 +27,8 @@ public:
 
 private:
   void Perspective(double fovy, double aspect, double near, double far);
+
+private:
 };
 
 } // gles
