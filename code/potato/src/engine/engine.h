@@ -3,15 +3,17 @@
 #include "common.h"
 #include "potato.h"
 
-#include "utility/util_dl.h"
-
 #include <string>
 
 namespace c4g{
+
+namespace utility{
+class DynamicLibraryManager;
+}
+
 namespace core{
 
 class IDisplay;
-class IRender;
 
 class CEngine : public IEngine
 {
@@ -27,10 +29,8 @@ public:
 #endif
 
 private:
-  base::Config m_oConfigDisplay;
-  core::IDisplay* m_pDisplay;
-  base::Config m_oConfigRender;
-  core::IRender* m_pRender;
+  base::Config          m_oConfigDisplay;
+  core::IDisplay*       m_pDisplay;
   utility::DynamicLibraryManager* m_pLibraryManager;
 };
 

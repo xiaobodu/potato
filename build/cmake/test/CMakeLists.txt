@@ -24,7 +24,8 @@ link_directories(${LINK_PATH_LIST})
 
 set(EXECUTABLE_OUTPUT_PATH ${OUT_PATH}/bin)
 
-add_definitions(-DROOT_PATH="${ROOT_PATH}")
+add_definitions(-DLIBR_PATH="${ROOT_PATH}/out")
+add_definitions(-DDATA_PATH="${ROOT_PATH}/data")
 
 ADD_EXECUTABLE (test ${CODE_FILE_LIST})
 

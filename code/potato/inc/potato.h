@@ -36,4 +36,4 @@ extern "C" void potato_main(struct android_app* pApp, const std::string& rsNativ
 
 #endif
 
-extern void GetConfig(std::string& rsPath, std::string& rsFile);
+extern void GetConfig(std::string& rsLibrPath, std::string& rsDataPath, std::string& rsFile);

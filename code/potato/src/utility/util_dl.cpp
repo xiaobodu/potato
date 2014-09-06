@@ -11,12 +11,7 @@ namespace utility {
 CDynamicLibraryHandler::CDynamicLibraryHandler(const std::string& rsFileName)
     : m_pLib(NULL)
 {
-#if defined(BUILD_ANDROID)
   m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
-#else
-  m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
-  //m_pLib = dlopen(rsFileName.c_str(), RTLD_NOW);
-#endif
   assert(m_pLib != NULL);
 }
 

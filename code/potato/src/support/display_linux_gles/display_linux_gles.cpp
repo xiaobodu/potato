@@ -6,10 +6,14 @@
 
 #include "utility/util_file.h"
 #include "utility/util_log.h"
+#include "utility/util_dl.h"
 
 #include <cassert>
 #include <unistd.h>
 #include <sys/time.h>
+
+FUNC_API_TYPEDEF(CreateRender, c4g::core::IRender, const c4g::base::Config);
+FUNC_API_TYPEDEF(DestroyRender, c4g::core::IRender, const c4g::base::Config);
 
 namespace c4g {
 namespace display {
@@ -17,8 +21,17 @@ namespace linux_gles {
 
 CDisplay::CDisplay(const base::Config& roConfig)
   : m_pDisplay(NULL), m_lWindow(0), m_pGLConfig(NULL), m_pGLDisplay(EGL_NO_DISPLAY)
-  , m_pGLContext(EGL_NO_CONTEXT), m_pGLSurface(EGL_NO_SURFACE), m_bIsRunning(true), m_pRender(NULL)
+  , m_pGLContext(EGL_NO_CONTEXT)
+  , m_pGLSurface(EGL_NO_SURFACE)
+  , m_bIsRunning(true)
+  , m_iWidth(0)
+  , m_iHeight(0)
+  , m_pRender(NULL)
+  , m_pLibraryManager(NULL)
 {
+  utility::Log::Instance().Info("%s", __PRETTY_FUNCTION__);
+  m_pLibraryManager = new utility::DynamicLibraryManager();
+
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
 
   rapidjson::Document jdoc;
@@ -33,20 +46,43 @@ CDisplay::CDisplay(const base::Config& roConfig)
   const rapidjson::Value& jheight = jsize["height"];
   assert(jheight.IsInt());
 
+  const rapidjson::Value& render = jdoc["render"];
+  assert(render.IsObject());
+  const rapidjson::Value& library = render["library"];
+  assert(library.IsObject());
+  const rapidjson::Value& library_file = library["file"];
+  assert(library_file.IsString());
+  const rapidjson::Value& configure = render["configure"];
+  assert(configure.IsObject());
+  const rapidjson::Value& configure_file = configure["file"];
+  assert(configure_file.IsString());
+
   m_sTitle = jtitle.GetString();
   m_iWidth = jwidth.GetInt();
   m_iHeight = jheight.GetInt();
+
+  m_oConfigRender._sLibrPath = roConfig._sLibrPath;
+  m_oConfigRender._sDataPath = roConfig._sDataPath;
+  m_oConfigRender._sLibraryFile = library_file.GetString();
+  m_oConfigRender._sConfigureFile = configure_file.GetString();
+
+  /// load the dynamic library
+  typedef FUNC_API_TYPE(CreateRender) CreateRenderFuncPtr;
+  CreateRenderFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(CreateRender));
+  /// create the display with configure
+  func_create_func_ptr(m_pRender, m_oConfigRender);
 }
 
 CDisplay::~CDisplay()
 {
-  ;
-}
+  /// load the dynamic library
+  typedef FUNC_API_TYPE(DestroyRender) DestroyRenderFuncPtr;
+  DestroyRenderFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(DestroyRender));
+  /// create the display with configure
+  func_destroy_func_ptr(m_pRender, m_oConfigRender);
 
-void CDisplay::BindRender(core::IRender*& rpRender)
-{
-  assert(NULL != rpRender && NULL == m_pRender);
-  m_pRender = rpRender;
+  delete m_pLibraryManager;
+  m_pLibraryManager = NULL;
 }
 
 void CDisplay::Run()

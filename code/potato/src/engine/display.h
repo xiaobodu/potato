@@ -20,7 +20,6 @@ public:
   }
 
 public:
-  virtual void BindRender(IRender*& rpRender) = 0;
 #if defined(BUILD_ANDROID)
   virtual void BindAndroidApp(struct android_app* pApp) = 0;
 #endif

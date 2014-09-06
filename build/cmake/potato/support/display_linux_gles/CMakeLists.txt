@@ -26,5 +26,6 @@ add_library(display_linux_gles SHARED ${SRC_FILE_LIST})
 set(LINK_FILE_LIST
   X11
   EGL
+  dl
   )
 target_link_libraries(display_linux_gles ${LINK_FILE_LIST})

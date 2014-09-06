@@ -9,6 +9,11 @@
 #include <EGL/egl.h>
 
 namespace c4g {
+
+namespace utility{
+class DynamicLibraryManager;
+}
+
 namespace display {
 namespace linux_gles {
 
@@ -19,7 +24,6 @@ public:
   virtual ~CDisplay();
 
 public:
-  virtual void BindRender(core::IRender*& rpRender);
   virtual void Run();
 
 protected:
@@ -41,7 +45,9 @@ private:
   int m_iWidth;
   int m_iHeight;
 
-  core::IRender* m_pRender;
+  base::Config          m_oConfigRender;
+  core::IRender*        m_pRender;
+  utility::DynamicLibraryManager* m_pLibraryManager;
 };
 
 }

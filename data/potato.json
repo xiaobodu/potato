@@ -1,0 +1,10 @@
+{
+  "engine":{
+    "library":{
+      "file":"lib/libengine.so"
+    },
+    "configure":{
+      "file":"config/engine.json"
+    }
+  }
+}

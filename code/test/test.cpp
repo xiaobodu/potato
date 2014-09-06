@@ -2,12 +2,17 @@
 
 #include <string>
 
-#if !defined(ROOT_PATH)
-#error "can't get the root path!!!"
+#if !defined(LIBR_PATH)
+#error "can't get the library path!!!"
 #endif
 
-void GetConfig(std::string& rsPath, std::string& rsFile)
+#if !defined(DATA_PATH)
+#error "can't get the data path!!!"
+#endif
+
+void GetConfig(std::string& rsLibrPath, std::string& rsDataPath, std::string& rsFile)
 {
-  rsPath = ROOT_PATH;
-  rsFile = "data/config.json";
+  rsLibrPath = LIBR_PATH;
+  rsDataPath = DATA_PATH;
+  rsFile = "potato.json";
 }

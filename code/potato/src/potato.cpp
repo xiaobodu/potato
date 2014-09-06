@@ -25,7 +25,7 @@ protected:
   virtual ~Potato();
 
 public:
-  Potato& Initialize(const std::string& rsDataPath, const std::string& rsConfigFile);
+  Potato& Initialize(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile);
   core::IEngine*& GetEngine();
 
 private:
@@ -67,15 +67,12 @@ Potato::~Potato()
   }
 }
 
-#if defined(BUILD_ANDROID)
 Potato& Potato::Initialize(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile)
-#else
-Potato& Potato::Initialize(const std::string& rsDataPath, const std::string& rsConfigFile)
-#endif
 {
-  utility::Log::Instance().Info("call %s", __FUNCTION__);
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
   if (NULL == m_pEngine)
   {
+    utility::Log::Instance().Info("libr:%s | data:%s", rsLibPath.c_str(), rsDataPath.c_str());
     std::string file_context = utility::ReadFile((rsDataPath + "/" + rsConfigFile).c_str());
 
     /// parse the configure file
@@ -94,11 +91,7 @@ Potato& Potato::Initialize(const std::string& rsDataPath, const std::string& rsC
     const rapidjson::Value& configure_file = configure["file"];
     assert(configure_file.IsString());
 
-#if defined(BUILD_ANDROID)
     m_oConfigEngine._sLibrPath = rsLibPath;
-#else
-    m_oConfigEngine._sLibrPath = rsDataPath;
-#endif
     m_oConfigEngine._sDataPath = rsDataPath;
     m_oConfigEngine._sLibraryFile = library_file.GetString();
     m_oConfigEngine._sConfigureFile = configure_file.GetString();
@@ -124,10 +117,11 @@ core::IEngine*& Potato::GetEngine()
 #if !defined(BUILD_ANDROID)
 int main(int argc, char* argv[])
 {
-  std::string path;
+  std::string libr_path;
+  std::string data_path;
   std::string file;
-  GetConfig(path, file);
-  c4g::core::IEngine*& engine_ptr = c4g::Potato::Instance().Initialize(path, file).GetEngine();
+  GetConfig(libr_path, data_path, file);
+  c4g::core::IEngine*& engine_ptr = c4g::Potato::Instance().Initialize(libr_path, data_path, file).GetEngine();
   engine_ptr->Run();
   return 0;
 }

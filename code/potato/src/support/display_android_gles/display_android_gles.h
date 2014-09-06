@@ -7,6 +7,11 @@
 #include <EGL/egl.h>
 
 namespace c4g {
+
+namespace utility{
+class DynamicLibraryManager;
+}
+
 namespace display {
 namespace android_gles {
 
@@ -17,7 +22,6 @@ public:
   virtual ~CDisplay();
 
 public:
-  virtual void BindRender(core::IRender*& rpRender);
   virtual void BindAndroidApp(struct android_app* pApp);
   virtual void Run();
 
@@ -40,7 +44,9 @@ private:
   bool          m_bIsEGLReady;
   bool          m_bCanRender;
 
-  core::IRender*                m_pRender;
+  base::Config          m_oConfigRender;
+  core::IRender*        m_pRender;
+  utility::DynamicLibraryManager* m_pLibraryManager;
 
   // android
   struct android_app*           m_pApp;

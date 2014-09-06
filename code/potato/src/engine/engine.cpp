@@ -17,17 +17,14 @@
 FUNC_API_TYPEDEF(CreateDisplay, c4g::core::IDisplay, const c4g::base::Config);
 FUNC_API_TYPEDEF(DestroyDisplay, c4g::core::IDisplay, const c4g::base::Config);
 
-FUNC_API_TYPEDEF(CreateRender, c4g::core::IRender, const c4g::base::Config);
-FUNC_API_TYPEDEF(DestroyRender, c4g::core::IRender, const c4g::base::Config);
-
 namespace c4g{
 namespace core{
 
 CEngine::CEngine(const c4g::base::Config& roConfig)
   : m_pDisplay(NULL)
-  , m_pRender(NULL)
   , m_pLibraryManager(NULL)
 {
+  utility::Log::Instance().Info("%s", __PRETTY_FUNCTION__);
   m_pLibraryManager = new utility::DynamicLibraryManager();
 
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
@@ -35,84 +32,39 @@ CEngine::CEngine(const c4g::base::Config& roConfig)
   rapidjson::Document doc;
   doc.Parse(file_context.c_str());
   assert(doc.IsObject());
-  if (NULL == m_pDisplay)
-  {
-    const rapidjson::Value& display = doc["display"];
-    assert(display.IsObject());
-    const rapidjson::Value& library = display["library"];
-    assert(library.IsObject());
-    const rapidjson::Value& library_file = library["file"];
-    assert(library_file.IsString());
-    const rapidjson::Value& configure = display["configure"];
-    assert(configure.IsObject());
-    const rapidjson::Value& configure_file = configure["file"];
-    assert(configure_file.IsString());
+  const rapidjson::Value& display = doc["display"];
+  assert(display.IsObject());
+  const rapidjson::Value& library = display["library"];
+  assert(library.IsObject());
+  const rapidjson::Value& library_file = library["file"];
+  assert(library_file.IsString());
+  const rapidjson::Value& configure = display["configure"];
+  assert(configure.IsObject());
+  const rapidjson::Value& configure_file = configure["file"];
+  assert(configure_file.IsString());
 
-    m_oConfigDisplay._sLibrPath = roConfig._sLibrPath;
-    m_oConfigDisplay._sDataPath = roConfig._sDataPath;
-    m_oConfigDisplay._sLibraryFile = library_file.GetString();
-    m_oConfigDisplay._sConfigureFile = configure_file.GetString();
+  m_oConfigDisplay._sLibrPath = roConfig._sLibrPath;
+  m_oConfigDisplay._sDataPath = roConfig._sDataPath;
+  m_oConfigDisplay._sLibraryFile = library_file.GetString();
+  m_oConfigDisplay._sConfigureFile = configure_file.GetString();
 
-    /// load the dynamic library
-    typedef FUNC_API_TYPE(CreateDisplay) CreateDisplayFuncPtr;
-    CreateDisplayFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(CreateDisplay));
-    /// create the display with configure
-    func_create_func_ptr(m_pDisplay, m_oConfigDisplay);
-  }
-  if (NULL == m_pRender)
-  {
-    const rapidjson::Value& render = doc["render"];
-    assert(render.IsObject());
-    const rapidjson::Value& library = render["library"];
-    assert(library.IsObject());
-    const rapidjson::Value& library_file = library["file"];
-    assert(library_file.IsString());
-    const rapidjson::Value& configure = render["configure"];
-    assert(configure.IsObject());
-    const rapidjson::Value& configure_file = configure["file"];
-    assert(configure_file.IsString());
-
-    m_oConfigRender._sLibrPath = roConfig._sLibrPath;
-    m_oConfigRender._sDataPath = roConfig._sDataPath;
-    m_oConfigRender._sLibraryFile = library_file.GetString();
-    m_oConfigRender._sConfigureFile = configure_file.GetString();
-
-    /// load the dynamic library
-    typedef FUNC_API_TYPE(CreateRender) CreateRenderFuncPtr;
-    CreateRenderFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(CreateRender));
-    /// create the display with configure
-    func_create_func_ptr(m_pRender, m_oConfigDisplay);
-  }
-
-  /// bind the render to the display
-  m_pDisplay->BindRender(m_pRender);
+  /// load the dynamic library
+  typedef FUNC_API_TYPE(CreateDisplay) CreateDisplayFuncPtr;
+  CreateDisplayFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(CreateDisplay));
+  /// create the display with configure
+  func_create_func_ptr(m_pDisplay, m_oConfigDisplay);
 }
 
 CEngine::~CEngine()
 {
-  if (NULL != m_pRender)
-  {
-    /// load the dynamic library
-    typedef FUNC_API_TYPE(DestroyRender) DestroyRenderFuncPtr;
-    DestroyRenderFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(DestroyRender));
-    /// create the display with configure
-    func_destroy_func_ptr(m_pRender, m_oConfigDisplay);
-  }
+  /// load the dynamic library
+  typedef FUNC_API_TYPE(DestroyDisplay) DestroyDisplayFuncPtr;
+  DestroyDisplayFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(DestroyDisplay));
+  /// create the display with configure
+  func_destroy_func_ptr(m_pDisplay, m_oConfigDisplay);
 
-  if (NULL != m_pDisplay)
-  {
-    /// load the dynamic library
-    typedef FUNC_API_TYPE(DestroyDisplay) DestroyDisplayFuncPtr;
-    DestroyDisplayFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(DestroyDisplay));
-    /// create the display with configure
-    func_destroy_func_ptr(m_pDisplay, m_oConfigDisplay);
-  }
-
-  if (NULL != m_pLibraryManager)
-  {
-    delete m_pLibraryManager;
-    m_pLibraryManager = NULL;
-  }
+  delete m_pLibraryManager;
+  m_pLibraryManager = NULL;
 }
 
 class DisplayWorker : public thread::IWorker
@@ -144,7 +96,7 @@ void CEngine::Run(android_app* pApp)
 void CEngine::Run()
 #endif
 {
-  utility::Log::Instance().System("engine is running");
+  utility::Log::Instance().Info("%s", __PRETTY_FUNCTION__);
 
 #if defined(BUILD_ANDROID)
   m_pDisplay->BindAndroidApp(pApp);

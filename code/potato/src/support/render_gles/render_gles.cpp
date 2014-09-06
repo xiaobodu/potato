@@ -14,7 +14,7 @@ namespace gles {
 
 CRender::CRender(const base::Config& roConfig)
 {
-  ;
+  utility::Log::Instance().Info("%s", __PRETTY_FUNCTION__);
 }
 
 CRender::~CRender()

@@ -9,6 +9,11 @@
 #include <GL/glx.h>
 
 namespace c4g {
+
+namespace utility{
+class DynamicLibraryManager;
+}
+
 namespace display {
 namespace linux_gl{
 
@@ -19,7 +24,6 @@ public:
   virtual ~CDisplay();
 
 public:
-  virtual void BindRender(core::IRender*& rpRender);
   virtual void Run();
 
 protected:
@@ -33,10 +37,14 @@ private:
   GLXContext m_pGLContext;
 
   bool m_bIsRunning;
+
+  std::string m_sTitle;
   int m_iWidth;
   int m_iHeight;
 
-  core::IRender* m_pRender;
+  base::Config          m_oConfigRender;
+  core::IRender*        m_pRender;
+  utility::DynamicLibraryManager* m_pLibraryManager;
 };
 
 }
