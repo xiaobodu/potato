@@ -175,7 +175,7 @@ jclass NativeHelper::RetrieveClass(JNIEnv*& rpEnv, const std::string& rsNativeCl
 
 void potato_main(android_app* pApp, const std::string& rsNativeClassName, const std::string& rsHelperClassName)
 {
-  ac::utility::Log::Instance().Info("potato_main");
+  c4g::utility::Log::Instance().Info("potato_main");
 
   app_dummy();
 
@@ -183,9 +183,9 @@ void potato_main(android_app* pApp, const std::string& rsNativeClassName, const 
 
   std::string libr_path = NativeHelper::Instance().GetLibraryPath();
   std::string data_path = NativeHelper::Instance().GetExternalPath();
-  ac::Potato::Instance().Initialize(libr_path, data_path, "potato.json");
+  c4g::Potato::Instance().Initialize(libr_path, data_path, "potato.json");
 
-  ac::core::IEngine*& engine_ptr = ac::Potato::Instance().GetEngine();
+  c4g::core::IEngine*& engine_ptr = c4g::Potato::Instance().GetEngine();
   assert(NULL != engine_ptr);
   engine_ptr->Run(pApp);
 }

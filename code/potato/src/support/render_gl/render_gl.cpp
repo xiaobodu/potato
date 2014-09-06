@@ -7,7 +7,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-namespace ac {
+namespace c4g {
 namespace render {
 namespace gl {
 
@@ -88,14 +88,14 @@ void CRender::End()
 }
 }
 
-bool CreateRender(ac::core::IRender*& rpRender, const ac::base::Config& roConfig)
+bool CreateRender(c4g::core::IRender*& rpRender, const c4g::base::Config& roConfig)
 {
   assert(rpRender == NULL);
-  rpRender = new ac::render::gl::CRender(roConfig);
+  rpRender = new c4g::render::gl::CRender(roConfig);
   return true;
 }
 
-bool DestroyRender(ac::core::IRender*& rpRender, const ac::base::Config& roConfig)
+bool DestroyRender(c4g::core::IRender*& rpRender, const c4g::base::Config& roConfig)
 {
   assert(rpRender != NULL);
   delete rpRender;

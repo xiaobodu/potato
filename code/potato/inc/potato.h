@@ -6,7 +6,7 @@
 #if defined(BUILD_ANDROID)
 #include "common.h"
 
-namespace ac {
+namespace c4g {
 
 /*!
  * \class Potato
@@ -26,7 +26,7 @@ public:
   core::IEngine*& GetEngine();
 
 private:
-  ac::base::Config m_oConfigEngine;
+  base::Config m_oConfigEngine;
   core::IEngine* m_pEngine;
 };
 

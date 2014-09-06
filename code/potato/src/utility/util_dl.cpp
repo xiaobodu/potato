@@ -5,11 +5,11 @@
 #include <cassert>
 #include <iostream>
 
-namespace ac{
-namespace utility{
+namespace c4g {
+namespace utility {
 
 CDynamicLibraryHandler::CDynamicLibraryHandler(const std::string& rsFileName)
-  : m_pLib(NULL)
+    : m_pLib(NULL)
 {
 #if defined(BUILD_ANDROID)
   m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);

@@ -3,11 +3,11 @@
 
 #include <cassert>
 
-namespace ac{
-namespace scene{
+namespace c4g {
+namespace scene {
 
-CScene::CScene(const ac::base::Config& roConfig)
-  : m_pAsset(NULL)
+CScene::CScene(const base::Config& roConfig)
+    : m_pAsset(NULL)
 {
   ;
 }
@@ -45,18 +45,18 @@ bool CScene::Draw(const render::ICanvas* pCanvas)
 }
 }
 
-bool CreateScene(ac::core::IScene*& rpScene, const ac::base::Config& roConfig)
+bool CreateScene(c4g::core::IScene*& rpScene, const c4g::base::Config& roConfig)
 {
   assert(rpScene == NULL);
   if (NULL != rpScene)
   {
     return false;
   }
-  rpScene = new ac::scene::CScene(roConfig);
+  rpScene = new c4g::scene::CScene(roConfig);
   return true;
 }
 
-bool DestroyScene(ac::core::IScene*& rpScene, const ac::base::Config& roConfig)
+bool DestroyScene(c4g::core::IScene*& rpScene, const c4g::base::Config& roConfig)
 {
   assert(rpScene != NULL);
   if (NULL == rpScene)

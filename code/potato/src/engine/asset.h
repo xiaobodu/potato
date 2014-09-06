@@ -2,13 +2,16 @@
 
 #include "common.h"
 
-namespace ac{
-namespace core{
+namespace c4g {
+namespace core {
 
 class IAsset
 {
 public:
-  virtual ~IAsset() { ; }
+  virtual ~IAsset()
+  {
+    ;
+  }
 
 public:
   virtual void Load(const std::string& rsFileName) = 0;
@@ -17,5 +20,5 @@ public:
 }
 }
 
-FUNC_API_DECLARE(CreateAsset, ac::core::IAsset, const ac::base::Config);
-FUNC_API_DECLARE(DestroyAsset, ac::core::IAsset, const ac::base::Config);
+FUNC_API_DECLARE(CreateAsset, c4g::core::IAsset, const c4g::base::Config);
+FUNC_API_DECLARE(DestroyAsset, c4g::core::IAsset, const c4g::base::Config);

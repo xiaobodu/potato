@@ -14,16 +14,16 @@
 #include "utility/util_file.h"
 #include "utility/util_dl.h"
 
-FUNC_API_TYPEDEF(CreateDisplay, ac::core::IDisplay, const ac::base::Config);
-FUNC_API_TYPEDEF(DestroyDisplay, ac::core::IDisplay, const ac::base::Config);
+FUNC_API_TYPEDEF(CreateDisplay, c4g::core::IDisplay, const c4g::base::Config);
+FUNC_API_TYPEDEF(DestroyDisplay, c4g::core::IDisplay, const c4g::base::Config);
 
-FUNC_API_TYPEDEF(CreateRender, ac::core::IRender, const ac::base::Config);
-FUNC_API_TYPEDEF(DestroyRender, ac::core::IRender, const ac::base::Config);
+FUNC_API_TYPEDEF(CreateRender, c4g::core::IRender, const c4g::base::Config);
+FUNC_API_TYPEDEF(DestroyRender, c4g::core::IRender, const c4g::base::Config);
 
-namespace ac{
+namespace c4g{
 namespace core{
 
-CEngine::CEngine(const ac::base::Config& roConfig)
+CEngine::CEngine(const c4g::base::Config& roConfig)
   : m_pDisplay(NULL)
   , m_pRender(NULL)
   , m_pLibraryManager(NULL)
@@ -159,14 +159,14 @@ void CEngine::Run()
 }
 }
 
-bool CreateEngine(ac::core::IEngine*& rpEngine, const ac::base::Config& roConfig)
+bool CreateEngine(c4g::core::IEngine*& rpEngine, const c4g::base::Config& roConfig)
 {
   assert(rpEngine == NULL);
-  rpEngine = new ac::core::CEngine(roConfig);
+  rpEngine = new c4g::core::CEngine(roConfig);
   return true;
 }
 
-bool DestroyEngine(ac::core::IEngine*& rpEngine, const ac::base::Config& roConfig)
+bool DestroyEngine(c4g::core::IEngine*& rpEngine, const c4g::base::Config& roConfig)
 {
   assert(rpEngine != NULL);
   delete rpEngine;

@@ -22,8 +22,8 @@
 
 #endif
 
-namespace ac{
-namespace utility{
+namespace c4g {
+namespace utility {
 
 #if !defined(BUILD_ANDROID)
 // define the style/color code
@@ -47,13 +47,12 @@ namespace utility{
 #define TEXT_STYLE_BGCOLOR_CYAN         "\x1b[46m"
 #define TEXT_STYLE_BGCOLOR_WHITE        "\x1b[47m"
 
-const static char* TextStyleCode[] = {TEXT_STYLE_END,
-    TEXT_STYLE_BOLD, TEXT_STYLE_UNDERLINE,
-    TEXT_STYLE_COLOR_BLACK, TEXT_STYLE_COLOR_RED, TEXT_STYLE_COLOR_GREEN, TEXT_STYLE_COLOR_YELLOW,
-    TEXT_STYLE_COLOR_BLUE, TEXT_STYLE_COLOR_MAGENTA, TEXT_STYLE_COLOR_CYAN, TEXT_STYLE_COLOR_WHITE,
-    TEXT_STYLE_BGCOLOR_BLACK, TEXT_STYLE_BGCOLOR_RED, TEXT_STYLE_BGCOLOR_GREEN, TEXT_STYLE_BGCOLOR_YELLOW,
-    TEXT_STYLE_BGCOLOR_BLUE, TEXT_STYLE_BGCOLOR_MAGENTA, TEXT_STYLE_BGCOLOR_CYAN, TEXT_STYLE_BGCOLOR_WHITE
-};
+const static char* TextStyleCode[] = { TEXT_STYLE_END,
+TEXT_STYLE_BOLD, TEXT_STYLE_UNDERLINE,
+TEXT_STYLE_COLOR_BLACK, TEXT_STYLE_COLOR_RED, TEXT_STYLE_COLOR_GREEN, TEXT_STYLE_COLOR_YELLOW,
+TEXT_STYLE_COLOR_BLUE, TEXT_STYLE_COLOR_MAGENTA, TEXT_STYLE_COLOR_CYAN, TEXT_STYLE_COLOR_WHITE,
+TEXT_STYLE_BGCOLOR_BLACK, TEXT_STYLE_BGCOLOR_RED, TEXT_STYLE_BGCOLOR_GREEN, TEXT_STYLE_BGCOLOR_YELLOW,
+TEXT_STYLE_BGCOLOR_BLUE, TEXT_STYLE_BGCOLOR_MAGENTA, TEXT_STYLE_BGCOLOR_CYAN, TEXT_STYLE_BGCOLOR_WHITE };
 #endif
 
 #define TEXT_BUFFER_SIZE_MAX            256
@@ -101,11 +100,17 @@ public:
   }
 
 protected:
-  Log() { ; }
-  virtual ~Log() { ; }
+  Log()
+  {
+    ;
+  }
+  virtual ~Log()
+  {
+    ;
+  }
 
 public:
-  void Fatal(const char* const& rcText, ...) const
+  void Fatal(const char* const & rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
@@ -115,7 +120,7 @@ public:
 #endif
   }
 
-  void Error(const char* const& rcText, ...) const
+  void Error(const char* const & rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
@@ -125,7 +130,7 @@ public:
 #endif
   }
 
-  void Warning(const char* const& rcText, ...) const
+  void Warning(const char* const & rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
@@ -135,7 +140,7 @@ public:
 #endif
   }
 
-  void System(const char* const& rcText, ...) const
+  void System(const char* const & rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
@@ -145,7 +150,7 @@ public:
 #endif
   }
 
-  void Info(const char* const& rcText, ...) const
+  void Info(const char* const & rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
@@ -155,7 +160,7 @@ public:
 #endif
   }
 
-  void Debug(const char* const& rcText, ...) const
+  void Debug(const char* const & rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
@@ -165,7 +170,7 @@ public:
 #endif
   }
 
-  void User(const char* const& rcText, ...) const
+  void User(const char* const & rcText, ...) const
   {
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
@@ -176,7 +181,7 @@ public:
   }
 
 #if !defined(BUILD_ANDROID)
-  void operator()(FILE* pFile, const LogStyle& eStyle, const char* const& rcTitle, const char* const& rcText, ...) const
+  void operator()(FILE* pFile, const LogStyle& eStyle, const char* const & rcTitle, const char* const & rcText, ...) const
   {
     assert(pFile != NULL);
     assert(rcTitle != NULL);
@@ -184,7 +189,8 @@ public:
 
     GET_ARGS_TEXT(rcText, result);
 
-    switch (eStyle) {
+    switch (eStyle)
+    {
     case EStyle_None:
       fprintf(pFile, "[%s] %s\n", rcTitle, result);
       break;

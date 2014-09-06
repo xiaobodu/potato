@@ -8,14 +8,14 @@
 #include <X11/Xutil.h>
 #include <GL/glx.h>
 
-namespace ac {
+namespace c4g {
 namespace display {
 namespace linux_gl{
 
 class CDisplay: public core::IDisplay
 {
 public:
-  CDisplay(const ac::base::Config& roConfig);
+  CDisplay(const base::Config& roConfig);
   virtual ~CDisplay();
 
 public:

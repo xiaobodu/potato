@@ -6,15 +6,18 @@
 #include <EGL/egl.h>
 #endif
 
-namespace ac{
-namespace core{
+namespace c4g {
+namespace core {
 
 class IRender;
 
 class IDisplay
 {
 public:
-  virtual ~IDisplay() { ; }
+  virtual ~IDisplay()
+  {
+    ;
+  }
 
 public:
   virtual void BindRender(IRender*& rpRender) = 0;
@@ -26,16 +29,19 @@ public:
 
 } // end of namespace core
 
-namespace display{
+namespace display {
 
 class IInput
 {
 public:
-  virtual ~IInput() { ; }
+  virtual ~IInput()
+  {
+    ;
+  }
 };
 
 } // end of namespace display
-} // end of namespace ac
+} // end of namespace c4g
 
-FUNC_API_DECLARE(CreateDisplay, ac::core::IDisplay, const ac::base::Config);
-FUNC_API_DECLARE(DestroyDisplay, ac::core::IDisplay, const ac::base::Config);
+FUNC_API_DECLARE(CreateDisplay, c4g::core::IDisplay, const c4g::base::Config);
+FUNC_API_DECLARE(DestroyDisplay, c4g::core::IDisplay, const c4g::base::Config);

@@ -2,11 +2,11 @@
 
 #include <cassert>
 
-namespace ac{
+namespace c4g{
 
 namespace asset{
 
-CAsset::CAsset(const ac::base::Config& roConfig)
+CAsset::CAsset(const c4g::base::Config& roConfig)
 {
   ;
 }
@@ -26,18 +26,18 @@ void CAsset::Load(const std::string& rsFileName)
 }
 
 
-bool CreateAsset(ac::core::IAsset*& rpAsset, const ac::base::Config& roConfig)
+bool CreateAsset(c4g::core::IAsset*& rpAsset, const c4g::base::Config& roConfig)
 {
   assert(rpAsset == NULL);
   if (rpAsset != NULL)
   {
     return false;
   }
-  rpAsset = new ac::asset::CAsset(roConfig);
+  rpAsset = new c4g::asset::CAsset(roConfig);
   return true;
 }
 
-bool DestroyAsset(ac::core::IAsset*& rpAsset, const ac::base::Config& roConfig)
+bool DestroyAsset(c4g::core::IAsset*& rpAsset, const c4g::base::Config& roConfig)
 {
   assert(rpAsset != NULL);
   if (NULL == rpAsset)

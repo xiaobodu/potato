@@ -3,8 +3,8 @@
 #include <map>
 #include <string>
 
-namespace ac{
-namespace utility{
+namespace c4g {
+namespace utility {
 
 class CDynamicLibraryHandler
 {

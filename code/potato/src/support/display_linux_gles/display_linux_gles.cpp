@@ -11,11 +11,11 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-namespace ac {
+namespace c4g {
 namespace display {
 namespace linux_gles {
 
-CDisplay::CDisplay(const ac::base::Config& roConfig)
+CDisplay::CDisplay(const base::Config& roConfig)
   : m_pDisplay(NULL), m_lWindow(0), m_pGLConfig(NULL), m_pGLDisplay(EGL_NO_DISPLAY)
   , m_pGLContext(EGL_NO_CONTEXT), m_pGLSurface(EGL_NO_SURFACE), m_bIsRunning(true), m_pRender(NULL)
 {
@@ -242,14 +242,14 @@ void CDisplay::DestroyWindow()
 }
 }
 
-bool CreateDisplay(ac::core::IDisplay*& rpDisplay, const ac::base::Config& roConfig)
+bool CreateDisplay(c4g::core::IDisplay*& rpDisplay, const c4g::base::Config& roConfig)
 {
   assert(rpDisplay == NULL);
-  rpDisplay = new ac::display::linux_gles::CDisplay(roConfig);
+  rpDisplay = new c4g::display::linux_gles::CDisplay(roConfig);
   return true;
 }
 
-bool DestroyDisplay(ac::core::IDisplay*& rpDisplay, const ac::base::Config& roConfig)
+bool DestroyDisplay(c4g::core::IDisplay*& rpDisplay, const c4g::base::Config& roConfig)
 {
   assert(rpDisplay != NULL);
   delete rpDisplay;

@@ -2,7 +2,7 @@
 
 #include "scene.h"
 
-namespace ac{
+namespace c4g{
 
 namespace core{
 class IAsset;
@@ -13,7 +13,7 @@ namespace scene{
 class CScene : public core::IScene
 {
 public:
-  explicit CScene(const ac::base::Config& roConfig);
+  explicit CScene(const base::Config& roConfig);
   virtual ~CScene();
 
 public:

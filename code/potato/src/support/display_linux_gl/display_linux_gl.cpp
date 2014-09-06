@@ -11,12 +11,12 @@
 #include <sys/time.h>
 #include <GL/glx.h>
 
-namespace ac {
+namespace c4g {
 namespace display {
 namespace linux_gl {
 
-CDisplay::CDisplay(const ac::base::Config& roConfig) :
-    m_pDisplay(NULL), m_lWindow(0), m_pGLContext(NULL), m_bIsRunning(true), m_pRender(NULL)
+CDisplay::CDisplay(const base::Config& roConfig)
+    : m_pDisplay(NULL), m_lWindow(0), m_pGLContext(NULL), m_bIsRunning(true), m_pRender(NULL)
 {
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
 
@@ -129,12 +129,12 @@ void CDisplay::CreateWindow()
   int screen_id = DefaultScreen(m_pDisplay);
 
   static int attrListDbl[] = {
-      GLX_RGBA, GLX_DOUBLEBUFFER,
-      GLX_RED_SIZE, 4,
-      GLX_GREEN_SIZE, 4,
-      GLX_BLUE_SIZE, 4,
-      GLX_DEPTH_SIZE, 16,
-      None };
+  GLX_RGBA, GLX_DOUBLEBUFFER,
+  GLX_RED_SIZE, 4,
+  GLX_GREEN_SIZE, 4,
+  GLX_BLUE_SIZE, 4,
+  GLX_DEPTH_SIZE, 16,
+  None };
   XVisualInfo* visual_info_ptr = glXChooseVisual(m_pDisplay, screen_id, attrListDbl);
   assert(NULL != visual_info_ptr);
 
@@ -143,13 +143,12 @@ void CDisplay::CreateWindow()
 
   XSetWindowAttributes attr;
   attr.colormap = XCreateColormap(m_pDisplay, RootWindow(m_pDisplay, visual_info_ptr->screen), visual_info_ptr->visual,
-      AllocNone);
+  AllocNone);
   attr.border_pixel = 0;
   attr.event_mask = ExposureMask | KeyReleaseMask | ButtonReleaseMask | StructureNotifyMask;
 
-  m_lWindow = XCreateWindow(m_pDisplay, RootWindow(m_pDisplay, visual_info_ptr->screen), 0, 0, m_iWidth, m_iHeight, 0,
-      visual_info_ptr->depth, InputOutput, visual_info_ptr->visual,
-      CWBorderPixel | CWColormap | CWEventMask, &attr);
+  m_lWindow = XCreateWindow(m_pDisplay, RootWindow(m_pDisplay, visual_info_ptr->screen), 0, 0, m_iWidth, m_iHeight, 0, visual_info_ptr->depth, InputOutput, visual_info_ptr->visual,
+  CWBorderPixel | CWColormap | CWEventMask, &attr);
   XMapWindow(m_pDisplay, m_lWindow);
   XFree(visual_info_ptr);
 
@@ -168,14 +167,14 @@ void CDisplay::DestroyWindow()
 }
 }
 
-bool CreateDisplay(ac::core::IDisplay*& rpDisplay, const ac::base::Config& roConfig)
+bool CreateDisplay(c4g::core::IDisplay*& rpDisplay, const c4g::base::Config& roConfig)
 {
   assert(rpDisplay == NULL);
-  rpDisplay = new ac::display::linux_gl::CDisplay(roConfig);
+  rpDisplay = new c4g::display::linux_gl::CDisplay(roConfig);
   return true;
 }
 
-bool DestroyDisplay(ac::core::IDisplay*& rpDisplay, const ac::base::Config& roConfig)
+bool DestroyDisplay(c4g::core::IDisplay*& rpDisplay, const c4g::base::Config& roConfig)
 {
   assert(rpDisplay != NULL);
   delete rpDisplay;

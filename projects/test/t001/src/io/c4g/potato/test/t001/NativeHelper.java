@@ -1,6 +1,6 @@
-package me.alexchi.potato.test.t001;
+package io.c4g.potato.test.t001;
 
-import me.alexchi.potato.PNativeHelper;
+import io.c4g.potato.PNativeHelper;
 
 public class NativeHelper extends PNativeHelper {
 	

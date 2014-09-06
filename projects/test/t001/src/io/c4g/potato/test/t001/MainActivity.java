@@ -1,8 +1,7 @@
-package me.alexchi.potato.test.t001;
+package io.c4g.potato.test.t001;
 
-//import me.alexchi.test.R;
-import me.alexchi.potato.IPNativeHelper;
-import me.alexchi.potato.PActivity;
+import io.c4g.potato.IPNativeHelper;
+import io.c4g.potato.PActivity;
 import android.os.Bundle;
 import android.util.Log;
 

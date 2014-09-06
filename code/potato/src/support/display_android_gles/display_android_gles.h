@@ -6,14 +6,14 @@
 
 #include <EGL/egl.h>
 
-namespace ac {
+namespace c4g {
 namespace display {
 namespace android_gles {
 
 class CDisplay: public core::IDisplay
 {
 public:
-  CDisplay(const ac::base::Config& roConfig);
+  CDisplay(const base::Config& roConfig);
   virtual ~CDisplay();
 
 public:

@@ -7,7 +7,7 @@
 #include <cmath>
 #include <GLES/gl.h>
 
-namespace ac {
+namespace c4g {
 namespace render {
 
 namespace gles {
@@ -107,14 +107,14 @@ void CRender::Perspective(double fovy, double aspect, double near, double far)
 }
 }
 
-bool CreateRender(ac::core::IRender*& rpRender, const ac::base::Config& roConfig)
+bool CreateRender(c4g::core::IRender*& rpRender, const c4g::base::Config& roConfig)
 {
   assert(rpRender == NULL);
-  rpRender = new ac::render::gles::CRender(roConfig);
+  rpRender = new c4g::render::gles::CRender(roConfig);
   return true;
 }
 
-bool DestroyRender(ac::core::IRender*& rpRender, const ac::base::Config& roConfig)
+bool DestroyRender(c4g::core::IRender*& rpRender, const c4g::base::Config& roConfig)
 {
   assert(rpRender != NULL);
   delete rpRender;

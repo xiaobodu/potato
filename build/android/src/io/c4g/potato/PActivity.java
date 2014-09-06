@@ -1,4 +1,4 @@
-package me.alexchi.potato;
+package io.c4g.potato;
 
 import android.app.NativeActivity;
 import android.os.Bundle;

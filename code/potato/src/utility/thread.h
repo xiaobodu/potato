@@ -4,7 +4,7 @@
  */
 #pragma once
 
-namespace ac {
+namespace c4g {
 namespace thread {
 
 /*!

@@ -7,8 +7,8 @@
 
 #include "thread.h"
 
-namespace ac{
-namespace thread{
+namespace c4g {
+namespace thread {
 
 void *DoWorkFuncPtr(void* pData)
 {
@@ -24,7 +24,8 @@ void *DoWorkFuncPtr(void* pData)
 
 void DoJob(thread::IWorker* pWorkers[], const int& riCount)
 {
-  if (0 >= riCount) {
+  if (0 >= riCount)
+  {
     return;
   }
 
@@ -41,7 +42,7 @@ void DoJob(thread::IWorker* pWorkers[], const int& riCount)
   /// create a thread for every workers
   for (i = 0; i < riCount; ++i)
   {
-    assert(0 == pthread_create(&threads[i], &attr, DoWorkFuncPtr, (void*)pWorkers[i]));
+    assert(0 == pthread_create(&threads[i], &attr, DoWorkFuncPtr, (void* )pWorkers[i]));
   }
 
   pthread_attr_destroy(&attr);

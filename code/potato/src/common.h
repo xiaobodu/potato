@@ -21,9 +21,9 @@
 #if defined(BUILD_ANDROID)
 struct android_app;
 #endif
-namespace ac{
+namespace c4g {
 
-namespace base{
+namespace base {
 
 typedef struct tagConfig
 {

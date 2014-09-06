@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-namespace ac {
+namespace c4g {
 
 namespace display {
 class IInput;
@@ -34,5 +34,5 @@ public:
 
 }
 
-FUNC_API_DECLARE(CreateScene, ac::core::IScene, const ac::base::Config);
-FUNC_API_DECLARE(DestroyScene, ac::core::IScene, const ac::base::Config);
+FUNC_API_DECLARE(CreateScene, c4g::core::IScene, const c4g::base::Config);
+FUNC_API_DECLARE(DestroyScene, c4g::core::IScene, const c4g::base::Config);

@@ -9,7 +9,7 @@
 #if !defined(BUILD_ANDROID)
 #include "common.h"
 
-namespace ac {
+namespace c4g {
 
 /*!
  * \class Potato
@@ -29,17 +29,17 @@ public:
   core::IEngine*& GetEngine();
 
 private:
-  ac::base::Config m_oConfigEngine;
+  c4g::base::Config m_oConfigEngine;
   core::IEngine* m_pEngine;
 };
 
 }
 #endif
 
-FUNC_API_TYPEDEF(CreateEngine, ac::core::IEngine, const ac::base::Config);
-FUNC_API_TYPEDEF(DestroyEngine, ac::core::IEngine, const ac::base::Config);
+FUNC_API_TYPEDEF(CreateEngine, c4g::core::IEngine, const c4g::base::Config);
+FUNC_API_TYPEDEF(DestroyEngine, c4g::core::IEngine, const c4g::base::Config);
 
-namespace ac {
+namespace c4g {
 
 static utility::DynamicLibraryManager gs_DynamicLibraryManager;
 
@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
   std::string path;
   std::string file;
   GetConfig(path, file);
-  ac::core::IEngine*& engine_ptr = ac::Potato::Instance().Initialize(path, file).GetEngine();
+  c4g::core::IEngine*& engine_ptr = c4g::Potato::Instance().Initialize(path, file).GetEngine();
   engine_ptr->Run();
   return 0;
 }

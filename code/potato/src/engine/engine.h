@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace ac{
+namespace c4g{
 namespace core{
 
 class IDisplay;
@@ -16,7 +16,7 @@ class IRender;
 class CEngine : public IEngine
 {
 public:
-  CEngine(const ac::base::Config& roConfig);
+  CEngine(const c4g::base::Config& roConfig);
   virtual ~CEngine();
 
 public:
@@ -37,5 +37,5 @@ private:
 }
 }
 
-FUNC_API_DECLARE(CreateEngine, ac::core::IEngine, const ac::base::Config);
-FUNC_API_DECLARE(DestroyEngine, ac::core::IEngine, const ac::base::Config);
+FUNC_API_DECLARE(CreateEngine, c4g::core::IEngine, const c4g::base::Config);
+FUNC_API_DECLARE(DestroyEngine, c4g::core::IEngine, const c4g::base::Config);

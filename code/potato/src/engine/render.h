@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-namespace ac{
+namespace c4g{
 namespace core{
 
 class IScene;
@@ -34,5 +34,5 @@ public:
 }
 }
 
-FUNC_API_DECLARE(CreateRender, ac::core::IRender, const ac::base::Config);
-FUNC_API_DECLARE(DestroyRender, ac::core::IRender, const ac::base::Config);
+FUNC_API_DECLARE(CreateRender, c4g::core::IRender, const c4g::base::Config);
+FUNC_API_DECLARE(DestroyRender, c4g::core::IRender, const c4g::base::Config);

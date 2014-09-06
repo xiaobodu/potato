@@ -1,4 +1,4 @@
-package me.alexchi.potato;
+package io.c4g.potato;
 
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;

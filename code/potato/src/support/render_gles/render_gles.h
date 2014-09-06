@@ -4,7 +4,7 @@
 
 #include "render.h"
 
-namespace ac {
+namespace c4g {
 
 namespace core {
 class IScene;
