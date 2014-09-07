@@ -26,7 +26,7 @@ public:
   virtual void End();
 
 private:
-  void Perspective(double fovy, double aspect, double near, double far);
+  void SetView(double fovy, double aspect, double near, double far);
 
 private:
 };

@@ -33,32 +33,34 @@ static GLubyte g_aiTexArray[4 * 4] = {
 
 void CRender::Start()
 {
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+
   glShadeModel(GL_SMOOTH);
   glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
-  glDepthFunc(GL_LEQUAL);
-  glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
+  // about blend
   glEnable(GL_BLEND);
-  glEnable(GL_CULL_FACE);
-  /// just 2d render, don't test the depth
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_DITHER);
-  glEnable(GL_TEXTURE_2D);
-
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+  glEnable(GL_CULL_FACE);
+  glEnable(GL_DITHER);
+  /// just 2d render, don't test the depth
+  //glEnable(GL_DEPTH_TEST);
+  //glDepthFunc(GL_LEQUAL);
+
+  // about texture
+  glEnable(GL_TEXTURE_2D);
   glGenTextures(1, &g_iTexId);
-
   glBindTexture(GL_TEXTURE_2D, g_iTexId);
-
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, g_aiTexArray);
-
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
 bool CRender::Resize(const int& riWidth, const int& riHeight)
 {
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+
   int width = riWidth;
   int height = riHeight;
   if (height == 0)
@@ -66,23 +68,19 @@ bool CRender::Resize(const int& riWidth, const int& riHeight)
     height = 1;
   }
   glViewport(0, 0, width, height);
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
 
-  Perspective(45.0f, (GLfloat) width / (GLfloat) height, 0.1f, 100.0f);
-  glViewport(0, 0, width, height);
-  glMatrixMode(GL_MODELVIEW);
+  SetView(45.0f, (GLfloat) width / (GLfloat) height, 10.0f, 100.0f);
   glFlush();
 
   return true;
 }
 
 GLfloat square1[] = { 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0 };
-GLfloat texcoord1[] = { 0, 0, 1, 0, 0, 1, 1, 1 };
-GLfloat color1[] = { 0.2, 0.2, 0.0, 1.0, 0.2, 0.0, 0.2, 1.0, 0.0, 0.7, 0.7, 1.0 };
+GLfloat texcoord1[] = { 0, 0, 10, 0, 0, 10, 10, 10 };
+GLfloat color1[] = { 0.2, 0.2, 0.0, 1.0, 0.2, 0.0, 0.2, 1.0, 0.0, 0.7, 0.7, 1.0, 1.0, 1.0, 1.0, 1.0 };
 GLfloat square2[] = { -0.5, -0.5, 0, 0, -0.5, 0, -0.5, 0, 0, 0, 0, 0 };
-GLfloat color2[] = { 0.2, 0.2, 0.0, 1.0, 0.2, 1.0, 0.2, 0.0, 0.5, 0.7, 0.7, 1.0, 0.8, 0.7, 0.7, 1.0 };
-GLubyte indices[] = {0, 1, 2, 2, 1, 3};
+GLfloat color2[] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+GLubyte indice[] = {0, 1, 2, 2, 1, 3};
 GLfloat rotate = 0.0f;
 
 bool CRender::Render(const float& rfDelta, core::IScene* pScene)
@@ -94,6 +92,7 @@ bool CRender::Render(const float& rfDelta, core::IScene* pScene)
 
   glTranslatef(0.0f, 0.0f, -10.0f);
 
+  glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -103,26 +102,30 @@ bool CRender::Render(const float& rfDelta, core::IScene* pScene)
   glTexCoordPointer(2, GL_FLOAT, 0, texcoord1);
   glVertexPointer(3, GL_FLOAT, 0, square1);
 
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indice);
 
+  glDisable(GL_TEXTURE_2D);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
   rotate += rfDelta * 100.0f;
-  glRotatef(rotate, 0.0f, 1.0f, 0.0f);
+  glRotatef(rotate, 0.0f, 0.0f, 1.0f);
+  glEnable(GL_COLOR_MATERIAL);
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_COLOR_ARRAY);
+  glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
   glColorPointer(4, GL_FLOAT, 0, color2);
   glVertexPointer(3, GL_FLOAT, 0, square2);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-  glDisableClientState(GL_COLOR_ARRAY);
+  glDisable(GL_COLOR_MATERIAL);
   glDisableClientState(GL_VERTEX_ARRAY);
+  glDisableClientState(GL_COLOR_ARRAY);
 
-  //color2[1] += rfDelta * 1.0f; if (color2[1] > 1.0f) color2[1] -= 1.0f;
-  //color2[3] += rfDelta * 0.3f; if (color2[3] > 1.0f) color2[3] = 1.0f;
-  //color2[5] += rfDelta * 0.5f; if (color2[5] > 1.0f) color2[5] -= 1.0f;
-  //color2[7] += rfDelta * 0.5f; if (color2[7] > 1.0f) color2[7] = 1.0f;
-  //color2[9] += rfDelta * 0.5f; if (color2[9] > 1.0f) color2[7] -= 1.0f;
+  color2[0] += rfDelta * 1.0f; if (color2[0] > 1.0f) color2[0] -= 1.0f;
+  color2[2] += rfDelta * 0.3f; if (color2[2] > 1.0f) color2[2] -= 1.0f;
+  color2[5] += rfDelta * 0.5f; if (color2[5] > 1.0f) color2[5] -= 1.0f;
+  color2[6] += rfDelta * 0.5f; if (color2[6] > 1.0f) color2[6] -= 1.0f;
+  color2[9] += rfDelta * 0.5f; if (color2[9] > 1.0f) color2[9] -= 1.0f;
 
   return true;
 }
@@ -130,11 +133,14 @@ bool CRender::Render(const float& rfDelta, core::IScene* pScene)
 void CRender::End()
 {
   glDeleteTextures(1, &g_iTexId);
-  //
+
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
-void CRender::Perspective(double fovy, double aspect, double near, double far)
+void CRender::SetView(double fovy, double aspect, double near, double far)
 {
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
@@ -144,9 +150,12 @@ void CRender::Perspective(double fovy, double aspect, double near, double far)
   double right = top * aspect;
   double left = 0.0 - right;
 
-  //glOrtho();
-  glFrustumf(left, right, bottom, top, near, far);
+  glOrthof(left, right, bottom, top, near, far);
+  /// just render 2d
+  //glFrustumf(left, right, bottom, top, near, far);
+  //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
   assert(GL_NO_ERROR == glGetError());
+  glMatrixMode(GL_MODELVIEW);
 }
 
 }

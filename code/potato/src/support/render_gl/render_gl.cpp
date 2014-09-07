@@ -27,6 +27,8 @@ CRender::~CRender()
 
 void CRender::Start()
 {
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+
   glShadeModel(GL_SMOOTH);
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   glClearDepth(1.0f);
@@ -37,6 +39,8 @@ void CRender::Start()
 
 bool CRender::Resize(const int& riWidth, const int& riHeight)
 {
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+
   int width = riWidth;
   int height = riHeight;
   if (height == 0)
@@ -78,7 +82,7 @@ bool CRender::Render(const float& rfDeltaTime, core::IScene* pScene)
 
 void CRender::End()
 {
-  //
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
 }
