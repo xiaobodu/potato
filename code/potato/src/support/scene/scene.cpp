@@ -22,17 +22,17 @@ static render::Glyph g_Glyph;
 CScene::CScene(const base::Config& roConfig)
   : m_pAsset(NULL)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
 CScene::~CScene()
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
 bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
   g_Glyph.l = 0.0f;
   g_Glyph.r = 5.0f;
   g_Glyph.t = 0.0f;
@@ -44,13 +44,13 @@ bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName)
 bool CScene::Unload(core::IRender* const& rpRender)
 {
   rpRender->DeleteTexId(1, &g_Glyph.id);
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
   return true;
 }
 
 bool CScene::Resize(const int& riWidth, const int& riHeight)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
   return true;
 }
 

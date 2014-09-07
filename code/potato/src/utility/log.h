@@ -237,3 +237,18 @@ public:
 
 }
 }
+
+#define C4G_LOG_FATAL(...)      c4g::utility::Log::Instance().Fatal(__VA_ARGS__)
+#define C4G_LOG_ERROR(...)      c4g::utility::Log::Instance().Error(__VA_ARGS__)
+#define C4G_LOG_WARNING(...)    c4g::utility::Log::Instance().Warning(__VA_ARGS__)
+/*#if defined(DEBUG)*/
+#define C4G_LOG_SYSTEM(...)     c4g::utility::Log::Instance().System(__VA_ARGS__)
+#define C4G_LOG_INFO(...)       c4g::utility::Log::Instance().Info(__VA_ARGS__)
+#define C4G_LOG_DEBUG(...)      c4g::utility::Log::Instance().Debug(__VA_ARGS__)
+#define C4G_LOG_USER(...)       c4g::utility::Log::Instance().User(__VA_ARGS__)
+/*#else
+#define C4G_LOG_SYSTEM(...)
+#define C4G_LOG_INFO(...)
+#define C4G_LOG_DEBUG(...)
+#define C4G_LOG_USER(...)
+#endif*/

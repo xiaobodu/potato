@@ -36,10 +36,6 @@ void CRender::Start()
   glShadeModel(GL_SMOOTH);
   glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
 
-  // about blend
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
   // it is not necessary to cull the face
   //glEnable(GL_CULL_FACE);
   glEnable(GL_DITHER);

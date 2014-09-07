@@ -19,6 +19,8 @@ public:
   {
     if (!IsProcessCustom(m_pT))
     {
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glEnable(GL_TEXTURE_2D);
       glEnableClientState(GL_VERTEX_ARRAY);
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -33,6 +35,7 @@ public:
 
     if (!IsProcessCustom(m_pT))
     {
+      glDisable(GL_BLEND);
       glDisable(GL_TEXTURE_2D);
       glDisableClientState(GL_VERTEX_ARRAY);
       glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -88,6 +91,10 @@ void CCanvas::DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& 
   glVertexPointer(3, GL_FLOAT, 0, m_aVertex);
 
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, m_aIndice);
+
+  /*glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  glBindTexture(GL_TEXTURE_2D, 0);*/
 }
 
 }
