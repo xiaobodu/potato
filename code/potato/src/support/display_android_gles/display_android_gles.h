@@ -47,9 +47,6 @@ private:
   bool          m_bIsEGLReady;
   bool          m_bCanRender;
 
-  int m_iWidth;
-  int m_iHeight;
-
   base::Config          m_oConfigRender;
   core::IRender*        m_pRender;
   core::IScene*         m_pScene;

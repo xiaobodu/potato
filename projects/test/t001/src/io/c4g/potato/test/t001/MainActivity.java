@@ -4,6 +4,8 @@ import io.c4g.potato.IPNativeHelper;
 import io.c4g.potato.PActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class MainActivity extends PActivity {
 

@@ -1,5 +1,6 @@
 #include <rapidjson/document.h>
 #include <android/sensor.h>
+#include <android/window.h>
 #include <android_native_app_glue.h>
 
 #include "display_android_gles.h"
@@ -29,8 +30,6 @@ CDisplay::CDisplay(const base::Config& roConfig)
   , m_pGLConfig(NULL)
   , m_bIsInitialized(false)
   , m_bIsRunning(false), m_bIsEGLReady(false), m_bCanRender(false)
-  , m_iWidth(0)
-  , m_iHeight(0)
   , m_pRender(NULL)
   , m_pScene(NULL)
   , m_pLibraryManager(NULL)
@@ -113,9 +112,12 @@ static void handle_cmd(struct android_app* app, int32_t cmd)
     display_ptr->Terminated();
     break;
 
-  case APP_CMD_WINDOW_RESIZED:
+  case APP_CMD_WINDOW_RESIZED: {
     utility::Log::Instance().Info("handle_cmd APP_CMD_WINDOW_RESIZED");
-    break;
+    int width = ANativeWindow_getWidth(app->window);
+    int height = ANativeWindow_getHeight(app->window);
+    display_ptr->Resize(width, height);
+  } break;
 
   case APP_CMD_WINDOW_REDRAW_NEEDED:
     utility::Log::Instance().Info("handle_cmd APP_CMD_WINDOW_REDRAW_NEEDED");
@@ -228,9 +230,10 @@ static void process_input(struct android_app* app, struct android_poll_source* s
 
 void CDisplay::Run(core::IScene* const& rpScene)
 {
-  utility::Log::Instance().Info("CDisplay::Run");
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
   assert(NULL != m_pRender);
   assert(NULL != m_pApp);
+  assert(NULL != rpScene);
 
   m_pScene = rpScene;
 
@@ -241,6 +244,8 @@ void CDisplay::Run(core::IScene* const& rpScene)
   m_pApp->onAppCmd = handle_cmd;
   m_pApp->onInputEvent = handle_input;
   m_pApp->inputPollSource.process = process_input;
+
+  ANativeActivity_setWindowFlags(m_pApp->activity, AWINDOW_FLAG_FULLSCREEN | AWINDOW_FLAG_DITHER, 0);
 
   ASensorManager* sensor_manager_ptr = ASensorManager_getInstance();
   m_pAccelerometerSensor = ASensorManager_getDefaultSensor(sensor_manager_ptr, ASENSOR_TYPE_ACCELEROMETER);
@@ -327,7 +332,7 @@ void CDisplay::Run(core::IScene* const& rpScene)
 
 void CDisplay::Initialize(android_app* pApp)
 {
-  utility::Log::Instance().Info("CDisplay::Initialize");
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
   m_pGLDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
   utility::Log::Instance().Info("display: %d", (int) m_pGLDisplay);
   assert(EGL_NO_DISPLAY != m_pGLDisplay);
@@ -368,21 +373,15 @@ void CDisplay::Initialize(android_app* pApp)
   EGL_NONE };
   m_pGLContext = eglCreateContext(m_pGLDisplay, m_pGLConfig, NULL, context_attribs);
   assert(EGL_NO_DISPLAY != m_pGLContext);
-  if (EGL_TRUE != eglMakeCurrent(m_pGLDisplay, m_pGLSurface, m_pGLSurface, m_pGLContext))
-  assert(0);
-
-  eglQuerySurface(m_pGLDisplay, m_pGLSurface, EGL_WIDTH, &m_iWidth);
-  eglQuerySurface(m_pGLDisplay, m_pGLSurface, EGL_HEIGHT, &m_iHeight);
+  if (EGL_TRUE != eglMakeCurrent(m_pGLDisplay, m_pGLSurface, m_pGLSurface, m_pGLContext)) assert(0);
 
   m_pRender->Start();
-  m_pRender->Resize(m_iWidth, m_iHeight);
+  //TODO:
+  m_pScene->Load(m_pRender, "");
 
-  if (NULL != m_pScene)
-  {
-    //TODO:
-    m_pScene->Load(m_pRender, "");
-    m_pScene->Resize(m_iWidth, m_iHeight);
-  }
+  int width = ANativeWindow_getWidth(pApp->window);
+  int height = ANativeWindow_getHeight(pApp->window);
+  Resize(width, height);
 
   m_bIsInitialized = true;
   m_bIsEGLReady = true;
@@ -394,12 +393,16 @@ void CDisplay::Terminated()
   {
     return;
   }
-  utility::Log::Instance().Info("CDisplay::Terminated");
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 
-  if (NULL != m_pScene) m_pScene->Unload(m_pRender);
-  m_pScene = NULL;
-  m_pRender->End();
-  m_pRender = NULL;
+  if (NULL != m_pScene)
+  {
+    m_pScene->Unload(m_pRender);
+  }
+  if (NULL != m_pRender)
+  {
+    m_pRender->End();
+  }
 
   if (m_pGLDisplay != EGL_NO_DISPLAY && m_bIsEGLReady)
   {
@@ -427,19 +430,20 @@ void CDisplay::Terminated()
 
 void CDisplay::Continue()
 {
-  utility::Log::Instance().Info("CDisplay::Continue");
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
   if (NULL != m_pAccelerometerSensor)
   {
       ASensorEventQueue_enableSensor(m_pAccelerometerSensorEventQueue, m_pAccelerometerSensor);
       // We'd like to get 60 events per second (in us).
       ASensorEventQueue_setEventRate(m_pAccelerometerSensorEventQueue, m_pAccelerometerSensor, (1000000L/3));
   }
-  m_bCanRender = true;
+
+  Run(m_pScene);
 }
 
 void CDisplay::Pause()
 {
-  utility::Log::Instance().Info("CDisplay::Pause");
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 
   if (NULL != m_pAccelerometerSensor)
   {
@@ -451,12 +455,14 @@ void CDisplay::Pause()
 
 void CDisplay::Stop()
 {
-  utility::Log::Instance().Info("CDisplay::Stop");
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
 void CDisplay::Resize(const int& riWidth, const int& riHeight)
 {
-  m_pRender->Resize(riWidth, riHeight);
+  utility::Log::Instance().Info("%s (%d, %d)", __PRETTY_FUNCTION__, riWidth, riHeight);
+  if (NULL != m_pRender) m_pRender->Resize(riWidth, riHeight);
+  if (NULL != m_pScene) m_pScene->Resize(riWidth, riHeight);
 }
 
 }

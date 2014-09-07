@@ -34,9 +34,9 @@ bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName)
 {
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
   g_Glyph.l = 0.0f;
-  g_Glyph.r = 1.0f;
+  g_Glyph.r = 5.0f;
   g_Glyph.t = 0.0f;
-  g_Glyph.b = 1.0f;
+  g_Glyph.b = 5.0f;
   g_Glyph.id = rpRender->GenerateTexId(2, 2, g_aiTexArray);
   return true;
 }
@@ -66,7 +66,7 @@ bool CScene::Tick(const float& rfDelta)
 
 bool CScene::Draw(render::ICanvas* const& rpCanvas)
 {
-  rpCanvas->DrawGlyph(g_Glyph, 100, 100, NULL);
+  rpCanvas->DrawGlyph(g_Glyph, 300, 300, NULL);
   return true;
 }
 

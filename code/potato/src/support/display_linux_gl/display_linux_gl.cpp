@@ -133,6 +133,7 @@ void CDisplay::Run(core::IScene* const& rpScene)
           m_iWidth = event.xconfigure.width;
           m_iHeight = event.xconfigure.height;
           m_pRender->Resize(m_iWidth, m_iHeight);
+          rpScene->Resize(m_iWidth, m_iHeight);
         }
         break;
 
