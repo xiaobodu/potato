@@ -6,9 +6,9 @@
 
 #include "render.h"
 
-#include "utility/util_file.h"
-#include "utility/util_log.h"
-#include "utility/util_dl.h"
+#include "utility/file.h"
+#include "utility/log.h"
+#include "utility/sharedlibrary.h"
 
 #include <cassert>
 #include <unistd.h>
@@ -68,8 +68,6 @@ CDisplay::CDisplay(const base::Config& roConfig)
 
 CDisplay::~CDisplay()
 {
-  utility::Log::Instance().Info("%s", __PRETTY_FUNCTION__);
-
   /// load the dynamic library
   typedef FUNC_API_TYPE(DestroyRender) DestroyRenderFuncPtr;
   DestroyRenderFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(DestroyRender));
@@ -78,6 +76,8 @@ CDisplay::~CDisplay()
 
   delete m_pLibraryManager;
   m_pLibraryManager = NULL;
+
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
 void CDisplay::BindAndroidApp(struct android_app* pApp)

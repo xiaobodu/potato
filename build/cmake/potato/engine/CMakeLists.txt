@@ -19,9 +19,10 @@ set(SRC_FILE_LIST
   ${SRC_PATH_engine}/engine.cpp
   ${SRC_PATH_potato}/utility/thread.h
   ${SRC_PATH_potato}/utility/thread.cpp
-  ${SRC_PATH_potato}/utility/util_dl.h
-  ${SRC_PATH_potato}/utility/util_dl.cpp
-  ${SRC_PATH_potato}/utility/util_file.h
+  ${SRC_PATH_potato}/utility/sharedlibrary.h
+  ${SRC_PATH_potato}/utility/sharedlibrary.cpp
+  ${SRC_PATH_potato}/utility/file.h
+  ${SRC_PATH_potato}/utility/log.h
   )
 
 source_group("source" FILES ${SRC_FILE_LIST})

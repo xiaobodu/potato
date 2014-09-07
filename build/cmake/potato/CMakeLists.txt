@@ -21,9 +21,9 @@ set(SRC_FILE_LIST
   ${INC_PATH_potato}/potato.h
   ${SRC_PATH_potato}/potato.cpp
   ${SRC_PATH_potato}/common.h
-  ${SRC_PATH_potato}/utility/util_dl.h
-  ${SRC_PATH_potato}/utility/util_dl.cpp
-  ${SRC_PATH_potato}/utility/util_file.h
+  ${SRC_PATH_potato}/utility/sharedlibrary.h
+  ${SRC_PATH_potato}/utility/sharedlibrary.cpp
+  ${SRC_PATH_potato}/utility/file.h
   )
 
 source_group("source" FILES ${SRC_FILE_LIST})

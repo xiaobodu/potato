@@ -1,5 +1,5 @@
-#include "util_dl.h"
-#include "util_log.h"
+#include "sharedlibrary.h"
+#include "log.h"
 
 #include <dlfcn.h>
 #include <cassert>

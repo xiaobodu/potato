@@ -1,7 +1,8 @@
 #include "render_gl.h"
 #include "scene.h"
 
-#include "utility/util_log.h"
+#include "utility/sharedlibrary.h"
+#include "utility/log.h"
 
 #include <cassert>
 #include <GL/gl.h>
@@ -14,18 +15,14 @@ namespace gl {
 GLfloat square1[] = { 0.25, 0.25, 0.0, 0.75, 0.25, 0.0, 0.25, 0.75, 0.0, 0.75, 0.75, 0.0 };
 GLfloat square2[] = { 0.0, 0.0, 1.0, 0.5, 0.0, 1.0, 0.0, 0.5, 1.0, 0.5, 0.5, 1.0 };
 
-void drawGL()
-{
-}
-
 CRender::CRender(const base::Config& roConfig)
 {
-  ;
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
 CRender::~CRender()
 {
-  ;
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
 void CRender::Start()

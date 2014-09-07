@@ -10,9 +10,9 @@
 
 #include "utility/thread.h"
 
-#include "utility/util_log.h"
-#include "utility/util_file.h"
-#include "utility/util_dl.h"
+#include "utility/log.h"
+#include "utility/file.h"
+#include "utility/sharedlibrary.h"
 
 FUNC_API_TYPEDEF(CreateDisplay, c4g::core::IDisplay, const c4g::base::Config);
 FUNC_API_TYPEDEF(DestroyDisplay, c4g::core::IDisplay, const c4g::base::Config);
@@ -24,7 +24,8 @@ CEngine::CEngine(const c4g::base::Config& roConfig)
   : m_pDisplay(NULL)
   , m_pLibraryManager(NULL)
 {
-  utility::Log::Instance().Info("%s", __PRETTY_FUNCTION__);
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+
   m_pLibraryManager = new utility::DynamicLibraryManager();
 
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
@@ -65,6 +66,8 @@ CEngine::~CEngine()
 
   delete m_pLibraryManager;
   m_pLibraryManager = NULL;
+
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
 class DisplayWorker : public thread::IWorker

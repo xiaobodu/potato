@@ -1,7 +1,8 @@
 #include "render_gles.h"
 #include "scene.h"
 
-#include "utility/util_log.h"
+#include "utility/sharedlibrary.h"
+#include "utility/log.h"
 
 #include <cassert>
 #include <cmath>
@@ -14,12 +15,12 @@ namespace gles {
 
 CRender::CRender(const base::Config& roConfig)
 {
-  utility::Log::Instance().Info("%s", __PRETTY_FUNCTION__);
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
 CRender::~CRender()
 {
-  ;
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
 static GLuint g_iTexId;

@@ -4,9 +4,9 @@
 
 #include "render.h"
 
-#include "utility/util_file.h"
-#include "utility/util_log.h"
-#include "utility/util_dl.h"
+#include "utility/file.h"
+#include "utility/log.h"
+#include "utility/sharedlibrary.h"
 
 #include <cassert>
 #include <unistd.h>
@@ -29,7 +29,8 @@ CDisplay::CDisplay(const base::Config& roConfig)
   , m_pRender(NULL)
   , m_pLibraryManager(NULL)
 {
-  utility::Log::Instance().Info("%s", __PRETTY_FUNCTION__);
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+
   m_pLibraryManager = new utility::DynamicLibraryManager();
 
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
@@ -83,11 +84,14 @@ CDisplay::~CDisplay()
 
   delete m_pLibraryManager;
   m_pLibraryManager = NULL;
+
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
 void CDisplay::Run()
 {
-  utility::Log::Instance().Info("%s", __PRETTY_FUNCTION__);
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+
   CreateWindow();
 
   m_pRender->Start();

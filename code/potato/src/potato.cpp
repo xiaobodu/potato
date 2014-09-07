@@ -1,8 +1,8 @@
 #include "potato.h"
 
-#include "utility/util_dl.h"
-#include "utility/util_file.h"
-#include "utility/util_log.h"
+#include "utility/sharedlibrary.h"
+#include "utility/file.h"
+#include "utility/log.h"
 
 #include <rapidjson/document.h>
 
@@ -52,7 +52,7 @@ Potato& Potato::Instance()
 Potato::Potato() :
     m_pEngine(NULL)
 {
-  ;
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
 Potato::~Potato()
@@ -65,6 +65,7 @@ Potato::~Potato()
     /// destroy the engine with configure
     func_destroy_func_ptr(m_pEngine, m_oConfigEngine);
   }
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
 Potato& Potato::Initialize(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile)

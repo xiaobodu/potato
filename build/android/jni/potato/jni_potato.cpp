@@ -5,7 +5,7 @@
 #include <android_native_app_glue.h>
 
 #include "potato.h"
-#include "utility/util_log.h"
+#include "utility/sharedlibrary.h"
 
 #include <EGL/egl.h>
 #include <GLES/gl.h>
