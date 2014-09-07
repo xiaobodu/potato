@@ -99,7 +99,7 @@ void CEngine::Run(android_app* pApp)
 void CEngine::Run()
 #endif
 {
-  utility::Log::Instance().Info("%s", __PRETTY_FUNCTION__);
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 
 #if defined(BUILD_ANDROID)
   m_pDisplay->BindAndroidApp(pApp);

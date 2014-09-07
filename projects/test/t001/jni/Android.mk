@@ -15,7 +15,7 @@ LOCAL_CPP_FEATURES 		:= rtti exceptions
 
 LOCAL_SRC_FILES 		+= $(ROOT_PATH)/build/android/jni/potato/jni_potato.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/potato.cpp
-LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/util_dl.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/sharedlibrary.cpp
 LOCAL_SRC_FILES 		+= t001.cpp
 
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/inc

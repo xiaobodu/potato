@@ -6,6 +6,7 @@
 
 #include "potato.h"
 #include "utility/sharedlibrary.h"
+#include "utility/log.h"
 
 #include <EGL/egl.h>
 #include <GLES/gl.h>
@@ -175,7 +176,7 @@ jclass NativeHelper::RetrieveClass(JNIEnv*& rpEnv, const std::string& rsNativeCl
 
 void potato_main(android_app* pApp, const std::string& rsNativeClassName, const std::string& rsHelperClassName)
 {
-  c4g::utility::Log::Instance().Info("potato_main");
+  c4g::utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 
   app_dummy();
 

@@ -4,7 +4,7 @@
 #include <android_native_app_glue.h>
 
 #include "potato.h"
-#include "utility/util_log.h"
+#include "utility/log.h"
 
 #define NATIVE_CLASS_NAME "android/app/NativeActivity"
 #define HELPER_CLASS_NAME "io/c4g/potato/test/t001/NativeHelper"
