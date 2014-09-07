@@ -26,7 +26,8 @@ public:
   virtual void End();
 
 private:
-  void SetView(double fovy, double aspect, double near, double far);
+  void SetView(const int& riWidth, const int& riHeight, const double& rdNear, const double& rdFar);
+  void Perspactive(double fovy, double aspect, double near, double far);
 
 private:
 };

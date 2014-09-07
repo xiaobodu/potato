@@ -8,11 +8,14 @@ set(INC_PATH_LIST
   ${SRC_PATH_potato}
   ${SRC_PATH_potato}/engine
   ${SRC_PATH_render_gles}
+  ${CODE_PATH}/external/rapidjson/include
   )
 
 set(SRC_FILE_LIST
   ${SRC_PATH_render_gles}/render_gles.h
   ${SRC_PATH_render_gles}/render_gles.cpp
+  ${SRC_PATH_render_gles}/canvas_gles.h
+  ${SRC_PATH_render_gles}/canvas_gles.cpp
   )
 
 source_group("source" FILES ${SRC_FILE_LIST})

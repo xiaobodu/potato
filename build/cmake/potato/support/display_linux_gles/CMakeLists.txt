@@ -8,6 +8,7 @@ set(INC_PATH_LIST
   ${SRC_PATH_potato}
   ${SRC_PATH_potato}/engine
   ${SRC_PATH_display_linux_gles}
+  ${CODE_PATH}/external/rapidjson/include
   )
 
 set(SRC_FILE_LIST

@@ -2,13 +2,13 @@
 
 #include "scene.h"
 
-namespace c4g{
+namespace c4g {
 
-namespace core{
+namespace core {
 class IAsset;
 }
 
-namespace scene{
+namespace scene {
 
 class CScene : public core::IScene
 {
@@ -18,6 +18,7 @@ public:
 
 public:
   virtual bool Load(const std::string& rsFileName);
+  virtual bool Check(const render::Glyph*& rpGlyph) const;
   virtual bool Resize(const int& riWidth, const int& riHeight);
   virtual bool Handle(const display::IInput* const pInput);
   virtual bool Tick(const float& rfDelta);

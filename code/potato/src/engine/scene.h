@@ -9,6 +9,7 @@ class IInput;
 }
 
 namespace render {
+class Glyph;
 class ICanvas;
 }
 
@@ -24,6 +25,7 @@ public:
 
 public:
   virtual bool Load(const std::string& rsFileName) = 0;
+  virtual bool Check(const render::Glyph*& rpGlyph) const = 0;
   virtual bool Resize(const int& riWidth, const int& riHeight) = 0;
   virtual bool Handle(const display::IInput* const pInput) = 0;
   virtual bool Tick(const float& rfDelta) = 0;

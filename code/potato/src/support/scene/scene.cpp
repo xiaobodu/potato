@@ -1,5 +1,8 @@
+#include <rapidjson/document.h>
+
 #include "scene_impl.h"
 #include "asset.h"
+#include "render.h"
 
 #include <cassert>
 
@@ -20,6 +23,12 @@ CScene::~CScene()
 bool CScene::Load(const std::string& rsFileName)
 {
   return true;
+}
+
+bool CScene::Check(const render::Glyph*& rpGlyph) const
+{
+  //
+  return false;
 }
 
 bool CScene::Resize(const int& riWidth, const int& riHeight)

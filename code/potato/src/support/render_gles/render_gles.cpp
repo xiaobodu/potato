@@ -42,14 +42,14 @@ void CRender::Start()
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  glEnable(GL_CULL_FACE);
+  // it is not necessary to cull the face
+  //glEnable(GL_CULL_FACE);
   glEnable(GL_DITHER);
   /// just 2d render, don't test the depth
   //glEnable(GL_DEPTH_TEST);
   //glDepthFunc(GL_LEQUAL);
 
   // about texture
-  glEnable(GL_TEXTURE_2D);
   glGenTextures(1, &g_iTexId);
   glBindTexture(GL_TEXTURE_2D, g_iTexId);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, g_aiTexArray);
@@ -61,27 +61,22 @@ bool CRender::Resize(const int& riWidth, const int& riHeight)
 {
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 
-  int width = riWidth;
-  int height = riHeight;
-  if (height == 0)
-  {
-    height = 1;
-  }
-  glViewport(0, 0, width, height);
+  glViewport(0, 0, riWidth, riHeight);
 
-  SetView(45.0f, (GLfloat) width / (GLfloat) height, 10.0f, 100.0f);
+  SetView(riWidth, riHeight, -10.0f, 10.0f);
   glFlush();
 
   return true;
 }
 
-GLfloat square1[] = { 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0 };
-GLfloat texcoord1[] = { 0, 0, 10, 0, 0, 10, 10, 10 };
-GLfloat color1[] = { 0.2, 0.2, 0.0, 1.0, 0.2, 0.0, 0.2, 1.0, 0.0, 0.7, 0.7, 1.0, 1.0, 1.0, 1.0, 1.0 };
-GLfloat square2[] = { -0.5, -0.5, 0, 0, -0.5, 0, -0.5, 0, 0, 0, 0, 0 };
-GLfloat color2[] = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
-GLubyte indice[] = {0, 1, 2, 2, 1, 3};
-GLfloat rotate = 0.0f;
+GLfloat square1[]   = { 100, -100, 0,       200, -100, 0,       100, -200, 0,       200, -200, 0 };
+GLfloat texcoord1[] = { 0, 0,               1, 0,               0, 1,               1, 1 };
+GLfloat color1[]    = { 0.2, 0.2, 0.0, 1.0, 0.2, 0.0, 0.2, 1.0, 0.0, 0.7, 0.7, 1.0, 1.0, 1.0, 1.0, 1.0 };
+GLubyte indice1[]   = { 0, 1, 2, 2, 1, 3 };
+
+GLfloat square2[]   = { 0, -200, 0,         0, -200, 0,         0, -100, 0,         100, -100, 0 };
+GLfloat color2[]    = { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 };
+GLfloat rotate      = 0.0f;
 
 bool CRender::Render(const float& rfDelta, core::IScene* pScene)
 {
@@ -89,8 +84,6 @@ bool CRender::Render(const float& rfDelta, core::IScene* pScene)
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glLoadIdentity();
-
-  glTranslatef(0.0f, 0.0f, -10.0f);
 
   glEnable(GL_TEXTURE_2D);
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -102,7 +95,7 @@ bool CRender::Render(const float& rfDelta, core::IScene* pScene)
   glTexCoordPointer(2, GL_FLOAT, 0, texcoord1);
   glVertexPointer(3, GL_FLOAT, 0, square1);
 
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indice);
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indice1);
 
   glDisable(GL_TEXTURE_2D);
   glDisableClientState(GL_VERTEX_ARRAY);
@@ -137,7 +130,25 @@ void CRender::End()
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
-void CRender::SetView(double fovy, double aspect, double near, double far)
+void CRender::SetView(const int& riWidth, const int& riHeight, const double& rdNear, const double& rdFar)
+{
+  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+
+  double left = 0.0;
+  double right = riWidth;
+
+  double top = 0;
+  double bottom = 0.0 - riHeight;
+
+  glOrthof(left, right, bottom, top, rdNear, rdFar);
+  assert(GL_NO_ERROR == glGetError());
+  glMatrixMode(GL_MODELVIEW);
+}
+
+void CRender::Perspactive(double fovy, double aspect, double near, double far)
 {
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 
@@ -150,10 +161,8 @@ void CRender::SetView(double fovy, double aspect, double near, double far)
   double right = top * aspect;
   double left = 0.0 - right;
 
-  glOrthof(left, right, bottom, top, near, far);
-  /// just render 2d
-  //glFrustumf(left, right, bottom, top, near, far);
-  //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+  glFrustumf(left, right, bottom, top, near, far);
+  glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
   assert(GL_NO_ERROR == glGetError());
   glMatrixMode(GL_MODELVIEW);
 }

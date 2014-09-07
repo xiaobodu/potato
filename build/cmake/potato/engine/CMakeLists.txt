@@ -7,6 +7,7 @@ set(SRC_PATH_engine ${SRC_PATH_potato}/engine)
 set(INC_PATH_LIST
   ${INC_PATH_potato}
   ${SRC_PATH_engine}
+  ${CODE_PATH}/external/rapidjson/include
   )
 
 set(SRC_FILE_LIST

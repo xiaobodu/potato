@@ -1,3 +1,10 @@
 {
-  
+  "scene":{
+    "library":{
+      "file":"lib/libscene.so"
+    },
+    "configure":{
+      "file":"scene/root.json"
+    }
+  }
 }

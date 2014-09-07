@@ -15,8 +15,10 @@ LOCAL_CPP_FEATURES 		:= rtti exceptions
 
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/engine
+LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/external/rapidjson/include
 
-LOCAL_SRC_FILES 		:= $(CODE_PATH)/potato/src/support/render_gles/render_gles.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/render_gles/render_gles.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/render_gles/canvas_gles.cpp
 
 LOCAL_LDLIBS    		:= -llog -lGLESv1_CM
 
