@@ -3,6 +3,7 @@
 #include "display_linux_gl.h"
 
 #include "render.h"
+#include "scene.h"
 
 #include "utility/file.h"
 #include "utility/sharedlibrary.h"
@@ -66,7 +67,7 @@ CDisplay::CDisplay(const base::Config& roConfig)
   m_oConfigRender._sLibraryFile = library_file.GetString();
   m_oConfigRender._sConfigureFile = configure_file.GetString();
 
-  /// load the dynamic library
+  /// load the shared library
   typedef FUNC_API_TYPE(CreateRender) CreateRenderFuncPtr;
   CreateRenderFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(CreateRender));
   /// create the display with configure
@@ -75,7 +76,7 @@ CDisplay::CDisplay(const base::Config& roConfig)
 
 CDisplay::~CDisplay()
 {
-  /// load the dynamic library
+  /// load the shared library
   typedef FUNC_API_TYPE(DestroyRender) DestroyRenderFuncPtr;
   DestroyRenderFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(DestroyRender));
   /// create the display with configure
@@ -87,11 +88,16 @@ CDisplay::~CDisplay()
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
-void CDisplay::Run()
+void CDisplay::Run(core::IScene* const& rpScene)
 {
   CreateWindow();
+
   m_pRender->Start();
   m_pRender->Resize(m_iWidth, m_iHeight);
+
+  //TODO:
+  rpScene->Load(m_pRender, "");
+  rpScene->Resize(m_iWidth, m_iHeight);
 
   timeval time;
   gettimeofday(&time, NULL);
@@ -146,7 +152,7 @@ void CDisplay::Run()
     second_temp = second;
     second = time.tv_sec * 1.0 + time.tv_usec / 1000000.0;
     second_delta = second - second_temp;
-    if (m_pRender->Render(static_cast<float>(second_delta), NULL))
+    if (m_pRender->Render(static_cast<float>(second_delta), rpScene))
     {
       glXSwapBuffers(m_pDisplay, m_lWindow);
     }
@@ -160,6 +166,7 @@ void CDisplay::Run()
     }
   }
 
+  rpScene->Unload(m_pRender);
   m_pRender->End();
   DestroyWindow();
 }

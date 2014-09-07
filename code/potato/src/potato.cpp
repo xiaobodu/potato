@@ -41,7 +41,7 @@ FUNC_API_TYPEDEF(DestroyEngine, c4g::core::IEngine, const c4g::base::Config);
 
 namespace c4g {
 
-static utility::DynamicLibraryManager gs_DynamicLibraryManager;
+static utility::CSharedLibraryManager gs_SharedLibraryManager;
 
 Potato& Potato::Instance()
 {
@@ -59,9 +59,9 @@ Potato::~Potato()
 {
   if (NULL != m_pEngine)
   {
-    /// load the dynamic library
+    /// load the shared library
     typedef FUNC_API_TYPE(DestroyEngine) DestroyEngineFuncPtr;
-    DestroyEngineFuncPtr func_destroy_func_ptr = gs_DynamicLibraryManager.GetFunc<DestroyEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(DestroyEngine));
+    DestroyEngineFuncPtr func_destroy_func_ptr = gs_SharedLibraryManager.GetFunc<DestroyEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(DestroyEngine));
     /// destroy the engine with configure
     func_destroy_func_ptr(m_pEngine, m_oConfigEngine);
   }
@@ -97,9 +97,9 @@ Potato& Potato::Initialize(const std::string& rsLibPath, const std::string& rsDa
     m_oConfigEngine._sLibraryFile = library_file.GetString();
     m_oConfigEngine._sConfigureFile = configure_file.GetString();
 
-    /// load the dynamic library
+    /// load the shared library
     typedef FUNC_API_TYPE(CreateEngine) CreateEngineFuncPtr;
-    CreateEngineFuncPtr func_create_func_ptr = gs_DynamicLibraryManager.GetFunc<CreateEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(CreateEngine));
+    CreateEngineFuncPtr func_create_func_ptr = gs_SharedLibraryManager.GetFunc<CreateEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(CreateEngine));
     /// create the engine with configure
     func_create_func_ptr(m_pEngine, m_oConfigEngine);
   }

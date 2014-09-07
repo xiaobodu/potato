@@ -9,7 +9,7 @@
 namespace c4g {
 namespace core {
 
-class IRender;
+class IScene;
 
 class IDisplay
 {
@@ -23,7 +23,7 @@ public:
 #if defined(BUILD_ANDROID)
   virtual void BindAndroidApp(struct android_app* pApp) = 0;
 #endif
-  virtual void Run() = 0;
+  virtual void Run(core::IScene* const& rpScene) = 0;
 };
 
 } // end of namespace core

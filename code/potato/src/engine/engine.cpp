@@ -6,7 +6,7 @@
 
 #include "engine.h"
 #include "display.h"
-#include "render.h"
+#include "scene.h"
 
 #include "utility/thread.h"
 
@@ -17,52 +17,97 @@
 FUNC_API_TYPEDEF(CreateDisplay, c4g::core::IDisplay, const c4g::base::Config);
 FUNC_API_TYPEDEF(DestroyDisplay, c4g::core::IDisplay, const c4g::base::Config);
 
+FUNC_API_TYPEDEF(CreateScene, c4g::core::IScene, const c4g::base::Config);
+FUNC_API_TYPEDEF(DestroyScene, c4g::core::IScene, const c4g::base::Config);
+
 namespace c4g{
 namespace core{
 
 CEngine::CEngine(const c4g::base::Config& roConfig)
   : m_pDisplay(NULL)
+  , m_pScene(NULL)
   , m_pLibraryManager(NULL)
 {
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 
-  m_pLibraryManager = new utility::DynamicLibraryManager();
+  m_pLibraryManager = new utility::CSharedLibraryManager();
 
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
 
   rapidjson::Document doc;
   doc.Parse(file_context.c_str());
   assert(doc.IsObject());
-  const rapidjson::Value& display = doc["display"];
-  assert(display.IsObject());
-  const rapidjson::Value& library = display["library"];
-  assert(library.IsObject());
-  const rapidjson::Value& library_file = library["file"];
-  assert(library_file.IsString());
-  const rapidjson::Value& configure = display["configure"];
-  assert(configure.IsObject());
-  const rapidjson::Value& configure_file = configure["file"];
-  assert(configure_file.IsString());
 
-  m_oConfigDisplay._sLibrPath = roConfig._sLibrPath;
-  m_oConfigDisplay._sDataPath = roConfig._sDataPath;
-  m_oConfigDisplay._sLibraryFile = library_file.GetString();
-  m_oConfigDisplay._sConfigureFile = configure_file.GetString();
+  /// build the display from the configure file
+  {
+    const rapidjson::Value& display = doc["display"];
+    assert(display.IsObject());
+    const rapidjson::Value& library = display["library"];
+    assert(library.IsObject());
+    const rapidjson::Value& library_file = library["file"];
+    assert(library_file.IsString());
+    const rapidjson::Value& configure = display["configure"];
+    assert(configure.IsObject());
+    const rapidjson::Value& configure_file = configure["file"];
+    assert(configure_file.IsString());
 
-  /// load the dynamic library
-  typedef FUNC_API_TYPE(CreateDisplay) CreateDisplayFuncPtr;
-  CreateDisplayFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(CreateDisplay));
-  /// create the display with configure
-  func_create_func_ptr(m_pDisplay, m_oConfigDisplay);
+    m_oConfigDisplay._sLibrPath = roConfig._sLibrPath;
+    m_oConfigDisplay._sDataPath = roConfig._sDataPath;
+    m_oConfigDisplay._sLibraryFile = library_file.GetString();
+    m_oConfigDisplay._sConfigureFile = configure_file.GetString();
+
+    /// load the shared library
+    typedef FUNC_API_TYPE(CreateDisplay) CreateDisplayFuncPtr;
+    CreateDisplayFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(CreateDisplay));
+    /// create the display with configure
+    func_create_func_ptr(m_pDisplay, m_oConfigDisplay);
+  }
+
+  /// build the scene from the configure file
+  {
+    const rapidjson::Value& display = doc["scene"];
+    assert(display.IsObject());
+    const rapidjson::Value& library = display["library"];
+    assert(library.IsObject());
+    const rapidjson::Value& library_file = library["file"];
+    assert(library_file.IsString());
+    const rapidjson::Value& configure = display["configure"];
+    assert(configure.IsObject());
+    const rapidjson::Value& configure_file = configure["file"];
+    assert(configure_file.IsString());
+
+    m_oConfigScene._sLibrPath = roConfig._sLibrPath;
+    m_oConfigScene._sDataPath = roConfig._sDataPath;
+    m_oConfigScene._sLibraryFile = library_file.GetString();
+    m_oConfigScene._sConfigureFile = configure_file.GetString();
+
+    /// load the shared library
+    typedef FUNC_API_TYPE(CreateScene) CreateSceneFuncPtr;
+    CreateSceneFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateSceneFuncPtr>(m_oConfigScene.GetLibraryFile(), TOSTRING(CreateScene));
+    /// create the display with configure
+    func_create_func_ptr(m_pScene, m_oConfigScene);
+  }
 }
 
 CEngine::~CEngine()
 {
-  /// load the dynamic library
-  typedef FUNC_API_TYPE(DestroyDisplay) DestroyDisplayFuncPtr;
-  DestroyDisplayFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(DestroyDisplay));
-  /// create the display with configure
-  func_destroy_func_ptr(m_pDisplay, m_oConfigDisplay);
+  /// destroy the scene from the configure file
+  {
+    /// load the shared library
+    typedef FUNC_API_TYPE(DestroyScene) DestroySceneFuncPtr;
+    DestroySceneFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroySceneFuncPtr>(m_oConfigScene.GetLibraryFile(), TOSTRING(DestroyScene));
+    /// create the display with configure
+    func_destroy_func_ptr(m_pScene, m_oConfigScene);
+  }
+
+  /// destroy the display from the configure file
+  {
+    /// load the shared library
+    typedef FUNC_API_TYPE(DestroyDisplay) DestroyDisplayFuncPtr;
+    DestroyDisplayFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(DestroyDisplay));
+    /// create the display with configure
+    func_destroy_func_ptr(m_pDisplay, m_oConfigDisplay);
+  }
 
   delete m_pLibraryManager;
   m_pLibraryManager = NULL;
@@ -70,7 +115,7 @@ CEngine::~CEngine()
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
-class DisplayWorker : public thread::IWorker
+/*class DisplayWorker : public thread::IWorker
 {
 public:
   DisplayWorker(IDisplay*& rpDisplay)
@@ -84,14 +129,14 @@ public:
   {
     utility::Log::Instance().System("start the display work");
 
-    m_pDisplay->Run();
+    m_pDisplay->Run(NULL);
 
     utility::Log::Instance().System("end the display work");
   }
 
 private:
   IDisplay* m_pDisplay;
-};
+};*/
 
 #if defined(BUILD_ANDROID)
 void CEngine::Run(android_app* pApp)
@@ -104,11 +149,12 @@ void CEngine::Run()
 #if defined(BUILD_ANDROID)
   m_pDisplay->BindAndroidApp(pApp);
 #endif
-  m_pDisplay->Run();
+  m_pDisplay->Run(m_pScene);
 
-  //DisplayWorker display_worker(m_pDisplay);
-  //thread::IWorker* workers[] = {&display_worker};
-  //thread::DoJob(workers, 1);
+  // use multi-thread in the future
+  /*DisplayWorker display_worker(m_pDisplay);
+  thread::IWorker* workers[] = {&display_worker};
+  thread::DoJob(workers, 1);*/
 }
 
 }

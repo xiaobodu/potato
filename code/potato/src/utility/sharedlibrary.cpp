@@ -8,21 +8,21 @@
 namespace c4g {
 namespace utility {
 
-CDynamicLibraryHandler::CDynamicLibraryHandler(const std::string& rsFileName)
+CSharedLibraryHandler::CSharedLibraryHandler(const std::string& rsFileName)
     : m_pLib(NULL)
 {
   m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
   assert(m_pLib != NULL);
 }
 
-CDynamicLibraryHandler::~CDynamicLibraryHandler()
+CSharedLibraryHandler::~CSharedLibraryHandler()
 {
 //#if !defined(BUILD_DEBUG)
   dlclose(m_pLib);
 //#endif
 }
 
-void* CDynamicLibraryHandler::GetFunc(const std::string& rsFuncName)
+void* CSharedLibraryHandler::GetFunc(const std::string& rsFuncName)
 {
   void* func_ptr = dlsym(m_pLib, rsFuncName.c_str());
   assert(func_ptr != NULL);
@@ -30,12 +30,12 @@ void* CDynamicLibraryHandler::GetFunc(const std::string& rsFuncName)
   return func_ptr;
 }
 
-DynamicLibraryManager::DynamicLibraryManager()
+CSharedLibraryManager::CSharedLibraryManager()
 {
   ;
 }
 
-DynamicLibraryManager::~DynamicLibraryManager()
+CSharedLibraryManager::~CSharedLibraryManager()
 {
   MapString2Handler::iterator it = m_mapFileName2Handler.begin();
   MapString2Handler::iterator it_end = m_mapFileName2Handler.end();
@@ -47,7 +47,7 @@ DynamicLibraryManager::~DynamicLibraryManager()
   m_mapFileName2Handler.clear();
 }
 
-void* DynamicLibraryManager::GetFuncPtr(const std::string& rsFileName, const std::string& rsFuncName)
+void* CSharedLibraryManager::GetFuncPtr(const std::string& rsFileName, const std::string& rsFuncName)
 {
   MapString2Handler::iterator it = m_mapFileName2Handler.find(rsFileName);
   if (it != m_mapFileName2Handler.end())
@@ -55,7 +55,7 @@ void* DynamicLibraryManager::GetFuncPtr(const std::string& rsFileName, const std
     return it->second->GetFunc(rsFuncName);
   }
 
-  CDynamicLibraryHandler* handler_ptr = new CDynamicLibraryHandler(rsFileName);
+  CSharedLibraryHandler* handler_ptr = new CSharedLibraryHandler(rsFileName);
   m_mapFileName2Handler.insert(std::make_pair(rsFileName, handler_ptr));
   return handler_ptr->GetFunc(rsFuncName);
 }

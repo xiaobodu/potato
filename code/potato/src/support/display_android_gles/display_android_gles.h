@@ -7,9 +7,12 @@
 #include <EGL/egl.h>
 
 namespace c4g {
-
+namespace core {
+class IRender;
+class IScene;
+}
 namespace utility{
-class DynamicLibraryManager;
+class CSharedLibraryManager;
 }
 
 namespace display {
@@ -23,7 +26,7 @@ public:
 
 public:
   virtual void BindAndroidApp(struct android_app* pApp);
-  virtual void Run();
+  virtual void Run(core::IScene* const& rpScene);
 
 public:
   void Initialize(android_app* pApp);
@@ -44,9 +47,13 @@ private:
   bool          m_bIsEGLReady;
   bool          m_bCanRender;
 
+  int m_iWidth;
+  int m_iHeight;
+
   base::Config          m_oConfigRender;
   core::IRender*        m_pRender;
-  utility::DynamicLibraryManager* m_pLibraryManager;
+  core::IScene*         m_pScene;
+  utility::CSharedLibraryManager* m_pLibraryManager;
 
   // android
   struct android_app*           m_pApp;

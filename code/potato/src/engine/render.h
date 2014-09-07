@@ -2,6 +2,8 @@
 
 #include "common.h"
 
+#include "base.h"
+
 namespace c4g{
 namespace core{
 
@@ -15,28 +17,27 @@ public:
 public:
   virtual void Start() = 0;
   virtual bool Resize(const int& riWidth, const int& riHeight) = 0;
-  virtual bool Render(const float& rfDeltaTime, IScene* pScene) = 0;
+  virtual bool Render(const float& rfDeltaTime, IScene* const& rpScene) = 0;
   virtual void End() = 0;
+
+public:
+  virtual unsigned int GenerateTexId(const int& riWidth, const int& riHeight, const unsigned char* const& rpBuffer) = 0;
+  virtual void DeleteTexId(const int& riCount, const unsigned int* const& rpiTexId) = 0;
 };
 
 }
 
 namespace render{
 
-class Glyph
+struct Glyph
 {
-public:
-  int x;
-  int y;
-  int w;
-  int h;
-  int id;
+  float l;
+  float r;
+  float t;
+  float b;
+  unsigned int id;
 
-public:
-  Glyph() : x(0), y(0), w(0), h(0), id(0) { ; }
-  virtual ~Glyph() { ; }
-
-public:
+  Glyph() : l(0), r(0), t(0), b(0), id(0) { ; }
 };
 
 class IProcess
@@ -45,9 +46,17 @@ public:
   virtual ~IProcess() { ; }
 
 public:
-  virtual void Preview() = 0;
-  virtual void Post() = 0;
+  virtual bool IsCustom() const { return false; }
+  virtual void Begin(const Glyph& rGlyph) = 0;
+  virtual void End() = 0;
+
+public:
 };
+
+inline bool IsProcessCustom(IProcess* const& rpProcess)
+{
+  return ((NULL == rpProcess) ? false : rpProcess->IsCustom());
+}
 
 class ICanvas
 {
@@ -55,21 +64,8 @@ public:
   virtual ~ICanvas() { ; }
 
 public:
-  virtual void DrawGlyph(core::IScene*& rpScene, const Glyph*& rpGlyph, const IProcess* pProcess = NULL) const = 0;
-  virtual void DrawGlyph(core::IScene*& rpScene, const Glyph*& rpGlyph, const float& rfWidth, const float& rfHeight, const IProcess* pProcess = NULL) const = 0;
-
-public:
-  template<class ClassProcess> void Draw(core::IScene*& rpScene, const Glyph*& rpGlyph, const IProcess* pProcess = NULL) const
-  {
-    ClassProcess do_Process;
-    DrawGlyph(rpScene, rpGlyph, pProcess);
-  }
-
-  template<class ClassProcess> void Draw(core::IScene*& rpScene, const Glyph*& rpGlyph, const float& rfWidth, const float& rfHeight, const IProcess* pProcess = NULL) const
-  {
-    ClassProcess do_process;
-    DrawGlyph(rpScene, rpGlyph, rfWidth, rfHeight, pProcess);
-  }
+  virtual void DrawGlyph(const Glyph& rGlyph, IProcess* const& rpProcess = NULL) = 0;
+  virtual void DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess = NULL) = 0;
 };
 
 }

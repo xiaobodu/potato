@@ -5,6 +5,7 @@
 #include "display_android_gles.h"
 
 #include "render.h"
+#include "scene.h"
 
 #include "utility/file.h"
 #include "utility/log.h"
@@ -28,7 +29,10 @@ CDisplay::CDisplay(const base::Config& roConfig)
   , m_pGLConfig(NULL)
   , m_bIsInitialized(false)
   , m_bIsRunning(false), m_bIsEGLReady(false), m_bCanRender(false)
+  , m_iWidth(0)
+  , m_iHeight(0)
   , m_pRender(NULL)
+  , m_pScene(NULL)
   , m_pLibraryManager(NULL)
   , m_pApp(NULL)
   , m_pAccelerometerSensor(NULL)
@@ -36,7 +40,7 @@ CDisplay::CDisplay(const base::Config& roConfig)
 {
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 
-  m_pLibraryManager = new utility::DynamicLibraryManager();
+  m_pLibraryManager = new utility::CSharedLibraryManager();
 
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
 
@@ -59,7 +63,7 @@ CDisplay::CDisplay(const base::Config& roConfig)
   m_oConfigRender._sLibraryFile = library_file.GetString();
   m_oConfigRender._sConfigureFile = configure_file.GetString();
 
-  /// load the dynamic library
+  /// load the shared library
   typedef FUNC_API_TYPE(CreateRender) CreateRenderFuncPtr;
   CreateRenderFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(CreateRender));
   /// create the display with configure
@@ -68,7 +72,7 @@ CDisplay::CDisplay(const base::Config& roConfig)
 
 CDisplay::~CDisplay()
 {
-  /// load the dynamic library
+  /// load the shared library
   typedef FUNC_API_TYPE(DestroyRender) DestroyRenderFuncPtr;
   DestroyRenderFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(DestroyRender));
   /// create the display with configure
@@ -222,11 +226,14 @@ static void process_input(struct android_app* app, struct android_poll_source* s
   }
 }
 
-void CDisplay::Run()
+void CDisplay::Run(core::IScene* const& rpScene)
 {
   utility::Log::Instance().Info("CDisplay::Run");
   assert(NULL != m_pRender);
   assert(NULL != m_pApp);
+
+  m_pScene = rpScene;
+
   m_bIsRunning = true;
   m_bCanRender = true;
 
@@ -302,7 +309,7 @@ void CDisplay::Run()
       second_temp = second;
       second = time.tv_sec * 1.0 + time.tv_usec / 1000000.0;
       second_delta = second - second_temp;
-      if (m_pRender->Render(static_cast<float>(second_delta), NULL))
+      if (m_pRender->Render(static_cast<float>(second_delta), rpScene))
       {
         eglSwapBuffers(m_pGLDisplay, m_pGLSurface);
       }
@@ -364,14 +371,18 @@ void CDisplay::Initialize(android_app* pApp)
   if (EGL_TRUE != eglMakeCurrent(m_pGLDisplay, m_pGLSurface, m_pGLSurface, m_pGLContext))
   assert(0);
 
+  eglQuerySurface(m_pGLDisplay, m_pGLSurface, EGL_WIDTH, &m_iWidth);
+  eglQuerySurface(m_pGLDisplay, m_pGLSurface, EGL_HEIGHT, &m_iHeight);
+
   m_pRender->Start();
+  m_pRender->Resize(m_iWidth, m_iHeight);
 
-  EGLint width = 0;
-  EGLint height = 0;
-  eglQuerySurface(m_pGLDisplay, m_pGLSurface, EGL_WIDTH, &width);
-  eglQuerySurface(m_pGLDisplay, m_pGLSurface, EGL_HEIGHT, &height);
-
-  m_pRender->Resize(width, height);
+  if (NULL != m_pScene)
+  {
+    //TODO:
+    m_pScene->Load(m_pRender, "");
+    m_pScene->Resize(m_iWidth, m_iHeight);
+  }
 
   m_bIsInitialized = true;
   m_bIsEGLReady = true;
@@ -385,7 +396,10 @@ void CDisplay::Terminated()
   }
   utility::Log::Instance().Info("CDisplay::Terminated");
 
+  if (NULL != m_pScene) m_pScene->Unload(m_pRender);
+  m_pScene = NULL;
   m_pRender->End();
+  m_pRender = NULL;
 
   if (m_pGLDisplay != EGL_NO_DISPLAY && m_bIsEGLReady)
   {

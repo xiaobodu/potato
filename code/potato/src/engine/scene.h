@@ -3,13 +3,15 @@
 #include "common.h"
 
 namespace c4g {
-
+namespace core {
+class IRender;
+}
 namespace display {
 class IInput;
 }
 
 namespace render {
-class Glyph;
+struct Glyph;
 class ICanvas;
 }
 
@@ -24,12 +26,12 @@ public:
   }
 
 public:
-  virtual bool Load(const std::string& rsFileName) = 0;
-  virtual bool Check(const render::Glyph*& rpGlyph) const = 0;
+  virtual bool Load(core::IRender* const& rpRender, const std::string& rsFileName) = 0;
+  virtual bool Unload(core::IRender* const& rpRender) = 0;
   virtual bool Resize(const int& riWidth, const int& riHeight) = 0;
   virtual bool Handle(const display::IInput* const pInput) = 0;
   virtual bool Tick(const float& rfDelta) = 0;
-  virtual bool Draw(const render::ICanvas* pCanvas) = 0;
+  virtual bool Draw(render::ICanvas* const& rpCanvas) = 0;
 };
 
 }

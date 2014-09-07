@@ -6,11 +6,11 @@
 namespace c4g {
 namespace utility {
 
-class CDynamicLibraryHandler
+class CSharedLibraryHandler
 {
 public:
-  CDynamicLibraryHandler(const std::string& rsFileName);
-  virtual ~CDynamicLibraryHandler();
+  CSharedLibraryHandler(const std::string& rsFileName);
+  virtual ~CSharedLibraryHandler();
 
 public:
   void* GetFunc(const std::string& rsFuncName);
@@ -20,18 +20,18 @@ private:
   std::map<std::string, void*> m_mapFuncName2FunPtr;
 };
 
-// a dynamic library manage interface
-class DynamicLibraryManager
+// a shared library manage interface
+class CSharedLibraryManager
 {
 public:
-  DynamicLibraryManager();
-  virtual ~DynamicLibraryManager();
+  CSharedLibraryManager();
+  virtual ~CSharedLibraryManager();
 
 public:
   virtual void* GetFuncPtr(const std::string& rsFileName, const std::string& rsFuncName);
 
 private:
-  typedef std::map<std::string, CDynamicLibraryHandler*> MapString2Handler;
+  typedef std::map<std::string, CSharedLibraryHandler*> MapString2Handler;
   MapString2Handler m_mapFileName2Handler;
 
   // help to call by template

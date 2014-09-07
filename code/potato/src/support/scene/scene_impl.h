@@ -17,12 +17,12 @@ public:
   virtual ~CScene();
 
 public:
-  virtual bool Load(const std::string& rsFileName);
-  virtual bool Check(const render::Glyph*& rpGlyph) const;
+  virtual bool Load(core::IRender* const& rpRender, const std::string& rsFileName);
+  virtual bool Unload(core::IRender* const& rpRender);
   virtual bool Resize(const int& riWidth, const int& riHeight);
   virtual bool Handle(const display::IInput* const pInput);
   virtual bool Tick(const float& rfDelta);
-  virtual bool Draw(const render::ICanvas* pCanvas);
+  virtual bool Draw(render::ICanvas* const& rpCanvas);
 
 private:
   core::IAsset* m_pAsset;

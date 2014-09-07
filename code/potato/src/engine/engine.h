@@ -6,9 +6,11 @@
 #include <string>
 
 namespace c4g{
-
+namespace core {
+class IScene;
+}
 namespace utility{
-class DynamicLibraryManager;
+class CSharedLibraryManager;
 }
 
 namespace core{
@@ -31,7 +33,9 @@ public:
 private:
   base::Config          m_oConfigDisplay;
   core::IDisplay*       m_pDisplay;
-  utility::DynamicLibraryManager* m_pLibraryManager;
+  base::Config          m_oConfigScene;
+  core::IScene*         m_pScene;
+  utility::CSharedLibraryManager* m_pLibraryManager;
 };
 
 }

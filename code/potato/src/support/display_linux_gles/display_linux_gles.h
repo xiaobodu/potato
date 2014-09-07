@@ -9,9 +9,12 @@
 #include <EGL/egl.h>
 
 namespace c4g {
-
+namespace core {
+class IRender;
+class IScene;
+}
 namespace utility{
-class DynamicLibraryManager;
+class CSharedLibraryManager;
 }
 
 namespace display {
@@ -24,7 +27,7 @@ public:
   virtual ~CDisplay();
 
 public:
-  virtual void Run();
+  virtual void Run(core::IScene* const& rpScene);
 
 protected:
   void CreateWindow();
@@ -47,7 +50,7 @@ private:
 
   base::Config          m_oConfigRender;
   core::IRender*        m_pRender;
-  utility::DynamicLibraryManager* m_pLibraryManager;
+  utility::CSharedLibraryManager* m_pLibraryManager;
 };
 
 }

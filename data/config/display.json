@@ -1,9 +1,4 @@
 {
-  "title":"t001",
-  "size":{
-    "width":480,
-    "height":800
-  },
   "render":{
     "library":{
       "file":"lib/librender_gles.so"
@@ -11,5 +6,10 @@
     "configure":{
       "file":"config/render.json"
     }
+  },
+  "title":"t001",
+  "size":{
+    "width":480,
+    "height":800
   }
 }

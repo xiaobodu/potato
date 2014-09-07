@@ -59,7 +59,7 @@ bool CRender::Resize(const int& riWidth, const int& riHeight)
   return true;
 }
 
-bool CRender::Render(const float& rfDeltaTime, core::IScene* pScene)
+bool CRender::Render(const float& rfDelta, core::IScene* const& rpScene)
 {
   glClearColor(0.2, 0.4, 0.6, 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -77,12 +77,34 @@ bool CRender::Render(const float& rfDeltaTime, core::IScene* pScene)
   glEnableClientState(GL_VERTEX_ARRAY);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
+  if (NULL != rpScene && rpScene->Tick(rfDelta))
+  {
+    //TODO:
+    rpScene->Draw(NULL);
+  }
+
   return true;
 }
 
 void CRender::End()
 {
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+}
+
+unsigned int CRender::GenerateTexId(const int& riWidth, const int& riHeight, const unsigned char* const& rpBuffer)
+{
+  unsigned int tex_id = 0;
+  glGenTextures(1, &tex_id);
+  glBindTexture(GL_TEXTURE_2D, tex_id);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, riWidth, riHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, rpBuffer);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  return 0;
+}
+
+void CRender::DeleteTexId(const int& riCount, const unsigned int* const& rpiTexId)
+{
+  glDeleteTextures(riCount, rpiTexId);
 }
 
 }
