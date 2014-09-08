@@ -17,7 +17,7 @@ public:
   virtual ~CAsset();
 
 public:
-  virtual void Load(const std::string& rsFileName);
+  virtual void LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer);
 };
 
 }

@@ -34,6 +34,7 @@ CDisplay::CDisplay(const base::Config& roConfig)
   , m_pScene(NULL)
   , m_pLibraryManager(NULL)
   , m_pApp(NULL)
+  , m_pSensorManager(NULL)
   , m_pAccelerometerSensor(NULL)
   , m_pAccelerometerSensorEventQueue(NULL)
 {

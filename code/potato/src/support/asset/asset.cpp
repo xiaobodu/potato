@@ -1,5 +1,8 @@
 #include "asset_impl.h"
 
+#include "file_png.h"
+#include "utility/log.h"
+
 #include <cassert>
 
 namespace c4g{
@@ -8,17 +11,20 @@ namespace asset{
 
 CAsset::CAsset(const c4g::base::Config& roConfig)
 {
-  ;
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
 CAsset::~CAsset()
 {
-  ;
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
-void CAsset::Load(const std::string& rsFileName)
+void CAsset::LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer)
 {
-  ;
+  CFilePNG::Instance().Load(rsFileName);
+  riWidth = static_cast<int>(CFilePNG::Instance().GetWidth());
+  riHeight = static_cast<int>(CFilePNG::Instance().GetHeight());
+  rpBuffer = static_cast<unsigned char*>(CFilePNG::Instance().GetBuffer());
 }
 
 }

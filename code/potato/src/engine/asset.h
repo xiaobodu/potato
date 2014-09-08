@@ -14,7 +14,7 @@ public:
   }
 
 public:
-  virtual void Load(const std::string& rsFileName) = 0;
+  virtual void LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer) = 0;
 };
 
 }

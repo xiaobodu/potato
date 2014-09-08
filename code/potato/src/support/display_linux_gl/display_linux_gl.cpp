@@ -179,12 +179,14 @@ void CDisplay::CreateWindow()
   int screen_id = DefaultScreen(m_pDisplay);
 
   static int attrListDbl[] = {
-  GLX_RGBA, GLX_DOUBLEBUFFER,
-  GLX_RED_SIZE, 4,
-  GLX_GREEN_SIZE, 4,
-  GLX_BLUE_SIZE, 4,
-  GLX_DEPTH_SIZE, 16,
-  None };
+      GLX_RGBA, GLX_DOUBLEBUFFER,
+      GLX_RED_SIZE, 8,
+      GLX_GREEN_SIZE, 8,
+      GLX_BLUE_SIZE, 8,
+      GLX_ALPHA_SIZE, 8,
+      GLX_BUFFER_SIZE, 32,
+      GLX_DEPTH_SIZE, 16,
+      None };
   XVisualInfo* visual_info_ptr = glXChooseVisual(m_pDisplay, screen_id, attrListDbl);
   assert(NULL != visual_info_ptr);
 

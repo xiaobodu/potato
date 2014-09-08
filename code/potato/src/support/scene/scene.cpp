@@ -16,12 +16,6 @@ FUNC_API_TYPEDEF(DestroyAsset, c4g::core::IAsset, const c4g::base::Config);
 namespace c4g {
 namespace scene {
 
-static unsigned char g_aiTexArray[4 * 4] = {
-    0xFF, 0x00, 0x00, 0x38,
-    0x00, 0xFF, 0x00, 0x38,
-    0x00, 0x00, 0xFF, 0xFF,
-    0xFF, 0xFF, 0xFF, 0xFF
-};
 static render::Glyph g_Glyph;
 
 class CProcess : public render::IProcess
@@ -44,7 +38,7 @@ public:
 public:
   bool Tick(const float& rfDelta)
   {
-    angle += rfDelta * 100.0f;
+    angle += rfDelta * 20.0f;
     if (angle > 360.0f) angle-= 360.0f;
     return true;
   }
@@ -106,11 +100,17 @@ CScene::~CScene()
 bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
+
+  int width = 0;
+  int height = 0;
+  unsigned char* buffer_ptr = NULL;
+  m_pAsset->LoadImage(m_oConfigAsset._sDataPath + "/scene/icon.png", width, height, buffer_ptr);
+
   g_Glyph.l = 0.0f;
-  g_Glyph.r = 5.0f;
+  g_Glyph.r = 1.0f;
   g_Glyph.t = 0.0f;
-  g_Glyph.b = 5.0f;
-  g_Glyph.id = rpRender->GenerateTexId(2, 2, g_aiTexArray);
+  g_Glyph.b = 1.0f;
+  g_Glyph.id = rpRender->GenerateTexId(width, height, buffer_ptr);
   return true;
 }
 

@@ -17,11 +17,16 @@ LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/engine
 
 LOCAL_SRC_FILES 		:= $(CODE_PATH)/potato/src/support/asset/asset.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/asset/file_png.cpp
 
 LOCAL_LDLIBS    		:= -llog
 
 LOCAL_SHARED_LIBRARIES := libstlport_static
+LOCAL_STATIC_LIBRARIES := libpng
 
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-module,cxx-stl/stlport)
+
+$(call import-module,external/libpng)
+

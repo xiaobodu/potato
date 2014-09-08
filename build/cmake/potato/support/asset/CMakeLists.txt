@@ -13,6 +13,7 @@ set(INC_PATH_LIST
 set(SRC_FILE_LIST
   ${SRC_PATH_support}/../engine/asset.h
   ${SRC_PATH_asset}/asset.cpp
+  ${SRC_PATH_asset}/file_png.cpp
   )
 
 source_group("source" FILES ${SRC_FILE_LIST})
@@ -24,5 +25,9 @@ include_directories(${INC_PATH_LIST})
 add_library(asset SHARED ${SRC_FILE_LIST})
 
 set(LINK_FILE_LIST
+  png
+  z
   )
 target_link_libraries(asset ${LINK_FILE_LIST})
+
+add_dependencies(asset png)
