@@ -2,6 +2,7 @@
 
 #include "base.h"
 #include "scene.h"
+#include "transform_gles.h"
 
 #include <cassert>
 #include <memory.h>
@@ -68,6 +69,8 @@ void CCanvas::DrawGlyph(const Glyph& rGlyph, IProcess* const& rpProcess)
 
 void CCanvas::DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess)
 {
+  glPushMatrix();
+
   CGlyphProcessScope process_scope(rGlyph, rfWidth, rfHeight, rpProcess);
 
   m_aVertex[3] = rfWidth;
@@ -84,6 +87,8 @@ void CCanvas::DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& 
   m_aTexCoord[6] = rGlyph.r;
   m_aTexCoord[7] = rGlyph.b;
 
+  rpProcess->Do(&CTransform::Instance(m_aVertex));
+
   //glActiveTexture(GL_TEXTURE0);
   glClientActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, rGlyph.id);
@@ -95,6 +100,8 @@ void CCanvas::DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& 
   /*glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   glBindTexture(GL_TEXTURE_2D, 0);*/
+
+  glPopMatrix();
 }
 
 }

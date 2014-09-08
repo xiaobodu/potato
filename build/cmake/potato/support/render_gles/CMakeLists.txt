@@ -16,6 +16,8 @@ set(SRC_FILE_LIST
   ${SRC_PATH_render_gles}/render_gles.cpp
   ${SRC_PATH_render_gles}/canvas_gles.h
   ${SRC_PATH_render_gles}/canvas_gles.cpp
+  ${SRC_PATH_render_gles}/transform_gles.h
+  ${SRC_PATH_render_gles}/transform_gles.cpp
   )
 
 source_group("source" FILES ${SRC_FILE_LIST})

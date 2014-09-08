@@ -1,3 +1,10 @@
 {
-  
+  "asset":{
+    "library":{
+      "file":"lib/libasset.so"
+    },
+    "configure":{
+      "file":"config/asset.json"
+    }
+  }
 }

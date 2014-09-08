@@ -37,7 +37,7 @@ CDisplay::CDisplay(const base::Config& roConfig)
   , m_pAccelerometerSensor(NULL)
   , m_pAccelerometerSensorEventQueue(NULL)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   m_pLibraryManager = new utility::CSharedLibraryManager();
 
@@ -80,7 +80,7 @@ CDisplay::~CDisplay()
   delete m_pLibraryManager;
   m_pLibraryManager = NULL;
 
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
 void CDisplay::BindAndroidApp(struct android_app* pApp)
@@ -230,7 +230,7 @@ static void process_input(struct android_app* app, struct android_poll_source* s
 
 void CDisplay::Run(core::IScene* const& rpScene)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
   assert(NULL != m_pRender);
   assert(NULL != m_pApp);
   assert(NULL != rpScene);
@@ -246,11 +246,6 @@ void CDisplay::Run(core::IScene* const& rpScene)
   m_pApp->inputPollSource.process = process_input;
 
   ANativeActivity_setWindowFlags(m_pApp->activity, AWINDOW_FLAG_FULLSCREEN | AWINDOW_FLAG_DITHER, 0);
-
-  ASensorManager* sensor_manager_ptr = ASensorManager_getInstance();
-  m_pAccelerometerSensor = ASensorManager_getDefaultSensor(sensor_manager_ptr, ASENSOR_TYPE_ACCELEROMETER);
-  m_pAccelerometerSensorEventQueue = ASensorManager_createEventQueue(sensor_manager_ptr, m_pApp->looper, LOOPER_ID_USER, NULL, NULL);
-  utility::Log::Instance().Info("%d %d", (int)m_pAccelerometerSensor, (int)m_pAccelerometerSensorEventQueue);
 
   timeval time;
   gettimeofday(&time, NULL);
@@ -289,7 +284,7 @@ void CDisplay::Run(core::IScene* const& rpScene)
         {
           while (ASensorEventQueue_getEvents(m_pAccelerometerSensorEventQueue, &accelerometer_sensor_event, 1) > 0)
           {
-            utility::Log::Instance().Info("vec: x=%.3f y=%.3f z=%.3f | acc: x=%.3f y=%.3f z=%.3f  mag: x=%.3f y=%.3f z=%.3f"
+            C4G_LOG_INFO("vec: x=%.3f y=%.3f z=%.3f | acc: x=%.3f y=%.3f z=%.3f  mag: x=%.3f y=%.3f z=%.3f"
                 , accelerometer_sensor_event.vector.x, accelerometer_sensor_event.vector.y, accelerometer_sensor_event.vector.z
                 , accelerometer_sensor_event.acceleration.x, accelerometer_sensor_event.acceleration.y, accelerometer_sensor_event.acceleration.z
                 , accelerometer_sensor_event.magnetic.x, accelerometer_sensor_event.magnetic.y, accelerometer_sensor_event.magnetic.z);
@@ -385,6 +380,21 @@ void CDisplay::Initialize(android_app* pApp)
 
   m_bIsInitialized = true;
   m_bIsEGLReady = true;
+
+  m_pSensorManager = ASensorManager_getInstance();
+  if (NULL != m_pSensorManager)
+  {
+    m_pAccelerometerSensor = ASensorManager_getDefaultSensor(m_pSensorManager, ASENSOR_TYPE_ACCELEROMETER);
+    if (NULL != m_pAccelerometerSensor)
+    {
+      m_pAccelerometerSensorEventQueue = ASensorManager_createEventQueue(m_pSensorManager, m_pApp->looper, LOOPER_ID_USER, NULL, NULL);
+      C4G_LOG_INFO("AccelerometerSensor %d %d", (int)m_pAccelerometerSensor, (int)m_pAccelerometerSensorEventQueue);
+    }
+    else
+    {
+      m_pAccelerometerSensorEventQueue = NULL;
+    }
+  }
 }
 
 void CDisplay::Terminated()
@@ -394,6 +404,20 @@ void CDisplay::Terminated()
     return;
   }
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+
+  if (NULL != m_pSensorManager)
+  {
+    if (NULL != m_pAccelerometerSensor)
+    {
+      if (NULL != m_pAccelerometerSensorEventQueue)
+      {
+        ASensorManager_destroyEventQueue(m_pSensorManager, m_pAccelerometerSensorEventQueue);
+        m_pAccelerometerSensorEventQueue = NULL;
+      }
+      m_pAccelerometerSensor = NULL;
+    }
+    m_pSensorManager = NULL;
+  }
 
   if (NULL != m_pScene)
   {
@@ -430,12 +454,13 @@ void CDisplay::Terminated()
 
 void CDisplay::Continue()
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
   if (NULL != m_pAccelerometerSensor)
   {
-      ASensorEventQueue_enableSensor(m_pAccelerometerSensorEventQueue, m_pAccelerometerSensor);
-      // We'd like to get 60 events per second (in us).
-      ASensorEventQueue_setEventRate(m_pAccelerometerSensorEventQueue, m_pAccelerometerSensor, (1000000L/3));
+    ASensorEventQueue_enableSensor(m_pAccelerometerSensorEventQueue, m_pAccelerometerSensor);
+    // We'd like to get 60 events per second (in us).
+    ASensorEventQueue_setEventRate(m_pAccelerometerSensorEventQueue, m_pAccelerometerSensor, 1000000);
+    //ASensorEventQueue_setEventRate(m_pAccelerometerSensorEventQueue, m_pAccelerometerSensor, ASensor_getMinDelay(m_pAccelerometerSensor));
   }
 
   Run(m_pScene);

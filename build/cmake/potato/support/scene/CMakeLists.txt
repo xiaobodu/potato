@@ -13,6 +13,10 @@ set(INC_PATH_LIST
 set(SRC_FILE_LIST
   ${SRC_PATH_support}/../engine/scene.h
   ${SRC_PATH_scene}/scene.cpp
+  ${SRC_PATH_potato}/utility/file.h
+  ${SRC_PATH_potato}/utility/log.h
+  ${SRC_PATH_potato}/utility/sharedlibrary.h
+  ${SRC_PATH_potato}/utility/sharedlibrary.cpp
   )
 
 source_group("source" FILES ${SRC_FILE_LIST})
@@ -24,5 +28,6 @@ include_directories(${INC_PATH_LIST})
 add_library(scene SHARED ${SRC_FILE_LIST})
 
 set(LINK_FILE_LIST
+  dl
   )
 target_link_libraries(scene ${LINK_FILE_LIST})

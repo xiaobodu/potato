@@ -1,7 +1,7 @@
 {
   "display":{
     "library":{
-      "file":"lib/libdisplay_linux_gles.so"
+      "file":"lib/libdisplay_android_gles.so"
     },
     "configure":{
       "file":"config/display.json"

@@ -212,7 +212,11 @@ public:
     case EStyle_BGColor_Magenta:
     case EStyle_BGColor_Cyan:
     case EStyle_BGColor_White:
+#if defined(OS_IS_LINUX)
       fprintf(stdout, "[%s%s"TEXT_STYLE_END"] %s%s"TEXT_STYLE_END"\n", TextStyleCode[eStyle], rcTitle, TextStyleCode[eStyle], result);
+#else
+      fprintf(stdout, "[%] %s\n", TextStyleCode[eStyle], rcTitle, TextStyleCode[eStyle], result);
+#endif
       break;
 
     default:
@@ -241,14 +245,14 @@ public:
 #define C4G_LOG_FATAL(...)      c4g::utility::Log::Instance().Fatal(__VA_ARGS__)
 #define C4G_LOG_ERROR(...)      c4g::utility::Log::Instance().Error(__VA_ARGS__)
 #define C4G_LOG_WARNING(...)    c4g::utility::Log::Instance().Warning(__VA_ARGS__)
-/*#if defined(DEBUG)*/
+#if defined(BUILD_DEBUG)
 #define C4G_LOG_SYSTEM(...)     c4g::utility::Log::Instance().System(__VA_ARGS__)
 #define C4G_LOG_INFO(...)       c4g::utility::Log::Instance().Info(__VA_ARGS__)
 #define C4G_LOG_DEBUG(...)      c4g::utility::Log::Instance().Debug(__VA_ARGS__)
 #define C4G_LOG_USER(...)       c4g::utility::Log::Instance().User(__VA_ARGS__)
-/*#else
+#else
 #define C4G_LOG_SYSTEM(...)
 #define C4G_LOG_INFO(...)
 #define C4G_LOG_DEBUG(...)
 #define C4G_LOG_USER(...)
-#endif*/
+#endif

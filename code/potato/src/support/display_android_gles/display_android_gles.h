@@ -7,6 +7,7 @@
 #include <EGL/egl.h>
 
 namespace c4g {
+
 namespace core {
 class IRender;
 class IScene;
@@ -54,6 +55,7 @@ private:
 
   // android
   struct android_app*           m_pApp;
+  struct ASensorManager*        m_pSensorManager;
   const struct ASensor*         m_pAccelerometerSensor;
   struct ASensorEventQueue*     m_pAccelerometerSensorEventQueue;
 };

@@ -50,7 +50,7 @@ bool CRender::Resize(const int& riWidth, const int& riHeight)
 
   glViewport(0, 0, riWidth, riHeight);
 
-  SetView(riWidth, riHeight, -10.0f, 10.0f);
+  SetView(riWidth, riHeight, -1000.0f, 1000.0f);
   glFlush();
 
   return true;

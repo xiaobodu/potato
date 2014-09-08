@@ -7,6 +7,9 @@ namespace c4g {
 namespace core {
 class IAsset;
 }
+namespace utility{
+class CSharedLibraryManager;
+}
 
 namespace scene {
 
@@ -25,7 +28,9 @@ public:
   virtual bool Draw(render::ICanvas* const& rpCanvas);
 
 private:
-  core::IAsset* m_pAsset;
+  base::Config          m_oConfigAsset;
+  core::IAsset*         m_pAsset;
+  utility::CSharedLibraryManager* m_pLibraryManager;
 };
 
 }

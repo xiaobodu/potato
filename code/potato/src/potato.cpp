@@ -49,10 +49,10 @@ Potato& Potato::Instance()
   return s_potato;
 }
 
-Potato::Potato() :
-    m_pEngine(NULL)
+Potato::Potato()
+  : m_pEngine(NULL)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
 Potato::~Potato()
@@ -65,16 +65,17 @@ Potato::~Potato()
     /// destroy the engine with configure
     func_destroy_func_ptr(m_pEngine, m_oConfigEngine);
   }
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
 Potato& Potato::Initialize(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
   if (NULL == m_pEngine)
   {
-    utility::Log::Instance().Info("libr:%s | data:%s", rsLibPath.c_str(), rsDataPath.c_str());
+    C4G_LOG_INFO("libr:%s | data:%s", rsLibPath.c_str(), rsDataPath.c_str());
     std::string file_context = utility::ReadFile((rsDataPath + "/" + rsConfigFile).c_str());
+    C4G_LOG_INFO("file: %s, %s", (rsDataPath + "/" + rsConfigFile).c_str(), file_context.c_str());
 
     /// parse the configure file
     /// and check the value's type
