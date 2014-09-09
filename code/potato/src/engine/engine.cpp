@@ -32,7 +32,11 @@ CEngine::CEngine(const c4g::base::Config& roConfig)
 
   m_pLibraryManager = new utility::CSharedLibraryManager();
 
+#if defined(BUILD_ANDROID)
+  std::string file_context = roConfig._sConfigureContext.c_str();
+#else
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
+#endif
 
   rapidjson::Document doc;
   doc.Parse(file_context.c_str());
@@ -40,24 +44,31 @@ CEngine::CEngine(const c4g::base::Config& roConfig)
 
   /// build the display from the configure file
   {
-    const rapidjson::Value& display = doc["display"];
-    assert(display.IsObject());
-    const rapidjson::Value& library = display["library"];
-    assert(library.IsObject());
-    const rapidjson::Value& library_file = library["file"];
-    assert(library_file.IsString());
-    const rapidjson::Value& configure = display["configure"];
-    assert(configure.IsObject());
-    const rapidjson::Value& configure_file = configure["file"];
-    assert(configure_file.IsString());
-
     m_oConfigDisplay._sLibrPath = roConfig._sLibrPath;
     m_oConfigDisplay._sDataPath = roConfig._sDataPath;
-    m_oConfigDisplay._sLibraryFile = library_file.GetString();
-    m_oConfigDisplay._sConfigureFile = configure_file.GetString();
 
-    /// load the shared library
+    const rapidjson::Value& display = doc["display"];
+    assert(display.IsObject());
+
+    const rapidjson::Value& library = display["library"];
+    assert(library.IsString());
+    m_oConfigDisplay._sLibraryFile = library.GetString();
+
+#if defined(BUILD_ANDROID)
+    m_oConfigDisplay._sConfigureContext = "\
+{\
+  \"render\":{\
+    \"library\":\"lib/librender_gles.so\"\
+  }\
+}";
+#else
+    const rapidjson::Value& configure = display["configure"];
+    assert(configure.IsString());
+    m_oConfigDisplay._sConfigureFile = configure.GetString();
+#endif
+
     typedef FUNC_API_TYPE(CreateDisplay) CreateDisplayFuncPtr;
+    /// load the shared library
     CreateDisplayFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateDisplayFuncPtr>(m_oConfigDisplay.GetLibraryFile(), TOSTRING(CreateDisplay));
     /// create the display with configure
     func_create_func_ptr(m_pDisplay, m_oConfigDisplay);
@@ -65,24 +76,30 @@ CEngine::CEngine(const c4g::base::Config& roConfig)
 
   /// build the scene from the configure file
   {
+    m_oConfigScene._sLibrPath = roConfig._sLibrPath;
+    m_oConfigScene._sDataPath = roConfig._sDataPath;
+
     const rapidjson::Value& display = doc["scene"];
     assert(display.IsObject());
     const rapidjson::Value& library = display["library"];
-    assert(library.IsObject());
-    const rapidjson::Value& library_file = library["file"];
-    assert(library_file.IsString());
+    assert(library.IsString());
+    m_oConfigScene._sLibraryFile = library.GetString();
+
+#if defined(BUILD_ANDROID)
+    m_oConfigScene._sConfigureContext = "\
+{\
+  \"asset\":{\
+    \"library\":\"lib/libasset.so\"\
+  }\
+}";
+#else
     const rapidjson::Value& configure = display["configure"];
-    assert(configure.IsObject());
-    const rapidjson::Value& configure_file = configure["file"];
-    assert(configure_file.IsString());
+    assert(configure.IsString());
+    m_oConfigScene._sConfigureFile = configure.GetString();
+#endif
 
-    m_oConfigScene._sLibrPath = roConfig._sLibrPath;
-    m_oConfigScene._sDataPath = roConfig._sDataPath;
-    m_oConfigScene._sLibraryFile = library_file.GetString();
-    m_oConfigScene._sConfigureFile = configure_file.GetString();
-
-    /// load the shared library
     typedef FUNC_API_TYPE(CreateScene) CreateSceneFuncPtr;
+    /// load the shared library
     CreateSceneFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateSceneFuncPtr>(m_oConfigScene.GetLibraryFile(), TOSTRING(CreateScene));
     /// create the display with configure
     func_create_func_ptr(m_pScene, m_oConfigScene);

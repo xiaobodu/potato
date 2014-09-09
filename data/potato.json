@@ -1,10 +1,6 @@
 {
   "engine":{
-    "library":{
-      "file":"lib/libengine.so"
-    },
-    "configure":{
-      "file":"config/engine.json"
-    }
+    "library":"lib/libengine.so",
+    "configure":"config/engine.json"
   }
 }

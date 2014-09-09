@@ -2,10 +2,6 @@
 
 #include "common.h"
 
-#if defined(BUILD_ANDROID)
-#include <EGL/egl.h>
-#endif
-
 namespace c4g {
 namespace core {
 

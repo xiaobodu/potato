@@ -55,26 +55,38 @@ CScene::CScene(const base::Config& roConfig)
 
   m_pLibraryManager = new utility::CSharedLibraryManager();
 
+#if defined(BUILD_ANDROID)
+  std::string file_context = roConfig._sConfigureContext.c_str();
+#else
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
+#endif
 
   rapidjson::Document jdoc;
   jdoc.Parse(file_context.c_str());
   assert(jdoc.IsObject());
-  const rapidjson::Value& render = jdoc["asset"];
-  assert(render.IsObject());
-  const rapidjson::Value& library = render["library"];
-  assert(library.IsObject());
-  const rapidjson::Value& library_file = library["file"];
-  assert(library_file.IsString());
-  const rapidjson::Value& configure = render["configure"];
-  assert(configure.IsObject());
-  const rapidjson::Value& configure_file = configure["file"];
-  assert(configure_file.IsString());
 
   m_oConfigAsset._sLibrPath = roConfig._sLibrPath;
   m_oConfigAsset._sDataPath = roConfig._sDataPath;
-  m_oConfigAsset._sLibraryFile = library_file.GetString();
-  m_oConfigAsset._sConfigureFile = configure_file.GetString();
+
+  const rapidjson::Value& render = jdoc["asset"];
+  assert(render.IsObject());
+
+  const rapidjson::Value& library = render["library"];
+  assert(library.IsString());
+  m_oConfigAsset._sLibraryFile = library.GetString();
+
+#if defined(BUILD_ANDROID)
+  m_oConfigAsset._sConfigureContext = "\
+{\
+  \"asset\":{\
+    \"library\":\"lib/libasset.so\"\
+  }\
+}";
+#else
+  const rapidjson::Value& configure = render["configure"];
+  assert(configure.IsString());
+  m_oConfigAsset._sConfigureFile = library.GetString();
+#endif
 
   /// load the shared library
   typedef FUNC_API_TYPE(CreateAsset) CreateAssetFuncPtr;

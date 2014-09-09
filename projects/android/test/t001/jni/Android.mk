@@ -2,10 +2,10 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-ROOT_PATH := ../../../../
+ROOT_PATH := ../../../../../
 CODE_PATH := $(ROOT_PATH)/code/
 
-REAL_ROOT_PATH := $(LOCAL_PATH)/../../../../
+REAL_ROOT_PATH := $(LOCAL_PATH)/../../../../../
 REAL_CODE_PATH := $(REAL_ROOT_PATH)/code/
 
 LOCAL_MODULE    		:= t001

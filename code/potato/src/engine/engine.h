@@ -20,7 +20,7 @@ class IDisplay;
 class CEngine : public IEngine
 {
 public:
-  CEngine(const c4g::base::Config& roConfig);
+  explicit CEngine(const c4g::base::Config& roConfig);
   virtual ~CEngine();
 
 public:

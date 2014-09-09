@@ -8,7 +8,7 @@ CODE_PATH := $(ROOT_PATH)/code/
 REAL_ROOT_PATH := $(LOCAL_PATH)/../../../../../
 REAL_CODE_PATH := $(REAL_ROOT_PATH)/code/
 
-LOCAL_MODULE    		:= display_android_gles
+LOCAL_MODULE    		:= display_gles
 LOCAL_CFLAGS 			:= -Wall -fPIC -DBUILD_ANDROID -DBUILD_DEBUG
 
 LOCAL_CPP_FEATURES 		:= rtti exceptions

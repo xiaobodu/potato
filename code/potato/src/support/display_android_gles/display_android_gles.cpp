@@ -21,7 +21,7 @@ FUNC_API_TYPEDEF(DestroyRender, c4g::core::IRender, const c4g::base::Config);
 
 namespace c4g {
 namespace display {
-namespace android_gles {
+namespace gles {
 
 CDisplay::CDisplay(const base::Config& roConfig)
   : m_pGLDisplay(EGL_NO_DISPLAY)
@@ -42,29 +42,40 @@ CDisplay::CDisplay(const base::Config& roConfig)
 
   m_pLibraryManager = new utility::CSharedLibraryManager();
 
+#if defined(BUILD_ANDROID)
+  std::string file_context = roConfig._sConfigureContext.c_str();
+#else
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
+#endif
 
   rapidjson::Document jdoc;
   jdoc.Parse(file_context.c_str());
   assert(jdoc.IsObject());
-  const rapidjson::Value& render = jdoc["render"];
-  assert(render.IsObject());
-  const rapidjson::Value& library = render["library"];
-  assert(library.IsObject());
-  const rapidjson::Value& library_file = library["file"];
-  assert(library_file.IsString());
-  const rapidjson::Value& configure = render["configure"];
-  assert(configure.IsObject());
-  const rapidjson::Value& configure_file = configure["file"];
-  assert(configure_file.IsString());
 
   m_oConfigRender._sLibrPath = roConfig._sLibrPath;
   m_oConfigRender._sDataPath = roConfig._sDataPath;
-  m_oConfigRender._sLibraryFile = library_file.GetString();
-  m_oConfigRender._sConfigureFile = configure_file.GetString();
 
-  /// load the shared library
+  const rapidjson::Value& render = jdoc["render"];
+  assert(render.IsObject());
+  const rapidjson::Value& library = render["library"];
+  m_oConfigRender._sLibraryFile = library.GetString();
+
+#if defined(BUILD_ANDROID)
+  m_oConfigRender._sConfigureContext = "\
+{\
+\"render\":{\
+  \"library\":\"lib/librender_gles.so\"\
+}\
+}";
+#else
+  assert(library.IsString());
+  const rapidjson::Value& configure = render["configure"];
+  assert(configure.IsString());
+  m_oConfigRender._sConfigureFile = configure.GetString();
+#endif
+
   typedef FUNC_API_TYPE(CreateRender) CreateRenderFuncPtr;
+  /// load the shared library
   CreateRenderFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(CreateRender));
   /// create the display with configure
   func_create_func_ptr(m_pRender, m_oConfigRender);
@@ -91,7 +102,7 @@ void CDisplay::BindAndroidApp(struct android_app* pApp)
 
 static void handle_cmd(struct android_app* app, int32_t cmd)
 {
-  display::android_gles::CDisplay* display_ptr = (display::android_gles::CDisplay*) app->userData;
+  display::gles::CDisplay* display_ptr = (display::gles::CDisplay*) app->userData;
   assert(NULL != display_ptr);
 
   switch (cmd)
@@ -498,7 +509,7 @@ void CDisplay::Resize(const int& riWidth, const int& riHeight)
 bool CreateDisplay(c4g::core::IDisplay*& rpDisplay, const c4g::base::Config& roConfig)
 {
   assert(rpDisplay == NULL);
-  rpDisplay = new c4g::display::android_gles::CDisplay(roConfig);
+  rpDisplay = new c4g::display::gles::CDisplay(roConfig);
   return true;
 }
 

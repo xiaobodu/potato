@@ -51,13 +51,9 @@ CDisplay::CDisplay(const base::Config& roConfig)
   const rapidjson::Value& render = jdoc["render"];
   assert(render.IsObject());
   const rapidjson::Value& library = render["library"];
-  assert(library.IsObject());
-  const rapidjson::Value& library_file = library["file"];
-  assert(library_file.IsString());
+  assert(library.IsString());
   const rapidjson::Value& configure = render["configure"];
-  assert(configure.IsObject());
-  const rapidjson::Value& configure_file = configure["file"];
-  assert(configure_file.IsString());
+  assert(configure.IsString());
 
   m_sTitle = jtitle.GetString();
   m_iWidth = jwidth.GetInt();
@@ -65,9 +61,10 @@ CDisplay::CDisplay(const base::Config& roConfig)
 
   m_oConfigRender._sLibrPath = roConfig._sLibrPath;
   m_oConfigRender._sDataPath = roConfig._sDataPath;
-  m_oConfigRender._sLibraryFile = library_file.GetString();
-  m_oConfigRender._sConfigureFile = configure_file.GetString();
+  m_oConfigRender._sLibraryFile = library.GetString();
+  m_oConfigRender._sConfigureFile = configure.GetString();
 
+  typedef FUNC_API_TYPE(CreateRender) CreateRenderFuncPtr;
   /// load the shared library
   typedef FUNC_API_TYPE(CreateRender) CreateRenderFuncPtr;
   CreateRenderFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(CreateRender));

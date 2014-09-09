@@ -1,10 +1,6 @@
 {
   "asset":{
-    "library":{
-      "file":"lib/libasset.so"
-    },
-    "configure":{
-      "file":"config/asset.json"
-    }
+    "library":"lib/libasset.so",
+    "configure":"config/asset.json"
   }
 }

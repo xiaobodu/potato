@@ -21,6 +21,7 @@
 #if defined(BUILD_ANDROID)
 struct android_app;
 #endif
+
 namespace c4g {
 
 namespace base {
@@ -29,18 +30,26 @@ typedef struct tagConfig
 {
   std::string _sLibrPath;
   std::string _sDataPath;
-  std::string _sConfigureFile;
-  std::string _sLibraryFile;
 
-  std::string GetConfigureFile() const
-  {
-    return _sDataPath + "/" + _sConfigureFile;
-  }
+  std::string _sLibraryFile;
 
   std::string GetLibraryFile() const
   {
     return _sLibrPath + "/" + _sLibraryFile;
   }
+
+#if defined(BUILD_ANDROID)
+  std::string _sConfigureContext;
+#else
+  std::string _sConfigureFile;
+#endif
+
+#if !defined(BUILD_ANDROID)
+  std::string GetConfigureFile() const
+  {
+    return _sDataPath + "/" + _sConfigureFile;
+  }
+#endif
 
 } Config;
 

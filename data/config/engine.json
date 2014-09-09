@@ -1,18 +1,10 @@
 {
   "display":{
-    "library":{
-      "file":"lib/libdisplay_linux_gles.so"
-    },
-    "configure":{
-      "file":"config/display.json"
-    }
+    "library":"lib/libdisplay_gles.so",
+    "configure":"config/display.json"
   },
   "scene":{
-    "library":{
-      "file":"lib/libscene.so"
-    },
-    "configure":{
-      "file":"config/scene.json"
-    }
+    "library":"lib/libscene.so",
+    "configure":"config/scene.json"
   }
 }

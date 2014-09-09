@@ -3,6 +3,8 @@
 
 #include <string>
 
+extern void GetConfig(std::string& rsLibrPath, std::string& rsDataPath, std::string& rsFile);
+
 #if defined(BUILD_ANDROID)
 #include "common.h"
 
@@ -22,7 +24,7 @@ protected:
   virtual ~Potato();
 
 public:
-  Potato& Initialize(const std::string& rsLibPath, const std::string& rsDataPath, const std::string& rsConfigFile);
+  Potato& Initialize(const std::string& rsLibrPath, const std::string& rsDataPath, const std::string& rsConfig);
   core::IEngine*& GetEngine();
 
 private:
@@ -35,5 +37,3 @@ private:
 extern "C" void potato_main(struct android_app* pApp, const std::string& rsNativeClassName, const std::string& rsHelperClassName);
 
 #endif
-
-extern void GetConfig(std::string& rsLibrPath, std::string& rsDataPath, std::string& rsFile);
