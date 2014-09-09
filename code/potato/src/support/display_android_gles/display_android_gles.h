@@ -17,7 +17,7 @@ class CSharedLibraryManager;
 }
 
 namespace display {
-namespace gles {
+namespace android_gles {
 
 class CDisplay: public core::IDisplay
 {

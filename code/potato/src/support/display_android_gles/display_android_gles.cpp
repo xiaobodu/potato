@@ -21,7 +21,7 @@ FUNC_API_TYPEDEF(DestroyRender, c4g::core::IRender, const c4g::base::Config);
 
 namespace c4g {
 namespace display {
-namespace gles {
+namespace android_gles {
 
 CDisplay::CDisplay(const base::Config& roConfig)
   : m_pGLDisplay(EGL_NO_DISPLAY)
@@ -102,7 +102,7 @@ void CDisplay::BindAndroidApp(struct android_app* pApp)
 
 static void handle_cmd(struct android_app* app, int32_t cmd)
 {
-  display::gles::CDisplay* display_ptr = (display::gles::CDisplay*) app->userData;
+  display::android_gles::CDisplay* display_ptr = (display::android_gles::CDisplay*) app->userData;
   assert(NULL != display_ptr);
 
   switch (cmd)
@@ -383,8 +383,9 @@ void CDisplay::Initialize(android_app* pApp)
   if (EGL_TRUE != eglMakeCurrent(m_pGLDisplay, m_pGLSurface, m_pGLSurface, m_pGLContext)) assert(0);
 
   m_pRender->Start();
+
   //TODO:
-  m_pScene->Load(m_pRender, "");
+  m_pScene->Load(m_pRender, "scene/root.json");
 
   int width = ANativeWindow_getWidth(pApp->window);
   int height = ANativeWindow_getHeight(pApp->window);
@@ -509,7 +510,7 @@ void CDisplay::Resize(const int& riWidth, const int& riHeight)
 bool CreateDisplay(c4g::core::IDisplay*& rpDisplay, const c4g::base::Config& roConfig)
 {
   assert(rpDisplay == NULL);
-  rpDisplay = new c4g::display::gles::CDisplay(roConfig);
+  rpDisplay = new c4g::display::android_gles::CDisplay(roConfig);
   return true;
 }
 

@@ -4,6 +4,8 @@
 #include "render.h"
 #include "asset.h"
 
+#include "panel.h"
+
 #include "utility/file.h"
 #include "utility/log.h"
 #include "utility/sharedlibrary.h"
@@ -28,7 +30,7 @@ public:
   virtual void Begin(const render::Glyph& rGlyph) { ; }
   virtual bool Do(render::ITransform* const& rpTransform)
   {
-    // keep on the 3d transform
+    // think in the 3d transform
     rpTransform->Translate(100.0f, 100.0f);
     rpTransform->Rotate(angle, 0.0f, 0.0f, 1.0f, 150.0f, 150.0f, 0.0f);
     return true;
@@ -50,9 +52,12 @@ static CProcess g_process;
 
 CScene::CScene(const base::Config& roConfig)
   : m_pAsset(NULL)
+  , m_pLibraryManager(NULL)
+  , m_pPanel(NULL)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
+  m_oConfig = roConfig;
   m_pLibraryManager = new utility::CSharedLibraryManager();
 
 #if defined(BUILD_ANDROID)
@@ -93,10 +98,15 @@ CScene::CScene(const base::Config& roConfig)
   CreateAssetFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateAssetFuncPtr>(m_oConfigAsset.GetLibraryFile(), TOSTRING(CreateAsset));
   /// create the display with configure
   func_create_func_ptr(m_pAsset, m_oConfigAsset);
+
+  m_pPanel = new CPanel(this, NULL);
 }
 
 CScene::~CScene()
 {
+  delete m_pPanel;
+  m_pPanel = NULL;
+
   /// load the shared library
   typedef FUNC_API_TYPE(DestroyAsset) DestroyAssetFuncPtr;
   DestroyAssetFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyAssetFuncPtr>(m_oConfigAsset.GetLibraryFile(), TOSTRING(DestroyAsset));
@@ -113,10 +123,15 @@ bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
+  std::string file_context = utility::ReadFile(m_oConfig._sDataPath + "/" + rsFileName);
+  rapidjson::Document jdoc;
+  jdoc.Parse(file_context.c_str());
+  CPanel::builder.Parser(m_pAsset, jdoc, m_pPanel);
+
   int width = 0;
   int height = 0;
   unsigned char* buffer_ptr = NULL;
-  m_pAsset->LoadImage(m_oConfigAsset._sDataPath + "/scene/icon.png", width, height, buffer_ptr);
+  m_pAsset->LoadImage("res/icon.png", width, height, buffer_ptr);
 
   g_Glyph.l = 0.0f;
   g_Glyph.r = 1.0f;
@@ -136,24 +151,29 @@ bool CScene::Unload(core::IRender* const& rpRender)
 bool CScene::Resize(const int& riWidth, const int& riHeight)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
-  return true;
-}
 
-bool CScene::Handle(const display::IInput* const pInput)
-{
+  m_pPanel->Resize(riWidth, riHeight);
   return true;
 }
 
 bool CScene::Tick(const float& rfDelta)
 {
   g_process.Tick(rfDelta);
-  return true;
+
+  return m_pPanel->Tick(rfDelta);
 }
 
 bool CScene::Draw(render::ICanvas* const& rpCanvas)
 {
   rpCanvas->DrawGlyph(g_Glyph, 300, 300, &g_process);
+
+  m_pPanel->Draw(rpCanvas);
   return true;
+}
+
+bool CScene::Handle(const display::IInput* const& rpInput)
+{
+  return m_pPanel->Handle(rpInput);
 }
 
 }

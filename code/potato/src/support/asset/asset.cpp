@@ -12,6 +12,8 @@ namespace asset{
 CAsset::CAsset(const c4g::base::Config& roConfig)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
+
+  m_oConfig = roConfig;
 }
 
 CAsset::~CAsset()
@@ -21,7 +23,7 @@ CAsset::~CAsset()
 
 void CAsset::LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer)
 {
-  CFilePNG::Instance().Load(rsFileName);
+  CFilePNG::Instance().Load(m_oConfig._sDataPath + "/" + rsFileName);
   riWidth = static_cast<int>(CFilePNG::Instance().GetWidth());
   riHeight = static_cast<int>(CFilePNG::Instance().GetHeight());
   rpBuffer = static_cast<unsigned char*>(CFilePNG::Instance().GetBuffer());

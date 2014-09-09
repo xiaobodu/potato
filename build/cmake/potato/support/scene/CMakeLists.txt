@@ -12,7 +12,16 @@ set(INC_PATH_LIST
 
 set(SRC_FILE_LIST
   ${SRC_PATH_support}/../engine/scene.h
+  ${SRC_PATH_scene}/scene_base.h
+  ${SRC_PATH_scene}/scene_impl.h
   ${SRC_PATH_scene}/scene.cpp
+  ${SRC_PATH_scene}/builder.h
+  ${SRC_PATH_scene}/layout.h
+  ${SRC_PATH_scene}/layout.cpp
+  ${SRC_PATH_scene}/widget.h
+  ${SRC_PATH_scene}/widget.cpp
+  ${SRC_PATH_scene}/panel.h
+  ${SRC_PATH_scene}/panel.cpp
   ${SRC_PATH_potato}/utility/file.h
   ${SRC_PATH_potato}/utility/log.h
   ${SRC_PATH_potato}/utility/sharedlibrary.h

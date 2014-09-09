@@ -64,7 +64,6 @@ CDisplay::CDisplay(const base::Config& roConfig)
   m_oConfigRender._sLibraryFile = library.GetString();
   m_oConfigRender._sConfigureFile = configure.GetString();
 
-  typedef FUNC_API_TYPE(CreateRender) CreateRenderFuncPtr;
   /// load the shared library
   typedef FUNC_API_TYPE(CreateRender) CreateRenderFuncPtr;
   CreateRenderFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(CreateRender));
@@ -96,7 +95,7 @@ void CDisplay::Run(core::IScene* const& rpScene)
   m_pRender->Resize(m_iWidth, m_iHeight);
 
   //TODO:
-  rpScene->Load(m_pRender, "");
+  rpScene->Load(m_pRender, "scene/root.json");
   rpScene->Resize(m_iWidth, m_iHeight);
 
   timeval time;

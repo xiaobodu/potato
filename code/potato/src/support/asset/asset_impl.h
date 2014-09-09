@@ -18,6 +18,9 @@ public:
 
 public:
   virtual void LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer);
+
+private:
+  c4g::base::Config m_oConfig;
 };
 
 }

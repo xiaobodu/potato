@@ -1,0 +1,60 @@
+{
+  "type": "panel",
+  "id": "root",
+  "value": {
+    "asset": [
+      {
+        "id": "icon",
+        "type": "image",
+        "file": "res/icon.png"
+      }
+    ],
+    "rect": {
+      "src": {
+        "x": 0,
+        "y": 0,
+        "w": 512,
+        "h": 512
+      },
+      "dst": {
+        "x": 0,
+        "y": 0,
+        "w": 100,
+        "h": 100
+      }
+    },
+    "layer": 0,
+    "visible": true,
+    "layout": {
+      "type": "fullfill"
+    },
+    "widgets": [
+      {
+        "file": "scene/main.json"
+      },
+      {
+        "type": "image",
+        "id": "icon",
+        "value": {
+          "rect": {
+            "src": {
+              "x": 0,
+              "y": 0,
+              "w": 100,
+              "h": 100
+            },
+            "dst": {
+              "x": 0,
+              "y": 0,
+              "w": 10,
+              "h": 10
+            }
+          },
+          "layer": 0,
+          "visible": true,
+          "texture":"icon"
+        }
+      }
+    ]
+  }
+}

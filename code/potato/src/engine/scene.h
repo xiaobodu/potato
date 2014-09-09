@@ -29,9 +29,9 @@ public:
   virtual bool Load(core::IRender* const& rpRender, const std::string& rsFileName) = 0;
   virtual bool Unload(core::IRender* const& rpRender) = 0;
   virtual bool Resize(const int& riWidth, const int& riHeight) = 0;
-  virtual bool Handle(const display::IInput* const pInput) = 0;
   virtual bool Tick(const float& rfDelta) = 0;
   virtual bool Draw(render::ICanvas* const& rpCanvas) = 0;
+  virtual bool Handle(const display::IInput* const& rpInput) = 0;
 };
 
 }
