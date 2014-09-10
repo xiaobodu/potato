@@ -2,11 +2,13 @@
   "type": "panel",
   "value": {
     "id": "root",
-    "asset": [
+    "assets": [
       {
-        "id": "icon",
         "type": "image",
-        "file": "res/icon.png"
+        "value": {
+          "id": "icon",
+          "file": "res/icon.png"
+        }
       }
     ],
     "dst": {
@@ -40,7 +42,7 @@
               "l": 0.0,
               "t": 0.0,
               "r": 10.0,
-              "b": 10.0
+              "b": 200.0
           },
           "layer": 0,
           "visible": true

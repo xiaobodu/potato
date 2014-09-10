@@ -4,6 +4,7 @@
 #include "render.h"
 #include "asset.h"
 
+#include "scene_base.h"
 #include "panel.h"
 
 #include "utility/file.h"
@@ -122,6 +123,9 @@ CScene::~CScene()
 bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
+
+  //TODO:
+  CAssetsBuilder::instance.BindRender(rpRender);
 
   std::string file_context = utility::ReadFile(m_oConfig._sDataPath + "/" + rsFileName);
   rapidjson::Document jdoc;

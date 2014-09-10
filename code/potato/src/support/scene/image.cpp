@@ -31,6 +31,7 @@ bool CImage::Tick(const float& rfDelta)
 
 void CImage::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
 {
+  rpCanvas->DrawGlyph(src, dst.w, dst.h, NULL);
   //
 }
 

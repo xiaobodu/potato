@@ -87,7 +87,7 @@ void CCanvas::DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& 
   m_aTexCoord[6] = rGlyph.r;
   m_aTexCoord[7] = rGlyph.b;
 
-  rpProcess->Do(&CTransform::Instance(m_aVertex));
+  if (NULL != rpProcess) rpProcess->Do(&CTransform::Instance(m_aVertex));
 
   //glActiveTexture(GL_TEXTURE0);
   glClientActiveTexture(GL_TEXTURE0);

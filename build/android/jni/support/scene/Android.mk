@@ -18,8 +18,8 @@ LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/engine
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/external/rapidjson/include
 
 LOCAL_SRC_FILES 		:= $(CODE_PATH)/potato/src/support/scene/scene.cpp
-LOCAL_SRC_FILES 		:= $(CODE_PATH)/potato/src/support/scene/math.cpp
-LOCAL_SRC_FILES 		:= $(CODE_PATH)/potato/src/support/scene/builder.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/math.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/builder.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/layout.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/widget.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/panel.cpp

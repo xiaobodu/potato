@@ -88,10 +88,41 @@ private:
   CFileBuilder();
 
 public:
-  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, rapidjson::Document& rpWidget) const;
+  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, rapidjson::Document& rDoc) const;
 
 public:
   static CFileBuilder instance;
+};
+
+class CAssetsBuilder : public TBuilder<const void* const>
+{
+private:
+  CAssetsBuilder();
+
+public:
+  // TODO: break the render
+  void BindRender(core::IRender* const& rpRender);
+
+public:
+  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, const void* const& rpPtr) const;
+
+private:
+  core::IRender* m_pRender;
+
+public:
+  static CAssetsBuilder instance;
+};
+
+class CAllWidgetBuilder : public TBuilder<IWidget* const>
+{
+private:
+  CAllWidgetBuilder();
+
+public:
+  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const;
+
+public:
+  static CAllWidgetBuilder instance;
 };
 
 class CBuilderManager

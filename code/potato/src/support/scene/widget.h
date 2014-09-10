@@ -17,7 +17,6 @@ public:
   }
   virtual ~TWidget()
   {
-    IWidget* widget_ptr = NULL;
     VWidgetPtr::iterator it = m_vpWidget.begin();
     VWidgetPtr::iterator it_end = m_vpWidget.end();
     for (; it != it_end; ++it)

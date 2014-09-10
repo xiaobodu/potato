@@ -40,7 +40,9 @@ bool CPanel::Tick(const float& rfDelta)
     IWidget*& widget_ptr = *it;
     if (widget_ptr->always_tick || widget_ptr->visible) res |= widget_ptr->Tick(rfDelta);
   }
+  //TEST:
   return res;
+  //return true;
 }
 
 void CPanel::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
@@ -83,41 +85,22 @@ bool CPanel::CBuilder::Do(core::IAsset* const & rpAsset, const rapidjson::Value&
     return false;
   }
 
+  const rapidjson::Value& jassets = jvalue["assets"];
+  if (!CAssetsBuilder::instance.Do(rpAsset, jassets, NULL))
+  {
+    return false;
+  }
+
   const rapidjson::Value& jwidgets = jvalue["widgets"];
   assert(jwidgets.IsArray());
   if (!jwidgets.IsArray()) return false;
 
-  for (int i = 0; i < jwidgets.Size(); ++i)
+  for (int i = 0; i < static_cast<int>(jwidgets.Size()); ++i)
   {
     const rapidjson::Value& jwidget = jwidgets[i];
     if (!jwidget.IsObject()) continue;
-    const rapidjson::Value& jwidgettype = jwidget["type"];
-    if (!jwidgettype.IsString()) continue;
-    const IBuilder* builder_ptr = CBuilderManager::instance.Get(jwidgettype.GetString());
-    if (NULL == builder_ptr) continue;
-    if (builder_ptr->name == "panel")
-    {
-      // TODO: where to delete?
-      IPanel* new_panel_ptr = new CPanel(rpPanel->scene, rpPanel);
-      const TBuilder<IPanel* const>* panel_builder_ptr = reinterpret_cast<const TBuilder<IPanel* const>*>(builder_ptr);
-      panel_builder_ptr->Do(rpAsset, jwidget, new_panel_ptr);
-      rpPanel->Add(new_panel_ptr);
-    }
-    else if (builder_ptr->name == "image")
-    {
-      // TODO: where to delete?
-      IImage* new_image_ptr = new CImage(rpPanel->scene, rpPanel);
-      const TBuilder<IImage* const>* image_builder_ptr = reinterpret_cast<const TBuilder<IImage* const>*>(builder_ptr);
-      image_builder_ptr->Do(rpAsset, jwidget, new_image_ptr);
-      rpPanel->Add(new_image_ptr);
-    }
-    else if (builder_ptr->name == "file")
-    {
-      rapidjson::Document doc;
-      const TBuilder<rapidjson::Document>* file_builder_ptr = reinterpret_cast<const TBuilder<rapidjson::Document>*>(builder_ptr);
-      file_builder_ptr->Do(rpAsset, jwidget, doc);
-      Do(rpAsset, doc, rpPanel);
-    }
+
+    CAllWidgetBuilder::instance.Do(rpAsset, jwidget, rpPanel);
   }
 
   //TODO:
