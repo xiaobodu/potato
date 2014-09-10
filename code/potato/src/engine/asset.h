@@ -15,6 +15,8 @@ public:
 
 public:
   virtual void LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer) = 0;
+  virtual void PushImageInfo(const std::string& rsId, const int& riWidth, const int& riHeight, const int& riId) = 0;
+  virtual bool FindImageInfo(const std::string& rsId, int& riWidth, int& riHeight, int& riId) const = 0;
 };
 
 }

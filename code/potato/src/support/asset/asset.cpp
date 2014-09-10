@@ -29,6 +29,27 @@ void CAsset::LoadImage(const std::string& rsFileName, int& riWidth, int& riHeigh
   rpBuffer = static_cast<unsigned char*>(CFilePNG::Instance().GetBuffer());
 }
 
+void CAsset::PushImageInfo(const std::string& rsId, const int& riWidth, const int& riHeight, const int& riId)
+{
+  if (0 >= riId) return;
+  ImageInfo info;
+  info.width = riWidth;
+  info.height = riHeight;
+  info.id = riId;
+  m_mImageInfo.insert(std::make_pair(rsId, info));
+}
+
+bool CAsset::FindImageInfo(const std::string& rsId, int& riWidth, int& riHeight, int& riId) const
+{
+  MImageInfo::const_iterator cit_find = m_mImageInfo.find(rsId);
+  if (cit_find == m_mImageInfo.end()) return false;
+  const ImageInfo& info_ref = cit_find->second;
+  riWidth = info_ref.width;
+  riHeight = info_ref.height;
+  riId = info_ref.id;
+  return true;
+}
+
 }
 
 }

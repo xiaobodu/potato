@@ -18,8 +18,6 @@ class ICanvas;
 }
 namespace scene {
 
-typedef Rect<float>     RectF;
-
 class IResizable
 {
 public:
@@ -74,14 +72,14 @@ public:
   std::string id;
   int layer;
   bool visible;
-  RectF rect;
+  RectF dst;
 
 public:
   IWidget()
     : id("unknown")
     , layer(0)
     , visible(false)
-    , rect(0.0)
+    , dst(0.0)
   {
     ;
   }

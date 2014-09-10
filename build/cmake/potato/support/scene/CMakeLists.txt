@@ -18,6 +18,7 @@ set(SRC_FILE_LIST
   ${SRC_PATH_scene}/math.h
   ${SRC_PATH_scene}/math.cpp
   ${SRC_PATH_scene}/builder.h
+  ${SRC_PATH_scene}/builder.cpp
   ${SRC_PATH_scene}/layout.h
   ${SRC_PATH_scene}/layout.cpp
   ${SRC_PATH_scene}/widget.h

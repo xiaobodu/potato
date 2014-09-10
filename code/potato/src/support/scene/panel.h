@@ -34,10 +34,10 @@ public:
   virtual bool Handle(const display::IInput* const& rpInput);
 
 public:
-  class CBuilder : public TWidget<IPanel>::CBuilder
+  class CBuilder : public TBuilder<IPanel* const>
   {
   public:
-    explicit CBuilder() : TWidget<IPanel>::CBuilder("panel")
+    explicit CBuilder() : TBuilder<IPanel* const>("panel")
     {
       ;
     }

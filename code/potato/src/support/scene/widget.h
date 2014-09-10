@@ -100,21 +100,6 @@ public:
 protected:
   typedef std::vector<IWidget*> VWidgetPtr;
   VWidgetPtr m_vpWidget;
-
-public:
-  class CBuilder : public TBuilder<TBase* const>
-  {
-  public:
-    explicit CBuilder(const std::string& rsName) : TBuilder<TBase* const>(rsName) { ; }
-    virtual ~CBuilder() { ; }
-
-  public:
-    virtual bool Parser(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, TBase* const& rpWidget) const
-    {
-      //
-      return true;
-    }
-  };
 };
 
 }

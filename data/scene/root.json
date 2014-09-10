@@ -1,7 +1,7 @@
 {
   "type": "panel",
-  "id": "root",
   "value": {
+    "id": "root",
     "asset": [
       {
         "id": "icon",
@@ -9,19 +9,11 @@
         "file": "res/icon.png"
       }
     ],
-    "rect": {
-      "src": {
-        "x": 0,
-        "y": 0,
-        "w": 512,
-        "h": 512
-      },
-      "dst": {
-        "x": 0,
-        "y": 0,
-        "w": 100,
-        "h": 100
-      }
+    "dst": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 100.0,
+        "b": 100.0
     },
     "layer": 0,
     "visible": true,
@@ -36,23 +28,21 @@
         "type": "image",
         "id": "icon",
         "value": {
-          "rect": {
             "src": {
-              "x": 0,
-              "y": 0,
-              "w": 100,
-              "h": 100
+              "l": 0.0,
+              "t": 0.0,
+              "r": 100.0,
+              "b": 100.0,
+              "id":"icon"
             },
             "dst": {
-              "x": 0,
-              "y": 0,
-              "w": 10,
-              "h": 10
-            }
+              "l": 0.0,
+              "t": 0.0,
+              "r": 10.0,
+              "b": 10.0
           },
           "layer": 0,
-          "visible": true,
-          "texture":"icon"
+          "visible": true
         }
       }
     ]

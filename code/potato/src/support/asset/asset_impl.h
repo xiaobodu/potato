@@ -2,6 +2,9 @@
 
 #include "asset.h"
 
+#include <string>
+#include <map>
+
 namespace c4g{
 
 namespace core{
@@ -16,11 +19,25 @@ public:
   explicit CAsset(const c4g::base::Config& roConfig);
   virtual ~CAsset();
 
-public:
-  virtual void LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer);
-
 private:
   c4g::base::Config m_oConfig;
+
+public:
+  virtual void LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer);
+  virtual void PushImageInfo(const std::string& rsId, const int& riWidth, const int& riHeight, const int& riId);
+  virtual bool FindImageInfo(const std::string& rsId, int& riWidth, int& riHeight, int& riId) const;
+
+private:
+  struct ImageInfo
+  {
+    int width;
+    int height;
+    int id;
+
+    ImageInfo() : width(0), height(0), id(0) { ; }
+  };
+  typedef std::map<std::string, ImageInfo>   MImageInfo;
+  MImageInfo  m_mImageInfo;
 };
 
 }
