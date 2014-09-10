@@ -11,7 +11,8 @@ class TWidget : public TBase
 {
 public:
   explicit TWidget(core::IScene* const& rpScene, IWidget* const& rpParent)
-    : m_pScene(rpScene)
+    : TBase()
+    , m_pScene(rpScene)
     , m_pParent(rpParent)
   {
     assert(NULL != rpScene);
@@ -58,6 +59,31 @@ public:
     }
     return widget_ptr;
   }
+  virtual int Find(const std::string& rsId) const
+  {
+    int index = -1;
+    VWidgetPtr::const_iterator cit = m_vpWidget.begin();
+    VWidgetPtr::const_iterator cit_end = m_vpWidget.end();
+    for (; cit != cit_end; ++cit)
+    {
+      ++index;
+      const IWidget* const& widget_ref = *cit;
+      if (widget_ref->id != rsId)
+      {
+        continue;
+      }
+      return index;
+    }
+    return -1;
+  }
+  virtual IWidget* Get(const int& riIndex)
+  {
+    if (0 > riIndex || riIndex >= static_cast<int>(m_vpWidget.size()))
+    {
+      return NULL;
+    }
+    return m_vpWidget.at(riIndex);
+  }
 
 public:
   virtual void Visit(IWidget::IVisitor* const& rpVisitor)
@@ -79,7 +105,7 @@ public:
   class CBuilder : public TBuilder<TBase* const>
   {
   public:
-    CBuilder() { ; }
+    explicit CBuilder(const std::string& rsName) : TBuilder<TBase* const>(rsName) { ; }
     virtual ~CBuilder() { ; }
 
   public:

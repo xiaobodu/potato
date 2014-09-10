@@ -5,6 +5,22 @@
 namespace c4g {
 namespace scene {
 
+class IPanel : public IWidget
+{
+public:
+  IPanel()
+    : IWidget()
+  {
+    ;
+  }
+  virtual ~IPanel()
+  {
+    ;
+  }
+
+public:
+};
+
 class CPanel : public TWidget<IPanel>
 {
 public:
@@ -20,6 +36,11 @@ public:
 public:
   class CBuilder : public TWidget<IPanel>::CBuilder
   {
+  public:
+    explicit CBuilder() : TWidget<IPanel>::CBuilder("panel")
+    {
+      ;
+    }
   public:
     virtual bool Parser(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, IPanel* const& rpPanel) const;
   };

@@ -2,8 +2,6 @@
 
 #include "scene.h"
 
-#include "scene_base.h"
-
 namespace c4g {
 
 namespace core {
@@ -14,6 +12,8 @@ class CSharedLibraryManager;
 }
 
 namespace scene {
+
+class IPanel;
 
 class CScene : public core::IScene
 {

@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include "math.h"
+
 namespace c4g {
 
 namespace core {
@@ -15,6 +17,8 @@ namespace render {
 class ICanvas;
 }
 namespace scene {
+
+typedef Rect<float>     RectF;
 
 class IResizable
 {
@@ -68,8 +72,19 @@ class IWidget : public IResizable, public ITickable, public IDrawable, public IH
 {
 public:
   std::string id;
+  int layer;
+  bool visible;
+  RectF rect;
 
 public:
+  IWidget()
+    : id("unknown")
+    , layer(0)
+    , visible(false)
+    , rect(0.0)
+  {
+    ;
+  }
   virtual ~IWidget()
   {
     ;
@@ -80,6 +95,8 @@ public:
   virtual const IWidget* const Parent() const = 0;
   virtual void Add(IWidget* const& rpWidget) = 0;
   virtual IWidget* Remove(const std::string& rsId) = 0;
+  virtual int Find(const std::string& rsId) const = 0;
+  virtual IWidget* Get(const int& riIndex) = 0;
 
 public:
   class IVisitor
@@ -91,29 +108,6 @@ public:
     virtual void On(IWidget* const& rpWidget) const = 0;
   };
   virtual void Visit(IVisitor* const& rpVisitor) = 0;
-};
-
-class ILayout
-{
-public:
-  virtual ~ILayout()
-  {
-    ;
-  }
-
-public:
-  virtual void Resize(IWidget* const& rpWidget, const int& riWidth, const int& riHeight) = 0;
-};
-
-class IPanel : public IWidget
-{
-public:
-  virtual ~IPanel()
-  {
-    ;
-  }
-
-public:
 };
 
 }

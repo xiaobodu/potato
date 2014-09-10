@@ -15,6 +15,14 @@ template<typename TGoods>
 class TBuilder
 {
 public:
+  const std::string name;
+
+public:
+  explicit TBuilder(const std::string& rsName)
+    : name(rsName)
+  {
+    ;
+  }
   virtual ~TBuilder()
   {
     ;
