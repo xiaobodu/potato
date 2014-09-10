@@ -4,3 +4,6 @@
 [submodule "code/external/libpng"]
 	path = code/external/libpng
 	url = https://github.com/code4game/libpng.git
+[submodule "code/external/freetype2"]
+	path = code/external/freetype2
+	url = https://github.com/code4game/freetype2
