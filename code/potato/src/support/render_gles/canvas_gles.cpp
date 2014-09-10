@@ -69,9 +69,9 @@ void CCanvas::DrawGlyph(const Glyph& rGlyph, IProcess* const& rpProcess)
 
 void CCanvas::DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess)
 {
-  glPushMatrix();
-
   CGlyphProcessScope process_scope(rGlyph, rfWidth, rfHeight, rpProcess);
+
+  glPushMatrix();
 
   m_aVertex[3] = rfWidth;
   m_aVertex[7] = -rfHeight;

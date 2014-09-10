@@ -54,7 +54,7 @@ bool CGlyphBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roC
 
   int width = 0;
   int height = 0;
-  int id = 0;
+  unsigned int id = 0;
   if (!rpAsset->FindImageInfo(jid.GetString(), width, height, id)) return false;
 
   rGlyph.l = static_cast<float>(jleft.GetDouble() / (width * 1.0f));

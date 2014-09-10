@@ -16,8 +16,17 @@ public:
 public:
   virtual void LoadFile(const std::string& rsFileName, std::string& rsFileContext) = 0;
   virtual void LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer) = 0;
-  virtual void PushImageInfo(const std::string& rsId, const int& riWidth, const int& riHeight, const int& riId) = 0;
-  virtual bool FindImageInfo(const std::string& rsId, int& riWidth, int& riHeight, int& riId) const = 0;
+  virtual void PushImageInfo(const std::string& rsId, const int& riWidth, const int& riHeight, const unsigned int& riId) = 0;
+  virtual bool FindImageInfo(const std::string& rsId, int& riWidth, int& riHeight, unsigned int& riId) const = 0;
+
+public:
+  class IImageInfoVisitor
+  {
+  public:
+    virtual void On(const std::string& rsId, const int& riWidth, const int& riHeight, const unsigned int& riId) const = 0;
+  };
+  virtual void VisitImageInfo(IImageInfoVisitor* const& rpVisitor) const = 0;
+  virtual void ClearImageInfo() = 0;
 };
 
 }

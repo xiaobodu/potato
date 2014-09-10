@@ -17,14 +17,7 @@ public:
   }
   virtual ~TWidget()
   {
-    VWidgetPtr::iterator it = m_vpWidget.begin();
-    VWidgetPtr::iterator it_end = m_vpWidget.end();
-    for (; it != it_end; ++it)
-    {
-      IWidget*& widget_ref = *it;
-      delete widget_ref;
-    }
-    m_vpWidget.clear();
+    Clear();
   }
 
 public:
@@ -50,6 +43,19 @@ public:
       rpDeal->On(widget_ptr);
       break;
     }
+  }
+  virtual void Clear()
+  {
+    if (0 >= m_vpWidget.size()) return;
+
+    VWidgetPtr::iterator it = m_vpWidget.begin();
+    VWidgetPtr::iterator it_end = m_vpWidget.end();
+    for (; it != it_end; ++it)
+    {
+      IWidget*& widget_ref = *it;
+      delete widget_ref;
+    }
+    m_vpWidget.clear();
   }
   virtual int Find(const std::string& rsId) const
   {

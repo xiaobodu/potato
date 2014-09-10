@@ -19,38 +19,6 @@ FUNC_API_TYPEDEF(DestroyAsset, c4g::core::IAsset, const c4g::base::Config);
 namespace c4g {
 namespace scene {
 
-static render::Glyph g_Glyph;
-
-class CProcess : public render::IProcess
-{
-public:
-  CProcess() : angle(0.0f) { ; }
-  virtual ~CProcess() { ; }
-
-public:
-  virtual void Begin(const render::Glyph& rGlyph) { ; }
-  virtual bool Do(render::ITransform* const& rpTransform)
-  {
-    // think in the 3d transform
-    rpTransform->Translate(100.0f, 100.0f);
-    rpTransform->Rotate(angle, 0.0f, 0.0f, 1.0f, 150.0f, 150.0f, 0.0f);
-    return true;
-  }
-  virtual void End() { ; }
-
-public:
-  bool Tick(const float& rfDelta)
-  {
-    angle += rfDelta * 20.0f;
-    if (angle > 360.0f) angle-= 360.0f;
-    return true;
-  }
-
-private:
-  float angle;
-};
-static CProcess g_process;
-
 CScene::CScene(const base::Config& roConfig)
   : m_pAsset(NULL)
   , m_pLibraryManager(NULL)
@@ -131,23 +99,52 @@ bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName)
   rapidjson::Document jdoc;
   jdoc.Parse(file_context.c_str());
   CPanel::builder.Do(m_pAsset, jdoc, m_pPanel);
-
-  int width = 0;
-  int height = 0;
-  unsigned char* buffer_ptr = NULL;
-  m_pAsset->LoadImage("res/icon.png", width, height, buffer_ptr);
-
-  g_Glyph.l = 0.0f;
-  g_Glyph.r = 1.0f;
-  g_Glyph.t = 0.0f;
-  g_Glyph.b = 1.0f;
-  g_Glyph.id = rpRender->GenerateTexId(width, height, buffer_ptr);
   return true;
 }
 
+class CImageInfoVisitorUnload : public core::IAsset::IImageInfoVisitor
+{
+public:
+  static CImageInfoVisitorUnload instance;
+
+protected:
+  CImageInfoVisitorUnload()
+    : m_pRender(NULL)
+  {
+    ;
+  }
+  virtual ~CImageInfoVisitorUnload()
+  {
+    ;
+  }
+
+public:
+  CImageInfoVisitorUnload& BindRender(core::IRender* const& rpRender)
+  {
+    m_pRender = rpRender;
+    return (*this);
+  }
+
+public:
+  virtual void On(const std::string& rsId, const int& riWidth, const int& riHeight, const unsigned int& riId) const
+  {
+    if (NULL == m_pRender) return;
+    unsigned int id = riId;
+    m_pRender->DeleteTexId(1, &id);
+  }
+
+private:
+  core::IRender* m_pRender;
+};
+CImageInfoVisitorUnload CImageInfoVisitorUnload::instance;
+
 bool CScene::Unload(core::IRender* const& rpRender)
 {
-  rpRender->DeleteTexId(1, &g_Glyph.id);
+  m_pAsset->VisitImageInfo(&CImageInfoVisitorUnload::instance.BindRender(rpRender));
+  m_pAsset->ClearImageInfo();
+
+  m_pPanel->Clear();
+
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
   return true;
 }
@@ -162,15 +159,11 @@ bool CScene::Resize(const int& riWidth, const int& riHeight)
 
 bool CScene::Tick(const float& rfDelta)
 {
-  g_process.Tick(rfDelta);
-
   return m_pPanel->Tick(rfDelta);
 }
 
 bool CScene::Draw(render::ICanvas* const& rpCanvas)
 {
-  rpCanvas->DrawGlyph(g_Glyph, 300, 300, &g_process);
-
   for (int i = C4G_LAYER_MIN; i < C4G_LAYER_MAX; ++i)
   {
     m_pPanel->Draw(i, rpCanvas);

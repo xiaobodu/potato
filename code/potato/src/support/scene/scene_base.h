@@ -104,6 +104,7 @@ public:
   virtual void Add(IWidget* const& rpWidget) = 0;
   // deal the removed widget, delete or move or etc.
   virtual void Remove(const std::string& rsId, IDeal* const& rpDeal) = 0;
+  virtual void Clear() = 0;
   virtual int Find(const std::string& rsId) const = 0;
   virtual IWidget* Get(const int& riIndex) = 0;
 

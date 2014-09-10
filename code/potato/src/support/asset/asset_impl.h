@@ -25,15 +25,17 @@ private:
 public:
   virtual void LoadFile(const std::string& rsFileName, std::string& rsFileContext);
   virtual void LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer);
-  virtual void PushImageInfo(const std::string& rsId, const int& riWidth, const int& riHeight, const int& riId);
-  virtual bool FindImageInfo(const std::string& rsId, int& riWidth, int& riHeight, int& riId) const;
+  virtual void PushImageInfo(const std::string& rsId, const int& riWidth, const int& riHeight, const unsigned int& riId);
+  virtual bool FindImageInfo(const std::string& rsId, int& riWidth, int& riHeight, unsigned int& riId) const;
+  virtual void VisitImageInfo(core::IAsset::IImageInfoVisitor* const& rpVisitor) const;
+  virtual void ClearImageInfo();
 
 private:
   struct ImageInfo
   {
     int width;
     int height;
-    int id;
+    unsigned int id;
 
     ImageInfo() : width(0), height(0), id(0) { ; }
   };
