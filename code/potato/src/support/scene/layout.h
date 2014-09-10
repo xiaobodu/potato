@@ -28,12 +28,12 @@ public:
   virtual void Resize(const int& riWidth, const int& riHeight);
 
 public:
-  class CBuilder : public TBuilder<CLayout* const>
+  class CBuilder : public TBuilder<ILayout* const>
   {
   public:
-    CBuilder() : TBuilder<CLayout* const>("layout") { ; }
+    CBuilder() : TBuilder<ILayout* const>("layout") { ; }
   public:
-    virtual bool Parser(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, CLayout* const & rpLayout) const;
+    virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, ILayout* const & rpLayout) const;
   };
   static CBuilder builder;
 };

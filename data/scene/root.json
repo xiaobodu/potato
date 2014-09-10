@@ -22,12 +22,13 @@
     },
     "widgets": [
       {
-        "file": "scene/main.json"
+        "type": "file",
+        "value": "scene/main.json"
       },
       {
         "type": "image",
-        "id": "icon",
         "value": {
+          "id": "icon",
             "src": {
               "l": 0.0,
               "t": 0.0,

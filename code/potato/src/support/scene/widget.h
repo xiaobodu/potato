@@ -11,37 +11,30 @@ class TWidget : public TBase
 {
 public:
   explicit TWidget(core::IScene* const& rpScene, IWidget* const& rpParent)
-    : TBase()
-    , m_pScene(rpScene)
-    , m_pParent(rpParent)
-  {
-    assert(NULL != rpScene);
-  }
-  virtual ~TWidget()
+    : TBase(rpScene, rpParent)
   {
     ;
   }
-
-public:
-  virtual core::IScene* const& Scene()
+  virtual ~TWidget()
   {
-    return m_pScene;
+    IWidget* widget_ptr = NULL;
+    VWidgetPtr::iterator it = m_vpWidget.begin();
+    VWidgetPtr::iterator it_end = m_vpWidget.end();
+    for (; it != it_end; ++it)
+    {
+      IWidget*& widget_ref = *it;
+      delete widget_ref;
+    }
+    m_vpWidget.clear();
   }
-  virtual const IWidget* const Parent() const
-  {
-    return m_pParent;
-  }
-
-private:
-  core::IScene* m_pScene;
-  IWidget* m_pParent;
 
 public:
   virtual void Add(IWidget* const& rpWidget)
   {
+    rpWidget->parent = this;
     m_vpWidget.push_back(rpWidget);
   }
-  virtual IWidget* Remove(const std::string& rsId)
+  virtual void Remove(const std::string& rsId, IDeal* const& rpDeal)
   {
     IWidget* widget_ptr = NULL;
     VWidgetPtr::iterator it = m_vpWidget.begin();
@@ -55,9 +48,9 @@ public:
       }
       widget_ptr = widget_ref;
       m_vpWidget.erase(it);
+      rpDeal->On(widget_ptr);
       break;
     }
-    return widget_ptr;
   }
   virtual int Find(const std::string& rsId) const
   {
@@ -98,8 +91,16 @@ public:
   }
 
 protected:
-  typedef std::vector<IWidget*> VWidgetPtr;
   VWidgetPtr m_vpWidget;
+};
+
+class CDealDelete : public IDeal
+{
+public:
+  virtual void On(IWidget*& rpWidget) const;
+
+public:
+  static CDealDelete instance;
 };
 
 }

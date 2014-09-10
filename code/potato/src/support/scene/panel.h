@@ -8,8 +8,8 @@ namespace scene {
 class IPanel : public IWidget
 {
 public:
-  IPanel()
-    : IWidget()
+  IPanel(core::IScene* const& rpScene, IWidget* const& rpParent)
+    : IWidget(rpScene, rpParent)
   {
     ;
   }
@@ -30,8 +30,8 @@ public:
 public:
   virtual void Resize(const int& riWidth, const int& riHeight);
   virtual bool Tick(const float& rfDelta);
-  virtual void Draw(render::ICanvas* const & rpCanvas);
-  virtual bool Handle(const display::IInput* const& rpInput);
+  virtual void Draw(const int& riLayer, render::ICanvas* const & rpCanvas);
+  virtual bool Handle(const int& riLayer, const display::IInput* const& rpInput);
 
 public:
   class CBuilder : public TBuilder<IPanel* const>
@@ -42,7 +42,7 @@ public:
       ;
     }
   public:
-    virtual bool Parser(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, IPanel* const& rpPanel) const;
+    virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, IPanel* const& rpPanel) const;
   };
   static CBuilder builder;
 };

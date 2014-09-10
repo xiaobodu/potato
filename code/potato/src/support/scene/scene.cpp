@@ -126,7 +126,7 @@ bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName)
   std::string file_context = utility::ReadFile(m_oConfig._sDataPath + "/" + rsFileName);
   rapidjson::Document jdoc;
   jdoc.Parse(file_context.c_str());
-  CPanel::builder.Parser(m_pAsset, jdoc, m_pPanel);
+  CPanel::builder.Do(m_pAsset, jdoc, m_pPanel);
 
   int width = 0;
   int height = 0;
@@ -167,13 +167,21 @@ bool CScene::Draw(render::ICanvas* const& rpCanvas)
 {
   rpCanvas->DrawGlyph(g_Glyph, 300, 300, &g_process);
 
-  m_pPanel->Draw(rpCanvas);
+  for (int i = C4G_LAYER_MIN; i < C4G_LAYER_MAX; ++i)
+  {
+    m_pPanel->Draw(i, rpCanvas);
+  }
   return true;
 }
 
 bool CScene::Handle(const display::IInput* const& rpInput)
 {
-  return m_pPanel->Handle(rpInput);
+  bool res = false;
+  for (int i = C4G_LAYER_MIN; i < C4G_LAYER_MAX; ++i)
+  {
+    res |= m_pPanel->Handle(i, rpInput);
+  }
+  return res;
 }
 
 }

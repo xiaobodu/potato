@@ -18,7 +18,7 @@ void CLayout::Resize(const int& riWidth, const int& riHeight)
   //TODO:
 }
 
-bool CLayout::CBuilder::Parser(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, CLayout* const & rpLayout) const
+bool CLayout::CBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, ILayout* const & rpLayout) const
 {
   //
   return true;

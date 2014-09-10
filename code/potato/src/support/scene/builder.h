@@ -42,7 +42,7 @@ public:
   }
 
 public:
-  virtual bool Parser(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, TGoods& rGoods) const = 0;
+  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, TGoods& rGoods) const = 0;
 };
 
 class CGlyphBuilder : public TBuilder<render::Glyph>
@@ -51,7 +51,7 @@ private:
   CGlyphBuilder();
 
 public:
-  virtual bool Parser(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, render::Glyph& rGlyph) const;
+  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, render::Glyph& rGlyph) const;
 
 public:
   static CGlyphBuilder instance;
@@ -63,7 +63,7 @@ private:
   CRectFBuilder();
 
 public:
-  virtual bool Parser(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, RectF& rRectF) const;
+  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, RectF& rRectF) const;
 
 public:
   static CRectFBuilder instance;
@@ -76,10 +76,22 @@ private:
   CWidgetBuilder();
 
 public:
-  virtual bool Parser(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const;
+  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const;
 
 public:
   static CWidgetBuilder instance;
+};
+
+class CFileBuilder : public TBuilder<rapidjson::Document>
+{
+private:
+  CFileBuilder();
+
+public:
+  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, rapidjson::Document& rpWidget) const;
+
+public:
+  static CFileBuilder instance;
 };
 
 class CBuilderManager

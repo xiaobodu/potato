@@ -2,6 +2,7 @@
 
 #include "file_png.h"
 #include "utility/log.h"
+#include "utility/file.h"
 
 #include <cassert>
 
@@ -19,6 +20,11 @@ CAsset::CAsset(const c4g::base::Config& roConfig)
 CAsset::~CAsset()
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
+}
+
+void CAsset::LoadFile(const std::string& rsFileName, std::string& rsFileContext)
+{
+  rsFileContext = utility::ReadFile(m_oConfig._sDataPath + "/" + rsFileName);
 }
 
 void CAsset::LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer)
