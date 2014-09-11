@@ -36,6 +36,7 @@ protected:
 private:
   Display* m_pDisplay;
   Window m_lWindow;
+  Atom m_lProtocolsDeleteWindow;
 
   EGLConfig m_pGLConfig;
   EGLDisplay m_pGLDisplay;

@@ -21,7 +21,11 @@ namespace display {
 namespace linux_gles {
 
 CDisplay::CDisplay(const base::Config& roConfig)
-  : m_pDisplay(NULL), m_lWindow(0), m_pGLConfig(NULL), m_pGLDisplay(EGL_NO_DISPLAY)
+  : m_pDisplay(NULL)
+  , m_lWindow(0)
+  , m_lProtocolsDeleteWindow(None)
+  , m_pGLConfig(NULL)
+  , m_pGLDisplay(EGL_NO_DISPLAY)
   , m_pGLContext(EGL_NO_CONTEXT)
   , m_pGLSurface(EGL_NO_SURFACE)
   , m_bIsRunning(true)
@@ -125,6 +129,13 @@ void CDisplay::Run(core::IScene* const& rpScene)
        glXSwapBuffers(m_pDisplay, m_lWindow);
        }
        break;*/
+
+      case ClientMessage:
+        if (event.xclient.data.l[0] == m_lProtocolsDeleteWindow)
+        {
+          m_bIsRunning = false;
+        }
+        break;
 
       case ConfigureNotify:
         if (event.xconfigure.width != m_iWidth || event.xconfigure.height != m_iHeight)
@@ -249,6 +260,9 @@ void CDisplay::CreateWindow()
   size_hints.min_width = m_iWidth;
   size_hints.min_height = m_iHeight;
   XSetStandardProperties(m_pDisplay, m_lWindow, m_sTitle.c_str(), None, None, 0, 0, &size_hints);
+
+  m_lProtocolsDeleteWindow = XInternAtom(m_pDisplay, "WM_DELETE_WINDOW", True);
+  XSetWMProtocols(m_pDisplay, m_lWindow, &m_lProtocolsDeleteWindow, 1);
 
   eglBindAPI(EGL_OPENGL_ES_API);
 

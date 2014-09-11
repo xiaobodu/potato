@@ -82,7 +82,7 @@ Potato& Potato::Initialize(const std::string& rsLibrPath, const std::string& rsD
 #else
     std::string file_context = utility::ReadFile((rsDataPath + "/" + rsConfigFile).c_str());
 #endif
-    C4G_LOG_INFO("0- %s %s %s %s", __PRETTY_FUNCTION__, rsLibrPath.c_str(), rsDataPath.c_str(), file_context.c_str());
+    //C4G_LOG_INFO("0- %s %s %s %s", __PRETTY_FUNCTION__, rsLibrPath.c_str(), rsDataPath.c_str(), file_context.c_str());
 
     /// parse the configure file
     /// and check the value's type
@@ -120,7 +120,6 @@ Potato& Potato::Initialize(const std::string& rsLibrPath, const std::string& rsD
     /// load the shared library
     CreateEngineFuncPtr func_create_func_ptr = gs_SharedLibraryManager.GetFunc<CreateEngineFuncPtr>(m_oConfigEngine.GetLibraryFile(), TOSTRING(CreateEngine));
     /// create the engine with configure
-    C4G_LOG_INFO("3- %s %s %d", __PRETTY_FUNCTION__, m_oConfigEngine.GetLibraryFile().c_str(), func_create_func_ptr);
     func_create_func_ptr(m_pEngine, m_oConfigEngine);
   }
 
