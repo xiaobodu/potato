@@ -18,14 +18,10 @@ class ILayout
 {
 public:
   ELayoutType type;
-  float width;
-  float height;
 
 public:
   ILayout()
     : type(ELayoutType_None)
-    , width(0.0f)
-    , height(0.0f)
   {
     ;
   }
@@ -35,7 +31,7 @@ public:
   }
 
 public:
-  virtual void Resize(IWidget* const& rpWidget, const float& rfWidth, const float& rfHeight) const = 0;
+  virtual void Resize(const RectF& roConfig, const RectF& roResized, IWidget* const& rpWidget) const = 0;
 };
 
 class CLayout : public ILayout
@@ -45,7 +41,7 @@ public:
   virtual ~CLayout();
 
 public:
-  virtual void Resize(IWidget* const& rpWidget, const float& rfWidth, const float& rfHeight) const;
+  virtual void Resize(const RectF& roConfig, const RectF& roResized, IWidget* const& rpWidget) const;
 
 public:
   class CBuilder : public TBuilder<ILayout* const>

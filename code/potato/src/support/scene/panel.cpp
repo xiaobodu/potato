@@ -25,14 +25,12 @@ CPanel::~CPanel()
 
 void CPanel::Resize(const float& rfWidth, const float& rfHeight)
 {
-  dst(rfWidth, rfHeight);
-
   VWidgetPtr::iterator it = m_vpWidget.begin();
   VWidgetPtr::iterator it_end = m_vpWidget.end();
   for (; it != it_end; ++it)
   {
     IWidget*& widget_ptr = *it;
-    layout.Resize(widget_ptr, dst.w, dst.h);
+    layout.Resize(dst_config, dst, widget_ptr);
   }
 }
 

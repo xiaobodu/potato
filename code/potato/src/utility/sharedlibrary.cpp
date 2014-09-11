@@ -12,7 +12,7 @@ CSharedLibraryHandler::CSharedLibraryHandler(const std::string& rsFileName)
     : m_pLib(NULL)
 {
   m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
-  utility::Log::Instance().Info("%s: %s res:%d", __PRETTY_FUNCTION__, rsFileName.c_str(), m_pLib);
+  //utility::Log::Instance().Info("%s: %s res:%d", __PRETTY_FUNCTION__, rsFileName.c_str(), m_pLib);
   assert(m_pLib != NULL);
 }
 
@@ -26,7 +26,7 @@ CSharedLibraryHandler::~CSharedLibraryHandler()
 void* CSharedLibraryHandler::GetFunc(const std::string& rsFuncName)
 {
   void* func_ptr = dlsym(m_pLib, rsFuncName.c_str());
-  utility::Log::Instance().Info("%s: %s res:%d", __PRETTY_FUNCTION__, rsFuncName.c_str(), m_pLib);
+  //utility::Log::Instance().Info("%s: %s res:%d", __PRETTY_FUNCTION__, rsFuncName.c_str(), m_pLib);
   assert(func_ptr != NULL);
   m_mapFuncName2FunPtr.insert(std::make_pair(rsFuncName, func_ptr));
   return func_ptr;

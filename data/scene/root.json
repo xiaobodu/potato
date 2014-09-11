@@ -14,15 +14,13 @@
     "dst": {
         "l": 0.0,
         "t": 0.0,
-        "r": 100.0,
-        "b": 100.0
+        "r": 480.0,
+        "b": 800.0
     },
     "layer": 0,
     "visible": true,
     "layout": {
-      "type": "scale",
-      "w": 480.0,
-      "h": 800.0
+      "type": "scale"
     },
     "widgets": [
       {

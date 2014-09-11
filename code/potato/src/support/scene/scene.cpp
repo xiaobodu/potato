@@ -154,10 +154,7 @@ bool CScene::Resize(const int& riWidth, const int& riHeight)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
-  /*m_pPanel->dst(riWidth, riHeight);
-  m_pPanel->layout.type = ELayoutType_Scale;
-  m_pPanel->layout.width = riWidth;
-  m_pPanel->layout.height = riHeight;*/
+  m_pPanel->dst(riWidth, riHeight);
   m_pPanel->Resize(riWidth, riHeight);
   return true;
 }

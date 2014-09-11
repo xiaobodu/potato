@@ -1,5 +1,8 @@
 #include "layout.h"
 
+#include "common.h"
+#include "math.h"
+
 namespace c4g {
 namespace scene {
 
@@ -16,7 +19,7 @@ CLayout::~CLayout()
   ;
 }
 
-void CLayout::Resize(IWidget* const& rpWidget, const float& rfWidth, const float& rfHeight) const
+void CLayout::Resize(const RectF& roConfig, const RectF& roResized, IWidget* const& rpWidget) const
 {
   if (NULL == rpWidget) return;
 
@@ -26,10 +29,10 @@ void CLayout::Resize(IWidget* const& rpWidget, const float& rfWidth, const float
     break;
 
   case ELayoutType_Scale:
-    rpWidget->dst.l = C4G_GET_MID_RATIO(0, width, 0, rfWidth, rpWidget->dst_config.l);
-    rpWidget->dst.r = C4G_GET_MID_RATIO(0, width, 0, rfWidth, rpWidget->dst_config.r);
-    rpWidget->dst.t = C4G_GET_MID_RATIO(0, height, 0, rfHeight, rpWidget->dst_config.t);
-    rpWidget->dst.b = C4G_GET_MID_RATIO(0, height, 0, rfHeight, rpWidget->dst_config.b);
+    rpWidget->dst.l = C4G_GET_MID_RATIO(roConfig.l, roConfig.r, roResized.l, roResized.r, rpWidget->dst_config.l);
+    rpWidget->dst.r = C4G_GET_MID_RATIO(roConfig.l, roConfig.r, roResized.l, roResized.r, rpWidget->dst_config.r);
+    rpWidget->dst.t = C4G_GET_MID_RATIO(roConfig.t, roConfig.b, roResized.t, roResized.b, rpWidget->dst_config.t);
+    rpWidget->dst.b = C4G_GET_MID_RATIO(roConfig.t, roConfig.b, roResized.t, roResized.b, rpWidget->dst_config.b);
     rpWidget->dst();
     break;
 
@@ -48,14 +51,8 @@ bool CLayout::CBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value&
 {
   const rapidjson::Value& jtype = roConfig["type"];
   if (!jtype.IsString()) return false;
-  const rapidjson::Value& jwidth = roConfig["w"];
-  if (!jwidth.IsDouble()) return false;
-  const rapidjson::Value& jheight = roConfig["h"];
-  if (!jheight.IsDouble()) return false;
 
   rpLayout->type = Convert(jtype.GetString());
-  rpLayout->width = static_cast<float>(jwidth.GetDouble());
-  rpLayout->height = static_cast<float>(jheight.GetDouble());
   return true;
 }
 
