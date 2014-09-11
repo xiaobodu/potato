@@ -3,6 +3,8 @@
 #define C4G_MATH_MAX(a, b)          ((a) > (b) ? (a) : (b))
 #define C4G_MATH_MIN(a, b)          ((a) < (b) ? (a) : (b))
 
+#define C4G_GET_MID_RATIO(a1, b1, a2, b2, x1) ((x1) * ((b2) - (a2)) / ((b1) - (a1)) + (a2))
+
 namespace c4g {
 namespace scene {
 

@@ -16,8 +16,6 @@ CLayout::~CLayout()
   ;
 }
 
-#define C4G_GET_MID_RATIO(a1, b1, a2, b2, x1) ((x1) * ((b2) - (a2)) / ((b1) - (a1)) + (a2))
-
 void CLayout::Resize(IWidget* const& rpWidget, const float& rfWidth, const float& rfHeight) const
 {
   if (NULL == rpWidget) return;
