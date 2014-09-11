@@ -69,6 +69,7 @@ CScene::CScene(const base::Config& roConfig)
   func_create_func_ptr(m_pAsset, m_oConfigAsset);
 
   m_pPanel = new CPanel(this, NULL);
+  m_pPanel->layout.type = ELayoutType_Scale;
 }
 
 CScene::~CScene()
@@ -153,6 +154,10 @@ bool CScene::Resize(const int& riWidth, const int& riHeight)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
+  /*m_pPanel->dst(riWidth, riHeight);
+  m_pPanel->layout.type = ELayoutType_Scale;
+  m_pPanel->layout.width = riWidth;
+  m_pPanel->layout.height = riHeight;*/
   m_pPanel->Resize(riWidth, riHeight);
   return true;
 }

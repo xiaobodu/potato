@@ -121,6 +121,7 @@ bool CWidgetBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& ro
 
   rpWidget->id = jid.GetString();
   CRectFBuilder::instance.Do(rpAsset, jrect, rpWidget->dst);
+  rpWidget->dst_config = rpWidget->dst;
   rpWidget->layer = jlayer.GetInt();
   rpWidget->visible = jvisible.GetBool();
   return true;

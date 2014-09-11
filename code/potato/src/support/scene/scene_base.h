@@ -31,7 +31,7 @@ public:
   }
 
 public:
-  virtual void Resize(const int& riWidth, const int& riHeight) = 0;
+  virtual void Resize(const float& rfWidth, const float& rfHeight) = 0;
 };
 
 class ITickable
@@ -80,6 +80,7 @@ public:
   bool visible;
   bool always_tick;
   RectF dst;
+  RectF dst_config;
   core::IScene* const scene;
   IWidget* parent;
 
@@ -90,6 +91,7 @@ public:
     , visible(false)
     , always_tick(false)
     , dst(0.0f)
+    , dst_config(0.0f)
     , scene(rpScene)
     , parent(rpParent)
   {

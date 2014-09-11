@@ -43,6 +43,12 @@ public:
     h = b - t;
     return (*this);
   }
+  Rect& operator()(const TType& rtWidth, const TType& rtHeight)
+  {
+    r = l + rtWidth;
+    b = t + rtHeight;
+    return (*this)();
+  }
   // assign
   Rect& operator=(const TType& rtValue)
   {

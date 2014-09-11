@@ -27,6 +27,7 @@ set(SRC_FILE_LIST
   ${SRC_PATH_scene}/panel.cpp
   ${SRC_PATH_scene}/image.h
   ${SRC_PATH_scene}/image.cpp
+  ${SRC_PATH_scene}/effect.cpp
   ${SRC_PATH_potato}/utility/file.h
   ${SRC_PATH_potato}/utility/log.h
   ${SRC_PATH_potato}/utility/sharedlibrary.h

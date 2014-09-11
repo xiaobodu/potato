@@ -54,19 +54,20 @@ public:
   virtual void Free(float* const& rpfData) = 0;
 };
 
-class IProcess
+class IEffect
 {
 public:
-  virtual ~IProcess() { ; }
+  virtual ~IEffect() { ; }
 
 public:
   virtual bool IsCustom() const { return false; }
+  virtual void Begin() = 0;
   virtual void Begin(const Glyph& rGlyph) = 0;
   virtual bool Do(ITransform* const& rpTransform) = 0;
   virtual void End() = 0;
 };
 
-inline bool IsProcessCustom(IProcess* const& rpProcess)
+inline bool IsEffectCustom(IEffect* const& rpProcess)
 {
   return ((NULL == rpProcess) ? false : rpProcess->IsCustom());
 }
@@ -77,8 +78,10 @@ public:
   virtual ~ICanvas() { ; }
 
 public:
-  virtual void DrawGlyph(const Glyph& rGlyph, IProcess* const& rpProcess = NULL) = 0;
-  virtual void DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess = NULL) = 0;
+  virtual void EffectBegin(IEffect* const& rpEffect) = 0;
+  virtual void EffectEnd(IEffect* const& rpEffect) = 0;
+  virtual void DrawGlyph(const Glyph& rGlyph, IEffect* const& rpEffect = NULL) = 0;
+  virtual void DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IEffect* const& rpEffect = NULL) = 0;
 };
 
 }

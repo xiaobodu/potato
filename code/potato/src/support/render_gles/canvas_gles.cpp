@@ -12,13 +12,13 @@ namespace c4g{
 namespace render {
 namespace gles {
 
-class CGlyphProcessScope : public base::TScope<IProcess>
+class CGlyphEffectScope : public base::TScope<IEffect>
 {
 public:
-  explicit CGlyphProcessScope(const Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess)
-    : base::TScope<IProcess>(rpProcess)
+  explicit CGlyphEffectScope(const Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IEffect* const& rpEffect)
+    : base::TScope<IEffect>(rpEffect)
   {
-    if (!IsProcessCustom(m_pT))
+    if (!IsEffectCustom(m_pT))
     {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -30,11 +30,11 @@ public:
     if (NULL != m_pT) m_pT->Begin(rGlyph);
   }
 
-  ~CGlyphProcessScope()
+  ~CGlyphEffectScope()
   {
     if (NULL != m_pT) m_pT->End();
 
-    if (!IsProcessCustom(m_pT))
+    if (!IsEffectCustom(m_pT))
     {
       glDisable(GL_BLEND);
       glDisable(GL_TEXTURE_2D);
@@ -62,14 +62,26 @@ CCanvas::~CCanvas()
   ;
 }
 
-void CCanvas::DrawGlyph(const Glyph& rGlyph, IProcess* const& rpProcess)
+void CCanvas::EffectBegin(IEffect* const& rpEffect)
 {
-  DrawGlyph(rGlyph, rGlyph.r - rGlyph.l, rGlyph.b - rGlyph.t, rpProcess);
+  glPushMatrix();
+
+  rpEffect->Do(&CTransform::Instance(m_aVertex));
 }
 
-void CCanvas::DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess)
+void CCanvas::EffectEnd(IEffect* const& rpEffect)
 {
-  CGlyphProcessScope process_scope(rGlyph, rfWidth, rfHeight, rpProcess);
+  glPopMatrix();
+}
+
+void CCanvas::DrawGlyph(const Glyph& rGlyph, IEffect* const& rpEffect)
+{
+  DrawGlyph(rGlyph, rGlyph.r - rGlyph.l, rGlyph.b - rGlyph.t, rpEffect);
+}
+
+void CCanvas::DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IEffect* const& rpEffect)
+{
+  CGlyphEffectScope effect_scope(rGlyph, rfWidth, rfHeight, rpEffect);
 
   glPushMatrix();
 
@@ -87,7 +99,7 @@ void CCanvas::DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& 
   m_aTexCoord[6] = rGlyph.r;
   m_aTexCoord[7] = rGlyph.b;
 
-  if (NULL != rpProcess) rpProcess->Do(&CTransform::Instance(m_aVertex));
+  if (NULL != rpEffect) rpEffect->Do(&CTransform::Instance(m_aVertex));
 
   //glActiveTexture(GL_TEXTURE0);
   glClientActiveTexture(GL_TEXTURE0);

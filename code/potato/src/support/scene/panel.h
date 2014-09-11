@@ -1,12 +1,18 @@
 #pragma once
 
 #include "widget.h"
+#include "layout.h"
 
 namespace c4g {
 namespace scene {
 
+class CEffect;
+
 class IPanel : public IWidget
 {
+public:
+  CLayout layout;
+
 public:
   IPanel(core::IScene* const& rpScene, IWidget* const& rpParent)
     : IWidget(rpScene, rpParent)
@@ -28,10 +34,13 @@ public:
   virtual ~CPanel();
 
 public:
-  virtual void Resize(const int& riWidth, const int& riHeight);
+  virtual void Resize(const float& rfWidth, const float& rfHeight);
   virtual bool Tick(const float& rfDelta);
   virtual void Draw(const int& riLayer, render::ICanvas* const & rpCanvas);
   virtual bool Handle(const int& riLayer, const display::IInput* const& rpInput);
+
+private:
+  CEffect* m_pEffect;
 
 public:
   class CBuilder : public TBuilder<IPanel* const>

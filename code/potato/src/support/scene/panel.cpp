@@ -2,6 +2,8 @@
 
 #include "scene.h"
 #include "image.h"
+#include "layout.h"
+#include "effect.h"
 
 namespace c4g {
 namespace scene {
@@ -9,29 +11,35 @@ namespace scene {
 CPanel::CBuilder CPanel::builder;
 
 CPanel::CPanel(core::IScene* const & rpScene, IWidget* const & rpParent)
-    : TWidget<IPanel>(rpScene, rpParent)
+  : TWidget<IPanel>(rpScene, rpParent)
+  , m_pEffect(NULL)
 {
-  ;
+  m_pEffect = new CEffect();
 }
 
 CPanel::~CPanel()
 {
-  ;
+  delete m_pEffect;
+  m_pEffect = NULL;
 }
 
-void CPanel::Resize(const int& riWidth, const int& riHeight)
+void CPanel::Resize(const float& rfWidth, const float& rfHeight)
 {
+  dst(rfWidth, rfHeight);
+
   VWidgetPtr::iterator it = m_vpWidget.begin();
   VWidgetPtr::iterator it_end = m_vpWidget.end();
   for (; it != it_end; ++it)
   {
     IWidget*& widget_ptr = *it;
-    widget_ptr->Resize(riWidth, riHeight);
+    layout.Resize(widget_ptr, dst.w, dst.h);
   }
 }
 
 bool CPanel::Tick(const float& rfDelta)
 {
+  m_pEffect->Tick(rfDelta);
+
   bool res = false;
   VWidgetPtr::iterator it = m_vpWidget.begin();
   VWidgetPtr::iterator it_end = m_vpWidget.end();
@@ -40,13 +48,14 @@ bool CPanel::Tick(const float& rfDelta)
     IWidget*& widget_ptr = *it;
     if (widget_ptr->always_tick || widget_ptr->visible) res |= widget_ptr->Tick(rfDelta);
   }
-  //TEST:
   return res;
-  //return true;
 }
 
 void CPanel::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
 {
+  m_pEffect->SetPos(dst.l, dst.t);
+  rpCanvas->EffectBegin(m_pEffect);
+
   VWidgetPtr::iterator it = m_vpWidget.begin();
   VWidgetPtr::iterator it_end = m_vpWidget.end();
   for (; it != it_end; ++it)
@@ -54,6 +63,8 @@ void CPanel::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
     IWidget*& widget_ptr = *it;
     if (widget_ptr->visible && riLayer == widget_ptr->layer) widget_ptr->Draw(riLayer, rpCanvas);
   }
+
+  rpCanvas->EffectEnd(m_pEffect);
 }
 
 bool CPanel::Handle(const int& riLayer, const display::IInput* const & rpInput)
@@ -85,8 +96,17 @@ bool CPanel::CBuilder::Do(core::IAsset* const & rpAsset, const rapidjson::Value&
     return false;
   }
 
-  const rapidjson::Value& jassets = jvalue["assets"];
-  if (!CAssetsBuilder::instance.Do(rpAsset, jassets, NULL))
+  if (jvalue.HasMember("assets"))
+  {
+    const rapidjson::Value& jassets = jvalue["assets"];
+    if (!CAssetsBuilder::instance.Do(rpAsset, jassets, NULL))
+    {
+      return false;
+    }
+  }
+
+  const rapidjson::Value& jlayout = jvalue["layout"];
+  if (!CLayout::builder.Do(rpAsset, jlayout, &rpPanel->layout))
   {
     return false;
   }
@@ -103,7 +123,6 @@ bool CPanel::CBuilder::Do(core::IAsset* const & rpAsset, const rapidjson::Value&
     CAllWidgetBuilder::instance.Do(rpAsset, jwidget, rpPanel);
   }
 
-  //TODO:
   return true;
 }
 
