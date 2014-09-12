@@ -1,0 +1,34 @@
+diff --git a/tccpp.c b/tccpp.c
+index 2d6e852..4e2ba7e 100644
+--- a/tccpp.c
++++ b/tccpp.c
+@@ -1954,7 +1954,7 @@ static void parse_number(const char *p)
+                 tokc.f = strtof(token_buf, NULL);
+             } else if (t == 'L') {
+                 ch = *p++;
+-#ifdef TCC_TARGET_PE
++#if defined(TCC_TARGET_PE) || defined(TCC_ANDROID)
+                 tok = TOK_CDOUBLE;
+                 tokc.d = strtod(token_buf, NULL);
+ #else
+diff --git a/tccrun.c b/tccrun.c
+index 50178a8..af99be3 100644
+--- a/tccrun.c
++++ b/tccrun.c
+@@ -20,6 +20,16 @@
+ 
+ #include "tcc.h"
+ 
++#ifdef TCC_ANDROID
++typedef struct sigcontext mcontext_t;
++typedef struct ucontext {
++    uint32_t uc_flags;
++    struct ucontext* uc_link;
++    stack_t uc_stack;
++    mcontext_t uc_mcontext;
++} ucontext_t;
++#endif //TCC_ANDROID
++
+ /* only native compiler supports -run */
+ #ifdef TCC_IS_NATIVE
+ 

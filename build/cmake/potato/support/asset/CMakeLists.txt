@@ -7,6 +7,7 @@ set(SRC_PATH_asset ${SRC_PATH_support}/asset)
 set(INC_PATH_LIST
   ${SRC_PATH_potato}
   ${SRC_PATH_potato}/engine
+  ${CODE_PATH}/external/libpng
   ${SRC_PATH_asset}
   )
 

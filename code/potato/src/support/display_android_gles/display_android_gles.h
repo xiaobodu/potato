@@ -36,6 +36,7 @@ public:
   void Pause();
   void Stop();
   void Resize(const int& riWidth, const int& riHeight);
+  void Input();
 
 private:
   EGLDisplay    m_pGLDisplay;

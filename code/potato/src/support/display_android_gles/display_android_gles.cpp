@@ -186,12 +186,17 @@ static void handle_cmd(struct android_app* app, int32_t cmd)
 
 static int32_t handle_input(struct android_app* app, AInputEvent* event)
 {
+  display::android_gles::CDisplay* display_ptr = (display::android_gles::CDisplay*) app->userData;
+  assert(NULL != display_ptr);
+
   int32_t type = AInputEvent_getType(event);
   utility::Log::Instance().Info("engine_handle_input %d", type);
   if (AINPUT_EVENT_TYPE_KEY == type)
   {
     int32_t action = AKeyEvent_getAction(event);
     utility::Log::Instance().Info("handle_input action:%d", action);
+
+    display_ptr->Input();
   }
   else if (AINPUT_EVENT_TYPE_MOTION == type)
   {
@@ -501,6 +506,11 @@ void CDisplay::Resize(const int& riWidth, const int& riHeight)
   utility::Log::Instance().Info("%s (%d, %d)", __PRETTY_FUNCTION__, riWidth, riHeight);
   if (NULL != m_pRender) m_pRender->Resize(riWidth, riHeight);
   if (NULL != m_pScene) m_pScene->Resize(riWidth, riHeight);
+}
+
+void CDisplay::Input()
+{
+  m_pScene->Handle(NULL);
 }
 
 }

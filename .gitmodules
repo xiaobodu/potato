@@ -9,4 +9,4 @@
 	url = http://git.savannah.gnu.org/r/freetype/freetype2.git
 [submodule "code/external/tinycc"]
 	path = code/external/tinycc
-	url = http://git.savannah.gnu.org/r/tinycc.git
+	url = https://github.com/code4game/tinycc

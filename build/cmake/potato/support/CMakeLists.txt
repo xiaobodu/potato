@@ -11,3 +11,5 @@ add_subdirectory(render_gles)
 add_subdirectory(asset)
 
 add_subdirectory(scene)
+
+add_subdirectory(script_tcc)
