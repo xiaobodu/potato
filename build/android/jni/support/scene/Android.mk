@@ -25,6 +25,8 @@ LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/widget.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/panel.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/image.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/effect.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/engine/input.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/engine/sensor.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/sharedlibrary.cpp
 
 LOCAL_LDLIBS    		:= -ldl -llog

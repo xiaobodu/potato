@@ -147,10 +147,52 @@ void CDisplay::Run(core::IScene* const& rpScene)
         }
         break;
 
+      case ButtonPress:
+        m_oInput.type = EInputType_Touch;
+        m_oInput.event = EInputEvent_Down;
+        (*m_oInput[C4G_INPUT_TOUCH_X]) = static_cast<float>(event.xbutton.x);
+        (*m_oInput[C4G_INPUT_TOUCH_Y]) = static_cast<float>(event.xbutton.y);
+        (*m_oInput[C4G_INPUT_TOUCH_L]) = static_cast<float>(event.xbutton.x_root);
+        (*m_oInput[C4G_INPUT_TOUCH_T]) = static_cast<float>(event.xbutton.y_root);
+        rpScene->Handle(&m_oInput);
+        break;
+
       case ButtonRelease:
+        m_oInput.type = EInputType_Touch;
+        m_oInput.event = EInputEvent_Up;
+        (*m_oInput[C4G_INPUT_TOUCH_X]) = static_cast<float>(event.xbutton.x);
+        (*m_oInput[C4G_INPUT_TOUCH_Y]) = static_cast<float>(event.xbutton.y);
+        (*m_oInput[C4G_INPUT_TOUCH_L]) = static_cast<float>(event.xbutton.x_root);
+        (*m_oInput[C4G_INPUT_TOUCH_T]) = static_cast<float>(event.xbutton.y_root);
+        rpScene->Handle(&m_oInput);
+        break;
+
+      case MotionNotify:
+        m_oInput.type = EInputType_Touch;
+        m_oInput.event = EInputEvent_Move;
+        (*m_oInput[C4G_INPUT_TOUCH_X]) = static_cast<float>(event.xbutton.x);
+        (*m_oInput[C4G_INPUT_TOUCH_Y]) = static_cast<float>(event.xbutton.y);
+        (*m_oInput[C4G_INPUT_TOUCH_L]) = static_cast<float>(event.xbutton.x_root);
+        (*m_oInput[C4G_INPUT_TOUCH_T]) = static_cast<float>(event.xbutton.y_root);
+        rpScene->Handle(&m_oInput);
+        break;
+
+      case KeyPress:
+        m_oInput.type = EInputType_Key;
+        m_oInput.event = EInputEvent_Down;
+        (*m_oInput[C4G_INPUT_KEY_TYPE]) = event.xkey.type;
+        (*m_oInput[C4G_INPUT_KEY_KEYCODE]) = static_cast<int>(event.xkey.keycode);
+        (*m_oInput[C4G_INPUT_KEY_SERIAL]) = static_cast<int>(event.xkey.serial);
+        rpScene->Handle(&m_oInput);
         break;
 
       case KeyRelease:
+        m_oInput.type = EInputType_Key;
+        m_oInput.event = EInputEvent_Up;
+        (*m_oInput[C4G_INPUT_KEY_TYPE]) = event.xkey.type;
+        (*m_oInput[C4G_INPUT_KEY_KEYCODE]) = static_cast<int>(event.xkey.keycode);
+        (*m_oInput[C4G_INPUT_KEY_SERIAL]) = static_cast<int>(event.xkey.serial);
+        rpScene->Handle(&m_oInput);
         if (XK_Escape == XLookupKeysym(&event.xkey, 0))
         {
           m_bIsRunning = false;
@@ -247,7 +289,12 @@ void CDisplay::CreateWindow()
   attr.background_pixel = 0;
   attr.border_pixel = 0;
   attr.colormap = XCreateColormap(m_pDisplay, root_window, visual_info_ptr->visual, AllocNone);
-  attr.event_mask = StructureNotifyMask | ExposureMask | KeyReleaseMask | ButtonReleaseMask;
+  attr.event_mask = StructureNotifyMask | ExposureMask
+      | EnterWindowMask | LeaveWindowMask
+      | KeyPressMask | KeyReleaseMask
+      | ButtonPressMask | ButtonReleaseMask
+      | Button1MotionMask
+      | ButtonMotionMask | PointerMotionMask;
   unsigned long mask = CWBackPixel | CWBorderPixel | CWColormap | CWEventMask;
   m_lWindow = XCreateWindow(m_pDisplay, root_window, window_pos_x, window_pos_y, m_iWidth, m_iHeight, 0, visual_info_ptr->depth, InputOutput,
       visual_info_ptr->visual, mask, &attr);

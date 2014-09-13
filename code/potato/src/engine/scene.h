@@ -9,6 +9,7 @@ class IRender;
 }
 namespace display {
 class IInput;
+class ISensor;
 }
 
 namespace render {
@@ -33,6 +34,7 @@ public:
   virtual bool Tick(const float& rfDelta) = 0;
   virtual bool Draw(render::ICanvas* const& rpCanvas) = 0;
   virtual bool Handle(const display::IInput* const& rpInput) = 0;
+  virtual bool Refresh(const display::ISensor* const& rpSensor) = 0;
 };
 
 }

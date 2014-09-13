@@ -12,6 +12,10 @@ set(INC_PATH_LIST
   )
 
 set(SRC_FILE_LIST
+  ${SRC_PATH_potato}/engine/input.h
+  ${SRC_PATH_potato}/engine/input.cpp
+  ${SRC_PATH_potato}/engine/sensor.h
+  ${SRC_PATH_potato}/engine/sensor.cpp
   ${SRC_PATH_display_gles}/display_linux_gles.h
   ${SRC_PATH_display_gles}/display_linux_gles.cpp
   )

@@ -28,6 +28,10 @@ set(SRC_FILE_LIST
   ${SRC_PATH_scene}/image.h
   ${SRC_PATH_scene}/image.cpp
   ${SRC_PATH_scene}/effect.cpp
+  ${SRC_PATH_potato}/engine/input.h
+  ${SRC_PATH_potato}/engine/input.cpp
+  ${SRC_PATH_potato}/engine/sensor.h
+  ${SRC_PATH_potato}/engine/sensor.cpp
   ${SRC_PATH_potato}/utility/file.h
   ${SRC_PATH_potato}/utility/log.h
   ${SRC_PATH_potato}/utility/sharedlibrary.h

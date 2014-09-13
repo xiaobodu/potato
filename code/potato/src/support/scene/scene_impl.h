@@ -29,6 +29,7 @@ public:
   virtual bool Tick(const float& rfDelta);
   virtual bool Draw(render::ICanvas* const& rpCanvas);
   virtual bool Handle(const display::IInput* const& rpInput);
+  virtual bool Refresh(const display::ISensor* const& rpSensor);
 
 public:
   virtual void BindScript(script::AHandler* const& rpHandler);

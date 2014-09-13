@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.h"
+#include "base.h"
 
 namespace c4g {
 namespace core {
@@ -26,13 +27,45 @@ public:
 
 namespace display {
 
-class IInput
+enum EInputType
 {
+  EInputType_None,
+  EInputType_Key,
+  EInputType_Touch,
+};
+
+enum EInputEvent
+{
+  EInputEvent_None,
+  EInputEvent_Down,
+  EInputEvent_Up,
+  EInputEvent_Move,
+};
+
+class IInput : public base::IValues<unsigned char>
+{
+public:
+  EInputType type;
+  EInputEvent event;
+
 public:
   virtual ~IInput()
   {
     ;
   }
+
+public:
+};
+
+class ISensor : public base::IValues<unsigned char>
+{
+public:
+  virtual ~ISensor()
+  {
+    ;
+  }
+
+public:
 };
 
 } // end of namespace display

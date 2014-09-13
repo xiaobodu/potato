@@ -7,6 +7,7 @@
 #include "render.h"
 #include "asset.h"
 #include "script.h"
+#include "input.h"
 
 #include "utility/file.h"
 #include "utility/log.h"
@@ -218,7 +219,17 @@ bool CScene::Handle(const display::IInput* const& rpInput)
   {
     res |= m_pPanel->Handle(i, rpInput);
   }
+  /*float x = 0;
+  float y = 0;
+  (*rpInput)(C4G_INPUT_TOUCH_X, x);
+  (*rpInput)(C4G_INPUT_TOUCH_Y, y);*/
   return res;
+}
+
+bool CScene::Refresh(const display::ISensor* const& rpSensor)
+{
+  //
+  return true;
 }
 
 void CScene::BindScript(script::AHandler* const& rpHandler)

@@ -13,11 +13,13 @@ LOCAL_CFLAGS 			:= -Wall -fPIC -DBUILD_ANDROID -DBUILD_DEBUG
 
 LOCAL_CPP_FEATURES 		:= rtti exceptions
 
-LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src
+LOCAL_C_INCLUDES 		:= $(REAL_CODE_PATH)/potato/src
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/engine
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/external/rapidjson/include
 
-LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/display_android_gles/display_android_gles.cpp
+LOCAL_SRC_FILES 		:= $(CODE_PATH)/potato/src/support/display_android_gles/display_android_gles.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/engine/input.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/engine/sensor.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/sharedlibrary.cpp
 
 LOCAL_LDLIBS    		:= -ldl -llog -landroid -lEGL

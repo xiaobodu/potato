@@ -4,7 +4,9 @@ project(support)
 
 set(SRC_PATH_support ${SRC_PATH_potato}/support)
 
+if (OS_IS_LINUX)
 add_subdirectory(display_linux_gles)
+endif()
 
 add_subdirectory(render_gles)
 

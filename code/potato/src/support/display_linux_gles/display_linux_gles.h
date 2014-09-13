@@ -3,6 +3,7 @@
 #include "common.h"
 
 #include "display.h"
+#include "input.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -52,6 +53,8 @@ private:
   base::Config          m_oConfigRender;
   core::IRender*        m_pRender;
   utility::CSharedLibraryManager* m_pLibraryManager;
+
+  display::CInput       m_oInput;
 };
 
 }

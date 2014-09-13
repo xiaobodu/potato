@@ -17,6 +17,6 @@
     },
     "layer": 0,
     "visible": true,
-    "script": "void draw() { log_info(\"hello draw in script\"); }"
+    "script": "void draw() { /*log_info(\"hello draw in script\");*/ }"
   }
 }
