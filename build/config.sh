@@ -1,3 +1,11 @@
+cd ../code/external/tinycc
+./configure
+cd ../../../build
+
+cd ../code/external/libpng
+cmake ./
+cd ../../../build
+
 mkdir -p ../out
 mkdir -p ../out/bin
 mkdir -p ../out/lib

@@ -3,6 +3,7 @@
 #include <png.h>
 #include <zlib.h>
 #include <cassert>
+#include <memory.h>
 
 namespace c4g {
 namespace asset {
@@ -52,7 +53,7 @@ void read_png(const char *file_name, unsigned int& riWidth, unsigned int& riHeig
         png_set_expand(png_ptr);
         png_set_gray_to_rgb(png_ptr);
 
-        png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, png_voidp_NULL);
+        png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
 
         png_bytep* row_pointers = png_get_rows(png_ptr, info_ptr);
         riWidth = png_get_image_width(png_ptr, info_ptr);
@@ -71,7 +72,7 @@ void read_png(const char *file_name, unsigned int& riWidth, unsigned int& riHeig
       }
     }
 
-    png_destroy_read_struct(&png_ptr, &info_ptr, png_infopp_NULL);
+    png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
   }
   fclose(fp);
 }
