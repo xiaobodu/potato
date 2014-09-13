@@ -1,9 +1,6 @@
 [submodule "code/external/rapidjson"]
 	path = code/external/rapidjson
 	url = https://github.com/miloyip/rapidjson.git
-[submodule "code/external/libpng"]
-	path = code/external/libpng
-	url = http://git.code.sf.net/p/libpng/code
 [submodule "code/external/freetype2"]
 	path = code/external/freetype2
 	url = http://git.savannah.gnu.org/r/freetype/freetype2.git
