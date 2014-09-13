@@ -5,6 +5,7 @@
 #include <map>
 
 #include "render.h"
+#include "script.h"
 #include "math.h"
 
 namespace c4g {
@@ -123,6 +124,18 @@ public:
 
 public:
   static CAllWidgetBuilder instance;
+};
+
+class CScriptBuilder : public TBuilder<script::ISubstance* const>
+{
+private:
+  CScriptBuilder();
+
+public:
+  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, script::ISubstance* const& rpSubstance) const;
+
+public:
+  static CScriptBuilder instance;
 };
 
 class CBuilderManager

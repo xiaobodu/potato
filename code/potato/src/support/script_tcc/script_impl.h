@@ -32,6 +32,7 @@ public:
 
 public:
   virtual void Compile(const std::string& rsCode);
+  virtual bool SetSymbol(const std::string& rsFuncName, void* pFunc);
   virtual void* const GetSymbol(const std::string& rsFuncName);
 
 private:

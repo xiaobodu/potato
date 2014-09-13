@@ -40,6 +40,7 @@ public:
 
 public:
   virtual void Compile(const std::string& rsCode) = 0;
+  virtual bool SetSymbol(const std::string& rsFuncName, void* pFunc) = 0;
   virtual void* const GetSymbol(const std::string& rsFuncName) = 0;
 };
 

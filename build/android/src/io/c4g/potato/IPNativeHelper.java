@@ -5,5 +5,6 @@ public interface IPNativeHelper {
 	String GetAppName();
 	String GetLibraryPath();
 	String GetExternalPath();
+	void HasReady();
 
 }

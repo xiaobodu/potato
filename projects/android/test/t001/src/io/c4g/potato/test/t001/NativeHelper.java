@@ -10,4 +10,8 @@ public class NativeHelper extends PNativeHelper {
 		return "t001";
 	}
 
+	public void HasReady() {
+		//
+	}
+
 }

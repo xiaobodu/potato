@@ -24,21 +24,6 @@ void error_callback(void *opaque, const char *msg)
   c4g::utility::Log::Instance().Error(msg);
 }
 
-/*if (NULL == s)
-{
-  TCCState *s = tcc_new();
-  tcc_set_output_type(s, TCC_OUTPUT_MEMORY);
-  tcc_set_error_func(s, 0, error_callback);
-
-  if (tcc_compile_string(s, "int main(int argc, char* argv[]) { int a = 10; int b = 20; int c = a + b; log_info(\"hello world\"); return 0; }") == -1)
-      return 1;
-  tcc_add_symbol(s, "printf", (void const*)android_printf);
-  tcc_add_symbol(s, "add", (void const*)add);
-  //tcc_relocate(s, TCC_RELOCATE_AUTO);
-  tcc_run(s, 0, NULL);
-  tcc_delete(s);
-}*/
-
 CScript::CScript(const base::Config& roConfig)
 {
   ;
@@ -102,11 +87,20 @@ CSubstance::~CSubstance()
 
 void CSubstance::Compile(const std::string& rsCode)
 {
+  if (m_bCompiled) return;
+
   m_bCompiled = (-1 != tcc_compile_string(m_pTCC, rsCode.c_str()));
   if (m_bCompiled)
   {
-    m_bCompiled = (tcc_relocate(m_pTCC, TCC_RELOCATE_AUTO) >= 0);
+    m_bCompiled = (0 <= tcc_relocate(m_pTCC, TCC_RELOCATE_AUTO));
   }
+}
+
+bool CSubstance::SetSymbol(const std::string& rsFuncName, void* pFunc)
+{
+  if (!m_bCompiled) return false;
+
+  return (0 <= tcc_add_symbol(m_pTCC, rsFuncName.c_str(), pFunc));
 }
 
 void* const CSubstance::GetSymbol(const std::string& rsFuncName)

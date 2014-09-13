@@ -37,17 +37,18 @@ public:
   virtual bool Handle(const int& riLayer, const display::IInput* const& rpInput);
 
 public:
-  class CBuilder : public TBuilder<IImage* const>
+  class CBuilder : public TBuilder<CImage* const>
   {
   public:
-    explicit CBuilder() : TBuilder<IImage* const>("image")
+    explicit CBuilder() : TBuilder<CImage* const>("image")
     {
       ;
     }
   public:
-    virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, IImage* const& rpImage) const;
+    virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, CImage* const& rpImage) const;
   };
   static CBuilder builder;
+  friend class CBuilder;
 
 private:
   CEffect* m_pEffect;

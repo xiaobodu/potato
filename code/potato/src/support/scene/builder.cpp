@@ -16,6 +16,7 @@ CWidgetBuilder CWidgetBuilder::instance;
 CFileBuilder CFileBuilder::instance;
 CAssetsBuilder CAssetsBuilder::instance;
 CAllWidgetBuilder CAllWidgetBuilder::instance;
+CScriptBuilder CScriptBuilder::instance;
 
 
 
@@ -252,6 +253,22 @@ bool CAllWidgetBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value&
   return false;
 }
 
+
+
+CScriptBuilder::CScriptBuilder()
+  : TBuilder<script::ISubstance* const>("script")
+{
+  ;
+}
+
+bool CScriptBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, script::ISubstance* const& rpSubstance) const
+{
+  if (NULL == rpSubstance) return false;
+
+  assert(roConfig.IsString());
+  rpSubstance->Compile(roConfig.GetString());
+  return true;
+}
 
 
 CBuilderManager::CBuilderManager()

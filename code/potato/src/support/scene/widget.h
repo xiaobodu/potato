@@ -99,6 +99,16 @@ public:
 
 protected:
   VWidgetPtr m_vpWidget;
+
+public:
+  template<typename TFuncPtr>
+  TFuncPtr CallScript(const std::string& rsFuncName, TFuncPtr pFuncDefault)
+  {
+    assert(NULL != pFuncDefault);
+    void* func_ptr = m_pSubstance->GetSymbol(rsFuncName);
+    if (NULL == func_ptr) return pFuncDefault;
+    return reinterpret_cast<TFuncPtr>(func_ptr);
+  }
 };
 
 class CDealDelete : public IDeal

@@ -62,6 +62,7 @@ public:
 public:
   virtual std::string GetLibraryPath();
   virtual std::string GetExternalPath();
+  virtual void HasReady();
 
 protected:
   jclass RetrieveClass(JNIEnv*& rpEnv, const std::string& rsNativeClassName, const std::string& rsHelperClassName);
@@ -160,6 +161,17 @@ std::string NativeHelper::GetExternalPath()
   return res_str;
 }
 
+void NativeHelper::HasReady()
+{
+  scope::ThreadMutex jni_env = scope::ThreadMutex(&m_Mutex, m_pActivity);
+  JNIEnv*& env = jni_env.GetEnv();
+
+  assert(m_bIsReady);
+  jmethodID method_id = env->GetMethodID(m_JNIClass, "HasReady", "()V");
+  assert(NULL != method_id);
+  env->CallVoidMethod(m_JNIObject, method_id);
+}
+
 jclass NativeHelper::RetrieveClass(JNIEnv*& rpEnv, const std::string& rsNativeClassName, const std::string& rsHelperClassName)
 {
   jclass activity_class = rpEnv->FindClass(rsNativeClassName.c_str());
@@ -186,6 +198,8 @@ void potato_main(android_app* pApp, const std::string& rsNativeClassName, const 
   std::string data_path = NativeHelper::Instance().GetExternalPath();
   std::string config = "{\"engine\":{\"library\":\"lib/libengine.so\"}}";
   c4g::Potato::Instance().Initialize(libr_path, data_path, config);
+
+  NativeHelper::Instance().HasReady();
 
   c4g::core::IEngine*& engine_ptr = c4g::Potato::Instance().GetEngine();
   C4G_LOG_INFO("engine: %d", engine_ptr);
