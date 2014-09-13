@@ -7,3 +7,6 @@
 [submodule "code/external/tinycc"]
 	path = code/external/tinycc
 	url = https://github.com/code4game/tinycc
+[submodule "code/external/libpng"]
+	path = code/external/libpng
+	url = http://git.code.sf.net/p/libpng/code
