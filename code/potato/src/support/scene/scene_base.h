@@ -1,10 +1,11 @@
 #pragma once
 
+#include "scene.h"
+#include "math.h"
+
 #include <string>
 #include <vector>
 #include <cassert>
-
-#include "math.h"
 
 #define C4G_LAYER_MAX           10
 #define C4G_LAYER_MIN           0
@@ -20,7 +21,19 @@ class IInput;
 namespace render {
 class ICanvas;
 }
+namespace script {
+class AHandler;
+}
 namespace scene {
+
+class ISceneWithScript : public core::IScene
+{
+public:
+  virtual ~ISceneWithScript() { ; }
+
+public:
+  virtual void BindScript(script::AHandler* const& rpHandler) = 0;
+};
 
 class IResizable
 {
@@ -81,11 +94,11 @@ public:
   bool always_tick;
   RectF dst;
   RectF dst_config;
-  core::IScene* const scene;
+  ISceneWithScript* const scene;
   IWidget* parent;
 
 public:
-  explicit IWidget(core::IScene* const& rpScene, IWidget* const& rpParent)
+  explicit IWidget(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
     : id("unknown")
     , layer(0)
     , visible(false)

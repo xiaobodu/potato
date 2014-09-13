@@ -10,7 +10,7 @@ class CEffect;
 class IImage : public IWidget
 {
 public:
-  explicit IImage(core::IScene* const& rpScene, IWidget* const& rpParent)
+  explicit IImage(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
     : IWidget(rpScene, rpParent)
   {
     ;
@@ -27,7 +27,7 @@ public:
 class CImage : public TWidget<IImage>
 {
 public:
-  explicit CImage(core::IScene* const& rpScene, IWidget* const& rpParent);
+  explicit CImage(ISceneWithScript* const& rpScene, IWidget* const& rpParent);
   virtual ~CImage();
 
 public:

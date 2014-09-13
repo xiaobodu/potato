@@ -14,18 +14,14 @@ extern "C" {
 namespace c4g {
 namespace script {
 
-
-void android_printf(char* txt)
+void log_info(char* txt)
 {
   c4g::utility::Log::Instance().Info(txt);
 }
-int add(int a, int b)
-{
-    return a + b;
-}
+
 void error_callback(void *opaque, const char *msg)
 {
-  c4g::utility::Log::Instance().Info(msg);
+  c4g::utility::Log::Instance().Error(msg);
 }
 
 /*if (NULL == s)
@@ -34,7 +30,7 @@ void error_callback(void *opaque, const char *msg)
   tcc_set_output_type(s, TCC_OUTPUT_MEMORY);
   tcc_set_error_func(s, 0, error_callback);
 
-  if (tcc_compile_string(s, "int main(int argc, char* argv[]) { int a = 10; int b = 20; int c = a + b; printf(\"hello world\"); return 0; }") == -1)
+  if (tcc_compile_string(s, "int main(int argc, char* argv[]) { int a = 10; int b = 20; int c = a + b; log_info(\"hello world\"); return 0; }") == -1)
       return 1;
   tcc_add_symbol(s, "printf", (void const*)android_printf);
   tcc_add_symbol(s, "add", (void const*)add);
@@ -45,6 +41,45 @@ void error_callback(void *opaque, const char *msg)
 
 CScript::CScript(const base::Config& roConfig)
 {
+  ;
+}
+
+CScript::~CScript()
+{
+  MSubstance::iterator it = m_mSubstance.begin();
+  MSubstance::iterator it_end = m_mSubstance.end();
+  for (; it != it_end; ++it)
+  {
+    script::AHandler* const& handler_ptr = (*it).first;
+    delete (*it).second;
+    handler_ptr->OnDeleteSubstance();
+  }
+  m_mSubstance.clear();
+}
+
+void CScript::New(script::AHandler* const& rpHandler)
+{
+  if (NULL == rpHandler || rpHandler->HaveSubstance()) return;
+  ISubstance* substance_ptr = new CSubstance();
+  rpHandler->OnNewSubstance(this, substance_ptr);
+  m_mSubstance.insert(std::make_pair(rpHandler, substance_ptr));
+}
+
+void CScript::Delete(script::AHandler* const& rpHandler)
+{
+  if (NULL == rpHandler) return;
+  rpHandler->OnDeleteSubstance();
+  MSubstance::iterator it_find = m_mSubstance.find(rpHandler);
+  if (m_mSubstance.end() != it_find)
+  {
+    delete (*it_find).second;
+    m_mSubstance.erase(it_find);
+  }
+}
+
+CSubstance::CSubstance()
+  : m_bCompiled(false)
+{
   m_pTCC = tcc_new();
   if (NULL != m_pTCC)
   {
@@ -52,14 +87,12 @@ CScript::CScript(const base::Config& roConfig)
     tcc_set_error_func(m_pTCC, NULL, error_callback);
 
     // some common symbols
-    tcc_add_symbol(m_pTCC, "log", (void const*)android_printf);
-    tcc_add_symbol(m_pTCC, "add", (void const*)add);
+    tcc_add_symbol(m_pTCC, "log_info", (void const*)log_info);
   }
 }
 
-CScript::~CScript()
+CSubstance::~CSubstance()
 {
-  // TODO: delete all script objects by the list of handlers
   if (NULL != m_pTCC)
   {
     tcc_delete(m_pTCC);
@@ -67,29 +100,20 @@ CScript::~CScript()
   }
 }
 
-void CScript::New(script::AHandler* const& rpHandler)
+void CSubstance::Compile(const std::string& rsCode)
 {
-  // TODO:
+  m_bCompiled = (-1 != tcc_compile_string(m_pTCC, rsCode.c_str()));
+  if (m_bCompiled)
+  {
+    m_bCompiled = (tcc_relocate(m_pTCC, TCC_RELOCATE_AUTO) >= 0);
+  }
 }
 
-void CScript::Delete(script::AHandler* const& rpHandler)
+void* const CSubstance::GetSymbol(const std::string& rsFuncName)
 {
-  // TODO:
-}
+  if (!m_bCompiled) return NULL;
 
-CObject::CObject()
-{
-  ;
-}
-
-CObject::~CObject()
-{
-  ;
-}
-
-void CObject::Call(const std::string& rsFuncName)
-{
-  ;
+  return tcc_get_symbol(m_pTCC, rsFuncName.c_str());
 }
 
 }

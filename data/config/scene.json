@@ -2,5 +2,9 @@
   "asset":{
     "library":"lib/libasset.so",
     "configure":"config/asset.json"
+  },
+  "script":{
+    "library":"lib/libscript_tcc.so",
+    "configure":"config/script.json"
   }
 }

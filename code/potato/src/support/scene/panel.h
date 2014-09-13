@@ -14,7 +14,7 @@ public:
   CLayout layout;
 
 public:
-  IPanel(core::IScene* const& rpScene, IWidget* const& rpParent)
+  IPanel(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
     : IWidget(rpScene, rpParent)
   {
     ;
@@ -30,7 +30,7 @@ public:
 class CPanel : public TWidget<IPanel>
 {
 public:
-  explicit CPanel(core::IScene* const& rpScene, IWidget* const& rpParent);
+  explicit CPanel(ISceneWithScript* const& rpScene, IWidget* const& rpParent);
   virtual ~CPanel();
 
 public:

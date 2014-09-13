@@ -3,6 +3,7 @@
 #include "common.h"
 
 namespace c4g {
+
 namespace core {
 class IRender;
 }

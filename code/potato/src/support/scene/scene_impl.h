@@ -1,11 +1,12 @@
 #pragma once
 
-#include "scene.h"
+#include "scene_base.h"
 
 namespace c4g {
 
 namespace core {
 class IAsset;
+class IScript;
 }
 namespace utility{
 class CSharedLibraryManager;
@@ -15,7 +16,7 @@ namespace scene {
 
 class IPanel;
 
-class CScene : public core::IScene
+class CScene : public ISceneWithScript
 {
 public:
   explicit CScene(const base::Config& roConfig);
@@ -29,10 +30,15 @@ public:
   virtual bool Draw(render::ICanvas* const& rpCanvas);
   virtual bool Handle(const display::IInput* const& rpInput);
 
+public:
+  virtual void BindScript(script::AHandler* const& rpHandler);
+
 private:
   base::Config          m_oConfig;
   base::Config          m_oConfigAsset;
   core::IAsset*         m_pAsset;
+  base::Config          m_oConfigScript;
+  core::IScript*        m_pScript;
   utility::CSharedLibraryManager* m_pLibraryManager;
 
   IPanel* m_pPanel;

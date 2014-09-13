@@ -10,10 +10,17 @@ namespace scene {
 
 CImage::CBuilder CImage::builder;
 
-CImage::CImage(core::IScene* const& rpScene, IWidget* const& rpParent)
+typedef void (*fun1)();
+
+CImage::CImage(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
   : TWidget<IImage>(rpScene, rpParent)
   , m_pEffect(NULL)
 {
+  m_pSubstance->Compile("void fun1() { log_info(\"hello world\"); }");
+  void* fff = m_pSubstance->GetSymbol("fun1");
+  fun1 ff = (fun1)m_pSubstance->GetSymbol("fun1");
+  if (NULL != ff) (*ff)();
+
   m_pEffect = new CEffect();
 }
 

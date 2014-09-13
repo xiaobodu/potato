@@ -3,17 +3,19 @@
 #include "scene_base.h"
 #include "builder.h"
 
+#include <script.h>
+
 namespace c4g {
 namespace scene {
 
 template<typename TBase>
-class TWidget : public TBase
+class TWidget : public TBase, public script::AHandler
 {
 public:
-  explicit TWidget(core::IScene* const& rpScene, IWidget* const& rpParent)
+  explicit TWidget(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
     : TBase(rpScene, rpParent)
   {
-    ;
+    rpScene->BindScript(this);
   }
   virtual ~TWidget()
   {

@@ -2,6 +2,8 @@
 
 #include "script.h"
 
+#include <map>
+
 struct TCCState;
 
 namespace c4g {
@@ -18,17 +20,23 @@ public:
   virtual void Delete(script::AHandler* const& rpHandler);
 
 private:
-  TCCState*  m_pTCC;
+  typedef std::map<script::AHandler* const, ISubstance*>  MSubstance;
+  MSubstance m_mSubstance;
 };
 
-class CObject : public IObject
+class CSubstance : public ISubstance
 {
 public:
-  CObject();
-  virtual ~CObject();
+  CSubstance();
+  virtual ~CSubstance();
 
 public:
-  virtual void Call(const std::string& rsFuncName);
+  virtual void Compile(const std::string& rsCode);
+  virtual void* const GetSymbol(const std::string& rsFuncName);
+
+private:
+  TCCState*  m_pTCC;
+  bool m_bCompiled;
 };
 
 }

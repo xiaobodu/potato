@@ -2,10 +2,12 @@
 
 #include "common.h"
 
+#include <cassert>
+
 namespace c4g {
 
 namespace script {
-class IObject;
+class ISubstance;
 class AHandler;
 }
 
@@ -28,16 +30,17 @@ public:
 
 namespace script {
 
-class IObject
+class ISubstance
 {
 public:
-  virtual ~IObject()
+  virtual ~ISubstance()
   {
     ;
   }
 
 public:
-  virtual void Call(const std::string& rsFuncName) = 0;
+  virtual void Compile(const std::string& rsCode) = 0;
+  virtual void* const GetSymbol(const std::string& rsFuncName) = 0;
 };
 
 class AHandler
@@ -45,34 +48,40 @@ class AHandler
 public:
   AHandler()
     : m_pScript(NULL)
-    , m_pScriptObj(NULL)
+    , m_pSubstance(NULL)
   {
     ;
   }
   virtual ~AHandler()
   {
-    if (NULL != m_pScriptObj)
+    if (NULL != m_pSubstance)
     {
+      assert(NULL != m_pScript);
       m_pScript->Delete(this);
     }
   }
 
-private:
-  void OnNewScriptObj(core::IScript* const& rpScript, IObject* const& rpObject)
+public:
+  bool HaveSubstance() const
+  {
+    return (NULL != m_pSubstance);
+  }
+  void OnNewSubstance(core::IScript* const& rpScript, ISubstance* const& rpSubstance)
   {
     m_pScript = rpScript;
-    m_pScriptObj = rpObject;
+    m_pSubstance = rpSubstance;
   }
-  void OnDeleteScriptObj()
+  void OnDeleteSubstance()
   {
-    m_pScriptObj = NULL;
+    m_pScript = NULL;
+    m_pSubstance = NULL;
   }
 
 private:
   core::IScript* m_pScript;
 
 protected:
-  IObject* m_pScriptObj;
+  ISubstance* m_pSubstance;
 };
 
 }

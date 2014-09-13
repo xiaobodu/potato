@@ -1,11 +1,12 @@
 #include <rapidjson/document.h>
 
+#include "scene_base.h"
 #include "scene_impl.h"
+#include "panel.h"
+
 #include "render.h"
 #include "asset.h"
-
-#include "scene_base.h"
-#include "panel.h"
+#include "script.h"
 
 #include "utility/file.h"
 #include "utility/log.h"
@@ -16,11 +17,15 @@
 FUNC_API_TYPEDEF(CreateAsset, c4g::core::IAsset, const c4g::base::Config);
 FUNC_API_TYPEDEF(DestroyAsset, c4g::core::IAsset, const c4g::base::Config);
 
+FUNC_API_TYPEDEF(CreateScript, c4g::core::IScript, const c4g::base::Config);
+FUNC_API_TYPEDEF(DestroyScript, c4g::core::IScript, const c4g::base::Config);
+
 namespace c4g {
 namespace scene {
 
 CScene::CScene(const base::Config& roConfig)
   : m_pAsset(NULL)
+  , m_pScript(NULL)
   , m_pLibraryManager(NULL)
   , m_pPanel(NULL)
 {
@@ -39,34 +44,57 @@ CScene::CScene(const base::Config& roConfig)
   jdoc.Parse(file_context.c_str());
   assert(jdoc.IsObject());
 
-  m_oConfigAsset._sLibrPath = roConfig._sLibrPath;
-  m_oConfigAsset._sDataPath = roConfig._sDataPath;
+  {
+    m_oConfigAsset._sLibrPath = roConfig._sLibrPath;
+    m_oConfigAsset._sDataPath = roConfig._sDataPath;
 
-  const rapidjson::Value& render = jdoc["asset"];
-  assert(render.IsObject());
+    const rapidjson::Value& jasset = jdoc["asset"];
+    assert(jasset.IsObject());
 
-  const rapidjson::Value& library = render["library"];
-  assert(library.IsString());
-  m_oConfigAsset._sLibraryFile = library.GetString();
+    const rapidjson::Value& library = jasset["library"];
+    assert(library.IsString());
+    m_oConfigAsset._sLibraryFile = library.GetString();
 
 #if defined(BUILD_ANDROID)
-  m_oConfigAsset._sConfigureContext = "\
-{\
-  \"asset\":{\
-    \"library\":\"lib/libasset.so\"\
-  }\
-}";
+    m_oConfigAsset._sConfigureContext = "{}";
 #else
-  const rapidjson::Value& configure = render["configure"];
-  assert(configure.IsString());
-  m_oConfigAsset._sConfigureFile = library.GetString();
+    const rapidjson::Value& configure = jasset["configure"];
+    assert(configure.IsString());
+    m_oConfigAsset._sConfigureFile = library.GetString();
 #endif
 
-  /// load the shared library
-  typedef FUNC_API_TYPE(CreateAsset) CreateAssetFuncPtr;
-  CreateAssetFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateAssetFuncPtr>(m_oConfigAsset.GetLibraryFile(), TOSTRING(CreateAsset));
-  /// create the display with configure
-  func_create_func_ptr(m_pAsset, m_oConfigAsset);
+    /// load the shared library
+    typedef FUNC_API_TYPE(CreateAsset) CreateAssetFuncPtr;
+    CreateAssetFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateAssetFuncPtr>(m_oConfigAsset.GetLibraryFile(), TOSTRING(CreateAsset));
+    /// create the display with configure
+    func_create_func_ptr(m_pAsset, m_oConfigAsset);
+  }
+
+  {
+    m_oConfigScript._sLibrPath = roConfig._sLibrPath;
+    m_oConfigScript._sDataPath = roConfig._sDataPath;
+
+    const rapidjson::Value& jscript = jdoc["script"];
+    assert(jscript.IsObject());
+
+    const rapidjson::Value& library = jscript["library"];
+    assert(library.IsString());
+    m_oConfigScript._sLibraryFile = library.GetString();
+
+#if defined(BUILD_ANDROID)
+    m_oConfigScript._sConfigureContext = "{}";
+#else
+    const rapidjson::Value& configure = jscript["configure"];
+    assert(configure.IsString());
+    m_oConfigScript._sConfigureFile = library.GetString();
+#endif
+
+    /// load the shared library
+    typedef FUNC_API_TYPE(CreateScript) CreateScriptFuncPtr;
+    CreateScriptFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateScriptFuncPtr>(m_oConfigScript.GetLibraryFile(), TOSTRING(CreateScript));
+    /// create the display with configure
+    func_create_func_ptr(m_pScript, m_oConfigScript);
+  }
 
   m_pPanel = new CPanel(this, NULL);
   m_pPanel->layout.type = ELayoutType_Scale;
@@ -77,11 +105,21 @@ CScene::~CScene()
   delete m_pPanel;
   m_pPanel = NULL;
 
-  /// load the shared library
-  typedef FUNC_API_TYPE(DestroyAsset) DestroyAssetFuncPtr;
-  DestroyAssetFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyAssetFuncPtr>(m_oConfigAsset.GetLibraryFile(), TOSTRING(DestroyAsset));
-  /// create the display with configure
-  func_destroy_func_ptr(m_pAsset, m_oConfigAsset);
+  {
+    /// load the shared library
+    typedef FUNC_API_TYPE(DestroyAsset) DestroyAssetFuncPtr;
+    DestroyAssetFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyAssetFuncPtr>(m_oConfigAsset.GetLibraryFile(), TOSTRING(DestroyAsset));
+    /// create the display with configure
+    func_destroy_func_ptr(m_pAsset, m_oConfigAsset);
+  }
+
+  {
+    /// load the shared library
+    typedef FUNC_API_TYPE(DestroyScript) DestroyScriptFuncPtr;
+    DestroyScriptFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyScriptFuncPtr>(m_oConfigScript.GetLibraryFile(), TOSTRING(DestroyScript));
+    /// create the display with configure
+    func_destroy_func_ptr(m_pScript, m_oConfigScript);
+  }
 
   delete m_pLibraryManager;
   m_pLibraryManager = NULL;
@@ -181,6 +219,12 @@ bool CScene::Handle(const display::IInput* const& rpInput)
     res |= m_pPanel->Handle(i, rpInput);
   }
   return res;
+}
+
+void CScene::BindScript(script::AHandler* const& rpHandler)
+{
+  assert(NULL != m_pScript);
+  m_pScript->New(rpHandler);
 }
 
 }

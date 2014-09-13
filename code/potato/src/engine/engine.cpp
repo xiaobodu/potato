@@ -90,6 +90,9 @@ CEngine::CEngine(const c4g::base::Config& roConfig)
 {\
   \"asset\":{\
     \"library\":\"lib/libasset.so\"\
+  },\
+  \"script\":{\
+    \"library\":\"lib/libscript_tcc.so\",\
   }\
 }";
 #else

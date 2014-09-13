@@ -10,7 +10,7 @@ namespace scene {
 
 CPanel::CBuilder CPanel::builder;
 
-CPanel::CPanel(core::IScene* const & rpScene, IWidget* const & rpParent)
+CPanel::CPanel(ISceneWithScript* const & rpScene, IWidget* const & rpParent)
   : TWidget<IPanel>(rpScene, rpParent)
   , m_pEffect(NULL)
 {
