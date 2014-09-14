@@ -30,12 +30,12 @@ IBuilder::IBuilder(const std::string& rsName)
 
 
 CGlyphBuilder::CGlyphBuilder()
-  : TBuilder<render::Glyph>("glyph")
+  : TBuilder<base::Glyph>("glyph")
 {
   ;
 }
 
-bool CGlyphBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, render::Glyph& rGlyph) const
+bool CGlyphBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, base::Glyph& rGlyph) const
 {
   const rapidjson::Value& jleft = roConfig["l"];
   assert(jleft.IsDouble());

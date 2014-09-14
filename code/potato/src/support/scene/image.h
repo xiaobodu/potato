@@ -21,7 +21,7 @@ public:
   }
 
 public:
-  render::Glyph src;
+  base::Glyph src;
 };
 
 class CImage : public TWidget<IImage>

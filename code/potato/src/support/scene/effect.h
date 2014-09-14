@@ -5,7 +5,7 @@
 namespace c4g {
 namespace scene {
 
-class CEffect : public render::IEffect
+class CEffect : public flash::IEffect
 {
 public:
   CEffect();
@@ -16,7 +16,7 @@ public:
 
 public:
   virtual void Begin();
-  virtual void Begin(const render::Glyph& rGlyph);
+  virtual void Begin(const base::Glyph& rGlyph);
   virtual bool Do(render::ITransform* const& rpTransform);
   virtual void End();
 

@@ -46,13 +46,13 @@ public:
   virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, TGoods& rGoods) const = 0;
 };
 
-class CGlyphBuilder : public TBuilder<render::Glyph>
+class CGlyphBuilder : public TBuilder<base::Glyph>
 {
 private:
   CGlyphBuilder();
 
 public:
-  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, render::Glyph& rGlyph) const;
+  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, base::Glyph& rGlyph) const;
 
 public:
   static CGlyphBuilder instance;

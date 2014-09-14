@@ -5,6 +5,17 @@
 namespace c4g {
 namespace base {
 
+struct Glyph
+{
+  float l;
+  float r;
+  float t;
+  float b;
+  unsigned int id;
+
+  Glyph() : l(0), r(0), t(0), b(0), id(0) { ; }
+};
+
 template<typename T>
 class TScope
 {

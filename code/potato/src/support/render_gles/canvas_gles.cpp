@@ -12,11 +12,11 @@ namespace c4g{
 namespace render {
 namespace gles {
 
-class CGlyphEffectScope : public base::TScope<IEffect>
+class CGlyphEffectScope : public base::TScope<flash::IEffect>
 {
 public:
-  explicit CGlyphEffectScope(const Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IEffect* const& rpEffect)
-    : base::TScope<IEffect>(rpEffect)
+  explicit CGlyphEffectScope(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, flash::IEffect* const& rpEffect)
+    : base::TScope<flash::IEffect>(rpEffect)
   {
     if (!IsEffectCustom(m_pT))
     {
@@ -62,24 +62,24 @@ CCanvas::~CCanvas()
   ;
 }
 
-void CCanvas::EffectBegin(IEffect* const& rpEffect)
+void CCanvas::EffectBegin(flash::IEffect* const& rpEffect)
 {
   glPushMatrix();
 
   rpEffect->Do(&CTransform::Instance(m_aVertex));
 }
 
-void CCanvas::EffectEnd(IEffect* const& rpEffect)
+void CCanvas::EffectEnd(flash::IEffect* const& rpEffect)
 {
   glPopMatrix();
 }
 
-void CCanvas::DrawGlyph(const Glyph& rGlyph, IEffect* const& rpEffect)
+void CCanvas::DrawGlyph(const base::Glyph& rGlyph, flash::IEffect* const& rpEffect)
 {
   DrawGlyph(rGlyph, rGlyph.r - rGlyph.l, rGlyph.b - rGlyph.t, rpEffect);
 }
 
-void CCanvas::DrawGlyph(const Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IEffect* const& rpEffect)
+void CCanvas::DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, flash::IEffect* const& rpEffect)
 {
   CGlyphEffectScope effect_scope(rGlyph, rfWidth, rfHeight, rpEffect);
 

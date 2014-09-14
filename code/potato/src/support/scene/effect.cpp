@@ -24,7 +24,7 @@ void CEffect::Begin()
   ;
 }
 
-void CEffect::Begin(const render::Glyph& rGlyph)
+void CEffect::Begin(const base::Glyph& rGlyph)
 {
   ;
 }
