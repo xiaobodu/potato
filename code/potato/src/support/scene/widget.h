@@ -2,6 +2,8 @@
 
 #include "scene_base.h"
 #include "builder.h"
+#include "input.h"
+#include "sensor.h"
 
 #include <script.h>
 
@@ -21,6 +23,11 @@ public:
   {
     Clear();
   }
+
+public:
+  virtual void Resize(const float& rfWidth, const float& rfHeight) { ; }
+  virtual bool Handle(const int& riLayer, const display::IInput* const& rpInput) { return false; }
+  virtual bool Refresh(const int& riLayer, const display::ISensor* const & rpSensor) { return false; }
 
 public:
   virtual void Add(IWidget* const& rpWidget)

@@ -14,6 +14,10 @@ CPanel::CPanel(ISceneWithScript* const & rpScene, IWidget* const & rpParent)
   : TWidget<IPanel>(rpScene, rpParent)
   , m_pEffect(NULL)
 {
+  resize = true;
+  input = true;
+  sensor = true;
+
   m_pEffect = new CEffect();
 }
 
@@ -73,7 +77,20 @@ bool CPanel::Handle(const int& riLayer, const display::IInput* const & rpInput)
   for (; it != it_end; ++it)
   {
     IWidget*& widget_ptr = *it;
-    if (widget_ptr->visible && riLayer == widget_ptr->layer) res |= widget_ptr->Handle(riLayer, rpInput);
+    if (widget_ptr->input && widget_ptr->visible && riLayer == widget_ptr->layer) res |= widget_ptr->Handle(riLayer, rpInput);
+  }
+  return res;
+}
+
+bool CPanel::Refresh(const int& riLayer, const display::ISensor* const & rpSensor)
+{
+  bool res = false;
+  VWidgetPtr::iterator it = m_vpWidget.begin();
+  VWidgetPtr::iterator it_end = m_vpWidget.end();
+  for (; it != it_end; ++it)
+  {
+    IWidget*& widget_ptr = *it;
+    if (widget_ptr->sensor && widget_ptr->visible && riLayer == widget_ptr->layer) res |= widget_ptr->Refresh(riLayer, rpSensor);
   }
   return res;
 }

@@ -3,6 +3,8 @@
 #include "common.h"
 
 #include "display.h"
+#include "input.h"
+#include "sensor.h"
 
 #include <EGL/egl.h>
 
@@ -36,7 +38,8 @@ public:
   void Pause();
   void Stop();
   void Resize(const int& riWidth, const int& riHeight);
-  void Input();
+  int Input(AInputEvent* pEvent);
+  int Sensor(ASensorEvent* pEvent);
 
 private:
   EGLDisplay    m_pGLDisplay;
@@ -59,6 +62,9 @@ private:
   struct ASensorManager*        m_pSensorManager;
   const struct ASensor*         m_pAccelerometerSensor;
   struct ASensorEventQueue*     m_pAccelerometerSensorEventQueue;
+
+  display::CInput       m_oInput;
+  display::CSensor      m_oSensor;
 };
 
 }

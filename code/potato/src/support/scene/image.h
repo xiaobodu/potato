@@ -31,10 +31,10 @@ public:
   virtual ~CImage();
 
 public:
-  virtual void Resize(const float& rfWidth, const float& rfHeight);
   virtual bool Tick(const float& rfDelta);
   virtual void Draw(const int& riLayer, render::ICanvas* const & rpCanvas);
-  virtual bool Handle(const int& riLayer, const display::IInput* const& rpInput);
+  /*virtual bool Handle(const int& riLayer, const display::IInput* const& rpInput);
+  virtual bool Refresh(const int& riLayer, const display::ISensor* const & rpSensor);*/
 
 public:
   class CBuilder : public TBuilder<CImage* const>

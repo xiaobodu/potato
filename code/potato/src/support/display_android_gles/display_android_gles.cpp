@@ -1,6 +1,7 @@
 #include <rapidjson/document.h>
 #include <android/sensor.h>
 #include <android/window.h>
+#include <android/window.h>
 #include <android_native_app_glue.h>
 
 #include "display_android_gles.h"
@@ -189,34 +190,7 @@ static int32_t handle_input(struct android_app* app, AInputEvent* event)
   display::android_gles::CDisplay* display_ptr = (display::android_gles::CDisplay*) app->userData;
   assert(NULL != display_ptr);
 
-  int32_t type = AInputEvent_getType(event);
-  utility::Log::Instance().Info("engine_handle_input %d", type);
-  if (AINPUT_EVENT_TYPE_KEY == type)
-  {
-    int32_t action = AKeyEvent_getAction(event);
-    utility::Log::Instance().Info("handle_input action:%d", action);
-
-    display_ptr->Input();
-  }
-  else if (AINPUT_EVENT_TYPE_MOTION == type)
-  {
-    int32_t action = AMotionEvent_getAction(event);
-    int32_t count = AMotionEvent_getPointerCount(event);
-    for (int i = 0; i < count; ++i)
-    {
-      float raw_x = AMotionEvent_getRawX(event, i);
-      float raw_y = AMotionEvent_getRawY(event, i);
-      float x = AMotionEvent_getX(event, i);
-      float y = AMotionEvent_getY(event, i);
-      float pressure = AMotionEvent_getPressure(event, i);
-      float size = AMotionEvent_getSize(event, i);
-
-      utility::Log::Instance().Info("handle_input %d action:%d raw:(%.3f, %.3f) | pos:(%.3f, %.3f) | pressure:%.3f | size:%.3f", i + 1, action, raw_x, raw_y, x, y, pressure, size);
-    }
-    return 1;
-  }
-  //
-  return 0;
+  return display_ptr->Input(event);
 }
 
 // NOTE: based on the file 'android-ndk-r10/sources/android/native_app_glue/android_native_app_glue.c'
@@ -301,10 +275,7 @@ void CDisplay::Run(core::IScene* const& rpScene)
         {
           while (ASensorEventQueue_getEvents(m_pAccelerometerSensorEventQueue, &accelerometer_sensor_event, 1) > 0)
           {
-            C4G_LOG_INFO("vec: x=%.3f y=%.3f z=%.3f | acc: x=%.3f y=%.3f z=%.3f  mag: x=%.3f y=%.3f z=%.3f"
-                , accelerometer_sensor_event.vector.x, accelerometer_sensor_event.vector.y, accelerometer_sensor_event.vector.z
-                , accelerometer_sensor_event.acceleration.x, accelerometer_sensor_event.acceleration.y, accelerometer_sensor_event.acceleration.z
-                , accelerometer_sensor_event.magnetic.x, accelerometer_sensor_event.magnetic.y, accelerometer_sensor_event.magnetic.z);
+            Sensor(&accelerometer_sensor_event);
           }
         }
       }
@@ -508,9 +479,79 @@ void CDisplay::Resize(const int& riWidth, const int& riHeight)
   if (NULL != m_pScene) m_pScene->Resize(riWidth, riHeight);
 }
 
-void CDisplay::Input()
+int CDisplay::Input(AInputEvent* pEvent)
 {
-  m_pScene->Handle(NULL);
+  int32_t type = AInputEvent_getType(pEvent);
+  utility::Log::Instance().Info("engine_handle_input %d", type);
+  if (AINPUT_EVENT_TYPE_KEY == type)
+  {
+    m_oInput.type = EInputType_Key;
+    int32_t action = AKeyEvent_getAction(pEvent);
+    if (AKEY_EVENT_ACTION_DOWN == action) m_oInput.event = EInputEvent_Down;
+    else if (AKEY_EVENT_ACTION_UP == action) m_oInput.event = EInputEvent_Up;
+    else m_oInput.event = EInputEvent_None;
+    (*m_oInput[C4G_INPUT_KEY_KEYCODE]) = AKeyEvent_getKeyCode(pEvent);
+    utility::Log::Instance().Info("handle_input action:%d", action);
+    return m_pScene->Handle(&m_oInput) ? 1 : 0;
+  }
+  else if (AINPUT_EVENT_TYPE_MOTION == type)
+  {
+    m_oInput.type = EInputType_Touch;
+    m_oInput.event = EInputEvent_None;
+
+    int32_t action = AMotionEvent_getAction(pEvent);
+    if (AMOTION_EVENT_ACTION_DOWN == action) m_oInput.event = EInputEvent_Down;
+    else if (AMOTION_EVENT_ACTION_UP == action) m_oInput.event = EInputEvent_Up;
+    else if (AMOTION_EVENT_ACTION_MOVE == action) m_oInput.event = EInputEvent_Move;
+    else m_oInput.event = EInputEvent_None;
+
+    int real_count = 0;
+    int32_t count = AMotionEvent_getPointerCount(pEvent);
+    for (int i = 0; i < count; ++i)
+    {
+      float pressure = AMotionEvent_getPressure(pEvent, i);
+      float size = AMotionEvent_getSize(pEvent, i);
+
+      /// don't record the event that pressure or size is equal or lower than zero
+      if (0 >= pressure || 0 >= size) continue;
+
+      float x = AMotionEvent_getX(pEvent, i);
+      float y = AMotionEvent_getY(pEvent, i);
+      float raw_x = AMotionEvent_getRawX(pEvent, i);
+      float raw_y = AMotionEvent_getRawY(pEvent, i);
+
+      (*m_oInput[C4G_INPUT_TOUCH_X + C4G_INPUT_TOUCH_DATA_SIZE * real_count]) = x;
+      (*m_oInput[C4G_INPUT_TOUCH_Y + C4G_INPUT_TOUCH_DATA_SIZE * real_count]) = y;
+      (*m_oInput[C4G_INPUT_TOUCH_LEFT + C4G_INPUT_TOUCH_DATA_SIZE * real_count]) = raw_x;
+      (*m_oInput[C4G_INPUT_TOUCH_TOP + C4G_INPUT_TOUCH_DATA_SIZE * real_count]) = raw_y;
+      (*m_oInput[C4G_INPUT_TOUCH_PRESSURE + C4G_INPUT_TOUCH_DATA_SIZE * real_count]) = pressure;
+      (*m_oInput[C4G_INPUT_TOUCH_SIZE + C4G_INPUT_TOUCH_DATA_SIZE * real_count]) = size;
+      utility::Log::Instance().Info("handle_input %d action:%d raw:(%.3f, %.3f) | pos:(%.3f, %.3f) | pressure:%.3f | size:%.3f", i + 1, action, raw_x, raw_y, x, y, pressure, size);
+
+      ++real_count;
+      if (C4G_INPUT_TOUCH_DATA_COUNT_MAX <= real_count) break;
+    }
+    if (0 < real_count)
+    {
+      (*m_oInput[C4G_INPUT_TOUCH_COUNT]) = real_count;
+      return m_pScene->Handle(&m_oInput) ? 1 : 0;
+    }
+  }
+  return 0;
+}
+
+int CDisplay::Sensor(ASensorEvent* pEvent)
+{
+  (*m_oSensor[C4G_SENSOR_VECTOR_X]) = (*pEvent).vector.x;
+  (*m_oSensor[C4G_SENSOR_VECTOR_Y]) = (*pEvent).vector.y;
+  (*m_oSensor[C4G_SENSOR_VECTOR_Z]) = (*pEvent).vector.z;
+  (*m_oSensor[C4G_SENSOR_ACCELERATION_X]) = (*pEvent).acceleration.x;
+  (*m_oSensor[C4G_SENSOR_ACCELERATION_Y]) = (*pEvent).acceleration.y;
+  (*m_oSensor[C4G_SENSOR_ACCELERATION_Z]) = (*pEvent).acceleration.z;
+  (*m_oSensor[C4G_SENSOR_MAGNETIC_X]) = (*pEvent).magnetic.x;
+  (*m_oSensor[C4G_SENSOR_MAGNETIC_Y]) = (*pEvent).magnetic.y;
+  (*m_oSensor[C4G_SENSOR_MAGNETIC_Z]) = (*pEvent).magnetic.z;
+  return m_pScene->Refresh(&m_oSensor);
 }
 
 }

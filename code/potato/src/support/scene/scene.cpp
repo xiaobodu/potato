@@ -219,17 +219,17 @@ bool CScene::Handle(const display::IInput* const& rpInput)
   {
     res |= m_pPanel->Handle(i, rpInput);
   }
-  /*float x = 0;
-  float y = 0;
-  (*rpInput)(C4G_INPUT_TOUCH_X, x);
-  (*rpInput)(C4G_INPUT_TOUCH_Y, y);*/
   return res;
 }
 
 bool CScene::Refresh(const display::ISensor* const& rpSensor)
 {
-  //
-  return true;
+  bool res = false;
+  for (int i = C4G_LAYER_MIN; i < C4G_LAYER_MAX; ++i)
+  {
+    res |= m_pPanel->Refresh(i, rpSensor);
+  }
+  return res;
 }
 
 void CScene::BindScript(script::AHandler* const& rpHandler)

@@ -44,7 +44,7 @@ void CLayout::Resize(const RectF& roConfig, const RectF& roResized, IWidget* con
   }
   //TODO:
 
-  rpWidget->Resize(rpWidget->dst.w, rpWidget->dst.h);
+  if (rpWidget->resize) rpWidget->Resize(rpWidget->dst.w, rpWidget->dst.h);
 }
 
 bool CLayout::CBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, ILayout* const & rpLayout) const

@@ -8,9 +8,42 @@
 namespace c4g {
 namespace scene {
 
+
+template<typename TType>
+class Vect2
+{
+public:
+  TType x;
+  TType y;
+
+public:
+  explicit Vect2(const TType& rtX, const TType& rtY)
+    : x(rtX), y(rtY)
+  {
+    ;
+  }
+  explicit Vect2(const Vect2& roOther)
+  {
+    x = roOther.x;
+    y = roOther.y;
+  }
+};
+
+typedef Vect2<int>       Vect2I;
+typedef Vect2<float>     Vect2F;
+typedef Vect2<double>    Vect2D;
+
 template<typename TType>
 class Rect
 {
+public:
+  TType l;
+  TType r;
+  TType w;
+  TType h;
+  TType t;
+  TType b;
+
 public:
   explicit Rect(const TType& rtValue)
     : l(rtValue)
@@ -90,6 +123,12 @@ public:
     }
     return true;
   }
+  bool operator^(const Vect2<TType>& roVect)
+  {
+    if (roVect.x < l || roVect.x > r) return false;
+    if (roVect.y < t || roVect.y > b) return false;
+    return true;
+  }
   // intersect
   Rect& operator^=(const Rect& roOther)
   {
@@ -118,14 +157,6 @@ public:
     if (b != roOther.b) return false;
     return true;
   }
-
-public:
-  TType l;
-  TType r;
-  TType w;
-  TType h;
-  TType t;
-  TType b;
 };
 
 typedef Rect<int>       RectI;

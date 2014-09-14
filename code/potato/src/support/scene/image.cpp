@@ -16,8 +16,6 @@ CImage::CImage(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
   : TWidget<IImage>(rpScene, rpParent)
   , m_pEffect(NULL)
 {
-  //m_pSubstance->Compile("void fun1() { log_info(\"hello world\"); }");
-
   m_pEffect = new CEffect();
 }
 
@@ -27,14 +25,9 @@ CImage::~CImage()
   m_pEffect = NULL;
 }
 
-void CImage::Resize(const float& rfWidth, const float& rfHeight)
-{
-  ;
-}
-
 // for script
-typedef bool (*script_tick)(float fDelta);
-bool script_tick_default(float fDelta)
+typedef bool (*script_image_tick)(float fDelta);
+bool script_image_tick_default(float fDelta)
 {
   //utility::Log::Instance().Warning("missing 'tick' function in script");
   return false;
@@ -43,14 +36,14 @@ bool script_tick_default(float fDelta)
 bool CImage::Tick(const float& rfDelta)
 {
   // call script
-  bool res = CallScript<script_tick>("tick", script_tick_default)(rfDelta);
+  bool res = CallScript<script_image_tick>("tick", script_image_tick_default)(rfDelta);
 
   return res || m_pEffect->Tick(rfDelta);
 }
 
-// script
-typedef void (*script_draw)(int iLayer);
-void script_draw_default(int iLayer)
+// for script
+typedef void (*script_image_draw)(int iLayer);
+void script_image_draw_default(int iLayer)
 {
   //utility::Log::Instance().Warning("missing 'draw' function in script");
 }
@@ -58,18 +51,38 @@ void script_draw_default(int iLayer)
 void CImage::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
 {
   // call script
-  CallScript<script_draw>("draw", script_draw_default)(riLayer);
+  CallScript<script_image_draw>("draw", script_image_draw_default)(riLayer);
 
   m_pEffect->SetPos(dst.l, dst.t);
   rpCanvas->DrawGlyph(src, dst.w, dst.h, m_pEffect);
   //
 }
 
-bool CImage::Handle(const int& riLayer, const display::IInput* const & rpInput)
+/*bool CImage::Handle(const int& riLayer, const display::IInput* const & rpInput)
+{
+  int count = 0;
+  (*rpInput)(C4G_INPUT_TOUCH_COUNT, count);
+  if (0 >= count) return false;
+
+  float x = 0;
+  float y = 0;
+  (*rpInput)(C4G_INPUT_TOUCH_X, x);
+  (*rpInput)(C4G_INPUT_TOUCH_Y, y);
+  if (!(dst ^ Vect2F(x, y))) return false;
+
+  if (display::EInputType_Touch == rpInput->type && display::EInputEvent_Up == rpInput->event)
+  {
+    int layer = riLayer;
+  }
+  //
+  return false;
+}
+
+bool CImage::Refresh(const int& riLayer, const display::ISensor* const & rpSensor)
 {
   //
-  return true;
-}
+  return false;
+}*/
 
 bool CImage::CBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, CImage* const & rpImage) const
 {

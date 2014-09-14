@@ -150,30 +150,33 @@ void CDisplay::Run(core::IScene* const& rpScene)
       case ButtonPress:
         m_oInput.type = EInputType_Touch;
         m_oInput.event = EInputEvent_Down;
+        (*m_oInput[C4G_INPUT_TOUCH_COUNT]) = 1;
         (*m_oInput[C4G_INPUT_TOUCH_X]) = static_cast<float>(event.xbutton.x);
         (*m_oInput[C4G_INPUT_TOUCH_Y]) = static_cast<float>(event.xbutton.y);
-        (*m_oInput[C4G_INPUT_TOUCH_L]) = static_cast<float>(event.xbutton.x_root);
-        (*m_oInput[C4G_INPUT_TOUCH_T]) = static_cast<float>(event.xbutton.y_root);
+        (*m_oInput[C4G_INPUT_TOUCH_LEFT]) = static_cast<float>(event.xbutton.x_root);
+        (*m_oInput[C4G_INPUT_TOUCH_TOP]) = static_cast<float>(event.xbutton.y_root);
         rpScene->Handle(&m_oInput);
         break;
 
       case ButtonRelease:
         m_oInput.type = EInputType_Touch;
         m_oInput.event = EInputEvent_Up;
+        (*m_oInput[C4G_INPUT_TOUCH_COUNT]) = 1;
         (*m_oInput[C4G_INPUT_TOUCH_X]) = static_cast<float>(event.xbutton.x);
         (*m_oInput[C4G_INPUT_TOUCH_Y]) = static_cast<float>(event.xbutton.y);
-        (*m_oInput[C4G_INPUT_TOUCH_L]) = static_cast<float>(event.xbutton.x_root);
-        (*m_oInput[C4G_INPUT_TOUCH_T]) = static_cast<float>(event.xbutton.y_root);
+        (*m_oInput[C4G_INPUT_TOUCH_LEFT]) = static_cast<float>(event.xbutton.x_root);
+        (*m_oInput[C4G_INPUT_TOUCH_TOP]) = static_cast<float>(event.xbutton.y_root);
         rpScene->Handle(&m_oInput);
         break;
 
       case MotionNotify:
         m_oInput.type = EInputType_Touch;
         m_oInput.event = EInputEvent_Move;
+        (*m_oInput[C4G_INPUT_TOUCH_COUNT]) = 1;
         (*m_oInput[C4G_INPUT_TOUCH_X]) = static_cast<float>(event.xbutton.x);
         (*m_oInput[C4G_INPUT_TOUCH_Y]) = static_cast<float>(event.xbutton.y);
-        (*m_oInput[C4G_INPUT_TOUCH_L]) = static_cast<float>(event.xbutton.x_root);
-        (*m_oInput[C4G_INPUT_TOUCH_T]) = static_cast<float>(event.xbutton.y_root);
+        (*m_oInput[C4G_INPUT_TOUCH_LEFT]) = static_cast<float>(event.xbutton.x_root);
+        (*m_oInput[C4G_INPUT_TOUCH_TOP]) = static_cast<float>(event.xbutton.y_root);
         rpScene->Handle(&m_oInput);
         break;
 

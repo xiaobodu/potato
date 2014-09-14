@@ -17,6 +17,7 @@ class IScene;
 }
 namespace display {
 class IInput;
+class ISensor;
 }
 namespace render {
 class ICanvas;
@@ -83,15 +84,30 @@ public:
   virtual bool Handle(const int& riLayer, const display::IInput* const & rpInput) = 0;
 };
 
+class IRefreshable
+{
+public:
+  virtual ~IRefreshable()
+  {
+    ;
+  }
+
+public:
+  virtual bool Refresh(const int& riLayer, const display::ISensor* const & rpSensor) = 0;
+};
+
 class IDeal;
 
-class IWidget : public IResizable, public ITickable, public IDrawable, public IHandleable
+class IWidget : public IResizable, public ITickable, public IDrawable, public IHandleable, public IRefreshable
 {
 public:
   std::string id;
   int layer;
-  bool visible;
+  bool resize;
   bool always_tick;
+  bool visible;
+  bool input;
+  bool sensor;
   RectF dst;
   RectF dst_config;
   ISceneWithScript* const scene;
@@ -101,8 +117,11 @@ public:
   explicit IWidget(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
     : id("unknown")
     , layer(0)
-    , visible(false)
+    , resize(false)
     , always_tick(false)
+    , visible(false)
+    , input(false)
+    , sensor(false)
     , dst(0.0f)
     , dst_config(0.0f)
     , scene(rpScene)
