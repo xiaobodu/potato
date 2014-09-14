@@ -30,6 +30,20 @@ public:
 
 namespace render{
 
+class ITransform
+{
+public:
+  virtual ~ITransform() { ; }
+
+public:
+  virtual void Translate(const float& rfX, const float& rfY, const float& rfZ = 0.0f) = 0;
+  virtual void Scale(const float& rfX, const float& rfY, const float& rfZ = 1.0f) = 0;
+  virtual void Rotate(const float& rfAngle, const float& rfX, const float& rfY, const float& rfZ, const float& rfAX = 0.0f, const float& rfAY = 0.0f, const float& rfAZ = 0.0f) = 0;
+  /// must have four vertex, means the array have 4 * 3 float
+  /// and the indices is { 0, 1, 2, 2, 1, 3 };
+  virtual void Free(float* const& rpfData) = 0;
+};
+
 class ICanvas
 {
 public:
