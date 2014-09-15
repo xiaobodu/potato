@@ -71,9 +71,9 @@ void CCanvas::DrawGlyph(const base::Glyph& rGlyph, IProcess* const& rpProcess)
 
 void CCanvas::DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess)
 {
-  glPushMatrix();
-
   CGlyphProcessScope effect_scope(rGlyph, rfWidth, rfHeight, rpProcess);
+
+  glPushMatrix();
 
   if (NULL != rpProcess) rpProcess->Do(&CTransform::Instance(m_aVertex));
 

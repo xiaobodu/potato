@@ -15,8 +15,6 @@ set(SRC_FILE_LIST
   ${SRC_PATH_scene}/scene_base.h
   ${SRC_PATH_scene}/scene_impl.h
   ${SRC_PATH_scene}/scene.cpp
-  ${SRC_PATH_scene}/math.h
-  ${SRC_PATH_scene}/math.cpp
   ${SRC_PATH_scene}/builder.h
   ${SRC_PATH_scene}/builder.cpp
   ${SRC_PATH_scene}/layout.h
@@ -32,6 +30,8 @@ set(SRC_FILE_LIST
   ${SRC_PATH_potato}/engine/input.cpp
   ${SRC_PATH_potato}/engine/sensor.h
   ${SRC_PATH_potato}/engine/sensor.cpp
+  ${SRC_PATH_potato}/utility/math.h
+  ${SRC_PATH_potato}/utility/math.cpp
   ${SRC_PATH_potato}/utility/file.h
   ${SRC_PATH_potato}/utility/log.h
   ${SRC_PATH_potato}/utility/sharedlibrary.h

@@ -20,17 +20,17 @@ class CEffectNone : public flash::IEffect
 public:
   static CEffectNone instance;
 
-public:
-  CEffectNone() { ; }
-  virtual ~CEffectNone() { ; }
+private:
+  CEffectNone();
+  virtual ~CEffectNone();
 
 public:
-  virtual void Play() { ; }
-  virtual void Stop() { ; }
-  virtual void Pause() { ; }
-  virtual void Continue() { ; }
-  virtual bool Tick(const float& rfDelta) { return false; }
-  virtual void Make(render::ITransform* const& rpTransform) { ; }
+  virtual void Play();
+  virtual void Stop();
+  virtual void Pause();
+  virtual void Continue();
+  virtual bool Tick(const float& rfDelta);
+  virtual void Make(render::ITransform* const& rpTransform);
 };
 
 template<typename TBase>

@@ -36,6 +36,7 @@ public:
 
 private:
   CProcess* m_pProcess;
+  bool m_runeffect;
 
 public:
   class CBuilder : public TBuilder<CImage* const>

@@ -58,7 +58,8 @@ bool CPanel::Tick(const float& rfDelta)
     IWidget*& widget_ptr = *it;
     if (widget_ptr->always_tick || widget_ptr->visible) res |= widget_ptr->Tick(rfDelta);
   }
-  return res || CurrentEffect()->Tick(rfDelta);
+  res |= CurrentEffect()->Tick(rfDelta);
+  return res;
 }
 
 void CPanel::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
