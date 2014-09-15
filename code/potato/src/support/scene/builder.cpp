@@ -1,6 +1,6 @@
 #include "builder.h"
 
-#include "scene_base.h"
+#include "scene_impl.h"
 #include "asset.h"
 #include "panel.h"
 #include "image.h"
@@ -13,6 +13,7 @@ CBuilderManager CBuilderManager::instance;
 CGlyphBuilder CGlyphBuilder::instance;
 CRectFBuilder CRectFBuilder::instance;
 CWidgetBuilder CWidgetBuilder::instance;
+CWidgetEffectsBuilder CWidgetEffectsBuilder::instance;
 CFileBuilder CFileBuilder::instance;
 CAssetsBuilder CAssetsBuilder::instance;
 CAllWidgetBuilder CAllWidgetBuilder::instance;
@@ -35,7 +36,7 @@ CGlyphBuilder::CGlyphBuilder()
   ;
 }
 
-bool CGlyphBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, base::Glyph& rGlyph) const
+bool CGlyphBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, base::Glyph& rGlyph) const
 {
   const rapidjson::Value& jleft = roConfig["l"];
   assert(jleft.IsDouble());
@@ -56,7 +57,7 @@ bool CGlyphBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roC
   int width = 0;
   int height = 0;
   unsigned int id = 0;
-  if (!rpAsset->FindImageInfo(jid.GetString(), width, height, id)) return false;
+  if (!rpScene->GetAssetPtr()->FindImageInfo(jid.GetString(), width, height, id)) return false;
 
   rGlyph.l = static_cast<float>(jleft.GetDouble() / (width * 1.0f));
   rGlyph.r = static_cast<float>(jright.GetDouble() / (width * 1.0f));
@@ -74,7 +75,7 @@ CRectFBuilder::CRectFBuilder()
   ;
 }
 
-bool CRectFBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, RectF& rRectF) const
+bool CRectFBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, RectF& rRectF) const
 {
   const rapidjson::Value& jleft = roConfig["l"];
   assert(jleft.IsDouble());
@@ -105,7 +106,7 @@ CWidgetBuilder::CWidgetBuilder()
   ;
 }
 
-bool CWidgetBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const
+bool CWidgetBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const
 {
   const rapidjson::Value& jid = roConfig["id"];
   assert(jid.IsString());
@@ -121,11 +122,44 @@ bool CWidgetBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& ro
   if (!jvisible.IsBool()) return false;
 
   rpWidget->id = jid.GetString();
-  CRectFBuilder::instance.Do(rpAsset, jrect, rpWidget->dst);
+  CRectFBuilder::instance.Do(rpScene, jrect, rpWidget->dst);
   rpWidget->dst_config = rpWidget->dst;
   rpWidget->layer = jlayer.GetInt();
   rpWidget->visible = jvisible.GetBool();
+
+  if (roConfig.HasMember("effects"))
+  {
+    const rapidjson::Value& jeffects = roConfig["effects"];
+    assert(jeffects.IsArray());
+    if (!jeffects.IsArray()) return false;
+    for (int i = 0; i < static_cast<int>(jeffects.Size()); ++i)
+    {
+      const rapidjson::Value& jeffect = jeffects[i];
+      if (!jeffect.IsObject()) continue;
+      const rapidjson::Value& jeffect_id = jeffect["id"];
+      if (!jeffect_id.IsString()) continue;
+      const rapidjson::Value& jeffect_name = jeffect["name"];
+      if (!jeffect_name.IsString()) continue;
+      flash::IEffect* effect_ptr = rpScene->GetFlashPtr()->New(jeffect_name.GetString());
+      if (NULL == effect_ptr) continue;
+      rpWidget->PushEffect(jeffect_id.GetString(), effect_ptr);
+    }
+  }
   return true;
+}
+
+
+
+CWidgetEffectsBuilder::CWidgetEffectsBuilder()
+  : TBuilder<IWidget* const>("effects")
+{
+  ;
+}
+
+bool CWidgetEffectsBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const
+{
+  //
+  return false;
 }
 
 
@@ -136,14 +170,14 @@ CFileBuilder::CFileBuilder()
   ;
 }
 
-bool CFileBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, rapidjson::Document& rDoc) const
+bool CFileBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, rapidjson::Document& rDoc) const
 {
   const rapidjson::Value& jvalue = roConfig["value"];
   assert(jvalue.IsString());
   if (!jvalue.IsString()) return false;
 
   std::string file_context;
-  rpAsset->LoadFile(jvalue.GetString(), file_context);
+  rpScene->GetAssetPtr()->LoadFile(jvalue.GetString(), file_context);
   rDoc.Parse(file_context.c_str());
   return true;
 }
@@ -162,7 +196,7 @@ void CAssetsBuilder::BindRender(core::IRender* const& rpRender)
   m_pRender = rpRender;
 }
 
-bool CAssetsBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, const void* const& rpPtr) const
+bool CAssetsBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, const void* const& rpPtr) const
 {
   assert(roConfig.IsArray());
   if (!roConfig.IsArray()) return false;
@@ -191,10 +225,10 @@ bool CAssetsBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& ro
       int width = 0;
       int height = 0;
       unsigned char* buffer_ptr = NULL;
-      rpAsset->LoadImage(jfile.GetString(), width, height, buffer_ptr);
+      rpScene->GetAssetPtr()->LoadImage(jfile.GetString(), width, height, buffer_ptr);
       if (NULL == m_pRender) continue;
       int texid = m_pRender->GenerateTexId(width, height, buffer_ptr);
-      rpAsset->PushImageInfo(jid.GetString(), width, height, texid);
+      rpScene->GetAssetPtr()->PushImageInfo(jid.GetString(), width, height, texid);
     }
   }
 
@@ -209,7 +243,7 @@ CAllWidgetBuilder::CAllWidgetBuilder()
   ;
 }
 
-bool CAllWidgetBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const
+bool CAllWidgetBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const
 {
   const rapidjson::Value& jtype = roConfig["type"];
   assert(jtype.IsString());
@@ -223,7 +257,7 @@ bool CAllWidgetBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value&
     // TODO: where to delete?
     IPanel* new_panel_ptr = new CPanel(rpWidget->scene, rpWidget);
     const TBuilder<IPanel* const>* panel_builder_ptr = reinterpret_cast<const TBuilder<IPanel* const>*>(builder_ptr);
-    if (panel_builder_ptr->Do(rpAsset, roConfig, new_panel_ptr))
+    if (panel_builder_ptr->Do(rpScene, roConfig, new_panel_ptr))
     {
       rpWidget->Add(new_panel_ptr);
       return true;
@@ -235,7 +269,7 @@ bool CAllWidgetBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value&
     // TODO: where to delete?
     IImage* new_image_ptr = new CImage(rpWidget->scene, rpWidget);
     const TBuilder<IImage* const>* image_builder_ptr = reinterpret_cast<const TBuilder<IImage* const>*>(builder_ptr);
-    if (image_builder_ptr->Do(rpAsset, roConfig, new_image_ptr))
+    if (image_builder_ptr->Do(rpScene, roConfig, new_image_ptr))
     {
       rpWidget->Add(new_image_ptr);
       return true;
@@ -246,8 +280,8 @@ bool CAllWidgetBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value&
   {
     rapidjson::Document doc;
     const TBuilder<rapidjson::Document>* file_builder_ptr = reinterpret_cast<const TBuilder<rapidjson::Document>*>(builder_ptr);
-    file_builder_ptr->Do(rpAsset, roConfig, doc);
-    return Do(rpAsset, doc, rpWidget);
+    file_builder_ptr->Do(rpScene, roConfig, doc);
+    return Do(rpScene, doc, rpWidget);
   }
 
   return false;
@@ -261,7 +295,7 @@ CScriptBuilder::CScriptBuilder()
   ;
 }
 
-bool CScriptBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, script::ISubstance* const& rpSubstance) const
+bool CScriptBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, script::ISubstance* const& rpSubstance) const
 {
   if (NULL == rpSubstance) return false;
 

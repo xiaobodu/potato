@@ -2,6 +2,8 @@
 
 #include "flash.h"
 
+#include <map>
+
 namespace c4g {
 namespace flash {
 
@@ -13,6 +15,8 @@ public:
 
 public:
   virtual IEffect* New(const std::string& rsName) const;
+
+public:
 };
 
 }

@@ -20,7 +20,7 @@ private:
 public:
   virtual void Translate(const float& rfX, const float& rfY, const float& rfZ = 0.0f);
   virtual void Scale(const float& rfX, const float& rfY, const float& rfZ = 1.0f);
-  virtual void Rotate(const float& rfAngle, const float& rfX, const float& rfY, const float& rfZ, const float& rfAX = 0.0f, const float& rfAY = 0.0f, const float& rfAZ = 0.0f);
+  virtual void Rotate(const float& rfAngle, const float& rfX, const float& rfY, const float& rfZ);
   virtual void Free(float* const& rpfVertexData);
 
 private:

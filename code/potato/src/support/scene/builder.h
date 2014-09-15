@@ -9,12 +9,9 @@
 #include "math.h"
 
 namespace c4g {
-
-namespace core {
-class IAsset;
-}
-
 namespace scene {
+
+class ISceneImpl;
 
 class IBuilder
 {
@@ -43,7 +40,7 @@ public:
   }
 
 public:
-  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, TGoods& rGoods) const = 0;
+  virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, TGoods& rGoods) const = 0;
 };
 
 class CGlyphBuilder : public TBuilder<base::Glyph>
@@ -52,7 +49,7 @@ private:
   CGlyphBuilder();
 
 public:
-  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, base::Glyph& rGlyph) const;
+  virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, base::Glyph& rGlyph) const;
 
 public:
   static CGlyphBuilder instance;
@@ -64,7 +61,7 @@ private:
   CRectFBuilder();
 
 public:
-  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, RectF& rRectF) const;
+  virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, RectF& rRectF) const;
 
 public:
   static CRectFBuilder instance;
@@ -77,10 +74,22 @@ private:
   CWidgetBuilder();
 
 public:
-  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const;
+  virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const;
 
 public:
   static CWidgetBuilder instance;
+};
+
+class CWidgetEffectsBuilder : public TBuilder<IWidget* const>
+{
+public:
+  CWidgetEffectsBuilder();
+
+public:
+  virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const;
+
+public:
+  static CWidgetEffectsBuilder instance;
 };
 
 class CFileBuilder : public TBuilder<rapidjson::Document>
@@ -89,7 +98,7 @@ private:
   CFileBuilder();
 
 public:
-  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, rapidjson::Document& rDoc) const;
+  virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, rapidjson::Document& rDoc) const;
 
 public:
   static CFileBuilder instance;
@@ -105,7 +114,7 @@ public:
   void BindRender(core::IRender* const& rpRender);
 
 public:
-  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, const void* const& rpPtr) const;
+  virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, const void* const& rpPtr) const;
 
 private:
   core::IRender* m_pRender;
@@ -120,7 +129,7 @@ private:
   CAllWidgetBuilder();
 
 public:
-  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const;
+  virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, IWidget* const& rpWidget) const;
 
 public:
   static CAllWidgetBuilder instance;
@@ -132,7 +141,7 @@ private:
   CScriptBuilder();
 
 public:
-  virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, script::ISubstance* const& rpSubstance) const;
+  virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, script::ISubstance* const& rpSubstance) const;
 
 public:
   static CScriptBuilder instance;

@@ -5,7 +5,7 @@
 namespace c4g {
 namespace base {
 
-struct Glyph
+typedef struct Glyph
 {
   float l;
   float r;
@@ -18,7 +18,12 @@ struct Glyph
   {
     ;
   }
-};
+} SGlyph;
+
+typedef struct Matrix
+{
+   float   m[4][4];
+} SMatrix;
 
 template<typename T>
 class TScope
@@ -44,14 +49,8 @@ class TPtrScope
 {
 public:
   explicit TPtrScope()
-      : m_pT(NULL)
   {
-    ;
-  }
-  explicit TPtrScope(T* const& rpT)
-      : m_pT(rpT)
-  {
-    ;
+    m_pT = NULL;
   }
   virtual ~TPtrScope()
   {
@@ -62,7 +61,6 @@ public:
   // just for pointer
   void operator=(T* const& rpT)
   {
-    Free();
     m_pT = rpT;
   }
   T* const& operator*()

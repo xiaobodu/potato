@@ -1,12 +1,17 @@
 #include "process.h"
 
+#include "scene_base.h"
+#include "flash.h"
+
+#include <cassert>
+
 namespace c4g {
 namespace scene {
 
-CProcess::CProcess()
-  : m_fX(0.0f), m_fY(0.0f)
+CProcess::CProcess(IWidget* const& rpWidget)
+  : m_pWidget(rpWidget), m_fX(0.0f), m_fY(0.0f)
 {
-  ;
+  assert(NULL != rpWidget);
 }
 CProcess::~CProcess()
 {
@@ -22,6 +27,7 @@ void CProcess::SetPos(const float& rfX, const float& rfY)
 bool CProcess::Do(render::ITransform* const & rpTransform)
 {
   rpTransform->Translate(m_fX, m_fY);
+  m_pWidget->CurrentEffect()->Make(rpTransform);
   return true;
 }
 

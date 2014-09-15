@@ -24,28 +24,53 @@
     },
     "widgets":[
       {
-        "type":"file",
-        "value":"scene/main.json"
-      },
-      {
-        "type":"image",
+        "type":"panel",
         "value":{
-          "id":"icon",
-          "src":{
-            "l":100.0,
-            "t":0.0,
-            "r":200.0,
-            "b":100.0,
-            "id":"icon"
-          },
+          "id":"sub",
           "dst":{
-            "l":50.0,
-            "t":0.0,
-            "r":100.0,
-            "b":50.0
+            "l":100.0,
+            "t":100.0,
+            "r":200.0,
+            "b":200.0
           },
           "layer":0,
-          "visible":true
+          "visible":true,
+          "layout":{
+            "type":"scale"
+          },
+          "effects":[
+            {
+              "id":"r",
+              "name":"rotate"
+            }
+          ],
+          "widgets":[
+            {
+              "type":"file",
+              "value":"scene/main.json"
+            },
+            {
+              "type":"image",
+              "value":{
+                "id":"icon",
+                "src":{
+                  "l":100.0,
+                  "t":0.0,
+                  "r":200.0,
+                  "b":100.0,
+                  "id":"icon"
+                },
+                "dst":{
+                  "l":50.0,
+                  "t":0.0,
+                  "r":100.0,
+                  "b":50.0
+                },
+                "layer":0,
+                "visible":true
+              }
+            }
+          ]
         }
       }
     ]

@@ -12,11 +12,11 @@ namespace scene {
 
 CImage::CBuilder CImage::builder;
 
-CImage::CImage(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
+CImage::CImage(ISceneImpl* const& rpScene, IWidget* const& rpParent)
   : TWidget<IImage>(rpScene, rpParent)
   , m_pProcess(NULL)
 {
-  m_pProcess = new CProcess();
+  m_pProcess = new CProcess(this);
 }
 
 CImage::~CImage()
@@ -53,12 +53,9 @@ void CImage::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
   // call script
   CallScript<script_image_draw>("draw", script_image_draw_default)(riLayer);
 
-  CurrentEffect()->Push();
-
   m_pProcess->SetPos(dst.l, dst.t);
   rpCanvas->DrawGlyph(src, dst.w, dst.h, m_pProcess);
-
-  CurrentEffect()->Pop();
+  //rpCanvas->DrawGlyph(src, dst.w, dst.h, NULL);
 }
 
 
@@ -68,13 +65,13 @@ CImage::CBuilder::CBuilder()
   ;
 }
 
-bool CImage::CBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, CImage* const & rpImage) const
+bool CImage::CBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, CImage* const & rpImage) const
 {
   const rapidjson::Value& jvalue = roConfig["value"];
   assert(jvalue.IsObject());
   if (!jvalue.IsObject()) return false;
 
-  if (!CWidgetBuilder::instance.Do(rpAsset, jvalue, rpImage))
+  if (!CWidgetBuilder::instance.Do(rpScene, jvalue, rpImage))
   {
     return false;
   }
@@ -83,7 +80,7 @@ bool CImage::CBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& 
   assert(jsrc.IsObject());
   if (!jsrc.IsObject()) return false;
 
-  if (!CGlyphBuilder::instance.Do(rpAsset, jsrc, rpImage->src))
+  if (!CGlyphBuilder::instance.Do(rpScene, jsrc, rpImage->src))
   {
     return false;
   }
@@ -91,7 +88,7 @@ bool CImage::CBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& 
   if (jvalue.HasMember("script"))
   {
     const rapidjson::Value& jscript = jvalue["script"];
-    CScriptBuilder::instance.Do(rpAsset, jscript, rpImage->m_pSubstance);
+    CScriptBuilder::instance.Do(rpScene, jscript, rpImage->m_pSubstance);
   }
 
   return true;

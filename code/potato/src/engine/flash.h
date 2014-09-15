@@ -6,6 +6,10 @@
 
 namespace c4g {
 
+namespace render {
+class ITransform;
+}
+
 namespace flash {
 class IEffect;
 }
@@ -36,8 +40,7 @@ public:
   virtual void Pause() = 0;
   virtual void Continue() = 0;
   virtual bool Tick(const float& rfDelta) = 0;
-  virtual void Push() = 0;
-  virtual void Pop() = 0;
+  virtual void Make(render::ITransform* const& rpTransform) = 0;
 };
 
 

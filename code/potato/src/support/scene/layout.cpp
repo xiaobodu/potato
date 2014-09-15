@@ -47,7 +47,7 @@ void CLayout::Resize(const RectF& roConfig, const RectF& roResized, IWidget* con
   if (rpWidget->resize) rpWidget->Resize(rpWidget->dst.w, rpWidget->dst.h);
 }
 
-bool CLayout::CBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, ILayout* const & rpLayout) const
+bool CLayout::CBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, ILayout* const & rpLayout) const
 {
   const rapidjson::Value& jtype = roConfig["type"];
   if (!jtype.IsString()) return false;

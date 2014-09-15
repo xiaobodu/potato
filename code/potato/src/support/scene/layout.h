@@ -49,7 +49,7 @@ public:
   public:
     CBuilder() : TBuilder<ILayout* const>("layout") { ; }
   public:
-    virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, ILayout* const & rpLayout) const;
+    virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, ILayout* const & rpLayout) const;
 
   protected:
     ELayoutType Convert(const std::string& rsType) const;

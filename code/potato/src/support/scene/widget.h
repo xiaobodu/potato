@@ -30,18 +30,18 @@ public:
   virtual void Pause() { ; }
   virtual void Continue() { ; }
   virtual bool Tick(const float& rfDelta) { return false; }
-  virtual void Push() { ; }
-  virtual void Pop() { ; }
+  virtual void Make(render::ITransform* const& rpTransform) { ; }
 };
 
 template<typename TBase>
 class TWidget : public TBase, public script::AHandler
 {
 public:
-  explicit TWidget(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
+  explicit TWidget(ISceneImpl* const& rpScene, IWidget* const& rpParent)
     : TBase(rpScene, rpParent)
     , m_pCurrentEffect(NULL)
   {
+    assert(NULL != rpScene);
     rpScene->BindScript(this);
   }
   virtual ~TWidget()
@@ -140,7 +140,8 @@ public:
     ///  check the effect map
     MEffects::const_iterator cit_find = m_mEffect.find(rsName);
     if (cit_find != m_mEffect.end()) return;
-    m_mEffect.insert(std::make_pair(rsName, base::TPtrScope<flash::IEffect>(rpEffect)));
+    m_mEffect.insert(std::make_pair(rsName, base::TPtrScope<flash::IEffect>()));
+    m_mEffect[rsName] = rpEffect;
   }
   virtual flash::IEffect* const CurrentEffect()
   {
@@ -149,7 +150,7 @@ public:
   }
   virtual void PlayEffect(const std::string& rsName, const bool& rbForce = false)
   {
-    if (!rbForce && NULL == m_pCurrentEffect) return;
+    if (!rbForce && NULL != m_pCurrentEffect) return;
     m_pCurrentEffect = NULL;
 
     MEffects::iterator it_find = m_mEffect.find(rsName);

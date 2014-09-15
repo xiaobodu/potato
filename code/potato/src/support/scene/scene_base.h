@@ -13,7 +13,8 @@
 namespace c4g {
 
 namespace core {
-class IScene;
+class IAsset;
+class IFlash;
 }
 namespace display {
 class IInput;
@@ -30,11 +31,16 @@ class AHandler;
 }
 namespace scene {
 
-class ISceneWithScript : public core::IScene
+class ISceneImpl : public core::IScene
 {
 public:
-  virtual ~ISceneWithScript() { ; }
+  virtual ~ISceneImpl() { ; }
 
+public:
+  virtual core::IAsset* const& GetAssetPtr() = 0;
+  virtual core::IFlash* const& GetFlashPtr() = 0;
+
+  /// script
 public:
   virtual void BindScript(script::AHandler* const& rpHandler) = 0;
 };
@@ -113,11 +119,11 @@ public:
   bool sensor;
   RectF dst;
   RectF dst_config;
-  ISceneWithScript* const scene;
+  ISceneImpl* const scene;
   IWidget* parent;
 
 public:
-  explicit IWidget(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
+  explicit IWidget(ISceneImpl* const& rpScene, IWidget* const& rpParent)
     : id("unknown")
     , layer(0)
     , resize(false)

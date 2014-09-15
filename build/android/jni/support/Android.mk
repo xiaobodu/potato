@@ -16,7 +16,7 @@ LOCAL_PATH := $(MY_LOCAL_SUPPORT_PATH)
 include $(LOCAL_PATH)/scene/Android.mk
 
 LOCAL_PATH := $(MY_LOCAL_SUPPORT_PATH)
-include $(LOCAL_PATH)/flash_gles/Android.mk
+include $(LOCAL_PATH)/flash/Android.mk
 
 LOCAL_PATH := $(MY_LOCAL_SUPPORT_PATH)
 include $(LOCAL_PATH)/script_tcc/Android.mk

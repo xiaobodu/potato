@@ -91,6 +91,9 @@ CEngine::CEngine(const c4g::base::Config& roConfig)
   \"asset\":{\
     \"library\":\"lib/libasset.so\"\
   },\
+  \"flash\":{\
+    \"library\":\"lib/libflash.so\"\
+  },\
   \"script\":{\
     \"library\":\"lib/libscript_tcc.so\"\
   }\

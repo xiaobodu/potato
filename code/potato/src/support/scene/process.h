@@ -2,15 +2,15 @@
 
 #include "render.h"
 
-#include "flash.h"
-
 namespace c4g {
 namespace scene {
+
+class IWidget;
 
 class CProcess : public render::IProcess
 {
 public:
-  CProcess();
+  CProcess(IWidget* const& rpWidget);
   virtual ~CProcess();
 
 public:
@@ -20,6 +20,7 @@ public:
   virtual bool Do(render::ITransform* const& rpTransform);
 
 private:
+  IWidget* m_pWidget;
   float m_fX;
   float m_fY;
 };

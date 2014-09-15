@@ -14,7 +14,7 @@ public:
   CLayout layout;
 
 public:
-  IPanel(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
+  IPanel(ISceneImpl* const& rpScene, IWidget* const& rpParent)
     : IWidget(rpScene, rpParent)
   {
     ;
@@ -30,7 +30,7 @@ public:
 class CPanel : public TWidget<IPanel>
 {
 public:
-  explicit CPanel(ISceneWithScript* const& rpScene, IWidget* const& rpParent);
+  explicit CPanel(ISceneImpl* const& rpScene, IWidget* const& rpParent);
   virtual ~CPanel();
 
 public:
@@ -42,6 +42,7 @@ public:
 
 private:
   CProcess* m_pProcess;
+  bool m_runeffect;
 
 public:
   class CBuilder : public TBuilder<IPanel* const>
@@ -52,7 +53,7 @@ public:
       ;
     }
   public:
-    virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, IPanel* const& rpPanel) const;
+    virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, IPanel* const& rpPanel) const;
   };
   static CBuilder builder;
 };

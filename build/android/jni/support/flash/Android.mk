@@ -8,7 +8,7 @@ CODE_PATH := $(ROOT_PATH)/code/
 REAL_ROOT_PATH := $(LOCAL_PATH)/../../../../../
 REAL_CODE_PATH := $(REAL_ROOT_PATH)/code/
 
-LOCAL_MODULE    		:= flash_gles
+LOCAL_MODULE    		:= flash
 LOCAL_CFLAGS 			:= -Wall -fPIC -DBUILD_ANDROID -DBUILD_DEBUG
 
 LOCAL_CPP_FEATURES 		:= rtti exceptions
@@ -17,10 +17,11 @@ LOCAL_C_INCLUDES 		:= $(REAL_CODE_PATH)/potato/src
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/potato/src/engine
 LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/external/rapidjson/include
 
-LOCAL_SRC_FILES 		:= $(CODE_PATH)/potato/src/support/flash_gles/flash_gles.cpp
+LOCAL_SRC_FILES 		:= $(CODE_PATH)/potato/src/support/flash/flash.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/flash/effect_rotate.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/sharedlibrary.cpp
 
-LOCAL_LDLIBS    		:= -ldl -llog
+LOCAL_LDLIBS    		:= -ldl -llog -lGLESv1_CM
 
 LOCAL_SHARED_LIBRARIES := libstlport_static
 

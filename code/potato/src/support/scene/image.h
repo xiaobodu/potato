@@ -10,7 +10,7 @@ class CProcess;
 class IImage : public IWidget
 {
 public:
-  explicit IImage(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
+  explicit IImage(ISceneImpl* const& rpScene, IWidget* const& rpParent)
     : IWidget(rpScene, rpParent)
   {
     ;
@@ -27,12 +27,15 @@ public:
 class CImage : public TWidget<IImage>
 {
 public:
-  explicit CImage(ISceneWithScript* const& rpScene, IWidget* const& rpParent);
+  explicit CImage(ISceneImpl* const& rpScene, IWidget* const& rpParent);
   virtual ~CImage();
 
 public:
   virtual bool Tick(const float& rfDelta);
   virtual void Draw(const int& riLayer, render::ICanvas* const & rpCanvas);
+
+private:
+  CProcess* m_pProcess;
 
 public:
   class CBuilder : public TBuilder<CImage* const>
@@ -41,12 +44,9 @@ public:
     explicit CBuilder();
 
   public:
-    virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, CImage* const& rpImage) const;
+    virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, CImage* const& rpImage) const;
   };
   static CBuilder builder;
-
-private:
-  CProcess* m_pProcess;
 };
 
 }

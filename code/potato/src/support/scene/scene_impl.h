@@ -6,6 +6,7 @@ namespace c4g {
 
 namespace core {
 class IAsset;
+class IFlash;
 class IScript;
 }
 namespace utility{
@@ -16,7 +17,7 @@ namespace scene {
 
 class IPanel;
 
-class CScene : public ISceneWithScript
+class CScene : public ISceneImpl
 {
 public:
   explicit CScene(const base::Config& roConfig);
@@ -32,17 +33,24 @@ public:
   virtual bool Refresh(const display::ISensor* const& rpSensor);
 
 public:
+  virtual core::IAsset* const& GetAssetPtr();
+  virtual core::IFlash* const& GetFlashPtr();
   virtual void BindScript(script::AHandler* const& rpHandler);
+
+public:
 
 private:
   base::Config          m_oConfig;
   base::Config          m_oConfigAsset;
   core::IAsset*         m_pAsset;
+  base::Config          m_oConfigFlash;
+  core::IFlash*         m_pFlash;
   base::Config          m_oConfigScript;
   core::IScript*        m_pScript;
   utility::CSharedLibraryManager* m_pLibraryManager;
 
   IPanel* m_pPanel;
+  bool m_bNeedFlush;
 };
 
 }

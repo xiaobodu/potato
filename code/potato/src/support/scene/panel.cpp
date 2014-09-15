@@ -13,15 +13,16 @@ namespace scene {
 
 CPanel::CBuilder CPanel::builder;
 
-CPanel::CPanel(ISceneWithScript* const & rpScene, IWidget* const & rpParent)
+CPanel::CPanel(ISceneImpl* const& rpScene, IWidget* const & rpParent)
   : TWidget<IPanel>(rpScene, rpParent)
   , m_pProcess(NULL)
+  , m_runeffect(false)
 {
   resize = true;
   input = true;
   sensor = true;
 
-  m_pProcess = new CProcess();
+  m_pProcess = new CProcess(this);
 }
 
 CPanel::~CPanel()
@@ -43,6 +44,12 @@ void CPanel::Resize(const float& rfWidth, const float& rfHeight)
 
 bool CPanel::Tick(const float& rfDelta)
 {
+  if (!m_runeffect)
+  {
+    PlayEffect("r");
+    m_runeffect = true;
+  }
+
   bool res = false;
   VWidgetPtr::iterator it = m_vpWidget.begin();
   VWidgetPtr::iterator it_end = m_vpWidget.end();
@@ -51,13 +58,11 @@ bool CPanel::Tick(const float& rfDelta)
     IWidget*& widget_ptr = *it;
     if (widget_ptr->always_tick || widget_ptr->visible) res |= widget_ptr->Tick(rfDelta);
   }
-  return res;
+  return res || CurrentEffect()->Tick(rfDelta);
 }
 
 void CPanel::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
 {
-  CurrentEffect()->Push();
-
   m_pProcess->SetPos(dst.l, dst.t);
   rpCanvas->EffectBegin(m_pProcess);
 
@@ -70,8 +75,6 @@ void CPanel::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
   }
 
   rpCanvas->EffectEnd(m_pProcess);
-
-  CurrentEffect()->Pop();
 }
 
 bool CPanel::Handle(const int& riLayer, const display::IInput* const & rpInput)
@@ -100,7 +103,7 @@ bool CPanel::Refresh(const int& riLayer, const display::ISensor* const & rpSenso
   return res;
 }
 
-bool CPanel::CBuilder::Do(core::IAsset* const & rpAsset, const rapidjson::Value& roConfig, IPanel* const & rpPanel) const
+bool CPanel::CBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, IPanel* const & rpPanel) const
 {
   const rapidjson::Value& jtype = roConfig["type"];
   assert(jtype.IsString());
@@ -111,7 +114,7 @@ bool CPanel::CBuilder::Do(core::IAsset* const & rpAsset, const rapidjson::Value&
   assert(jvalue.IsObject());
   if (!jvalue.IsObject()) return false;
 
-  if (!CWidgetBuilder::instance.Do(rpAsset, jvalue, rpPanel))
+  if (!CWidgetBuilder::instance.Do(rpScene, jvalue, rpPanel))
   {
     return false;
   }
@@ -119,14 +122,14 @@ bool CPanel::CBuilder::Do(core::IAsset* const & rpAsset, const rapidjson::Value&
   if (jvalue.HasMember("assets"))
   {
     const rapidjson::Value& jassets = jvalue["assets"];
-    if (!CAssetsBuilder::instance.Do(rpAsset, jassets, NULL))
+    if (!CAssetsBuilder::instance.Do(rpScene, jassets, NULL))
     {
       return false;
     }
   }
 
   const rapidjson::Value& jlayout = jvalue["layout"];
-  if (!CLayout::builder.Do(rpAsset, jlayout, &rpPanel->layout))
+  if (!CLayout::builder.Do(rpScene, jlayout, &rpPanel->layout))
   {
     return false;
   }
@@ -140,7 +143,7 @@ bool CPanel::CBuilder::Do(core::IAsset* const & rpAsset, const rapidjson::Value&
     const rapidjson::Value& jwidget = jwidgets[i];
     if (!jwidget.IsObject()) continue;
 
-    CAllWidgetBuilder::instance.Do(rpAsset, jwidget, rpPanel);
+    CAllWidgetBuilder::instance.Do(rpScene, jwidget, rpPanel);
   }
 
   return true;

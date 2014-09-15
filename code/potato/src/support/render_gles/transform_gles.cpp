@@ -38,12 +38,10 @@ void CTransform::Scale(const float& rfX, const float& rfY, const float& rfZ /*= 
   glScalef(rfX, rfY, rfZ);
 }
 
-void CTransform::Rotate(const float& rfAngle, const float& rfX, const float& rfY, const float& rfZ, const float& rfAX /*= 0.0f*/, const float& rfAY /*= 0.0f*/, const float& rfAZ /*= 0.0f*/)
+void CTransform::Rotate(const float& rfAngle, const float& rfX, const float& rfY, const float& rfZ)
 {
   //TODO: use matrix
-  glTranslatef(rfAX, -rfAY, rfAZ);
   glRotatef(rfAngle, rfX, rfY, rfZ);
-  glTranslatef(-rfAX, rfAY, -rfAZ);
 }
 
 void CTransform::Free(float* const& rpfData)

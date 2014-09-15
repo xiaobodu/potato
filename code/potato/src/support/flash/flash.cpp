@@ -1,4 +1,6 @@
-#include "flash_gles.h"
+#include "flash_impl.h"
+
+#include "effect_rotate.h"
 
 #include <cassert>
 
@@ -17,6 +19,8 @@ CFlash::~CFlash()
 
 IEffect* CFlash::New(const std::string& rsName) const
 {
+  if (rsName == "rotate") return new CEffectRotate();
+  //TODO:
   return NULL;
 }
 

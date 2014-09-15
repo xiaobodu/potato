@@ -65,10 +65,10 @@ bool CRender::Render(const float& rfDelta, core::IScene* const& rpScene)
 
   if (NULL != rpScene && rpScene->Tick(rfDelta))
   {
-    rpScene->Draw(m_pCanvas);
+    return rpScene->Draw(m_pCanvas);
   }
 
-  return true;
+  return false;
 }
 
 void CRender::End()

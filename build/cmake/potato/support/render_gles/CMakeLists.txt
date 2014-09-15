@@ -29,7 +29,6 @@ include_directories(${INC_PATH_LIST})
 add_library(render_gles SHARED ${SRC_FILE_LIST})
 
 set(LINK_FILE_LIST
-  EGL
   GLESv1_CM
   )
 target_link_libraries(render_gles ${LINK_FILE_LIST})

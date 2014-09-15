@@ -18,6 +18,9 @@
 FUNC_API_TYPEDEF(CreateAsset, c4g::core::IAsset, const c4g::base::Config);
 FUNC_API_TYPEDEF(DestroyAsset, c4g::core::IAsset, const c4g::base::Config);
 
+FUNC_API_TYPEDEF(CreateFlash, c4g::core::IFlash, const c4g::base::Config);
+FUNC_API_TYPEDEF(DestroyFlash, c4g::core::IFlash, const c4g::base::Config);
+
 FUNC_API_TYPEDEF(CreateScript, c4g::core::IScript, const c4g::base::Config);
 FUNC_API_TYPEDEF(DestroyScript, c4g::core::IScript, const c4g::base::Config);
 
@@ -26,9 +29,11 @@ namespace scene {
 
 CScene::CScene(const base::Config& roConfig)
   : m_pAsset(NULL)
+  , m_pFlash(NULL)
   , m_pScript(NULL)
   , m_pLibraryManager(NULL)
   , m_pPanel(NULL)
+  , m_bNeedFlush(true)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
@@ -69,6 +74,32 @@ CScene::CScene(const base::Config& roConfig)
     CreateAssetFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateAssetFuncPtr>(m_oConfigAsset.GetLibraryFile(), TOSTRING(CreateAsset));
     /// create the display with configure
     func_create_func_ptr(m_pAsset, m_oConfigAsset);
+  }
+
+  {
+    m_oConfigFlash._sLibrPath = roConfig._sLibrPath;
+    m_oConfigFlash._sDataPath = roConfig._sDataPath;
+
+    const rapidjson::Value& jflash = jdoc["flash"];
+    assert(jflash.IsObject());
+
+    const rapidjson::Value& library = jflash["library"];
+    assert(library.IsString());
+    m_oConfigFlash._sLibraryFile = library.GetString();
+
+#if defined(BUILD_ANDROID)
+    m_oConfigFlash._sConfigureContext = "{}";
+#else
+    const rapidjson::Value& configure = jflash["configure"];
+    assert(configure.IsString());
+    m_oConfigFlash._sConfigureFile = library.GetString();
+#endif
+
+    /// load the shared library
+    typedef FUNC_API_TYPE(CreateFlash) CreateFlashFuncPtr;
+    CreateFlashFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateFlashFuncPtr>(m_oConfigFlash.GetLibraryFile(), TOSTRING(CreateFlash));
+    /// create the display with configure
+    func_create_func_ptr(m_pFlash, m_oConfigFlash);
   }
 
   {
@@ -116,6 +147,14 @@ CScene::~CScene()
 
   {
     /// load the shared library
+    typedef FUNC_API_TYPE(DestroyFlash) DestroyFlashFuncPtr;
+    DestroyFlashFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyFlashFuncPtr>(m_oConfigFlash.GetLibraryFile(), TOSTRING(DestroyFlash));
+    /// create the display with configure
+    func_destroy_func_ptr(m_pFlash, m_oConfigFlash);
+  }
+
+  {
+    /// load the shared library
     typedef FUNC_API_TYPE(DestroyScript) DestroyScriptFuncPtr;
     DestroyScriptFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyScriptFuncPtr>(m_oConfigScript.GetLibraryFile(), TOSTRING(DestroyScript));
     /// create the display with configure
@@ -138,7 +177,7 @@ bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName)
   std::string file_context = utility::ReadFile(m_oConfig._sDataPath + "/" + rsFileName);
   rapidjson::Document jdoc;
   jdoc.Parse(file_context.c_str());
-  CPanel::builder.Do(m_pAsset, jdoc, m_pPanel);
+  CPanel::builder.Do(this, jdoc, m_pPanel);
   return true;
 }
 
@@ -200,14 +239,20 @@ bool CScene::Resize(const int& riWidth, const int& riHeight)
 
 bool CScene::Tick(const float& rfDelta)
 {
-  return m_pPanel->Tick(rfDelta);
+  bool res = m_bNeedFlush;
+
+  res |= m_pPanel->Tick(rfDelta);
+
+  //TODO:
+  //m_bNeedFlush = false;
+  return res;
 }
 
 bool CScene::Draw(render::ICanvas* const& rpCanvas)
 {
   for (int i = C4G_LAYER_MIN; i < C4G_LAYER_MAX; ++i)
   {
-    m_pPanel->Draw(i, rpCanvas);
+    if (m_pPanel->layer == i) m_pPanel->Draw(i, rpCanvas);
   }
   return true;
 }
@@ -230,6 +275,16 @@ bool CScene::Refresh(const display::ISensor* const& rpSensor)
     res |= m_pPanel->Refresh(i, rpSensor);
   }
   return res;
+}
+
+core::IAsset* const& CScene::GetAssetPtr()
+{
+  return m_pAsset;
+}
+
+core::IFlash* const& CScene::GetFlashPtr()
+{
+  return m_pFlash;
 }
 
 void CScene::BindScript(script::AHandler* const& rpHandler)

@@ -3,6 +3,10 @@
     "library":"lib/libasset.so",
     "configure":"config/asset.json"
   },
+  "flash":{
+    "library":"lib/libflash.so",
+    "configure":"config/flash.json"
+  },
   "script":{
     "library":"lib/libscript_tcc.so",
     "configure":"config/script.json"
