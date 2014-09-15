@@ -13,21 +13,76 @@ struct Glyph
   float b;
   unsigned int id;
 
-  Glyph() : l(0), r(0), t(0), b(0), id(0) { ; }
+  Glyph()
+      : l(0), r(0), t(0), b(0), id(0)
+  {
+    ;
+  }
 };
 
 template<typename T>
 class TScope
 {
 public:
-  explicit TScope(T* const& rpT)
-    : m_pT(rpT)
-  { ; }
+  explicit TScope(T* const & rpT)
+      : m_pT(rpT)
+  {
+    ;
+  }
 
-  ~TScope()
-  { ; }
+  virtual ~TScope()
+  {
+    ;
+  }
 
 protected:
+  T* m_pT;
+};
+
+template<typename T>
+class TPtrScope
+{
+public:
+  explicit TPtrScope()
+      : m_pT(NULL)
+  {
+    ;
+  }
+  explicit TPtrScope(T* const& rpT)
+      : m_pT(rpT)
+  {
+    ;
+  }
+  virtual ~TPtrScope()
+  {
+    Free();
+  }
+
+public:
+  // just for pointer
+  void operator=(T* const& rpT)
+  {
+    Free();
+    m_pT = rpT;
+  }
+  T* const& operator*()
+  {
+    return m_pT;
+  }
+  const T* const& operator*() const
+  {
+    return m_pT;
+  }
+
+protected:
+  void Free()
+  {
+    if (NULL == m_pT) return;
+    delete m_pT;
+    m_pT = NULL;
+  }
+
+private:
   T* m_pT;
 };
 
@@ -35,10 +90,13 @@ template<typename TKey>
 class IValues
 {
 public:
-  typedef TKey      KeyType;
+  typedef TKey KeyType;
 
 public:
-  virtual ~IValues() { ; }
+  virtual ~IValues()
+  {
+    ;
+  }
 
 public:
   virtual IValues* const operator[](const TKey& rKey) = 0;

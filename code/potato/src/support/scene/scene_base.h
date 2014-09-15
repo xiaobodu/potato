@@ -22,6 +22,9 @@ class ISensor;
 namespace render {
 class ICanvas;
 }
+namespace flash {
+class IEffect;
+}
 namespace script {
 class AHandler;
 }
@@ -152,6 +155,15 @@ public:
     virtual void On(IWidget* const& rpWidget) const = 0;
   };
   virtual void Visit(IVisitor* const& rpVisitor) = 0;
+
+  /// effect
+public:
+  virtual void PushEffect(const std::string& rsName, flash::IEffect* const& rpEffect) = 0;
+  virtual flash::IEffect* const& CurrentEffect() = 0;
+  virtual void PlayEffect(const std::string& rsName, const bool& rbForce = false) = 0;
+  virtual void StopEffect() = 0;
+  virtual void PauseEffect() = 0;
+  virtual void ContinueEffect() = 0;
 };
 
 typedef std::vector<IWidget*> VWidgetPtr;

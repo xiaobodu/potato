@@ -14,6 +14,6 @@ add_subdirectory(asset)
 
 add_subdirectory(scene)
 
-add_subdirectory(flash)
+add_subdirectory(flash_gles)
 
 add_subdirectory(script_tcc)

@@ -12,35 +12,25 @@ namespace c4g{
 namespace render {
 namespace gles {
 
-class CGlyphEffectScope : public base::TScope<flash::IEffect>
+class CGlyphProcessScope : public base::TScope<IProcess>
 {
 public:
-  explicit CGlyphEffectScope(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, flash::IEffect* const& rpEffect)
-    : base::TScope<flash::IEffect>(rpEffect)
+  explicit CGlyphProcessScope(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess)
+    : base::TScope<IProcess>(rpProcess)
   {
-    if (!IsEffectCustom(m_pT))
-    {
-      glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-      glEnable(GL_TEXTURE_2D);
-      glEnableClientState(GL_VERTEX_ARRAY);
-      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    }
-
-    if (NULL != m_pT) m_pT->Begin(rGlyph);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_TEXTURE_2D);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   }
 
-  ~CGlyphEffectScope()
+  ~CGlyphProcessScope()
   {
-    if (NULL != m_pT) m_pT->End();
-
-    if (!IsEffectCustom(m_pT))
-    {
-      glDisable(GL_BLEND);
-      glDisable(GL_TEXTURE_2D);
-      glDisableClientState(GL_VERTEX_ARRAY);
-      glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    }
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   }
 };
 
@@ -62,28 +52,30 @@ CCanvas::~CCanvas()
   ;
 }
 
-void CCanvas::EffectBegin(flash::IEffect* const& rpEffect)
+void CCanvas::EffectBegin(IProcess* const& rpProcess)
 {
   glPushMatrix();
 
-  rpEffect->Do(&CTransform::Instance(m_aVertex));
+  if (NULL != rpProcess) rpProcess->Do(&CTransform::Instance(m_aVertex));
 }
 
-void CCanvas::EffectEnd(flash::IEffect* const& rpEffect)
+void CCanvas::EffectEnd(IProcess* const& rpProcess)
 {
   glPopMatrix();
 }
 
-void CCanvas::DrawGlyph(const base::Glyph& rGlyph, flash::IEffect* const& rpEffect)
+void CCanvas::DrawGlyph(const base::Glyph& rGlyph, IProcess* const& rpProcess)
 {
-  DrawGlyph(rGlyph, rGlyph.r - rGlyph.l, rGlyph.b - rGlyph.t, rpEffect);
+  DrawGlyph(rGlyph, rGlyph.r - rGlyph.l, rGlyph.b - rGlyph.t, rpProcess);
 }
 
-void CCanvas::DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, flash::IEffect* const& rpEffect)
+void CCanvas::DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess)
 {
-  CGlyphEffectScope effect_scope(rGlyph, rfWidth, rfHeight, rpEffect);
+  CGlyphProcessScope effect_scope(rGlyph, rfWidth, rfHeight, rpProcess);
 
   glPushMatrix();
+
+  if (NULL != rpProcess) rpProcess->Do(&CTransform::Instance(m_aVertex));
 
   m_aVertex[3] = rfWidth;
   m_aVertex[7] = -rfHeight;
@@ -99,8 +91,6 @@ void CCanvas::DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const f
   m_aTexCoord[6] = rGlyph.r;
   m_aTexCoord[7] = rGlyph.b;
 
-  if (NULL != rpEffect) rpEffect->Do(&CTransform::Instance(m_aVertex));
-
   //glActiveTexture(GL_TEXTURE0);
   glClientActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, rGlyph.id);
@@ -108,10 +98,6 @@ void CCanvas::DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const f
   glVertexPointer(3, GL_FLOAT, 0, m_aVertex);
 
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, m_aIndice);
-
-  /*glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-  glBindTexture(GL_TEXTURE_2D, 0);*/
 
   glPopMatrix();
 }

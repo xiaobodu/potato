@@ -5,7 +5,7 @@
 namespace c4g {
 namespace scene {
 
-class CEffect;
+class CProcess;
 
 class IImage : public IWidget
 {
@@ -33,25 +33,20 @@ public:
 public:
   virtual bool Tick(const float& rfDelta);
   virtual void Draw(const int& riLayer, render::ICanvas* const & rpCanvas);
-  /*virtual bool Handle(const int& riLayer, const display::IInput* const& rpInput);
-  virtual bool Refresh(const int& riLayer, const display::ISensor* const & rpSensor);*/
 
 public:
   class CBuilder : public TBuilder<CImage* const>
   {
   public:
-    explicit CBuilder() : TBuilder<CImage* const>("image")
-    {
-      ;
-    }
+    explicit CBuilder();
+
   public:
     virtual bool Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, CImage* const& rpImage) const;
   };
   static CBuilder builder;
-  friend class CBuilder;
 
 private:
-  CEffect* m_pEffect;
+  CProcess* m_pProcess;
 };
 
 }

@@ -6,7 +6,7 @@
 namespace c4g {
 namespace scene {
 
-class CEffect;
+class CProcess;
 
 class IPanel : public IWidget
 {
@@ -41,7 +41,7 @@ public:
   virtual bool Refresh(const int& riLayer, const display::ISensor* const & rpSensor);
 
 private:
-  CEffect* m_pEffect;
+  CProcess* m_pProcess;
 
 public:
   class CBuilder : public TBuilder<IPanel* const>

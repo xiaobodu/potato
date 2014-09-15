@@ -2,12 +2,17 @@
 
 #include "scene_base.h"
 #include "builder.h"
-#include "input.h"
-#include "sensor.h"
 
-#include <script.h>
+#include "flash.h"
+#include "script.h"
 
 namespace c4g {
+
+namespace display {
+class IInput;
+class ISensor;
+}
+
 namespace scene {
 
 template<typename TBase>
@@ -16,6 +21,7 @@ class TWidget : public TBase, public script::AHandler
 public:
   explicit TWidget(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
     : TBase(rpScene, rpParent)
+    , m_pCurrentEffect(NULL)
   {
     rpScene->BindScript(this);
   }
@@ -107,6 +113,52 @@ public:
 protected:
   VWidgetPtr m_vpWidget;
 
+  /// effect
+public:
+  typedef std::map<std::string, base::TPtrScope<flash::IEffect> > MEffects;
+  virtual void PushEffect(const std::string& rsName, flash::IEffect* const& rpEffect)
+  {
+    ///  check the effect map
+    MEffects::const_iterator cit_find = m_mEffect.find(rsName);
+    if (cit_find != m_mEffect.end()) return;
+    m_mEffect.insert(std::make_pair(rsName, base::TPtrScope<flash::IEffect>(rpEffect)));
+  }
+  virtual flash::IEffect* const& CurrentEffect()
+  {
+    return m_pCurrentEffect;
+  }
+  virtual void PlayEffect(const std::string& rsName, const bool& rbForce = false)
+  {
+    if (!rbForce && NULL == m_pCurrentEffect) return;
+    m_pCurrentEffect = NULL;
+
+    MEffects::iterator it_find = m_mEffect.find(rsName);
+    if (it_find == m_mEffect.end()) return;
+    m_pCurrentEffect = *((*it_find).second);
+    if (NULL == m_pCurrentEffect) return;
+    m_pCurrentEffect->Play();
+  }
+  virtual void StopEffect()
+  {
+    if (NULL == m_pCurrentEffect) return;
+    m_pCurrentEffect->Stop();
+    m_pCurrentEffect = NULL;
+  }
+  virtual void PauseEffect()
+  {
+    if (NULL == m_pCurrentEffect) return;
+    m_pCurrentEffect->Pause();
+  }
+  virtual void ContinueEffect()
+  {
+    if (NULL == m_pCurrentEffect) return;
+    m_pCurrentEffect->Continue();
+  }
+protected:
+  MEffects  m_mEffect;
+  flash::IEffect* m_pCurrentEffect;
+
+  /// script
 public:
   template<typename TFuncPtr>
   TFuncPtr CallScript(const std::string& rsFuncName, TFuncPtr pFuncDefault)

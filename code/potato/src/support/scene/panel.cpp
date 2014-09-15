@@ -3,7 +3,10 @@
 #include "scene.h"
 #include "image.h"
 #include "layout.h"
-#include "effect.h"
+#include "process.h"
+
+#include "input.h"
+#include "sensor.h"
 
 namespace c4g {
 namespace scene {
@@ -12,19 +15,19 @@ CPanel::CBuilder CPanel::builder;
 
 CPanel::CPanel(ISceneWithScript* const & rpScene, IWidget* const & rpParent)
   : TWidget<IPanel>(rpScene, rpParent)
-  , m_pEffect(NULL)
+  , m_pProcess(NULL)
 {
   resize = true;
   input = true;
   sensor = true;
 
-  m_pEffect = new CEffect();
+  m_pProcess = new CProcess();
 }
 
 CPanel::~CPanel()
 {
-  delete m_pEffect;
-  m_pEffect = NULL;
+  delete m_pProcess;
+  m_pProcess = NULL;
 }
 
 void CPanel::Resize(const float& rfWidth, const float& rfHeight)
@@ -40,8 +43,6 @@ void CPanel::Resize(const float& rfWidth, const float& rfHeight)
 
 bool CPanel::Tick(const float& rfDelta)
 {
-  m_pEffect->Tick(rfDelta);
-
   bool res = false;
   VWidgetPtr::iterator it = m_vpWidget.begin();
   VWidgetPtr::iterator it_end = m_vpWidget.end();
@@ -55,8 +56,8 @@ bool CPanel::Tick(const float& rfDelta)
 
 void CPanel::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
 {
-  m_pEffect->SetPos(dst.l, dst.t);
-  rpCanvas->EffectBegin(m_pEffect);
+  m_pProcess->SetPos(dst.l, dst.t);
+  rpCanvas->EffectBegin(m_pProcess);
 
   VWidgetPtr::iterator it = m_vpWidget.begin();
   VWidgetPtr::iterator it_end = m_vpWidget.end();
@@ -66,7 +67,7 @@ void CPanel::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
     if (widget_ptr->visible && riLayer == widget_ptr->layer) widget_ptr->Draw(riLayer, rpCanvas);
   }
 
-  rpCanvas->EffectEnd(m_pEffect);
+  rpCanvas->EffectEnd(m_pProcess);
 }
 
 bool CPanel::Handle(const int& riLayer, const display::IInput* const & rpInput)

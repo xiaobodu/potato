@@ -1,51 +1,51 @@
 {
-  "type": "panel",
-  "value": {
-    "id": "root",
-    "assets": [
+  "type":"panel",
+  "value":{
+    "id":"root",
+    "assets":[
       {
-        "type": "image",
-        "value": {
-          "id": "icon",
-          "file": "res/icon.png"
+        "type":"image",
+        "value":{
+          "id":"icon",
+          "file":"res/icon.png"
         }
       }
     ],
-    "dst": {
-        "l": 0.0,
-        "t": 0.0,
-        "r": 480.0,
-        "b": 800.0
+    "dst":{
+      "l":0.0,
+      "t":0.0,
+      "r":480.0,
+      "b":800.0
     },
-    "layer": 0,
-    "visible": true,
-    "layout": {
-      "type": "scale"
+    "layer":0,
+    "visible":true,
+    "layout":{
+      "type":"scale"
     },
-    "widgets": [
+    "widgets":[
       {
-        "type": "file",
-        "value": "scene/main.json"
+        "type":"file",
+        "value":"scene/main.json"
       },
       {
-        "type": "image",
-        "value": {
-          "id": "icon",
-            "src": {
-              "l": 100.0,
-              "t": 0.0,
-              "r": 200.0,
-              "b": 100.0,
-              "id":"icon"
-            },
-            "dst": {
-              "l": 50.0,
-              "t": 0.0,
-              "r": 100.0,
-              "b": 50.0
+        "type":"image",
+        "value":{
+          "id":"icon",
+          "src":{
+            "l":100.0,
+            "t":0.0,
+            "r":200.0,
+            "b":100.0,
+            "id":"icon"
           },
-          "layer": 0,
-          "visible": true
+          "dst":{
+            "l":50.0,
+            "t":0.0,
+            "r":100.0,
+            "b":50.0
+          },
+          "layer":0,
+          "visible":true
         }
       }
     ]

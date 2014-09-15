@@ -3,7 +3,6 @@
 #include "common.h"
 
 #include "base.h"
-#include "flash.h"
 
 namespace c4g{
 namespace core{
@@ -44,16 +43,25 @@ public:
   virtual void Free(float* const& rpfData) = 0;
 };
 
+class IProcess
+{
+public:
+  virtual ~IProcess() { ; }
+
+public:
+  virtual bool Do(render::ITransform* const& rpTransform) = 0;
+};
+
 class ICanvas
 {
 public:
   virtual ~ICanvas() { ; }
 
 public:
-  virtual void EffectBegin(flash::IEffect* const& rpEffect) = 0;
-  virtual void EffectEnd(flash::IEffect* const& rpEffect) = 0;
-  virtual void DrawGlyph(const base::Glyph& rGlyph, flash::IEffect* const& rpEffect = NULL) = 0;
-  virtual void DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, flash::IEffect* const& rpEffect = NULL) = 0;
+  virtual void EffectBegin(IProcess* const& rpProcess) = 0;
+  virtual void EffectEnd(IProcess* const& rpProcess) = 0;
+  virtual void DrawGlyph(const base::Glyph& rGlyph, IProcess* const& rpProcess = NULL) = 0;
+  virtual void DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess = NULL) = 0;
 };
 
 }

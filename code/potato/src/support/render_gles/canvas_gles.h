@@ -20,10 +20,10 @@ public:
   virtual ~CCanvas();
 
 public:
-  virtual void EffectBegin(flash::IEffect* const& rpEffect);
-  virtual void EffectEnd(flash::IEffect* const& rpEffect);
-  virtual void DrawGlyph(const base::Glyph& rGlyph, flash::IEffect* const& rpEffect = NULL);
-  virtual void DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, flash::IEffect* const& rpEffect = NULL);
+  virtual void EffectBegin(IProcess* const& rpProcess);
+  virtual void EffectEnd(IProcess* const& rpProcess);
+  virtual void DrawGlyph(const base::Glyph& rGlyph, IProcess* const& rpProcess = NULL);
+  virtual void DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess = NULL);
 
 private:
   GLfloat m_aVertex[RECT_VERTEX_NUM * RECT_VERTEX_FLOAT_NUM];

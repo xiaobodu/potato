@@ -1,4 +1,4 @@
-#include "flash_impl.h"
+#include "flash_gles.h"
 
 #include <cassert>
 
@@ -13,6 +13,11 @@ CFlash::CFlash(const c4g::base::Config& roConfig)
 CFlash::~CFlash()
 {
   ;
+}
+
+IEffect* CFlash::New(const std::string& rsName) const
+{
+  return NULL;
 }
 
 }

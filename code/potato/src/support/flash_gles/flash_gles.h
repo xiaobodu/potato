@@ -12,6 +12,7 @@ public:
   virtual ~CFlash();
 
 public:
+  virtual IEffect* New(const std::string& rsName) const;
 };
 
 }

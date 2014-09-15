@@ -6,9 +6,6 @@
 
 namespace c4g {
 
-namespace render {
-class ITransform;
-}
 namespace flash {
 class IEffect;
 }
@@ -21,6 +18,7 @@ public:
   virtual ~IFlash() { ; }
 
 public:
+  virtual flash::IEffect* New(const std::string& rsName) const = 0;
 };
 
 }
@@ -33,17 +31,14 @@ public:
   virtual ~IEffect() { ; }
 
 public:
-  virtual bool IsCustom() const { return false; }
-  virtual void Begin() = 0;
-  virtual void Begin(const base::Glyph& rGlyph) = 0;
-  virtual bool Do(render::ITransform* const& rpTransform) = 0;
-  virtual void End() = 0;
+  virtual void Play() = 0;
+  virtual void Stop() = 0;
+  virtual void Pause() = 0;
+  virtual void Continue() = 0;
+  virtual bool Tick(const float& rfDelta) = 0;
+  virtual void Push() = 0;
+  virtual void Pop() = 0;
 };
-
-inline bool IsEffectCustom(IEffect* const& rpProcess)
-{
-  return ((NULL == rpProcess) ? false : rpProcess->IsCustom());
-}
 
 }
 }

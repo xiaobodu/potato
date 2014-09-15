@@ -1,19 +1,19 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(flash)
+project(flash_gles)
 
-set(SRC_PATH_flash ${SRC_PATH_support}/flash)
+set(SRC_PATH_flash_gles ${SRC_PATH_support}/flash_gles)
 
 set(INC_PATH_LIST
   ${SRC_PATH_potato}
   ${SRC_PATH_potato}/engine
-  ${SRC_PATH_flash}
+  ${SRC_PATH_flash_gles}
   )
 
 set(SRC_FILE_LIST
   ${SRC_PATH_support}/../engine/flash.h
-  ${SRC_PATH_flash}/flash_impl.h
-  ${SRC_PATH_flash}/flash.cpp
+  ${SRC_PATH_flash_gles}/flash_gles.h
+  ${SRC_PATH_flash_gles}/flash_gles.cpp
   ${SRC_PATH_potato}/utility/file.h
   ${SRC_PATH_potato}/utility/log.h
   ${SRC_PATH_potato}/utility/sharedlibrary.h
@@ -26,9 +26,9 @@ set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
 
 include_directories(${INC_PATH_LIST})
 
-add_library(flash SHARED ${SRC_FILE_LIST})
+add_library(flash_gles SHARED ${SRC_FILE_LIST})
 
 set(LINK_FILE_LIST
   dl
   )
-target_link_libraries(flash ${LINK_FILE_LIST})
+target_link_libraries(flash_gles ${LINK_FILE_LIST})

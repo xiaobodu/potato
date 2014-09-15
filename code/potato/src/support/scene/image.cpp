@@ -1,7 +1,7 @@
 #include "image.h"
 
 #include "scene.h"
-#include "effect.h"
+#include "process.h"
 
 #include "utility/log.h"
 
@@ -14,15 +14,15 @@ CImage::CBuilder CImage::builder;
 
 CImage::CImage(ISceneWithScript* const& rpScene, IWidget* const& rpParent)
   : TWidget<IImage>(rpScene, rpParent)
-  , m_pEffect(NULL)
+  , m_pProcess(NULL)
 {
-  m_pEffect = new CEffect();
+  m_pProcess = new CProcess();
 }
 
 CImage::~CImage()
 {
-  delete m_pEffect;
-  m_pEffect = NULL;
+  delete m_pProcess;
+  m_pProcess = NULL;
 }
 
 // for script
@@ -38,7 +38,7 @@ bool CImage::Tick(const float& rfDelta)
   // call script
   bool res = CallScript<script_image_tick>("tick", script_image_tick_default)(rfDelta);
 
-  return res || m_pEffect->Tick(rfDelta);
+  return res;// || m_pProcess->Tick(rfDelta);
 }
 
 // for script
@@ -53,36 +53,17 @@ void CImage::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
   // call script
   CallScript<script_image_draw>("draw", script_image_draw_default)(riLayer);
 
-  m_pEffect->SetPos(dst.l, dst.t);
-  rpCanvas->DrawGlyph(src, dst.w, dst.h, m_pEffect);
+  m_pProcess->SetPos(dst.l, dst.t);
+  rpCanvas->DrawGlyph(src, dst.w, dst.h, m_pProcess);
   //
 }
 
-/*bool CImage::Handle(const int& riLayer, const display::IInput* const & rpInput)
+
+CImage::CBuilder::CBuilder()
+  : TBuilder<CImage* const>("image")
 {
-  int count = 0;
-  (*rpInput)(C4G_INPUT_TOUCH_COUNT, count);
-  if (0 >= count) return false;
-
-  float x = 0;
-  float y = 0;
-  (*rpInput)(C4G_INPUT_TOUCH_X, x);
-  (*rpInput)(C4G_INPUT_TOUCH_Y, y);
-  if (!(dst ^ Vect2F(x, y))) return false;
-
-  if (display::EInputType_Touch == rpInput->type && display::EInputEvent_Up == rpInput->event)
-  {
-    int layer = riLayer;
-  }
-  //
-  return false;
+  ;
 }
-
-bool CImage::Refresh(const int& riLayer, const display::ISensor* const & rpSensor)
-{
-  //
-  return false;
-}*/
 
 bool CImage::CBuilder::Do(core::IAsset* const& rpAsset, const rapidjson::Value& roConfig, CImage* const & rpImage) const
 {
