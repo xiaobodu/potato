@@ -56,6 +56,8 @@ bool CPanel::Tick(const float& rfDelta)
 
 void CPanel::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
 {
+  CurrentEffect()->Push();
+
   m_pProcess->SetPos(dst.l, dst.t);
   rpCanvas->EffectBegin(m_pProcess);
 
@@ -68,6 +70,8 @@ void CPanel::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
   }
 
   rpCanvas->EffectEnd(m_pProcess);
+
+  CurrentEffect()->Pop();
 }
 
 bool CPanel::Handle(const int& riLayer, const display::IInput* const & rpInput)

@@ -15,6 +15,25 @@ class ISensor;
 
 namespace scene {
 
+class CEffectNone : public flash::IEffect
+{
+public:
+  static CEffectNone instance;
+
+public:
+  CEffectNone() { ; }
+  virtual ~CEffectNone() { ; }
+
+public:
+  virtual void Play() { ; }
+  virtual void Stop() { ; }
+  virtual void Pause() { ; }
+  virtual void Continue() { ; }
+  virtual bool Tick(const float& rfDelta) { return false; }
+  virtual void Push() { ; }
+  virtual void Pop() { ; }
+};
+
 template<typename TBase>
 class TWidget : public TBase, public script::AHandler
 {
@@ -123,8 +142,9 @@ public:
     if (cit_find != m_mEffect.end()) return;
     m_mEffect.insert(std::make_pair(rsName, base::TPtrScope<flash::IEffect>(rpEffect)));
   }
-  virtual flash::IEffect* const& CurrentEffect()
+  virtual flash::IEffect* const CurrentEffect()
   {
+    if (NULL == m_pCurrentEffect) return &CEffectNone::instance;
     return m_pCurrentEffect;
   }
   virtual void PlayEffect(const std::string& rsName, const bool& rbForce = false)

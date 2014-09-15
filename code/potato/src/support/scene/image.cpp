@@ -38,7 +38,7 @@ bool CImage::Tick(const float& rfDelta)
   // call script
   bool res = CallScript<script_image_tick>("tick", script_image_tick_default)(rfDelta);
 
-  return res;// || m_pProcess->Tick(rfDelta);
+  return res || CurrentEffect()->Tick(rfDelta);
 }
 
 // for script
@@ -53,9 +53,12 @@ void CImage::Draw(const int& riLayer, render::ICanvas* const & rpCanvas)
   // call script
   CallScript<script_image_draw>("draw", script_image_draw_default)(riLayer);
 
+  CurrentEffect()->Push();
+
   m_pProcess->SetPos(dst.l, dst.t);
   rpCanvas->DrawGlyph(src, dst.w, dst.h, m_pProcess);
-  //
+
+  CurrentEffect()->Pop();
 }
 
 

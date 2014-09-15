@@ -40,6 +40,7 @@ public:
   virtual void Pop() = 0;
 };
 
+
 }
 }
 

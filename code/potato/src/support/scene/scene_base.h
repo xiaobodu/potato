@@ -159,7 +159,7 @@ public:
   /// effect
 public:
   virtual void PushEffect(const std::string& rsName, flash::IEffect* const& rpEffect) = 0;
-  virtual flash::IEffect* const& CurrentEffect() = 0;
+  virtual flash::IEffect* const CurrentEffect() = 0;
   virtual void PlayEffect(const std::string& rsName, const bool& rbForce = false) = 0;
   virtual void StopEffect() = 0;
   virtual void PauseEffect() = 0;
