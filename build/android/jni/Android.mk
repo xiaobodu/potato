@@ -4,9 +4,6 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-#LOCAL_PATH := $(MY_LOCAL_ROOT_PATH)
-#include $(LOCAL_PATH)/external/Android.mk
-
 LOCAL_PATH := $(MY_LOCAL_ROOT_PATH)
 include $(LOCAL_PATH)/potato/Android.mk
 
@@ -15,3 +12,5 @@ include $(LOCAL_PATH)/engine/Android.mk
 
 LOCAL_PATH := $(MY_LOCAL_ROOT_PATH)
 include $(LOCAL_PATH)/support/Android.mk
+
+LOCAL_PATH := $(MY_LOCAL_ROOT_PATH)

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+    <string name="app_name">t001</string>
     <string name="run_engine">运行</string>
     
 </resources>
