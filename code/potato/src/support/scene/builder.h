@@ -6,7 +6,7 @@
 
 #include "render.h"
 #include "script.h"
-#include "utility/math.h"
+#include "utility/mathematics.h"
 
 namespace c4g {
 namespace scene {

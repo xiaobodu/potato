@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scene.h"
-#include "utility/math.h"
+#include "utility/mathematics.h"
 
 #include <string>
 #include <vector>

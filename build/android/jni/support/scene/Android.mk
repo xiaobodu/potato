@@ -26,7 +26,7 @@ LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/image.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/process.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/engine/input.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/engine/sensor.cpp
-LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/math.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/mathematics.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/sharedlibrary.cpp
 
 LOCAL_LDLIBS    		:= -ldl -llog

@@ -1,7 +1,7 @@
 #include "layout.h"
 
 #include "common.h"
-#include "math.h"
+#include "utility/mathematics.h"
 
 namespace c4g {
 namespace scene {
