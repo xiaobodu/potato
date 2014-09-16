@@ -2,6 +2,8 @@
 
 #include "render.h"
 
+#include "utility/log.h"
+
 namespace c4g {
 namespace flash {
 
@@ -12,9 +14,6 @@ CEffectRotate::CEffectRotate()
   , m_bPlaying(false)
   , m_fTime(0.0f)
   , m_fAngle(0.0f)
-  , m_fWidth(0.0f)
-  , m_fHeight(0.0f)
-  , m_fDepth(0.0f)
 {
   ;
 }
@@ -54,9 +53,7 @@ void CEffectRotate::Continue()
 
 void CEffectRotate::Resize(const float& rfWidth, const float& rfHeight, const float& rfDepth)
 {
-  m_fWidth = rfWidth;
-  m_fHeight = rfHeight;
-  m_fDepth = rfDepth;
+  ;
 }
 
 bool CEffectRotate::Tick(const float& rfDelta)

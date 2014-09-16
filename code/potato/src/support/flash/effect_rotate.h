@@ -34,9 +34,6 @@ private:
   bool m_bPlaying;
   float m_fTime;
   float m_fAngle;
-  float m_fWidth;
-  float m_fHeight;
-  float m_fDepth;
 
 public:
   void Build(const rapidjson::Value& roConfig);
