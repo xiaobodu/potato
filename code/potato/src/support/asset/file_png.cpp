@@ -123,7 +123,7 @@ void CFilePNG::Free()
 {
   if (NULL != m_pBuffer)
   {
-    delete m_pBuffer;
+    delete[] m_pBuffer;
     m_pBuffer = NULL;
   }
 }

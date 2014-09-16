@@ -1,12 +1,15 @@
 potato
 ======
 
-A light 2D mobile engine. It belongs to [Code4Game][].
+A light weight 2D mobile engine. It belongs to [Code4Game][].
 
 
 #### Status
 
 Still in developing.
+
+
+----------------------------
 
 
 ## Overview
@@ -43,12 +46,17 @@ Need [CMake][], [Git][].
 Log
 ---
 
-- 2014-09-16:
-  -  improve the flash module
-  - configure the file to test the flash module
+Please see [LOG.md][].
 
+
+Next
+----
+
+Please see [Trello][].
 
 
 [CMake]: http://cmake.org/ "CMake"
-[Git]: http://www.git-scm.com/ "Git"
+[Git]: http://git-scm.com/ "Git"
 [Code4Game]: http://c4g.io/ "Code 4 Game"
+[LOG.md]: https://github.com/code4game/potato/blob/master/LOG.md "Log"
+[Trello]: https://trello.com/code4game/ "Plan"
