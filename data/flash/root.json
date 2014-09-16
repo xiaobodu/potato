@@ -2,23 +2,23 @@
   "effects":[
     {
       "type":"rotate",
+      "id":"rotate_sun",
       "value":{
-        "id":"rotate_sun",
-        "speed": 10.0f
+        "speed":100.0
       }
     },
     {
       "type":"rotate",
+      "id":"rotate_earth",
       "value":{
-        "id":"rotate_earth",
-        "speed": 10.0f
+        "speed":500.0
       }
     },
     {
       "type":"rotate",
+      "id":"rotate_moon",
       "value":{
-        "id":"rotate_moon",
-        "speed": 10.0f
+        "speed":100.0
       }
     }
   ]

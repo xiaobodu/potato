@@ -69,7 +69,7 @@
           "effects":[
             {
               "id":"r",
-              "name":"rotate"
+              "name":"rotate_sun"
             }
           ],
           "widgets":[
@@ -95,7 +95,7 @@
                 "effects":[
                   {
                     "id":"r",
-                    "name":"rotate"
+                    "name":"rotate_earth"
                   }
                 ],
                 "widgets":[

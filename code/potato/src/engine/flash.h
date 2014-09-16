@@ -23,6 +23,7 @@ public:
 
 public:
   virtual flash::IEffect* New(const std::string& rsName) const = 0;
+  virtual void Load(const std::string& rsFileName) = 0;
 };
 
 }

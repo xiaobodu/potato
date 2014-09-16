@@ -5,10 +5,10 @@
 namespace c4g {
 namespace flash {
 
-CEffectRotate CEffectRotate::instance;
+std::string CEffectTypeRotate::name("rotate");
 
 CEffectRotate::CEffectRotate()
-  : speed(100.0f)
+  : speed(0.0f)
   , m_bPlaying(false)
   , m_fTime(0.0f)
   , m_fAngle(0.0f)
@@ -88,6 +88,27 @@ bool CEffectRotate::Make(render::ITransform* const& rpTransform)
 void CEffectRotate::PostMake()
 {
   ;
+}
+
+CEffectTypeRotate::CEffectTypeRotate()
+{
+  ;
+}
+
+CEffectTypeRotate::~CEffectTypeRotate()
+{
+  ;
+}
+
+IEffect* CEffectTypeRotate::New(const rapidjson::Value& roConfig) const
+{
+  const rapidjson::Value& jspeed = roConfig["speed"];
+  assert(jspeed.IsDouble());
+  if (!jspeed.IsDouble()) return NULL;
+
+  CEffectRotate* res = new CEffectRotate();
+  res->speed = static_cast<float>(jspeed.GetDouble());
+  return res;
 }
 
 }

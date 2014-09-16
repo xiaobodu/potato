@@ -13,6 +13,7 @@ set(INC_PATH_LIST
 set(SRC_FILE_LIST
   ${SRC_PATH_support}/../engine/flash.h
   ${SRC_PATH_flash}/flash_impl.h
+  ${SRC_PATH_flash}/flash_base.h
   ${SRC_PATH_flash}/flash.cpp
   ${SRC_PATH_flash}/effect_rotate.h
   ${SRC_PATH_flash}/effect_rotate.cpp

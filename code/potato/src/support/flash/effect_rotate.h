@@ -2,16 +2,13 @@
 
 #include <rapidjson/document.h>
 
-#include "flash.h"
+#include "flash_base.h"
 
 namespace c4g {
 namespace flash {
 
 class CEffectRotate : public IEffect
 {
-public:
-  static CEffectRotate instance;
-
 public:
   float speed;
 
@@ -43,6 +40,21 @@ private:
 
 public:
   void Build(const rapidjson::Value& roConfig);
+};
+
+class CEffectTypeRotate : public IEffectType
+{
+  friend class CFlash;
+
+private:
+  static std::string name;
+
+private:
+  CEffectTypeRotate();
+  virtual ~CEffectTypeRotate();
+
+public:
+  virtual IEffect* New(const rapidjson::Value& roConfig) const;
 };
 
 }

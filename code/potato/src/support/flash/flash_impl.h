@@ -7,6 +7,8 @@
 namespace c4g {
 namespace flash {
 
+class IEffectType;
+
 class CFlash : public core::IFlash
 {
 public:
@@ -14,17 +16,19 @@ public:
   virtual ~CFlash();
 
 public:
-  virtual IEffect* New(const std::string& rsName) const;
-  virtual void Load(const std::string& rsName);
+  virtual IEffect* New(const std::string& rsId) const;
+  virtual void Load(const std::string& rsFileName);
 
 protected:
-  void Push(const std::string& rsName, flash::IEffect* const& rpEffect);
-  void PushTemplate(const std::string& rsName, flash::IEffect* const& rpEffect);
+  void Push(const std::string& rsId, flash::IEffect* const& rpEffect);
+  void PushType(const std::string& rsType, flash::IEffectType* const& rpEffect);
+  const flash::IEffectType* const GetType(const std::string& rsName) const;
 
 private:
   typedef std::map<std::string, IEffect* const> MEffects;
   MEffects m_mEffect;
-  MEffects m_mEffectTemplate;
+  typedef std::map<std::string, IEffectType* const> MEffectTypes;
+  MEffectTypes m_mEffectType;
 };
 
 }
