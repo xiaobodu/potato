@@ -5,6 +5,7 @@
 #include "effect_rotate.h"
 
 #include "utility/file.h"
+#include "utility/log.h"
 
 #include <cassert>
 
@@ -13,6 +14,8 @@ namespace flash {
 
 CFlash::CFlash(const c4g::base::Config& roConfig)
 {
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
+
 #if defined(BUILD_ANDROID)
   std::string file_context = roConfig._sConfigureContext.c_str();
 #else
@@ -34,7 +37,7 @@ CFlash::CFlash(const c4g::base::Config& roConfig)
 
 CFlash::~CFlash()
 {
-  ;
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
 void CFlash::Load(const std::string& rsName)

@@ -25,6 +25,8 @@ set(SRC_FILE_LIST
   ${SRC_PATH_scene}/panel.cpp
   ${SRC_PATH_scene}/image.h
   ${SRC_PATH_scene}/image.cpp
+  ${SRC_PATH_scene}/flip.h
+  ${SRC_PATH_scene}/flip.cpp
   ${SRC_PATH_scene}/process.cpp
   ${SRC_PATH_potato}/engine/input.h
   ${SRC_PATH_potato}/engine/input.cpp

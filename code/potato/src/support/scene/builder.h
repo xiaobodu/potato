@@ -3,6 +3,7 @@
 #include <rapidjson/document.h>
 #include <string>
 #include <map>
+#include <vector>
 
 #include "render.h"
 #include "script.h"
@@ -53,6 +54,18 @@ public:
 
 public:
   static CGlyphBuilder instance;
+};
+
+class CGlyphListBuilder : public TBuilder<std::vector<base::Glyph> >
+{
+private:
+  CGlyphListBuilder();
+
+public:
+  virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, std::vector<base::Glyph>& rGlyphList) const;
+
+public:
+  static CGlyphListBuilder instance;
 };
 
 class CRectFBuilder : public TBuilder<RectF>

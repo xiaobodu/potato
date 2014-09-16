@@ -4,6 +4,7 @@
 #include "asset.h"
 #include "panel.h"
 #include "image.h"
+#include "flip.h"
 
 namespace c4g {
 namespace scene {
@@ -11,6 +12,7 @@ namespace scene {
 // construct the static instance about builder
 CBuilderManager CBuilderManager::instance;
 CGlyphBuilder CGlyphBuilder::instance;
+CGlyphListBuilder CGlyphListBuilder::instance;
 CRectFBuilder CRectFBuilder::instance;
 CWidgetBuilder CWidgetBuilder::instance;
 CWidgetEffectsBuilder CWidgetEffectsBuilder::instance;
@@ -65,6 +67,29 @@ bool CGlyphBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roCon
   rGlyph.b = static_cast<float>(jbottom.GetDouble() / (height * 1.0f));
   rGlyph.id = id;
   return true;
+}
+
+
+
+CGlyphListBuilder::CGlyphListBuilder()
+  : TBuilder<std::vector<base::Glyph> >("glyphs")
+{
+  ;
+}
+
+bool CGlyphListBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, std::vector<base::Glyph>& rGlyphList) const
+{
+  if (!roConfig.IsArray()) return false;
+
+  for (int i = 0; i < static_cast<int>(roConfig.Size()); ++i)
+  {
+    const rapidjson::Value& jglyph = roConfig[i];
+    if (!jglyph.IsObject()) continue;
+    base::Glyph glyph;
+    if (!CGlyphBuilder::instance.Do(rpScene, jglyph, glyph)) continue;
+    rGlyphList.push_back(glyph);
+  }
+  return (0 >= rGlyphList.size());
 }
 
 
@@ -275,6 +300,18 @@ bool CAllWidgetBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& r
       return true;
     }
     delete new_image_ptr;
+  }
+  else if (builder_ptr->name == "flip")
+  {
+    // TODO: where to delete?
+    IFlip* new_flip_ptr = new CFlip(rpWidget->scene, rpWidget);
+    const TBuilder<IFlip* const>* flip_builder_ptr = reinterpret_cast<const TBuilder<IFlip* const>*>(builder_ptr);
+    if (flip_builder_ptr->Do(rpScene, roConfig, new_flip_ptr))
+    {
+      rpWidget->Add(new_flip_ptr);
+      return true;
+    }
+    delete new_flip_ptr;
   }
   else if (builder_ptr->name == "file")
   {

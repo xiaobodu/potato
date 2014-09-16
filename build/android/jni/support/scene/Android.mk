@@ -23,6 +23,7 @@ LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/layout.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/widget.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/panel.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/image.cpp
+LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/flip.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/process.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/engine/input.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/engine/sensor.cpp
