@@ -15,6 +15,11 @@ CEffectNone::~CEffectNone()
   ;
 }
 
+flash::IEffect* CEffectNone::New() const
+{
+  return NULL;
+}
+
 void CEffectNone::Play()
 {
   ;
@@ -31,11 +36,23 @@ void CEffectNone::Continue()
 {
   ;
 }
+void CEffectNone::Resize(const float& rfWidth, const float& rfHeight, const float& rfDepth)
+{
+  ;
+}
 bool CEffectNone::Tick(const float& rfDelta)
 {
   return false;
 }
-void CEffectNone::Make(render::ITransform* const & rpTransform)
+void CEffectNone::PreMake()
+{
+  ;
+}
+bool CEffectNone::Make(render::ITransform* const & rpTransform)
+{
+  return false;
+}
+void CEffectNone::PostMake()
 {
   ;
 }

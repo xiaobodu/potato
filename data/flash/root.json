@@ -1,0 +1,25 @@
+{
+  "effects":[
+    {
+      "type":"rotate",
+      "value":{
+        "id":"rotate_sun",
+        "speed": 10.0f
+      }
+    },
+    {
+      "type":"rotate",
+      "value":{
+        "id":"rotate_earth",
+        "speed": 10.0f
+      }
+    },
+    {
+      "type":"rotate",
+      "value":{
+        "id":"rotate_moon",
+        "speed": 10.0f
+      }
+    }
+  ]
+}

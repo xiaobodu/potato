@@ -9,6 +9,34 @@
           "id":"icon",
           "file":"res/icon.png"
         }
+      },
+      {
+        "type":"image",
+        "value":{
+          "id":"sl01",
+          "file":"res/spotlight01.png"
+        }
+      },
+      {
+        "type":"image",
+        "value":{
+          "id":"sun",
+          "file":"res/sun.png"
+        }
+      },
+      {
+        "type":"image",
+        "value":{
+          "id":"earth",
+          "file":"res/earth.png"
+        }
+      },
+      {
+        "type":"image",
+        "value":{
+          "id":"moon",
+          "file":"res/moon.png"
+        }
       }
     ],
     "dst":{
@@ -20,7 +48,7 @@
     "layer":0,
     "visible":true,
     "layout":{
-      "type":"scale"
+      "type":"fitin"
     },
     "widgets":[
       {
@@ -50,28 +78,68 @@
               "value":"scene/main.json"
             },
             {
-              "type":"image",
+              "type":"panel",
               "value":{
-                "id":"icon",
-                "src":{
-                  "l":100.0,
-                  "t":0.0,
-                  "r":200.0,
-                  "b":100.0,
-                  "id":"icon"
-                },
+                "id":"suba",
                 "dst":{
-                  "l":100.0,
+                  "l":150.0,
                   "t":0.0,
-                  "r":200.0,
-                  "b":100.0
+                  "r":250.0,
+                  "b":50.0
                 },
                 "layer":0,
                 "visible":true,
+                "layout":{
+                  "type":"scale"
+                },
                 "effects":[
                   {
                     "id":"r",
                     "name":"rotate"
+                  }
+                ],
+                "widgets":[
+                  {
+                    "type":"image",
+                    "value":{
+                      "id":"earth",
+                      "src":{
+                        "l":0.0,
+                        "t":0.0,
+                        "r":512.0,
+                        "b":512.0,
+                        "id":"earth"
+                      },
+                      "dst":{
+                        "l":-25.0,
+                        "t":-25.0,
+                        "r":25.0,
+                        "b":25.0
+                      },
+                      "layer":0,
+                      "visible":true
+                    }
+                  },
+                  {
+                    "type":"image",
+                    "value":{
+                      "id":"moon",
+                      "src":{
+                        "l":0.0,
+                        "t":0.0,
+                        "r":1024.0,
+                        "b":1024.0,
+                        "id":"moon"
+                      },
+                      "dst":{
+                        "l":30.0,
+                        "t":-10.0,
+                        "r":50.0,
+                        "b":10.0
+                      },
+                      "layer":0,
+                      "visible":true
+                    }
                   }
                 ]
               }

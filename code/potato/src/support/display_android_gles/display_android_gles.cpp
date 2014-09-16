@@ -1,7 +1,6 @@
 #include <rapidjson/document.h>
 #include <android/sensor.h>
 #include <android/window.h>
-#include <android/window.h>
 #include <android_native_app_glue.h>
 
 #include "display_android_gles.h"
@@ -482,7 +481,6 @@ void CDisplay::Resize(const int& riWidth, const int& riHeight)
 int CDisplay::Input(AInputEvent* pEvent)
 {
   int32_t type = AInputEvent_getType(pEvent);
-  utility::Log::Instance().Info("engine_handle_input %d", type);
   if (AINPUT_EVENT_TYPE_KEY == type)
   {
     m_oInput.type = EInputType_Key;
@@ -513,7 +511,7 @@ int CDisplay::Input(AInputEvent* pEvent)
       float size = AMotionEvent_getSize(pEvent, i);
 
       /// don't record the event that pressure or size is equal or lower than zero
-      if (0 >= pressure || 0 >= size) continue;
+      if (0 >= pressure && 0 >= size) continue;
 
       float x = AMotionEvent_getX(pEvent, i);
       float y = AMotionEvent_getY(pEvent, i);

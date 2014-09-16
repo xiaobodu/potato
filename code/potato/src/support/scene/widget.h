@@ -25,12 +25,18 @@ private:
   virtual ~CEffectNone();
 
 public:
+  virtual flash::IEffect* New() const;
+
+public:
   virtual void Play();
   virtual void Stop();
   virtual void Pause();
   virtual void Continue();
+  virtual void Resize(const float& rfWidth, const float& rfHeight, const float& rfDepth);
   virtual bool Tick(const float& rfDelta);
-  virtual void Make(render::ITransform* const& rpTransform);
+  virtual void PreMake();
+  virtual bool Make(render::ITransform* const& rpTransform);
+  virtual void PostMake();
 };
 
 template<typename TBase>
@@ -150,30 +156,69 @@ public:
   }
   virtual void PlayEffect(const std::string& rsName, const bool& rbForce = false)
   {
-    if (!rbForce && NULL != m_pCurrentEffect) return;
-    m_pCurrentEffect = NULL;
+    if (rbForce || NULL == m_pCurrentEffect)
+    {
+      m_pCurrentEffect = NULL;
 
-    MEffects::iterator it_find = m_mEffect.find(rsName);
-    if (it_find == m_mEffect.end()) return;
-    m_pCurrentEffect = *((*it_find).second);
-    if (NULL == m_pCurrentEffect) return;
-    m_pCurrentEffect->Play();
+      MEffects::iterator it_find = m_mEffect.find(rsName);
+      if (it_find != m_mEffect.end())
+      {
+        m_pCurrentEffect = *((*it_find).second);
+        if (NULL != m_pCurrentEffect)
+        {
+          m_pCurrentEffect->Resize(TBase::dst.w, TBase::dst.h, 0.0f);
+          m_pCurrentEffect->Play();
+        }
+      }
+    }
+    /// play same name effect of sub-widgets
+    VWidgetPtr::iterator it = m_vpWidget.begin();
+    VWidgetPtr::iterator it_end = m_vpWidget.end();
+    for (; it != it_end; ++it)
+    {
+      IWidget*& widget_ptr = *it;
+      widget_ptr->PlayEffect(rsName, rbForce);
+    }
   }
   virtual void StopEffect()
   {
-    if (NULL == m_pCurrentEffect) return;
-    m_pCurrentEffect->Stop();
-    m_pCurrentEffect = NULL;
+    /// stop same name effect of sub-widgets
+    VWidgetPtr::iterator it = m_vpWidget.begin();
+    VWidgetPtr::iterator it_end = m_vpWidget.end();
+    for (; it != it_end; ++it)
+    {
+      IWidget*& widget_ptr = *it;
+      widget_ptr->StopEffect();
+    }
+    if (NULL != m_pCurrentEffect)
+    {
+      m_pCurrentEffect->Stop();
+      m_pCurrentEffect = NULL;
+    }
   }
   virtual void PauseEffect()
   {
-    if (NULL == m_pCurrentEffect) return;
-    m_pCurrentEffect->Pause();
+    /// stop same name effect of sub-widgets
+    VWidgetPtr::iterator it = m_vpWidget.begin();
+    VWidgetPtr::iterator it_end = m_vpWidget.end();
+    for (; it != it_end; ++it)
+    {
+      IWidget*& widget_ptr = *it;
+      widget_ptr->PauseEffect();
+    }
+    if (NULL != m_pCurrentEffect) m_pCurrentEffect->Pause();
   }
   virtual void ContinueEffect()
   {
-    if (NULL == m_pCurrentEffect) return;
-    m_pCurrentEffect->Continue();
+    if (NULL != m_pCurrentEffect) m_pCurrentEffect->Continue();
+    /// stop same name effect of sub-widgets
+    VWidgetPtr::iterator it = m_vpWidget.begin();
+    VWidgetPtr::iterator it_end = m_vpWidget.end();
+    for (; it != it_end; ++it)
+    {
+      IWidget*& widget_ptr = *it;
+      widget_ptr->ContinueEffect();
+    }
   }
 protected:
   MEffects  m_mEffect;

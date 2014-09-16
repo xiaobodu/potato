@@ -42,6 +42,7 @@ void CRender::Start()
   /// just 2d render, don't test the depth
   //glEnable(GL_DEPTH_TEST);
   //glDepthFunc(GL_LEQUAL);
+  glEnable(GL_BLEND);
 }
 
 bool CRender::Resize(const int& riWidth, const int& riHeight)

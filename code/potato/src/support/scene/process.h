@@ -17,7 +17,9 @@ public:
   void SetPos(const float& rfX, const float& rfY);
 
 public:
+  virtual void PreDo();
   virtual bool Do(render::ITransform* const& rpTransform);
+  virtual void PostDo();
 
 private:
   IWidget* m_pWidget;

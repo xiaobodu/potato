@@ -15,7 +15,6 @@ CImage::CBuilder CImage::builder;
 CImage::CImage(ISceneImpl* const& rpScene, IWidget* const& rpParent)
   : TWidget<IImage>(rpScene, rpParent)
   , m_pProcess(NULL)
-  , m_runeffect(false)
 {
   m_pProcess = new CProcess(this);
 }
@@ -36,12 +35,6 @@ bool script_image_tick_default(float fDelta)
 
 bool CImage::Tick(const float& rfDelta)
 {
-  if (!m_runeffect)
-  {
-    PlayEffect("r");
-    m_runeffect = true;
-  }
-
   // call script
   bool res = CallScript<script_image_tick>("tick", script_image_tick_default)(rfDelta);
 

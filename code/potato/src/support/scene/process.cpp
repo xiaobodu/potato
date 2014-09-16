@@ -24,11 +24,21 @@ void CProcess::SetPos(const float& rfX, const float& rfY)
   m_fY = rfY;
 }
 
+void CProcess::PreDo()
+{
+  m_pWidget->CurrentEffect()->PreMake();
+}
+
 bool CProcess::Do(render::ITransform* const & rpTransform)
 {
   rpTransform->Translate(m_fX, m_fY);
   m_pWidget->CurrentEffect()->Make(rpTransform);
   return true;
+}
+
+void CProcess::PostDo()
+{
+  m_pWidget->CurrentEffect()->PostMake();
 }
 
 }

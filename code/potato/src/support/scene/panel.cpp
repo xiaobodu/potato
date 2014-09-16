@@ -16,7 +16,6 @@ CPanel::CBuilder CPanel::builder;
 CPanel::CPanel(ISceneImpl* const& rpScene, IWidget* const & rpParent)
   : TWidget<IPanel>(rpScene, rpParent)
   , m_pProcess(NULL)
-  , m_runeffect(false)
 {
   resize = true;
   input = true;
@@ -44,12 +43,6 @@ void CPanel::Resize(const float& rfWidth, const float& rfHeight)
 
 bool CPanel::Tick(const float& rfDelta)
 {
-  if (!m_runeffect)
-  {
-    PlayEffect("r");
-    m_runeffect = true;
-  }
-
   bool res = false;
   VWidgetPtr::iterator it = m_vpWidget.begin();
   VWidgetPtr::iterator it_end = m_vpWidget.end();

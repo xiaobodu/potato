@@ -34,6 +34,7 @@ CScene::CScene(const base::Config& roConfig)
   , m_pLibraryManager(NULL)
   , m_pPanel(NULL)
   , m_bNeedFlush(true)
+  , m_bPlayEffect(false)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
@@ -66,7 +67,7 @@ CScene::CScene(const base::Config& roConfig)
 #else
     const rapidjson::Value& configure = jasset["configure"];
     assert(configure.IsString());
-    m_oConfigAsset._sConfigureFile = library.GetString();
+    m_oConfigAsset._sConfigureFile = configure.GetString();
 #endif
 
     /// load the shared library
@@ -88,11 +89,14 @@ CScene::CScene(const base::Config& roConfig)
     m_oConfigFlash._sLibraryFile = library.GetString();
 
 #if defined(BUILD_ANDROID)
-    m_oConfigFlash._sConfigureContext = "{}";
+    m_oConfigFlash._sConfigureContext = "\
+{\
+  \"data\": \"flash/root.json\"\
+}";
 #else
     const rapidjson::Value& configure = jflash["configure"];
     assert(configure.IsString());
-    m_oConfigFlash._sConfigureFile = library.GetString();
+    m_oConfigFlash._sConfigureFile = configure.GetString();
 #endif
 
     /// load the shared library
@@ -263,6 +267,19 @@ bool CScene::Handle(const display::IInput* const& rpInput)
   for (int i = C4G_LAYER_MIN; i < C4G_LAYER_MAX; ++i)
   {
     res |= m_pPanel->Handle(i, rpInput);
+  }
+  if (rpInput->type == display::EInputType_Touch && rpInput->event == display::EInputEvent_Up)
+  {
+    if (!m_bPlayEffect)
+    {
+      m_pPanel->PlayEffect("r");
+      m_bPlayEffect = true;
+    }
+    else
+    {
+      m_pPanel->StopEffect();
+      m_bPlayEffect = false;
+    }
   }
   return res;
 }

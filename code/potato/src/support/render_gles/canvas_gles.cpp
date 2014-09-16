@@ -18,16 +18,18 @@ public:
   explicit CGlyphProcessScope(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess)
     : base::TScope<IProcess>(rpProcess)
   {
-    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_2D);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    m_pT->PreDo();
   }
 
   ~CGlyphProcessScope()
   {
-    glDisable(GL_BLEND);
+    m_pT->PostDo();
+
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);

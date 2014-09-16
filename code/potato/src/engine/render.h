@@ -49,7 +49,9 @@ public:
   virtual ~IProcess() { ; }
 
 public:
+  virtual void PreDo() = 0;
   virtual bool Do(render::ITransform* const& rpTransform) = 0;
+  virtual void PostDo() = 0;
 };
 
 class ICanvas

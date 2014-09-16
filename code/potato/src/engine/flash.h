@@ -35,12 +35,18 @@ public:
   virtual ~IEffect() { ; }
 
 public:
+  virtual IEffect* New() const = 0;
+
+public:
   virtual void Play() = 0;
   virtual void Stop() = 0;
   virtual void Pause() = 0;
   virtual void Continue() = 0;
+  virtual void Resize(const float& rfWidth, const float& rfHeight, const float& rfDepth) = 0;
   virtual bool Tick(const float& rfDelta) = 0;
-  virtual void Make(render::ITransform* const& rpTransform) = 0;
+  virtual void PreMake() = 0;
+  virtual bool Make(render::ITransform* const& rpTransform) = 0;
+  virtual void PostMake() = 0;
 };
 
 

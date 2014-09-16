@@ -51,6 +51,8 @@ private:
 
   IPanel* m_pPanel;
   bool m_bNeedFlush;
+
+  bool m_bPlayEffect;
 };
 
 }
