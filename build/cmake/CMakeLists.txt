@@ -62,5 +62,6 @@ set(OUT_PATH "${ROOT_PATH}/out")
 # add sub-project
 add_subdirectory(external)
 add_subdirectory(potato)
+add_subdirectory(editor)
 add_subdirectory(test)
 

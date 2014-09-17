@@ -1,6 +1,5 @@
 #pragma once
 
-#include "potato.h"
 
 #if !defined(LIBR_PATH)
 #define LIBR_PATH   ""
@@ -11,3 +10,4 @@
 #define DATA_PATH   ""
 #error "can't get the data path!!!"
 #endif
+

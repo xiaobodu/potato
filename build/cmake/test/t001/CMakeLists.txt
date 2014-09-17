@@ -39,4 +39,4 @@ target_link_libraries(t001 ${LINK_FILE_LIST})
 SET (DEP_PROJ_LIST
   potato
   )
-ADD_DEPENDENCIES (t001 ${DEP_PROJ_LIST})
+add_dependencies(t001 ${DEP_PROJ_LIST})

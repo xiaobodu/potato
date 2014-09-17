@@ -238,7 +238,8 @@ void CDisplay::CreateWindow()
   assert(EGL_SUCCESS == eglGetError());
 
   EGLint egl_major, egl_minor;
-  assert(eglInitialize(m_pGLDisplay, &egl_major, &egl_minor));
+  EGLBoolean res = eglInitialize(m_pGLDisplay, &egl_major, &egl_minor);
+  assert(res);
 
   const EGLint attribs[] = {
       EGL_COLOR_BUFFER_TYPE, EGL_TRANSPARENT_RGB,
@@ -253,7 +254,8 @@ void CDisplay::CreateWindow()
       EGL_NONE };
 
   int num_configs = 0;
-  assert(eglGetConfigs(m_pGLDisplay, &m_pGLConfig, 1, &num_configs));
+  res = eglGetConfigs(m_pGLDisplay, &m_pGLConfig, 1, &num_configs);
+  assert(res);
   //assert(eglChooseConfig(m_pGLDisplay, attribs, &m_pGLConfig, 1, &num_configs));
   assert(NULL != m_pGLConfig && num_configs > 0);
 
@@ -267,7 +269,8 @@ void CDisplay::CreateWindow()
   assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_DEPTH_SIZE, &value));
 
   EGLint vid = 0;
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_NATIVE_VISUAL_ID, &vid));
+  res = eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_NATIVE_VISUAL_ID, &vid);
+  assert(res);
 
   XVisualInfo* visual_info_ptr;
   XVisualInfo visual_info;
@@ -329,13 +332,15 @@ void CDisplay::CreateWindow()
   XFree(visual_info_ptr);
 
   XMapWindow(m_pDisplay, m_lWindow);
-  assert(eglMakeCurrent(m_pGLDisplay, m_pGLSurface, m_pGLSurface, m_pGLContext));
+  res = eglMakeCurrent(m_pGLDisplay, m_pGLSurface, m_pGLSurface, m_pGLContext);
+  assert(res);
 }
 
 void CDisplay::DestroyWindow()
 {
   if (EGL_NO_DISPLAY != m_pGLDisplay)
   {
+    eglMakeCurrent(m_pGLDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     if (EGL_NO_CONTEXT != m_pGLContext) eglDestroyContext(m_pGLDisplay, m_pGLContext);
     if (EGL_NO_SURFACE != m_pGLSurface) eglDestroySurface(m_pGLDisplay, m_pGLSurface);
     eglTerminate(m_pGLDisplay);
