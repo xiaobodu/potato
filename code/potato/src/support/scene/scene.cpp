@@ -171,14 +171,16 @@ CScene::~CScene()
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
-bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName)
+bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName, bool bIsAbsolutePath /*= false*/)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   //TODO:
   CAssetsBuilder::instance.BindRender(rpRender);
 
-  std::string file_context = utility::ReadFile(m_oConfig._sDataPath + "/" + rsFileName);
+  std::string file_context = "";
+  if (bIsAbsolutePath) file_context = utility::ReadFile(rsFileName);
+  else file_context = utility::ReadFile(m_oConfig._sDataPath + "/" + rsFileName);
   rapidjson::Document jdoc;
   jdoc.Parse(file_context.c_str());
   CPanel::builder.Do(this, jdoc, m_pPanel);
@@ -308,6 +310,21 @@ void CScene::BindScript(script::AHandler* const& rpHandler)
 {
   assert(NULL != m_pScript);
   m_pScript->New(rpHandler);
+}
+
+void CScene::SetDataPath(const std::string& rsDataPath)
+{
+  m_oConfig._sDataPath = rsDataPath;
+}
+
+const std::string& CScene::GetDataPath() const
+{
+  return m_oConfig._sDataPath;
+}
+
+IPanel* const& CScene::GetPanel()
+{
+  return m_pPanel;
 }
 
 }

@@ -28,7 +28,7 @@ public:
   }
 
 public:
-  virtual bool Load(core::IRender* const& rpRender, const std::string& rsFileName) = 0;
+  virtual bool Load(core::IRender* const& rpRender, const std::string& rsFileName, bool bIsAbsolutePath = false) = 0;
   virtual bool Unload(core::IRender* const& rpRender) = 0;
   virtual bool Resize(const int& riWidth, const int& riHeight) = 0;
   virtual bool Tick(const float& rfDelta) = 0;

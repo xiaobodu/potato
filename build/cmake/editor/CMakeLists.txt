@@ -29,6 +29,7 @@ set(INC_PATH_LIST
   ${CODE_PATH}/potato/src/engine
   ${CODE_PATH}/potato/src/support/render_gles
   ${CODE_PATH}/potato/src/support/scene
+  ${CODE_PATH}/external/rapidjson/include
   ${CODE_PATH_editor}/qt
   )
 
@@ -44,6 +45,13 @@ set(SRC_FILE_LIST
   ${CODE_PATH_editor}/qt/qsidebarwidget.h
   ${CODE_PATH_editor}/qt/qsidebarwidget.cpp
   ${CODE_PATH_editor}/qt/qsidebarwidget_moc.cpp
+  ${CODE_PATH_editor}/qt/qpropertywidget_ui.h
+  ${CODE_PATH_editor}/qt/qpropertywidget.h
+  ${CODE_PATH_editor}/qt/qpropertywidget.cpp
+  ${CODE_PATH_editor}/qt/qpropertywidget_moc.cpp
+  ${CODE_PATH_editor}/qt/qscenetreewidget.h
+  ${CODE_PATH_editor}/qt/qscenetreewidget.cpp
+  ${CODE_PATH_editor}/qt/qscenetreewidget_moc.cpp
   ${CODE_PATH_editor}/qt/qaboutdialog_ui.h
   ${CODE_PATH_editor}/qt/qaboutdialog.h
   ${CODE_PATH_editor}/qt/qaboutdialog.cpp
@@ -116,6 +124,8 @@ endmacro(QT_GENERATE_MOC)
 QT_GENERATE_MOC(${CODE_PATH_editor} editor)
 QT_GENERATE_MOC(${CODE_PATH_editor}/qt qgleswidget)
 QT_GENERATE_MOC(${CODE_PATH_editor}/qt qsidebarwidget)
+QT_GENERATE_MOC(${CODE_PATH_editor}/qt qpropertywidget)
+QT_GENERATE_MOC(${CODE_PATH_editor}/qt qscenetreewidget)
 QT_GENERATE_MOC(${CODE_PATH_editor}/qt qaboutdialog)
 
 
@@ -132,6 +142,7 @@ endmacro(QT_GENERATE_UIC)
 
 QT_GENERATE_UIC(${CODE_PATH_editor} mainwindow . editor_mainwindow)
 QT_GENERATE_UIC(${CODE_PATH_editor} sidebarwidget qt qsidebarwidget)
+QT_GENERATE_UIC(${CODE_PATH_editor} propertywidget qt qpropertywidget)
 QT_GENERATE_UIC(${CODE_PATH_editor} aboutdialog qt qaboutdialog)
 
 # build dependicies
@@ -143,6 +154,9 @@ set(DEP_PROJ_LIST
   qgleswidget_moc_cpp
   qsidebarwidget_ui_h
   qsidebarwidget_moc_cpp
+  qpropertywidget_ui_h
+  qpropertywidget_moc_cpp
+  qscenetreewidget_moc_cpp
   qaboutdialog_ui_h
   qaboutdialog_moc_cpp
   )

@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_c4g__qt__QSideBarWidget_t {
-    QByteArrayData data[1];
-    char stringdata[25];
+    QByteArrayData data[5];
+    char stringdata[74];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -29,9 +29,14 @@ struct qt_meta_stringdata_c4g__qt__QSideBarWidget_t {
     )
 static const qt_meta_stringdata_c4g__qt__QSideBarWidget_t qt_meta_stringdata_c4g__qt__QSideBarWidget = {
     {
-QT_MOC_LITERAL(0, 0, 23)
+QT_MOC_LITERAL(0, 0, 23),
+QT_MOC_LITERAL(1, 24, 11),
+QT_MOC_LITERAL(2, 36, 0),
+QT_MOC_LITERAL(3, 37, 28),
+QT_MOC_LITERAL(4, 66, 6)
     },
-    "c4g::qt::QSideBarWidget\0"
+    "c4g::qt::QSideBarWidget\0UpdateScene\0"
+    "\0c4g::scene::ISceneImpl*const\0pScene\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -41,22 +46,31 @@ static const uint qt_meta_data_c4g__qt__QSideBarWidget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       0,    0, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
        0,       // signalCount
 
+ // slots: name, argc, parameters, tag, flags
+       1,    1,   19,    2, 0x0a,
+
+ // slots: parameters
+    QMetaType::Void, 0x80000000 | 3,    4,
+
        0        // eod
 };
 
 void c4g::qt::QSideBarWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    Q_UNUSED(_o);
-    Q_UNUSED(_id);
-    Q_UNUSED(_c);
-    Q_UNUSED(_a);
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        QSideBarWidget *_t = static_cast<QSideBarWidget *>(_o);
+        switch (_id) {
+        case 0: _t->UpdateScene((*reinterpret_cast< c4g::scene::ISceneImpl*const(*)>(_a[1]))); break;
+        default: ;
+        }
+    }
 }
 
 const QMetaObject c4g::qt::QSideBarWidget::staticMetaObject = {
@@ -83,6 +97,15 @@ int c4g::qt::QSideBarWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_
     _id = QWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 1)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 1;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 1)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 1;
+    }
     return _id;
 }
 QT_END_MOC_NAMESPACE

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>171</width>
-    <height>399</height>
+    <width>233</width>
+    <height>527</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,20 +15,35 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
-    <widget class="QTreeView" name="tvProject"/>
+    <widget class="c4g::qt::QSceneTreeWidget" name="twScene">
+     <column>
+      <property name="text">
+       <string notr="true">1</string>
+      </property>
+     </column>
+    </widget>
    </item>
    <item>
-    <widget class="QTabWidget" name="tabProperty">
-     <widget class="QWidget" name="tabPropertyMain">
-      <attribute name="title">
-       <string>Tab 1</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout"/>
-     </widget>
-    </widget>
+    <widget class="c4g::qt::QPropertyWidget" name="propertyWidget" native="true"/>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>c4g::qt::QPropertyWidget</class>
+   <extends>QWidget</extends>
+   <header>qpropertywidget.h</header>
+   <container>1</container>
+   <slots>
+    <slot>OnUpdate(QString)</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>c4g::qt::QSceneTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>qscenetreewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

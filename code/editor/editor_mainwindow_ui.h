@@ -14,13 +14,11 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDockWidget>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -44,9 +42,6 @@ public:
     QAction *actionSideBar;
     QAction *actionProject;
     QWidget *centralwidget;
-    QHBoxLayout *horizontalLayout;
-    QTabWidget *tabView;
-    QWidget *tabViewMain;
     QVBoxLayout *verticalLayout;
     c4g::qt::QGLESWidget *glesWidget;
     QMenuBar *menubar;
@@ -58,7 +53,6 @@ public:
     QWidget *dockWidgetContents;
     QVBoxLayout *verticalLayout_3;
     c4g::qt::QSideBarWidget *sidebarWidget;
-    QVBoxLayout *verticalLayout_2;
     QToolBar *toolBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -76,7 +70,7 @@ public:
         actionNew->setEnabled(false);
         actionOpen = new QAction(MainWindow);
         actionOpen->setObjectName(QStringLiteral("actionOpen"));
-        actionOpen->setEnabled(false);
+        actionOpen->setEnabled(true);
         actionSave = new QAction(MainWindow);
         actionSave->setObjectName(QStringLiteral("actionSave"));
         actionSave->setEnabled(false);
@@ -97,24 +91,13 @@ public:
         actionProject->setObjectName(QStringLiteral("actionProject"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
-        horizontalLayout = new QHBoxLayout(centralwidget);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        tabView = new QTabWidget(centralwidget);
-        tabView->setObjectName(QStringLiteral("tabView"));
-        tabView->setTabsClosable(true);
-        tabViewMain = new QWidget();
-        tabViewMain->setObjectName(QStringLiteral("tabViewMain"));
-        verticalLayout = new QVBoxLayout(tabViewMain);
+        verticalLayout = new QVBoxLayout(centralwidget);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        glesWidget = new c4g::qt::QGLESWidget(tabViewMain);
+        glesWidget = new c4g::qt::QGLESWidget(centralwidget);
         glesWidget->setObjectName(QStringLiteral("glesWidget"));
         glesWidget->setMinimumSize(QSize(240, 240));
 
         verticalLayout->addWidget(glesWidget);
-
-        tabView->addTab(tabViewMain, QString());
-
-        horizontalLayout->addWidget(tabView);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
@@ -140,8 +123,6 @@ public:
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         sidebarWidget = new c4g::qt::QSideBarWidget(dockWidgetContents);
         sidebarWidget->setObjectName(QStringLiteral("sidebarWidget"));
-        verticalLayout_2 = new QVBoxLayout(sidebarWidget);
-        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
 
         verticalLayout_3->addWidget(sidebarWidget);
 
@@ -172,6 +153,8 @@ public:
         QObject::connect(actionNew, SIGNAL(triggered()), MainWindow, SLOT(OnMenuBarPotatoNew()));
         QObject::connect(actionOpen, SIGNAL(triggered()), MainWindow, SLOT(OnMenuBarPotatoOpen()));
         QObject::connect(actionSave, SIGNAL(triggered()), MainWindow, SLOT(OnMenuBarPotatoSave()));
+        QObject::connect(glesWidget, SIGNAL(DidLoadScene(c4g::scene::ISceneImpl*const)), sidebarWidget, SLOT(UpdateScene(c4g::scene::ISceneImpl*const)));
+        QObject::connect(MainWindow, SIGNAL(ToLoadScene(QString)), glesWidget, SLOT(ToLoadScene(QString)));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -190,7 +173,6 @@ public:
         actionEditInBar->setText(QApplication::translate("MainWindow", "Edit", 0));
         actionSideBar->setText(QApplication::translate("MainWindow", "Side Bar", 0));
         actionProject->setText(QApplication::translate("MainWindow", "Project", 0));
-        tabView->setTabText(tabView->indexOf(tabViewMain), QApplication::translate("MainWindow", "Tab 1", 0));
         menuPotato->setTitle(QApplication::translate("MainWindow", "Potato", 0));
         menuHelp->setTitle(QApplication::translate("MainWindow", "Help", 0));
         menuView->setTitle(QApplication::translate("MainWindow", "View", 0));

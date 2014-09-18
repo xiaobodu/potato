@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../editor_common.h"
 #include "input.h"
+#include "scene_impl.h"
 
 #include <QtOpenGL/QGLWidget>
 #include <QtCore/QBasicTimer>
@@ -60,7 +60,11 @@ public:
   QGLESWidget(QWidget* pParent = NULL);
   virtual ~QGLESWidget();
 
-public:
+public Q_SLOTS:
+  void ToLoadScene(QString sScenePath);
+
+Q_SIGNALS:
+  void DidLoadScene(c4g::scene::ISceneImpl*const pScene);
 
 protected:
   void mousePressEvent(QMouseEvent *e);
@@ -73,9 +77,11 @@ protected:
   void paintGL();
 
 private:
-  QBasicTimer timer;
   core::IRender* m_pRender;
-  core::IScene* m_pScene;
+  scene::ISceneImpl* m_pScene;
+  QBasicTimer timer;
+  float m_fWidth;
+  float m_fHeight;
   display::CInput       m_oInput;
 
   timeval time;

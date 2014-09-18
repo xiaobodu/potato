@@ -1,6 +1,11 @@
 #include <QtGui/QMouseEvent>
 
+#include "render_gles.h"
+#include "scene_impl.h"
+#include "panel.h"
+
 #include "qgleswidget.h"
+#include "../editor_common.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -9,13 +14,11 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-#include "render_gles.h"
-#include "scene_impl.h"
-
 namespace c4g {
 namespace qt {
 
 QGLESFormat QGLESFormat::instance;
+
 
 QGLESFormat::QGLESFormat()
     : QGLFormat()
@@ -114,6 +117,8 @@ bool QGLESContext::chooseContext(const QGLContext* shareContext /*= 0*/)
 
 QGLESWidget::QGLESWidget(QWidget* pParent /*= NULL*/)
   : QGLWidget(new QGLESContext(this), pParent)
+  , m_fWidth(0.0f)
+  , m_fHeight(0.0f)
   , second(0.0)
   , second_temp(0.0)
   , second_delta(0.0)
@@ -133,7 +138,6 @@ QGLESWidget::QGLESWidget(QWidget* pParent /*= NULL*/)
 
 QGLESWidget::~QGLESWidget()
 {
-  //TODO:
   m_pScene->Unload(m_pRender);
   delete m_pScene;
   m_pScene = NULL;
@@ -141,6 +145,17 @@ QGLESWidget::~QGLESWidget()
   m_pRender->End();
   delete m_pRender;
   m_pRender = NULL;
+}
+
+void QGLESWidget::ToLoadScene(QString sScenePath)
+{
+  std::string scene_path = sScenePath.toUtf8().constData();
+  m_pScene->SetDataPath(scene_path);
+  m_pScene->GetPanel()->Clear();
+  if (!m_pScene->Load(m_pRender, "scene/root.json")) return;
+  m_pScene->Resize(m_fWidth, m_fHeight);
+
+  DidLoadScene(m_pScene);
 }
 
 void QGLESWidget::mousePressEvent(QMouseEvent *e)
@@ -171,8 +186,6 @@ void QGLESWidget::initializeGL()
 {
   m_pRender->Start();
 
-  m_pScene->Load(m_pRender, "scene/root.json");
-
   gettimeofday(&time, NULL);
 
   timer.start(12, this);
@@ -180,8 +193,11 @@ void QGLESWidget::initializeGL()
 
 void QGLESWidget::resizeGL(int w, int h)
 {
-  m_pRender->Resize(w, h);
-  m_pScene->Resize(w, h);
+  m_fWidth = static_cast<float>(w);
+  m_fHeight = static_cast<float>(h);
+
+  m_pRender->Resize(m_fWidth, m_fHeight);
+  m_pScene->Resize(m_fWidth, m_fHeight);
 }
 
 void QGLESWidget::paintGL()

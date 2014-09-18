@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_c4g__potato__Editor_t {
-    QByteArrayData data[6];
-    char stringdata[100];
+    QByteArrayData data[8];
+    char stringdata[123];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -30,14 +30,17 @@ struct qt_meta_stringdata_c4g__potato__Editor_t {
 static const qt_meta_stringdata_c4g__potato__Editor_t qt_meta_stringdata_c4g__potato__Editor = {
     {
 QT_MOC_LITERAL(0, 0, 19),
-QT_MOC_LITERAL(1, 20, 18),
-QT_MOC_LITERAL(2, 39, 0),
-QT_MOC_LITERAL(3, 40, 19),
-QT_MOC_LITERAL(4, 60, 19),
-QT_MOC_LITERAL(5, 80, 18)
+QT_MOC_LITERAL(1, 20, 11),
+QT_MOC_LITERAL(2, 32, 0),
+QT_MOC_LITERAL(3, 33, 10),
+QT_MOC_LITERAL(4, 44, 18),
+QT_MOC_LITERAL(5, 63, 19),
+QT_MOC_LITERAL(6, 83, 19),
+QT_MOC_LITERAL(7, 103, 18)
     },
-    "c4g::potato::Editor\0OnMenuBarPotatoNew\0"
-    "\0OnMenuBarPotatoOpen\0OnMenuBarPotatoSave\0"
+    "c4g::potato::Editor\0ToLoadScene\0\0"
+    "sScenePath\0OnMenuBarPotatoNew\0"
+    "OnMenuBarPotatoOpen\0OnMenuBarPotatoSave\0"
     "OnMenuBarHelpAbout\0"
 };
 #undef QT_MOC_LITERAL
@@ -48,18 +51,24 @@ static const uint qt_meta_data_c4g__potato__Editor[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,   39,    2, 0x06,
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   34,    2, 0x0a,
-       3,    0,   35,    2, 0x0a,
-       4,    0,   36,    2, 0x0a,
-       5,    0,   37,    2, 0x0a,
+       4,    0,   42,    2, 0x0a,
+       5,    0,   43,    2, 0x0a,
+       6,    0,   44,    2, 0x0a,
+       7,    0,   45,    2, 0x0a,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::QString,    3,
 
  // slots: parameters
     QMetaType::Void,
@@ -75,14 +84,23 @@ void c4g::potato::Editor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, 
     if (_c == QMetaObject::InvokeMetaMethod) {
         Editor *_t = static_cast<Editor *>(_o);
         switch (_id) {
-        case 0: _t->OnMenuBarPotatoNew(); break;
-        case 1: _t->OnMenuBarPotatoOpen(); break;
-        case 2: _t->OnMenuBarPotatoSave(); break;
-        case 3: _t->OnMenuBarHelpAbout(); break;
+        case 0: _t->ToLoadScene((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 1: _t->OnMenuBarPotatoNew(); break;
+        case 2: _t->OnMenuBarPotatoOpen(); break;
+        case 3: _t->OnMenuBarPotatoSave(); break;
+        case 4: _t->OnMenuBarHelpAbout(); break;
         default: ;
         }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        void **func = reinterpret_cast<void **>(_a[1]);
+        {
+            typedef void (Editor::*_t)(QString );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&Editor::ToLoadScene)) {
+                *result = 0;
+            }
+        }
     }
-    Q_UNUSED(_a);
 }
 
 const QMetaObject c4g::potato::Editor::staticMetaObject = {
@@ -110,14 +128,21 @@ int c4g::potato::Editor::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 5)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 5;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 5)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 4;
+        _id -= 5;
     }
     return _id;
+}
+
+// SIGNAL 0
+void c4g::potato::Editor::ToLoadScene(QString _t1)
+{
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_END_MOC_NAMESPACE

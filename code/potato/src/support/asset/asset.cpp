@@ -22,14 +22,17 @@ CAsset::~CAsset()
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
-void CAsset::LoadFile(const std::string& rsFileName, std::string& rsFileContext)
+void CAsset::LoadFile(const std::string& rsFileName, std::string& rsFileContext, bool bIsAbsolutePath /*= false*/)
 {
-  rsFileContext = utility::ReadFile(m_oConfig._sDataPath + "/" + rsFileName);
+  if (bIsAbsolutePath) rsFileContext = utility::ReadFile(rsFileName);
+  else rsFileContext = utility::ReadFile(m_oConfig._sDataPath + "/" + rsFileName);
 }
 
-void CAsset::LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer)
+void CAsset::LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer, bool bIsAbsolutePath /*= false*/)
 {
-  CFilePNG::Instance().Load(m_oConfig._sDataPath + "/" + rsFileName);
+  if (bIsAbsolutePath) CFilePNG::Instance().Load(rsFileName);
+  else CFilePNG::Instance().Load(m_oConfig._sDataPath + "/" + rsFileName);
+
   riWidth = static_cast<int>(CFilePNG::Instance().GetWidth());
   riHeight = static_cast<int>(CFilePNG::Instance().GetHeight());
   rpBuffer = static_cast<unsigned char*>(CFilePNG::Instance().GetBuffer());

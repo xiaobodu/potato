@@ -1,8 +1,10 @@
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QApplication>
+
 #include "editor.h"
 
 #include "qt/qaboutdialog.h"
 
-#include <QtWidgets/QApplication>
 
 #if defined(MSVC)
 #include <crtdbg.h>
@@ -10,6 +12,8 @@
 
 namespace c4g {
 namespace potato {
+
+core::IScene* gs_pScene = NULL;
 
 Editor::Editor(QWidget* pParent /*= NULL*/)
   : QMainWindow(pParent)
@@ -30,8 +34,16 @@ void Editor::OnMenuBarPotatoNew()
 
 void Editor::OnMenuBarPotatoOpen()
 {
-  //TODO:
-  ;
+  QFileDialog dialog(this);
+  dialog.setFileMode(QFileDialog::Directory);
+  dialog.setOption(QFileDialog::ShowDirsOnly);
+
+  if (dialog.exec() == 0)
+  {
+      return;
+  }
+  m_sScenePath = dialog.directory().path();
+  ToLoadScene(m_sScenePath);
 }
 
 void Editor::OnMenuBarPotatoSave()

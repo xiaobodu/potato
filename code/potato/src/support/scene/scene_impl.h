@@ -24,7 +24,7 @@ public:
   virtual ~CScene();
 
 public:
-  virtual bool Load(core::IRender* const& rpRender, const std::string& rsFileName);
+  virtual bool Load(core::IRender* const& rpRender, const std::string& rsFileName, bool bIsAbsolutePath = false);
   virtual bool Unload(core::IRender* const& rpRender);
   virtual bool Resize(const int& riWidth, const int& riHeight);
   virtual bool Tick(const float& rfDelta);
@@ -36,6 +36,9 @@ public:
   virtual core::IAsset* const& GetAssetPtr();
   virtual core::IFlash* const& GetFlashPtr();
   virtual void BindScript(script::AHandler* const& rpHandler);
+  virtual void SetDataPath(const std::string& rsDataPath);
+  virtual const std::string& GetDataPath() const;
+  virtual IPanel* const& GetPanel();
 
 public:
 

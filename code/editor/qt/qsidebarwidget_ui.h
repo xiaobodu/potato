@@ -14,10 +14,10 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QTreeView>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "qpropertywidget.h"
+#include "qscenetreewidget.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -25,32 +25,28 @@ class Ui_SideBarWidget
 {
 public:
     QVBoxLayout *verticalLayout_3;
-    QTreeView *tvProject;
-    QTabWidget *tabProperty;
-    QWidget *tabPropertyMain;
-    QVBoxLayout *verticalLayout;
+    c4g::qt::QSceneTreeWidget *twScene;
+    c4g::qt::QPropertyWidget *propertyWidget;
 
     void setupUi(QWidget *SideBarWidget)
     {
         if (SideBarWidget->objectName().isEmpty())
             SideBarWidget->setObjectName(QStringLiteral("SideBarWidget"));
-        SideBarWidget->resize(171, 399);
+        SideBarWidget->resize(233, 527);
         verticalLayout_3 = new QVBoxLayout(SideBarWidget);
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
-        tvProject = new QTreeView(SideBarWidget);
-        tvProject->setObjectName(QStringLiteral("tvProject"));
+        twScene = new c4g::qt::QSceneTreeWidget(SideBarWidget);
+        QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
+        __qtreewidgetitem->setText(0, QStringLiteral("1"));
+        twScene->setHeaderItem(__qtreewidgetitem);
+        twScene->setObjectName(QStringLiteral("twScene"));
 
-        verticalLayout_3->addWidget(tvProject);
+        verticalLayout_3->addWidget(twScene);
 
-        tabProperty = new QTabWidget(SideBarWidget);
-        tabProperty->setObjectName(QStringLiteral("tabProperty"));
-        tabPropertyMain = new QWidget();
-        tabPropertyMain->setObjectName(QStringLiteral("tabPropertyMain"));
-        verticalLayout = new QVBoxLayout(tabPropertyMain);
-        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        tabProperty->addTab(tabPropertyMain, QString());
+        propertyWidget = new c4g::qt::QPropertyWidget(SideBarWidget);
+        propertyWidget->setObjectName(QStringLiteral("propertyWidget"));
 
-        verticalLayout_3->addWidget(tabProperty);
+        verticalLayout_3->addWidget(propertyWidget);
 
 
         retranslateUi(SideBarWidget);
@@ -61,7 +57,6 @@ public:
     void retranslateUi(QWidget *SideBarWidget)
     {
         SideBarWidget->setWindowTitle(QApplication::translate("SideBarWidget", "Form", 0));
-        tabProperty->setTabText(tabProperty->indexOf(tabPropertyMain), QApplication::translate("SideBarWidget", "Tab 1", 0));
     } // retranslateUi
 
 };

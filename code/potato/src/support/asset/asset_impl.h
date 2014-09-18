@@ -23,8 +23,8 @@ private:
   c4g::base::Config m_oConfig;
 
 public:
-  virtual void LoadFile(const std::string& rsFileName, std::string& rsFileContext);
-  virtual void LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer);
+  virtual void LoadFile(const std::string& rsFileName, std::string& rsFileContext, bool bIsAbsolutePath = false);
+  virtual void LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer, bool bIsAbsolutePath = false);
   virtual void PushImageInfo(const std::string& rsId, const int& riWidth, const int& riHeight, const unsigned int& riId);
   virtual bool FindImageInfo(const std::string& rsId, int& riWidth, int& riHeight, unsigned int& riId) const;
   virtual void VisitImageInfo(core::IAsset::IImageInfoVisitor* const& rpVisitor) const;

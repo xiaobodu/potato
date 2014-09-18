@@ -20,29 +20,15 @@
    <string>Potato Editor</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QTabWidget" name="tabView">
-      <property name="tabsClosable">
-       <bool>true</bool>
+     <widget class="c4g::qt::QGLESWidget" name="glesWidget" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>240</width>
+        <height>240</height>
+       </size>
       </property>
-      <widget class="QWidget" name="tabViewMain">
-       <attribute name="title">
-        <string>Tab 1</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="c4g::qt::QGLESWidget" name="glesWidget" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>240</width>
-            <height>240</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
      </widget>
     </item>
    </layout>
@@ -100,9 +86,7 @@
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <widget class="c4g::qt::QSideBarWidget" name="sidebarWidget" native="true">
-       <layout class="QVBoxLayout" name="verticalLayout_2"/>
-      </widget>
+      <widget class="c4g::qt::QSideBarWidget" name="sidebarWidget" native="true"/>
      </item>
     </layout>
    </widget>
@@ -139,7 +123,7 @@
   </action>
   <action name="actionOpen">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>Open</string>
@@ -199,12 +183,19 @@
    <extends>QWidget</extends>
    <header>qgleswidget.h</header>
    <container>1</container>
+   <slots>
+    <signal>DidLoadScene(c4g::scene::ISceneImpl*const)</signal>
+    <slot>ToLoadScene(QString)</slot>
+   </slots>
   </customwidget>
   <customwidget>
    <class>c4g::qt::QSideBarWidget</class>
    <extends>QWidget</extends>
    <header>qsidebarwidget.h</header>
    <container>1</container>
+   <slots>
+    <slot>UpdateScene(c4g::scene::ISceneImpl*const)</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -321,8 +312,41 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>glesWidget</sender>
+   <signal>DidLoadScene(c4g::scene::ISceneImpl*const)</signal>
+   <receiver>sidebarWidget</receiver>
+   <slot>UpdateScene(c4g::scene::ISceneImpl*const)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>356</x>
+     <y>255</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>36</x>
+     <y>268</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>MainWindow</sender>
+   <signal>ToLoadScene(QString)</signal>
+   <receiver>glesWidget</receiver>
+   <slot>ToLoadScene(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>319</x>
+     <y>239</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>371</x>
+     <y>255</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
+  <signal>ToLoadScene(QString)</signal>
   <slot>OnMenuBarPotatoNew()</slot>
   <slot>OnMenuBarPotatoOpen()</slot>
   <slot>OnMenuBarPotatoSave()</slot>
