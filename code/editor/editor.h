@@ -13,10 +13,16 @@ class Editor : public QMainWindow
 
 public:
   Editor(QWidget* pParent = NULL);
-  //virtual ~Editor();
+  virtual ~Editor();
+
+public Q_SLOTS:
+  void OnMenuBarPotatoNew();
+  void OnMenuBarPotatoOpen();
+  void OnMenuBarPotatoSave();
+  void OnMenuBarHelpAbout();
 
 public:
-  Ui_MainWindow         m_oUi;
+  Ui::MainWindow         m_oUi;
 };
 
 }

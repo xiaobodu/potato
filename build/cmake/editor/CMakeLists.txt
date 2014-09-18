@@ -40,6 +40,14 @@ set(SRC_FILE_LIST
   ${CODE_PATH_editor}/qt/qgleswidget.h
   ${CODE_PATH_editor}/qt/qgleswidget.cpp
   ${CODE_PATH_editor}/qt/qgleswidget_moc.cpp
+  ${CODE_PATH_editor}/qt/qsidebarwidget_ui.h
+  ${CODE_PATH_editor}/qt/qsidebarwidget.h
+  ${CODE_PATH_editor}/qt/qsidebarwidget.cpp
+  ${CODE_PATH_editor}/qt/qsidebarwidget_moc.cpp
+  ${CODE_PATH_editor}/qt/qaboutdialog_ui.h
+  ${CODE_PATH_editor}/qt/qaboutdialog.h
+  ${CODE_PATH_editor}/qt/qaboutdialog.cpp
+  ${CODE_PATH_editor}/qt/qaboutdialog_moc.cpp
   ${CODE_PATH}/potato/src/engine/input.h
   ${CODE_PATH}/potato/src/engine/input.cpp
   )
@@ -107,27 +115,35 @@ endmacro(QT_GENERATE_MOC)
 
 QT_GENERATE_MOC(${CODE_PATH_editor} editor)
 QT_GENERATE_MOC(${CODE_PATH_editor}/qt qgleswidget)
+QT_GENERATE_MOC(${CODE_PATH_editor}/qt qsidebarwidget)
+QT_GENERATE_MOC(${CODE_PATH_editor}/qt qaboutdialog)
 
 
-macro(QT_GENERATE_UIC directory resname filename)
+macro(QT_GENERATE_UIC directory resname filepath filename)
 add_custom_target(${filename}_ui_h
-  DEPENDS ${directory}/${filename}_ui.h
+  DEPENDS ${directory}/${filepath}/${filename}_ui.h
   VERBATIM)
-add_custom_command(OUTPUT ${directory}/${filename}_ui.h
+add_custom_command(OUTPUT ${directory}/${filepath}/${filename}_ui.h
   DEPENDS ${directory}/res/${resname}.ui
-  COMMAND ${QT_SDK_PATH}/bin/uic ${directory}/res/${resname}.ui -o ${directory}/${filename}_ui.h
-  COMMENT "Generating C++ header file ${directory}/${filename}_ui.h by ${directory}/res/${resname}.ui"
+  COMMAND ${QT_SDK_PATH}/bin/uic ${directory}/res/${resname}.ui -o ${directory}/${filepath}/${filename}_ui.h
+  COMMENT "Generating C++ header file ${directory}/${filepath}/${filename}_ui.h by ${directory}/res/${resname}.ui"
   VERBATIM)
 endmacro(QT_GENERATE_UIC)
 
-QT_GENERATE_UIC(${CODE_PATH_editor} mainwindow editor_mainwindow)
+QT_GENERATE_UIC(${CODE_PATH_editor} mainwindow . editor_mainwindow)
+QT_GENERATE_UIC(${CODE_PATH_editor} sidebarwidget qt qsidebarwidget)
+QT_GENERATE_UIC(${CODE_PATH_editor} aboutdialog qt qaboutdialog)
 
 # build dependicies
 set(DEP_PROJ_LIST
   render_gles
   scene
   editor_moc_cpp
-  editor_main_ui_h
+  editor_mainwindow_ui_h
   qgleswidget_moc_cpp
+  qsidebarwidget_ui_h
+  qsidebarwidget_moc_cpp
+  qaboutdialog_ui_h
+  qaboutdialog_moc_cpp
   )
 add_dependencies(editor ${DEP_PROJ_LIST})

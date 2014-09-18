@@ -18,6 +18,7 @@ public:
   explicit CGlyphProcessScope(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess)
     : base::TScope<IProcess>(rpProcess)
   {
+    glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_TEXTURE_2D);
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -33,6 +34,7 @@ public:
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisable(GL_BLEND);
   }
 };
 
@@ -47,6 +49,12 @@ CCanvas::CCanvas()
   m_aIndice[3] = 2;
   m_aIndice[4] = 1;
   m_aIndice[5] = 3;
+
+  memset(m_aVertexLine, 0, sizeof(GLfloat) * RECT_VERTEX_NUM * RECT_VERTEX_FLOAT_NUM);
+  m_aIndiceLine[0] = 0;
+  m_aIndiceLine[1] = 1;
+  m_aIndiceLine[2] = 2;
+  m_aIndiceLine[3] = 3;
 }
 
 CCanvas::~CCanvas()

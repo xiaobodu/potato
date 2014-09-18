@@ -48,7 +48,7 @@
     "layer":0,
     "visible":true,
     "layout":{
-      "type":"fitin"
+      "type":"scale"
     },
     "widgets":[
       {
@@ -57,14 +57,14 @@
           "id":"sub",
           "dst":{
             "l":240.0,
-            "t":350.0,
-            "r":340.0,
-            "b":450.0
+            "t":400.0,
+            "r":480.0,
+            "b":800.0
           },
           "layer":0,
           "visible":true,
           "layout":{
-            "type":"scale"
+            "type":"fitin"
           },
           "effects":[
             {

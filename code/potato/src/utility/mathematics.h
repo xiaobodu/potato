@@ -110,6 +110,11 @@ public:
     b = C4G_MATH_MAX(b, roOther.b);
     return (*this)();
   }
+  // size test
+  bool operator!() const
+  {
+    return (0 >= w || 0 >= h);
+  }
   // intersect test
   bool operator^(const Rect& roOther)
   {

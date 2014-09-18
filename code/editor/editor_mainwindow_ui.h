@@ -14,15 +14,18 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDockWidget>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QTreeView>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "qgleswidget.h"
+#include "qsidebarwidget.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -35,107 +38,164 @@ public:
     QAction *actionOpen;
     QAction *actionSave;
     QAction *actionQuit;
+    QAction *actionEffect;
+    QAction *actionPlayInBar;
+    QAction *actionEditInBar;
+    QAction *actionSideBar;
+    QAction *actionProject;
     QWidget *centralwidget;
-    QVBoxLayout *verticalLayout_2;
-    c4g::qt::QGLESWidget *gleswidget;
+    QHBoxLayout *horizontalLayout;
+    QTabWidget *tabView;
+    QWidget *tabViewMain;
+    QVBoxLayout *verticalLayout;
+    c4g::qt::QGLESWidget *glesWidget;
     QMenuBar *menubar;
-    QMenu *menuFile;
+    QMenu *menuPotato;
     QMenu *menuHelp;
+    QMenu *menuView;
     QStatusBar *statusbar;
-    QDockWidget *dockWidget;
+    QDockWidget *dockSideBar;
     QWidget *dockWidgetContents;
     QVBoxLayout *verticalLayout_3;
-    QVBoxLayout *verticalLayout;
-    QTreeView *treeView;
+    c4g::qt::QSideBarWidget *sidebarWidget;
+    QVBoxLayout *verticalLayout_2;
+    QToolBar *toolBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(806, 863);
-        MainWindow->setMinimumSize(QSize(480, 480));
+        MainWindow->resize(640, 480);
+        MainWindow->setMinimumSize(QSize(0, 0));
         actionTutorial = new QAction(MainWindow);
         actionTutorial->setObjectName(QStringLiteral("actionTutorial"));
         actionAbout = new QAction(MainWindow);
         actionAbout->setObjectName(QStringLiteral("actionAbout"));
         actionNew = new QAction(MainWindow);
         actionNew->setObjectName(QStringLiteral("actionNew"));
+        actionNew->setEnabled(false);
         actionOpen = new QAction(MainWindow);
         actionOpen->setObjectName(QStringLiteral("actionOpen"));
+        actionOpen->setEnabled(false);
         actionSave = new QAction(MainWindow);
         actionSave->setObjectName(QStringLiteral("actionSave"));
+        actionSave->setEnabled(false);
         actionQuit = new QAction(MainWindow);
         actionQuit->setObjectName(QStringLiteral("actionQuit"));
+        actionEffect = new QAction(MainWindow);
+        actionEffect->setObjectName(QStringLiteral("actionEffect"));
+        actionPlayInBar = new QAction(MainWindow);
+        actionPlayInBar->setObjectName(QStringLiteral("actionPlayInBar"));
+        actionEditInBar = new QAction(MainWindow);
+        actionEditInBar->setObjectName(QStringLiteral("actionEditInBar"));
+        actionEditInBar->setEnabled(false);
+        actionSideBar = new QAction(MainWindow);
+        actionSideBar->setObjectName(QStringLiteral("actionSideBar"));
+        actionSideBar->setCheckable(true);
+        actionSideBar->setChecked(true);
+        actionProject = new QAction(MainWindow);
+        actionProject->setObjectName(QStringLiteral("actionProject"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
-        verticalLayout_2 = new QVBoxLayout(centralwidget);
-        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        gleswidget = new c4g::qt::QGLESWidget(centralwidget);
-        gleswidget->setObjectName(QStringLiteral("gleswidget"));
-        gleswidget->setMinimumSize(QSize(480, 800));
+        horizontalLayout = new QHBoxLayout(centralwidget);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        tabView = new QTabWidget(centralwidget);
+        tabView->setObjectName(QStringLiteral("tabView"));
+        tabView->setTabsClosable(true);
+        tabViewMain = new QWidget();
+        tabViewMain->setObjectName(QStringLiteral("tabViewMain"));
+        verticalLayout = new QVBoxLayout(tabViewMain);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        glesWidget = new c4g::qt::QGLESWidget(tabViewMain);
+        glesWidget->setObjectName(QStringLiteral("glesWidget"));
+        glesWidget->setMinimumSize(QSize(240, 240));
 
-        verticalLayout_2->addWidget(gleswidget);
+        verticalLayout->addWidget(glesWidget);
+
+        tabView->addTab(tabViewMain, QString());
+
+        horizontalLayout->addWidget(tabView);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 806, 25));
-        menuFile = new QMenu(menubar);
-        menuFile->setObjectName(QStringLiteral("menuFile"));
+        menubar->setGeometry(QRect(0, 0, 640, 25));
+        menuPotato = new QMenu(menubar);
+        menuPotato->setObjectName(QStringLiteral("menuPotato"));
         menuHelp = new QMenu(menubar);
         menuHelp->setObjectName(QStringLiteral("menuHelp"));
+        menuView = new QMenu(menubar);
+        menuView->setObjectName(QStringLiteral("menuView"));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));
         MainWindow->setStatusBar(statusbar);
-        dockWidget = new QDockWidget(MainWindow);
-        dockWidget->setObjectName(QStringLiteral("dockWidget"));
+        dockSideBar = new QDockWidget(MainWindow);
+        dockSideBar->setObjectName(QStringLiteral("dockSideBar"));
+        dockSideBar->setLayoutDirection(Qt::LeftToRight);
+        dockSideBar->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockWidgetContents = new QWidget();
         dockWidgetContents->setObjectName(QStringLiteral("dockWidgetContents"));
         verticalLayout_3 = new QVBoxLayout(dockWidgetContents);
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
-        verticalLayout = new QVBoxLayout();
-        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        treeView = new QTreeView(dockWidgetContents);
-        treeView->setObjectName(QStringLiteral("treeView"));
+        sidebarWidget = new c4g::qt::QSideBarWidget(dockWidgetContents);
+        sidebarWidget->setObjectName(QStringLiteral("sidebarWidget"));
+        verticalLayout_2 = new QVBoxLayout(sidebarWidget);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
 
-        verticalLayout->addWidget(treeView);
+        verticalLayout_3->addWidget(sidebarWidget);
 
+        dockSideBar->setWidget(dockWidgetContents);
+        MainWindow->addDockWidget(static_cast<Qt::DockWidgetArea>(1), dockSideBar);
+        toolBar = new QToolBar(MainWindow);
+        toolBar->setObjectName(QStringLiteral("toolBar"));
+        MainWindow->addToolBar(Qt::TopToolBarArea, toolBar);
 
-        verticalLayout_3->addLayout(verticalLayout);
-
-        dockWidget->setWidget(dockWidgetContents);
-        MainWindow->addDockWidget(static_cast<Qt::DockWidgetArea>(1), dockWidget);
-
-        menubar->addAction(menuFile->menuAction());
+        menubar->addAction(menuPotato->menuAction());
+        menubar->addAction(menuView->menuAction());
         menubar->addAction(menuHelp->menuAction());
-        menuFile->addAction(actionNew);
-        menuFile->addSeparator();
-        menuFile->addAction(actionOpen);
-        menuFile->addAction(actionSave);
-        menuFile->addSeparator();
-        menuFile->addAction(actionQuit);
-        menuHelp->addAction(actionTutorial);
-        menuHelp->addSeparator();
+        menuPotato->addAction(actionNew);
+        menuPotato->addSeparator();
+        menuPotato->addAction(actionOpen);
+        menuPotato->addAction(actionSave);
+        menuPotato->addSeparator();
+        menuPotato->addAction(actionQuit);
         menuHelp->addAction(actionAbout);
+        menuView->addAction(actionSideBar);
+        toolBar->addAction(actionEditInBar);
 
         retranslateUi(MainWindow);
         QObject::connect(actionQuit, SIGNAL(triggered()), MainWindow, SLOT(close()));
+        QObject::connect(actionSideBar, SIGNAL(toggled(bool)), dockSideBar, SLOT(setVisible(bool)));
+        QObject::connect(dockSideBar, SIGNAL(visibilityChanged(bool)), actionSideBar, SLOT(setChecked(bool)));
+        QObject::connect(actionAbout, SIGNAL(triggered()), MainWindow, SLOT(OnMenuBarHelpAbout()));
+        QObject::connect(actionNew, SIGNAL(triggered()), MainWindow, SLOT(OnMenuBarPotatoNew()));
+        QObject::connect(actionOpen, SIGNAL(triggered()), MainWindow, SLOT(OnMenuBarPotatoOpen()));
+        QObject::connect(actionSave, SIGNAL(triggered()), MainWindow, SLOT(OnMenuBarPotatoSave()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Potato Editor", 0));
         actionTutorial->setText(QApplication::translate("MainWindow", "Tutorial", 0));
         actionAbout->setText(QApplication::translate("MainWindow", "About", 0));
         actionNew->setText(QApplication::translate("MainWindow", "New", 0));
         actionOpen->setText(QApplication::translate("MainWindow", "Open", 0));
         actionSave->setText(QApplication::translate("MainWindow", "Save", 0));
         actionQuit->setText(QApplication::translate("MainWindow", "Quit", 0));
-        menuFile->setTitle(QApplication::translate("MainWindow", "File", 0));
+        actionEffect->setText(QApplication::translate("MainWindow", "Effect", 0));
+        actionPlayInBar->setText(QApplication::translate("MainWindow", "Play", 0));
+        actionEditInBar->setText(QApplication::translate("MainWindow", "Edit", 0));
+        actionSideBar->setText(QApplication::translate("MainWindow", "Side Bar", 0));
+        actionProject->setText(QApplication::translate("MainWindow", "Project", 0));
+        tabView->setTabText(tabView->indexOf(tabViewMain), QApplication::translate("MainWindow", "Tab 1", 0));
+        menuPotato->setTitle(QApplication::translate("MainWindow", "Potato", 0));
         menuHelp->setTitle(QApplication::translate("MainWindow", "Help", 0));
+        menuView->setTitle(QApplication::translate("MainWindow", "View", 0));
+        dockSideBar->setWindowTitle(QApplication::translate("MainWindow", "Side Bar", 0));
+        toolBar->setWindowTitle(QApplication::translate("MainWindow", "toolBar", 0));
     } // retranslateUi
 
 };

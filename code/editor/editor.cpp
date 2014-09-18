@@ -1,5 +1,7 @@
 #include "editor.h"
 
+#include "qt/qaboutdialog.h"
+
 #include <QtWidgets/QApplication>
 
 #if defined(MSVC)
@@ -13,6 +15,31 @@ Editor::Editor(QWidget* pParent /*= NULL*/)
   : QMainWindow(pParent)
 {
   m_oUi.setupUi(this);
+}
+
+Editor::~Editor()
+{
+  ;
+}
+
+void Editor::OnMenuBarPotatoNew()
+{
+  ;
+}
+
+void Editor::OnMenuBarPotatoOpen()
+{
+  ;
+}
+
+void Editor::OnMenuBarPotatoSave()
+{
+  ;
+}
+
+void Editor::OnMenuBarHelpAbout()
+{
+  QAboutDialog::ShowDialog(this);
 }
 
 }

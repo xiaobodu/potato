@@ -16,7 +16,7 @@ namespace gles {
 CRender::CRender(const base::Config& roConfig)
   : m_pCanvas(NULL)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   m_pCanvas = new CCanvas();
 }
@@ -26,12 +26,12 @@ CRender::~CRender()
   delete m_pCanvas;
   m_pCanvas = NULL;
 
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
 void CRender::Start()
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   glShadeModel(GL_SMOOTH);
   glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
@@ -42,12 +42,12 @@ void CRender::Start()
   /// just 2d render, don't test the depth
   //glEnable(GL_DEPTH_TEST);
   //glDepthFunc(GL_LEQUAL);
-  glEnable(GL_BLEND);
+  //glEnable(GL_BLEND);
 }
 
 bool CRender::Resize(const int& riWidth, const int& riHeight)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   glViewport(0, 0, riWidth, riHeight);
 
@@ -74,7 +74,7 @@ bool CRender::Render(const float& rfDelta, core::IScene* const& rpScene)
 
 void CRender::End()
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
 unsigned int CRender::GenerateTexId(const int& riWidth, const int& riHeight, const unsigned char* const& rpBuffer)
@@ -95,7 +95,7 @@ void CRender::DeleteTexId(const int& riCount, const unsigned int* const& rpiTexI
 
 void CRender::SetView(const int& riWidth, const int& riHeight, const double& rdNear, const double& rdFar)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -113,7 +113,7 @@ void CRender::SetView(const int& riWidth, const int& riHeight, const double& rdN
 
 void CRender::Perspactive(double fovy, double aspect, double near, double far)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();

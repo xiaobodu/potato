@@ -44,6 +44,9 @@ public:
   virtual void Resize(const RectF& roConfig, const RectF& roResized, IWidget* const& rpWidget) const;
 
 public:
+  static void Resize(const ELayoutType& reType, const RectF& roConfig, const RectF& roResized, IWidget* const& rpWidget);
+
+public:
   class CBuilder : public TBuilder<ILayout* const>
   {
   public:

@@ -8,6 +8,7 @@
 #define RECT_VERTEX_FLOAT_NUM        3
 #define RECT_TEXCOORD_FLOAT_NUM      2
 #define RECT_INDICE_INT_NUM          6
+#define RECT_INDICE_LINE_INT_NUM     4
 
 namespace c4g{
 namespace render {
@@ -29,6 +30,8 @@ private:
   GLfloat m_aVertex[RECT_VERTEX_NUM * RECT_VERTEX_FLOAT_NUM];
   GLfloat m_aTexCoord[RECT_VERTEX_NUM * RECT_TEXCOORD_FLOAT_NUM];
   GLubyte m_aIndice[RECT_INDICE_INT_NUM];
+  GLfloat m_aVertexLine[RECT_VERTEX_NUM * RECT_VERTEX_FLOAT_NUM];
+  GLubyte m_aIndiceLine[RECT_INDICE_LINE_INT_NUM];
 };
 
 }
