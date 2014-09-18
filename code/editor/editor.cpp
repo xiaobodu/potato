@@ -24,16 +24,19 @@ Editor::~Editor()
 
 void Editor::OnMenuBarPotatoNew()
 {
+  //TODO:
   ;
 }
 
 void Editor::OnMenuBarPotatoOpen()
 {
+  //TODO:
   ;
 }
 
 void Editor::OnMenuBarPotatoSave()
 {
+  //TODO:
   ;
 }
 
