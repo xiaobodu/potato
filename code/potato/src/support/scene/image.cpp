@@ -16,6 +16,8 @@ CImage::CImage(ISceneImpl* const& rpScene, IWidget* const& rpParent)
   : TWidget<IImage>(rpScene, rpParent)
   , m_pProcess(NULL)
 {
+  class_name = "c4g::scene::CImage";
+
   m_pProcess = new CProcess(this);
 }
 

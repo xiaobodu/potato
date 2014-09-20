@@ -49,6 +49,18 @@ set(SRC_FILE_LIST
   ${CODE_PATH_editor}/qt/qpropertywidget.h
   ${CODE_PATH_editor}/qt/qpropertywidget.cpp
   ${CODE_PATH_editor}/qt/qpropertywidget_moc.cpp
+  ${CODE_PATH_editor}/qt/qbasicpropertywidget_ui.h
+  ${CODE_PATH_editor}/qt/qbasicpropertywidget.h
+  ${CODE_PATH_editor}/qt/qbasicpropertywidget.cpp
+  ${CODE_PATH_editor}/qt/qbasicpropertywidget_moc.cpp
+  ${CODE_PATH_editor}/qt/qimagepropertywidget_ui.h
+  ${CODE_PATH_editor}/qt/qimagepropertywidget.h
+  ${CODE_PATH_editor}/qt/qimagepropertywidget.cpp
+  ${CODE_PATH_editor}/qt/qimagepropertywidget_moc.cpp
+  ${CODE_PATH_editor}/qt/qrectfpropertywidget_ui.h
+  ${CODE_PATH_editor}/qt/qrectfpropertywidget.h
+  ${CODE_PATH_editor}/qt/qrectfpropertywidget.cpp
+  ${CODE_PATH_editor}/qt/qrectfpropertywidget_moc.cpp
   ${CODE_PATH_editor}/qt/qscenetreewidget.h
   ${CODE_PATH_editor}/qt/qscenetreewidget.cpp
   ${CODE_PATH_editor}/qt/qscenetreewidget_moc.cpp
@@ -101,6 +113,7 @@ set(LINK_FILE_LIST
   render_gles
   scene
   Qt5Core
+  Qt5Gui
   Qt5Widgets
   Qt5OpenGL
   EGL
@@ -125,6 +138,9 @@ QT_GENERATE_MOC(${CODE_PATH_editor} editor)
 QT_GENERATE_MOC(${CODE_PATH_editor}/qt qgleswidget)
 QT_GENERATE_MOC(${CODE_PATH_editor}/qt qsidebarwidget)
 QT_GENERATE_MOC(${CODE_PATH_editor}/qt qpropertywidget)
+QT_GENERATE_MOC(${CODE_PATH_editor}/qt qbasicpropertywidget)
+QT_GENERATE_MOC(${CODE_PATH_editor}/qt qimagepropertywidget)
+QT_GENERATE_MOC(${CODE_PATH_editor}/qt qrectfpropertywidget)
 QT_GENERATE_MOC(${CODE_PATH_editor}/qt qscenetreewidget)
 QT_GENERATE_MOC(${CODE_PATH_editor}/qt qaboutdialog)
 
@@ -143,6 +159,9 @@ endmacro(QT_GENERATE_UIC)
 QT_GENERATE_UIC(${CODE_PATH_editor} mainwindow . editor_mainwindow)
 QT_GENERATE_UIC(${CODE_PATH_editor} sidebarwidget qt qsidebarwidget)
 QT_GENERATE_UIC(${CODE_PATH_editor} propertywidget qt qpropertywidget)
+QT_GENERATE_UIC(${CODE_PATH_editor} basicpropertywidget qt qbasicpropertywidget)
+QT_GENERATE_UIC(${CODE_PATH_editor} rectfpropertywidget qt qrectfpropertywidget)
+QT_GENERATE_UIC(${CODE_PATH_editor} imagepropertywidget qt qimagepropertywidget)
 QT_GENERATE_UIC(${CODE_PATH_editor} aboutdialog qt qaboutdialog)
 
 # build dependicies
@@ -156,6 +175,12 @@ set(DEP_PROJ_LIST
   qsidebarwidget_moc_cpp
   qpropertywidget_ui_h
   qpropertywidget_moc_cpp
+  qbasicpropertywidget_ui_h
+  qbasicpropertywidget_moc_cpp
+  qrectfpropertywidget_ui_h
+  qrectfpropertywidget_moc_cpp
+  qimagepropertywidget_ui_h
+  qimagepropertywidget_moc_cpp
   qscenetreewidget_moc_cpp
   qaboutdialog_ui_h
   qaboutdialog_moc_cpp

@@ -75,6 +75,8 @@ void *c4g::qt::QSceneTreeWidget::qt_metacast(const char *_clname)
     if (!_clname) return 0;
     if (!strcmp(_clname, qt_meta_stringdata_c4g__qt__QSceneTreeWidget.stringdata))
         return static_cast<void*>(const_cast< QSceneTreeWidget*>(this));
+    if (!strcmp(_clname, "scene::IWidget::IVisitor"))
+        return static_cast< scene::IWidget::IVisitor*>(const_cast< QSceneTreeWidget*>(this));
     return QTreeWidget::qt_metacast(_clname);
 }
 

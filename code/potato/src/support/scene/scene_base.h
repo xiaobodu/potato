@@ -118,6 +118,7 @@ class IWidget : public IResizable, public ITickable, public IDrawable, public IH
 {
 public:
   std::string id;
+  std::string class_name;
   int layer;
   bool resize;
   bool always_tick;
@@ -132,6 +133,7 @@ public:
 public:
   explicit IWidget(ISceneImpl* const& rpScene, IWidget* const& rpParent)
     : id("unknown")
+    , class_name("unknown")
     , layer(0)
     , resize(false)
     , always_tick(false)
@@ -165,7 +167,7 @@ public:
     virtual ~IVisitor() { ; }
 
   public:
-    virtual void On(IWidget* const& rpWidget) const = 0;
+    virtual void On(IWidget* const& rpWidget) = 0;
   };
   virtual void Visit(IVisitor* const& rpVisitor) = 0;
 

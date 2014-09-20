@@ -3,6 +3,7 @@
 #include "qpropertywidget_ui.h"
 
 #include <QtWidgets/QWidget>
+#include <QtWidgets/QTreeWidget>
 
 namespace c4g {
 namespace qt {
@@ -15,7 +16,11 @@ public:
   QPropertyWidget(QWidget* pParent = 0);
   virtual ~QPropertyWidget();
 
-public:
+public Q_SLOTS:
+  void UpdateWidget(QTreeWidgetItem* pItem, int iColum);
+  void LostWidget();
+
+private:
   Ui::PropertyWidget m_oUi;
 };
 

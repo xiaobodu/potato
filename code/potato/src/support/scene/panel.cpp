@@ -17,6 +17,8 @@ CPanel::CPanel(ISceneImpl* const& rpScene, IWidget* const & rpParent)
   : TWidget<IPanel>(rpScene, rpParent)
   , m_pProcess(NULL)
 {
+  class_name = "c4g::scene::CPanel";
+
   resize = true;
   input = true;
   sensor = true;

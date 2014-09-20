@@ -163,19 +163,23 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Potato Editor", 0));
         actionTutorial->setText(QApplication::translate("MainWindow", "Tutorial", 0));
-        actionAbout->setText(QApplication::translate("MainWindow", "About", 0));
-        actionNew->setText(QApplication::translate("MainWindow", "New", 0));
-        actionOpen->setText(QApplication::translate("MainWindow", "Open", 0));
-        actionSave->setText(QApplication::translate("MainWindow", "Save", 0));
-        actionQuit->setText(QApplication::translate("MainWindow", "Quit", 0));
+        actionAbout->setText(QApplication::translate("MainWindow", "&About", 0));
+        actionNew->setText(QApplication::translate("MainWindow", "&New", 0));
+        actionNew->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", 0));
+        actionOpen->setText(QApplication::translate("MainWindow", "&Open", 0));
+        actionOpen->setShortcut(QApplication::translate("MainWindow", "Ctrl+O", 0));
+        actionSave->setText(QApplication::translate("MainWindow", "&Save", 0));
+        actionSave->setShortcut(QApplication::translate("MainWindow", "Ctrl+S", 0));
+        actionQuit->setText(QApplication::translate("MainWindow", "&Quit", 0));
+        actionQuit->setShortcut(QApplication::translate("MainWindow", "Ctrl+Q", 0));
         actionEffect->setText(QApplication::translate("MainWindow", "Effect", 0));
         actionPlayInBar->setText(QApplication::translate("MainWindow", "Play", 0));
         actionEditInBar->setText(QApplication::translate("MainWindow", "Edit", 0));
         actionSideBar->setText(QApplication::translate("MainWindow", "Side Bar", 0));
         actionProject->setText(QApplication::translate("MainWindow", "Project", 0));
-        menuPotato->setTitle(QApplication::translate("MainWindow", "Potato", 0));
-        menuHelp->setTitle(QApplication::translate("MainWindow", "Help", 0));
-        menuView->setTitle(QApplication::translate("MainWindow", "View", 0));
+        menuPotato->setTitle(QApplication::translate("MainWindow", "&Potato", 0));
+        menuHelp->setTitle(QApplication::translate("MainWindow", "&Help", 0));
+        menuView->setTitle(QApplication::translate("MainWindow", "&View", 0));
         dockSideBar->setWindowTitle(QApplication::translate("MainWindow", "Side Bar", 0));
         toolBar->setWindowTitle(QApplication::translate("MainWindow", "toolBar", 0));
     } // retranslateUi

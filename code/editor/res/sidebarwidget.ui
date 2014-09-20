@@ -16,11 +16,26 @@
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="c4g::qt::QSceneTreeWidget" name="twScene">
+     <property name="columnCount">
+      <number>2</number>
+     </property>
      <column>
       <property name="text">
        <string notr="true">1</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string notr="true">2</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
     </widget>
    </item>
    <item>
@@ -35,7 +50,8 @@
    <header>qpropertywidget.h</header>
    <container>1</container>
    <slots>
-    <slot>OnUpdate(QString)</slot>
+    <slot>UpdateWidget(QTreeWidgetItem*,int)</slot>
+    <slot>LostWidget()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -45,5 +61,22 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>twScene</sender>
+   <signal>itemClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>propertyWidget</receiver>
+   <slot>UpdateWidget(QTreeWidgetItem*,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>116</x>
+     <y>251</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>116</x>
+     <y>513</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
