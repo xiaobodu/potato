@@ -19,6 +19,7 @@ public:
 public:
   virtual void PreDo();
   virtual bool Do(render::ITransform* const& rpTransform);
+  virtual bool Do(render::IBlend* const& rpBlend);
   virtual void PostDo();
 
 private:

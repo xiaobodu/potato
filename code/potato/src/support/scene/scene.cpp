@@ -274,12 +274,13 @@ bool CScene::Handle(const display::IInput* const& rpInput)
   {
     if (!m_bPlayEffect)
     {
-      m_pPanel->PlayEffect("r");
+      m_pPanel->PlayEffect("p");
       m_bPlayEffect = true;
     }
     else
     {
-      m_pPanel->StopEffect();
+      m_pPanel->PauseEffect();
+      //m_pPanel->StopEffect();
       m_bPlayEffect = false;
     }
   }

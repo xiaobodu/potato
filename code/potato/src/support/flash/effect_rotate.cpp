@@ -12,6 +12,7 @@ std::string CEffectTypeRotate::name("rotate");
 CEffectRotate::CEffectRotate()
   : speed(0.0f)
   , m_bPlaying(false)
+  , m_bPause(false)
   , m_fTime(0.0f)
   , m_fAngle(0.0f)
 {
@@ -34,6 +35,7 @@ IEffect* CEffectRotate::New() const
 void CEffectRotate::Play()
 {
   m_bPlaying = true;
+  m_bPause = false;
 }
 
 void CEffectRotate::Stop()
@@ -43,12 +45,12 @@ void CEffectRotate::Stop()
 
 void CEffectRotate::Pause()
 {
-  ;
+  m_bPause = true;
 }
 
 void CEffectRotate::Continue()
 {
-  ;
+  m_bPause = false;
 }
 
 void CEffectRotate::Resize(const float& rfWidth, const float& rfHeight, const float& rfDepth)
@@ -60,11 +62,14 @@ bool CEffectRotate::Tick(const float& rfDelta)
 {
   if (!m_bPlaying) return false;
 
-  m_fTime += rfDelta;
+  if (!m_bPause)
+  {
+    m_fTime += rfDelta;
 
-  m_fAngle = m_fTime * speed;
+    m_fAngle = m_fTime * speed;
 
-  if (360.0f < m_fAngle) m_fAngle -= 360.0f;
+    if (360.0f < m_fAngle) m_fAngle -= 360.0f;
+  }
   //
   return true;
 }

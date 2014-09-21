@@ -43,6 +43,17 @@ public:
   virtual void Free(float* const& rpfData) = 0;
 };
 
+class IBlend
+{
+public:
+  virtual ~IBlend() { ; }
+
+public:
+  virtual void Add(const base::SColor& rsColor, const base::Color::Flags& rcFlags) = 0;
+  virtual void Minus(const base::SColor& rsColor, const base::Color::Flags& rcFlags) = 0;
+  virtual void Multiply(const base::SColor& rsColor, const base::Color::Flags& rcFlags) = 0;
+};
+
 class IProcess
 {
 public:
@@ -51,6 +62,7 @@ public:
 public:
   virtual void PreDo() = 0;
   virtual bool Do(render::ITransform* const& rpTransform) = 0;
+  virtual bool Do(render::IBlend* const& rpBlend) = 0;
   virtual void PostDo() = 0;
 };
 

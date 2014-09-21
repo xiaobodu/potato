@@ -164,13 +164,18 @@ public:
       if (it_find != m_mEffect.end())
       {
         m_pCurrentEffect = *((*it_find).second);
-        if (NULL != m_pCurrentEffect)
-        {
-          m_pCurrentEffect->Resize(TBase::dst.w, TBase::dst.h, 0.0f);
-          m_pCurrentEffect->Play();
-        }
+      }
+      if (NULL != m_pCurrentEffect)
+      {
+        m_pCurrentEffect->Resize(TBase::dst.w, TBase::dst.h, 0.0f);
       }
     }
+
+    if (NULL != m_pCurrentEffect)
+    {
+      m_pCurrentEffect->Play();
+    }
+
     /// play same name effect of sub-widgets
     VWidgetPtr::iterator it = m_vpWidget.begin();
     VWidgetPtr::iterator it_end = m_vpWidget.end();

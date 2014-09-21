@@ -36,6 +36,12 @@ bool CProcess::Do(render::ITransform* const & rpTransform)
   return true;
 }
 
+bool CProcess::Do(render::IBlend* const& rpBlend)
+{
+  m_pWidget->CurrentEffect()->Make(rpBlend);
+  return true;
+}
+
 void CProcess::PostDo()
 {
   m_pWidget->CurrentEffect()->PostMake();

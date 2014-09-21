@@ -3,6 +3,7 @@
 #include "flash_impl.h"
 
 #include "effect_rotate.h"
+#include "effect_blend.h"
 
 #include "utility/file.h"
 #include "utility/log.h"
@@ -22,7 +23,8 @@ CFlash::CFlash(const c4g::base::Config& roConfig)
   std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
 #endif
 
-  PushType("rotate", new CEffectTypeRotate);
+  PushType(CEffectTypeRotate::name, new CEffectTypeRotate);
+  PushType(CEffectTypeBlend::name, new CEffectTypeBlend);
 
   rapidjson::Document jdoc;
   jdoc.Parse(file_context.c_str());

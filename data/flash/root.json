@@ -15,10 +15,13 @@
       }
     },
     {
-      "type":"rotate",
-      "id":"rotate_moon",
+      "type":"blend",
+      "id":"blend_moon",
       "value":{
-        "speed":100.0
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 50
       }
     }
   ]

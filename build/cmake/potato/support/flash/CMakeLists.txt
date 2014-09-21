@@ -17,6 +17,8 @@ set(SRC_FILE_LIST
   ${SRC_PATH_flash}/flash.cpp
   ${SRC_PATH_flash}/effect_rotate.h
   ${SRC_PATH_flash}/effect_rotate.cpp
+  ${SRC_PATH_flash}/effect_blend.h
+  ${SRC_PATH_flash}/effect_blend.cpp
   ${SRC_PATH_potato}/utility/file.h
   ${SRC_PATH_potato}/utility/log.h
   ${SRC_PATH_potato}/utility/sharedlibrary.h

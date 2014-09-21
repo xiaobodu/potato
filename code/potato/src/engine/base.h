@@ -20,6 +20,30 @@ typedef struct Glyph
   }
 } SGlyph;
 
+typedef struct Color
+{
+  typedef enum FlagBit
+  {
+    eFlagBit_None = 0x00,
+    eFlagBit_R = 0x01,
+    eFlagBit_G = 0x02,
+    eFlagBit_B = 0x04,
+    eFlagBit_A = 0x08,
+  } EFlagBit;
+  typedef unsigned char  Flags;
+
+  unsigned char r;
+  unsigned char g;
+  unsigned char b;
+  unsigned char a;
+
+  Color()
+    : r(0x00), g(0x00), b(0x00), a(0x00)
+  {
+    ;
+  }
+} SColor;
+
 typedef struct Matrix
 {
    float   m[4][4];

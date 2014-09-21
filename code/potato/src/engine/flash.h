@@ -8,6 +8,7 @@ namespace c4g {
 
 namespace render {
 class ITransform;
+class IBlend;
 }
 
 namespace flash {
@@ -46,7 +47,8 @@ public:
   virtual void Resize(const float& rfWidth, const float& rfHeight, const float& rfDepth) = 0;
   virtual bool Tick(const float& rfDelta) = 0;
   virtual void PreMake() = 0;
-  virtual bool Make(render::ITransform* const& rpTransform) = 0;
+  virtual bool Make(render::ITransform* const& rpTransform) { return false; }
+  virtual bool Make(render::IBlend* const& rpBlend) { return false; }
   virtual void PostMake() = 0;
 };
 

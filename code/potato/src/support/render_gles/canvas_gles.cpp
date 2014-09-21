@@ -3,6 +3,7 @@
 #include "base.h"
 #include "scene.h"
 #include "transform_gles.h"
+#include "blend_gles.h"
 
 #include <cassert>
 #include <memory.h>
@@ -31,6 +32,7 @@ public:
   {
     m_pT->PostDo();
 
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -86,6 +88,7 @@ void CCanvas::DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const f
   glPushMatrix();
 
   if (NULL != rpProcess) rpProcess->Do(&CTransform::Instance(m_aVertex));
+  if (NULL != rpProcess) rpProcess->Do(&CBlend::Instance());
 
   m_aVertex[3] = rfWidth;
   m_aVertex[7] = -rfHeight;

@@ -2,8 +2,6 @@
 
 #include "render.h"
 
-/*#include <GLES/gl.h>*/
-
 namespace c4g{
 namespace render {
 namespace gles {

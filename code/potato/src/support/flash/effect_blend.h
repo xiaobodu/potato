@@ -7,14 +7,15 @@
 namespace c4g {
 namespace flash {
 
-class CEffectRotate : public IEffect
+class CEffectBlend : public IEffect
 {
 public:
-  float speed;
+  base::SColor color;
+  base::Color::Flags flags;
 
 public:
-  CEffectRotate();
-  virtual ~CEffectRotate();
+  CEffectBlend();
+  virtual ~CEffectBlend();
 
 public:
   virtual IEffect* New() const;
@@ -27,20 +28,19 @@ public:
   virtual void Resize(const float& rfWidth, const float& rfHeight, const float& rfDepth);
   virtual bool Tick(const float& rfDelta);
   virtual void PreMake();
-  virtual bool Make(render::ITransform* const& rpTransform);
+  virtual bool Make(render::IBlend* const& rpBlend);
   virtual void PostMake();
 
 private:
   bool m_bPlaying;
   bool m_bPause;
   float m_fTime;
-  float m_fAngle;
 
 public:
   void Build(const rapidjson::Value& roConfig);
 };
 
-class CEffectTypeRotate : public IEffectType
+class CEffectTypeBlend : public IEffectType
 {
   friend class CFlash;
 
@@ -48,8 +48,8 @@ private:
   static std::string name;
 
 private:
-  CEffectTypeRotate();
-  virtual ~CEffectTypeRotate();
+  CEffectTypeBlend();
+  virtual ~CEffectTypeBlend();
 
 public:
   virtual IEffect* New(const rapidjson::Value& roConfig) const;
