@@ -13,7 +13,7 @@ before_install:
   - sudo apt-get install cppcheck valgrind
 
 before_script:
-  - cppcheck code/ --quiet --error-exitcode=1
+  - cppcheck code/editor code/potato code/test -I code/editor/ -I code/potato/ -I code/potato/inc -I code/potato/src -I code/potato/src/engine -I code/test/ --quiet --error-exitcode=1
   - cd build/
   - ./ready.sh
   - ./config.sh
