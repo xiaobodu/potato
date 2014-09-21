@@ -10,7 +10,7 @@ compiler:
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
   - sudo apt-get update
-  - sudo apt-get install cppcheck valgrind libgles1-mesa-dev
+  - sudo apt-get install cppcheck valgrind libgles1-mesa-dev qt5-default
 
 before_script:
   - cppcheck code/editor code/potato code/test -I code/editor/ -I code/potato/ -I code/potato/inc -I code/potato/src -I code/potato/src/engine -I code/test/ --quiet --error-exitcode=1
