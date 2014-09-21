@@ -10,14 +10,27 @@ compiler:
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
   - sudo apt-get update
-  - sudo apt-get install cppcheck valgrind libgles1
+  - sudo apt-get install cppcheck valgrind libgles1-mesa-dev
 
 before_script:
   - cppcheck code/editor code/potato code/test -I code/editor/ -I code/potato/ -I code/potato/inc -I code/potato/src -I code/potato/src/engine -I code/test/ --quiet --error-exitcode=1
-  - cd build/
-  - ./ready.sh
-  - ./config.sh
+  - git submodule init
+  - git submodule update
+  - cd code/external/
+  - cd tinycc/
+  - ./configure
   - cd ../
+  - cd libpng/
+  - cmake ./
+  - cd ../
+  - cd ../../
+  - mkdir -p out
+  - mkdir -p out/bin
+  - mkdir -p out/lib
+  - mkdir -p out/make
+  - cd out/make
+  - cmake -D CMAKE_BUILD_TYPE=Release -D QT_SDK_PATH=/usr ../../build/cmake/
+  - cd ../../
 
 script:
   - cd out/make/
