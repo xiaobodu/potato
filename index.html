@@ -41,14 +41,14 @@
         <h1>
 <a name="potato" class="anchor" href="#potato"><span class="octicon octicon-link"></span></a>potato</h1>
 
-<p>A light 2D mobile engine. It belongs to <a href="http://c4g.io/" title="Code 4 Game">Code4Game</a>.</p>
+<p>A light weight 2D mobile engine. It belongs to <a href="http://c4g.io/" title="Code 4 Game">Code4Game</a>.</p>
 
 <h4>
 <a name="status" class="anchor" href="#status"><span class="octicon octicon-link"></span></a>Status</h4>
 
 <p>Still in developing.</p>
 
-<h2>
+<hr><h2>
 <a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h2>
 
 <ul>
@@ -61,6 +61,14 @@
 <li><a href="#android"><strong>Android</strong></a></li>
 </ul>
 </li>
+<li>
+<a href="#run"><strong>Run</strong></a>
+
+<ul>
+<li><a href="#t001"><strong>t001</strong></a></li>
+<li><a href="#editor"><strong>editor</strong></a></li>
+</ul>
+</li>
 <li><a href="#log"><strong>Log</strong></a></li>
 </ul><h2>
 <a name="build" class="anchor" href="#build"><span class="octicon octicon-link"></span></a>Build</h2>
@@ -68,7 +76,7 @@
 <h3>
 <a name="ready" class="anchor" href="#ready"><span class="octicon octicon-link"></span></a>Ready</h3>
 
-<p>Need <a href="http://cmake.org/" title="CMake">CMake</a>, <a href="http://www.git-scm.com/" title="Git">Git</a>.</p>
+<p>Need <a href="http://git-scm.com/" title="Git">Git</a>, <a href="http://cmake.org/" title="CMake">CMake</a>, <a href="http://qt-project.org/" title="Qt">Qt</a> for the editor.</p>
 
 <ul>
 <li>Into <code>build</code> directory.</li>
@@ -85,17 +93,47 @@
 <ul>
 <li>Run <code>make-android.sh</code> (Build all projects include static/shared library, third library, test)</li>
 </ul><h2>
-<a name="log" class="anchor" href="#log"><span class="octicon octicon-link"></span></a>Log</h2>
+<a name="run" class="anchor" href="#run"><span class="octicon octicon-link"></span></a>Run</h2>
+
+<h4>
+<a name="t001" class="anchor" href="#t001"><span class="octicon octicon-link"></span></a>t001</h4>
 
 <ul>
-<li>2014-09-16:
+<li>
+<p>For Linux</p>
 
 <ul>
-<li> improve the flash module</li>
-<li>configure the file to test the flash module</li>
+<li>Just run the <code>out/bin/t001</code>.</li>
 </ul>
 </li>
+<li>
+<p>For Android</p>
+
+<ul>
+<li>Copy all files/directories from <code>data/</code> to the <code>t001/</code> of sd card in the device.</li>
+<li>Install the unsigned package - <code>android/t001.apk</code> into the device.</li>
 </ul>
+</li>
+</ul><h4>
+<a name="editor" class="anchor" href="#editor"><span class="octicon octicon-link"></span></a>editor</h4>
+
+<ul>
+<li>For Linux
+
+<ul>
+<li>Just run the <code>out/bin/editor</code>.</li>
+<li>In the editor, open the <code>data/</code> directory to load the scene.</li>
+</ul>
+</li>
+</ul><h2>
+<a name="log" class="anchor" href="#log"><span class="octicon octicon-link"></span></a>Log</h2>
+
+<p>Please see <a href="https://github.com/code4game/potato/blob/master/LOG.md" title="Log">LOG.md</a>.</p>
+
+<h2>
+<a name="next" class="anchor" href="#next"><span class="octicon octicon-link"></span></a>Next</h2>
+
+<p>Please see <a href="https://trello.com/code4game/" title="Plan">Trello</a>.</p>
       </section>
 
     </div>
