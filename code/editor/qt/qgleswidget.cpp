@@ -59,18 +59,6 @@ void QGLESContext::makeCurrent()
   res = eglInitialize(m_pGLDisplay, &egl_major, &egl_minor);
   assert(res);
 
-  const EGLint attribs[] = {
-    EGL_COLOR_BUFFER_TYPE, EGL_TRANSPARENT_RGB,
-    EGL_RED_SIZE, 8,
-    EGL_GREEN_SIZE, 8,
-    EGL_BLUE_SIZE, 8,
-    EGL_ALPHA_SIZE, 8,
-    EGL_BUFFER_SIZE, 32,
-    EGL_DEPTH_SIZE, 16,
-    EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-    EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
-    EGL_NONE };
-
   int num_configs = 0;
   res = eglGetConfigs(m_pGLDisplay, &m_pGLConfig, 1, &num_configs);
   assert(res);
