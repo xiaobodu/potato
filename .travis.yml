@@ -10,7 +10,7 @@ compiler:
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
   - sudo apt-get update
-  - sudo apt-get install cppcheck valgrind
+  - sudo apt-get install cppcheck valgrind libgles1
 
 before_script:
   - cppcheck code/editor code/potato code/test -I code/editor/ -I code/potato/ -I code/potato/inc -I code/potato/src -I code/potato/src/engine -I code/test/ --quiet --error-exitcode=1
@@ -20,9 +20,9 @@ before_script:
   - cd ../
 
 script:
-  - cd build/
-  - ./make.sh
-  - cd ../
+  - cd out/make/
+  - make
+  - cd ../../
 
 #after_success:
 #  - valgrind --leak-check=yes out/bin/test
