@@ -39,9 +39,7 @@ script:
   - cd ../../
 
 after_success:
-  - cd out/make/
-  - coveralls --exclude lib --exclude external --gcov-options '\-lp'
-  - cd ../../
+  - coveralls --root out/make/ --build-root out/make/ --no-gcov
 #  - valgrind --leak-check=yes out/bin/test
 
 notifications:
