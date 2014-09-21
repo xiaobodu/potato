@@ -19,11 +19,8 @@ Still in developing.
   * [**Linux**](#linux)
   * [**Android**](#android)
 * [**Run**](#run)
-  * [**Linux**](#linux)
-  	* [**t001**](#t001)
-  	* [**editor**](#editor)
-  * [**Android**](#android)
-  	* [**t001**](#t001)
+  * [**t001**](#t001)
+  * [**editor**](#editor)
 * [**Log**](#log)
 
 
@@ -52,25 +49,25 @@ Need [Git][], [CMake][], [Qt][] for the editor.
 Run
 ---
 
-### Linux
-
 #### t001
+
+##### Linux
 
 * Just run the `out/bin/t001`.
 
 
-#### editor
-
-* Just run the `out/bin/editor`.
-* In the editor, open the `data/` directory to load the scene.
-
-
-### Android
-
-#### t001
+##### Android
 
 * Copy all files/directories from `data/` to the `t001/` of sd card in the device.
 * Install the unsigned package - `android/t001.apk` into the device.
+
+
+#### editor
+
+##### Linux
+
+* Just run the `out/bin/editor`.
+* In the editor, open the `data/` directory to load the scene.
 
 
 Log
