@@ -24,8 +24,8 @@ script:
   - make
   - cd ../../
 
-after_success:
-  - valgrind --leak-check=yes out/bin/test
+#after_success:
+#  - valgrind --leak-check=yes out/bin/test
 
 notifications:
   email:

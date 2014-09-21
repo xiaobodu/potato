@@ -8,6 +8,8 @@ A light weight 2D mobile engine. It belongs to [Code4Game][].
 
 Still in developing.
 
+[![Build Status](https://travis-ci.org/code4game/potato.svg)](https://travis-ci.org/code4game/potato)
+
 
 ----------------------------
 
