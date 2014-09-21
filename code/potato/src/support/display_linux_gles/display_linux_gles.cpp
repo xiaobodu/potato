@@ -102,6 +102,7 @@ void CDisplay::Run(core::IScene* const& rpScene)
   rpScene->Load(m_pRender, "scene/root.json");
   rpScene->Resize(m_iWidth, m_iHeight);
 
+#if !defined(BUILD_COVERALLS)
   timeval time;
   gettimeofday(&time, NULL);
   double second = time.tv_sec * 1.0 + time.tv_usec / 1000000.0;
@@ -221,6 +222,7 @@ void CDisplay::Run(core::IScene* const& rpScene)
       usleep(static_cast<__useconds_t >(second_sleep * 1000000));
     }
   }
+#endif
 
   rpScene->Unload(m_pRender);
   m_pRender->End();
@@ -320,16 +322,20 @@ void CDisplay::CreateWindow()
   //TODO: how to release all memory about x window
   XFree(visual_info_ptr);
 
+#if !defined(BUILD_COVERALLS)
   XMapWindow(m_pDisplay, m_lWindow);
   res = eglMakeCurrent(m_pGLDisplay, m_pGLSurface, m_pGLSurface, m_pGLContext);
   assert(res);
+#endif
 }
 
 void CDisplay::DestroyWindow()
 {
   if (EGL_NO_DISPLAY != m_pGLDisplay)
   {
+#if !defined(BUILD_COVERALLS)
     eglMakeCurrent(m_pGLDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+#endif
     if (EGL_NO_CONTEXT != m_pGLContext) eglDestroyContext(m_pGLDisplay, m_pGLContext);
     if (EGL_NO_SURFACE != m_pGLSurface) eglDestroySurface(m_pGLDisplay, m_pGLSurface);
     eglTerminate(m_pGLDisplay);
