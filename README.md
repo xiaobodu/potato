@@ -51,23 +51,20 @@ Run
 
 #### t001
 
-##### Linux
+- For Linux
+  * Just run the `out/bin/t001`.
 
-* Just run the `out/bin/t001`.
 
-
-##### Android
-
-* Copy all files/directories from `data/` to the `t001/` of sd card in the device.
-* Install the unsigned package - `android/t001.apk` into the device.
+- For Android
+  * Copy all files/directories from `data/` to the `t001/` of sd card in the device.
+  * Install the unsigned package - `android/t001.apk` into the device.
 
 
 #### editor
 
-##### Linux
-
-* Just run the `out/bin/editor`.
-* In the editor, open the `data/` directory to load the scene.
+- For Linux
+  * Just run the `out/bin/editor`.
+  * In the editor, open the `data/` directory to load the scene.
 
 
 Log
