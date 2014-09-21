@@ -122,7 +122,7 @@ CScene::CScene(const base::Config& roConfig)
 #else
     const rapidjson::Value& configure = jscript["configure"];
     assert(configure.IsString());
-    m_oConfigScript._sConfigureFile = library.GetString();
+    m_oConfigScript._sConfigureFile = configure.GetString();
 #endif
 
     /// load the shared library

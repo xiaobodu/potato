@@ -240,6 +240,7 @@ void CDisplay::CreateWindow()
   EGLint egl_major, egl_minor;
   EGLBoolean res = eglInitialize(m_pGLDisplay, &egl_major, &egl_minor);
   assert(res);
+  if (!res) return;
 
   int num_configs = 0;
   res = eglGetConfigs(m_pGLDisplay, &m_pGLConfig, 1, &num_configs);
@@ -247,14 +248,14 @@ void CDisplay::CreateWindow()
   //assert(eglChooseConfig(m_pGLDisplay, attribs, &m_pGLConfig, 1, &num_configs));
   assert(NULL != m_pGLConfig && num_configs > 0);
 
-  int value = 0;
+  /*int value = 0;
   assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_COLOR_BUFFER_TYPE, &value));
   assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_RED_SIZE, &value));
   assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_GREEN_SIZE, &value));
   assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_BLUE_SIZE, &value));
   assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_ALPHA_SIZE, &value));
   assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_BUFFER_SIZE, &value));
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_DEPTH_SIZE, &value));
+  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_DEPTH_SIZE, &value));*/
 
   EGLint vid = 0;
   res = eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_NATIVE_VISUAL_ID, &vid);

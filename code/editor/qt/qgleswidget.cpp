@@ -58,6 +58,7 @@ void QGLESContext::makeCurrent()
   EGLint egl_major, egl_minor;
   res = eglInitialize(m_pGLDisplay, &egl_major, &egl_minor);
   assert(res);
+  if (!res) return;
 
   int num_configs = 0;
   res = eglGetConfigs(m_pGLDisplay, &m_pGLConfig, 1, &num_configs);
