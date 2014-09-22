@@ -48,7 +48,7 @@ set(LINK_FILE_LIST
 elseif(OS_IS_WINDOWS)
 set(LINK_FILE_LIST
   ${OUT_PATH}/lib/Release/png.lib
-  ${ROOT_PATH}/${ZLIB_LIBRARY}
+  ${ZLIB_LIBRARY}
   )
 endif()
 target_link_libraries(asset ${LINK_FILE_LIST})
