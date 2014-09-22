@@ -139,7 +139,7 @@ void CRender::Perspactive(const double& rdFovy, const double& rdAspect, const do
   double left = 0.0 - right;
 
 #if defined(GL_VERSION_ES_CM_1_1)
-  glFrustumf(left, right, bottom, top, near, far);
+  glFrustumf(left, right, bottom, top, rdNear, rdFar);
 #elif defined(GL_VERSION_1_1)
   glFrustum(left, right, bottom, top, rdNear, rdFar);
 #endif
