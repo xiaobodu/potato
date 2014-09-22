@@ -8,6 +8,17 @@ include_directories(${ZLIB_INCLUDE_DIR})
 
 set(CODE_PATH_libpng ${CODE_PATH_external}/libpng)
 
+if(OS_IS_LINUX)
+set(INC_PATH_LIST
+  ${CODE_PATH_libpng}
+  )
+elseif(OS_IS_WINDOWS)
+set(INC_PATH_LIST
+  ${CODE_PATH_libpng}
+  ${ZLIB_INCLUDE_DIR}
+  )
+endif()
+
 set(libpng_sources
   ${CODE_PATH_libpng}/png.h
   ${CODE_PATH_libpng}/pngconf.h
@@ -40,12 +51,10 @@ add_definitions(-DLIBPNG_NO_MMX)
 add_definitions(-DPNG_NO_MMX_CODE)
 add_definitions(-DPNG_NO_FLOATING_POINT_SUPPORTED)
 
-set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
+set(LIBRARY_OUTPUT_PATH
+  "${OUT_PATH}/lib"
+  )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR})
+include_directories(${INC_PATH_LIST})
 
 add_library(png STATIC ${libpng_sources})
-if(MSVC)
-  # msvc does not append 'lib' - do it here to have consistent name
-  set_target_properties(${PNG_LIB_NAME_STATIC} PROPERTIES PREFIX "lib")
-endif()
