@@ -11,7 +11,6 @@ configuration:
 install:
   - cinst wget
   - cinst cmake
-  - cinst qt-sdk-windows-x86-msvc2010_opengl
   - cinst Devbox-UnZip
 
 before_build:
