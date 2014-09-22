@@ -25,8 +25,7 @@ before_build:
   - cmake -G "Visual Studio 11" ./
   - msbuild zlib.sln /p:Configuration=Release /m
   - cd ../libpng/
-  - cmake -G "Visual Studio 11" -D PNG_DEBUG=FALSE -D PNG_SHARED=FALSE -D PNG_TESTS=FALSE ./
-  - msbuild libpng.sln /p:Configuration=Release /m
+  - cmake -G "Visual Studio 11" -D PNG_DEBUG=FALSE -D PNG_SHARED=FALSE -D PNG_TESTS=FALSE -D ZLIB_INCLUDE_DIR=code/external/zlib -D ZLIB_LIBRARY=code/external/zlib/Release ./
   - cd ../../../build/
   - config-tcc.bat
   - cd ../
