@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 project(asset)
 
+# needed packages
+find_package(ZLIB REQUIRED)
+
 set(SRC_PATH_asset ${SRC_PATH_support}/asset)
 
 if(OS_IS_LINUX)
@@ -16,6 +19,7 @@ set(INC_PATH_LIST
   ${SRC_PATH_potato}/engine
   ${CODE_PATH}/external/libpng
   ${SRC_PATH_asset}
+  ${ZLIB_INCLUDE_DIR}
   )
 endif()
 
@@ -27,11 +31,14 @@ set(SRC_FILE_LIST
 
 source_group("source" FILES ${SRC_FILE_LIST})
 
-set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
+set(LIBRARY_OUTPUT_PATH
+  ${OUT_PATH}/lib
+)
 
 include_directories(${INC_PATH_LIST})
 
 add_library(asset SHARED ${SRC_FILE_LIST})
+
 
 if(OS_IS_LINUX)
 set(LINK_FILE_LIST
@@ -40,8 +47,8 @@ set(LINK_FILE_LIST
   )
 elseif(OS_IS_WINDOWS)
 set(LINK_FILE_LIST
-  libpng.lib
-  zlib.lib
+  ${OUT_PATH}/lib/Release/png.lib
+  ${ZLIB_LIBRARY}
   )
 endif()
 target_link_libraries(asset ${LINK_FILE_LIST})

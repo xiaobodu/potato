@@ -13,8 +13,9 @@ endif()
 
 
 if(OS_IS_WINDOWS)
+  set(CMAKE_C_FLAGS "/fPIC")
   set(CMAKE_CXX_FLAGS "/fPIC")
-elif(OS_IS_LINUX)
+elseif(OS_IS_LINUX)
   set(CMAKE_C_FLAGS "-fPIC")
   set(CMAKE_CXX_FLAGS "-fPIC")
 endif()
@@ -101,11 +102,13 @@ add_executable(editor ${SRC_FILE_LIST})
 
 if(OS_IS_WINDOWS)
 set(LINK_FILE_LIST
+  render_gles
   qtmain.lib
   Qt5Core.lib
   Qt5Gui.lib
   Qt5Widgets.lib
   Qt5OpenGL.lib
+  gl.lib
   )
 elseif(OS_IS_LINUX)
 set(LINK_FILE_LIST

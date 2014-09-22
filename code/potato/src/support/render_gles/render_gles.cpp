@@ -7,7 +7,16 @@
 
 #include <cassert>
 #include <cmath>
+#if defined(CXX_GNU)
 #include <GLES/gl.h>
+#elif defined(CXX_MSVC)
+#include <Windows.h>
+#include <GL/gl.h>
+#endif
+
+#if !defined(M_PI)
+# define M_PI    3.1415926
+#endif
 
 namespace c4g {
 namespace render {
@@ -106,25 +115,35 @@ void CRender::SetView(const int& riWidth, const int& riHeight, const double& rdN
   double top = 0;
   double bottom = 0.0 - riHeight;
 
+#if defined(GL_VERSION_ES_CM_1_1)
   glOrthof(left, right, bottom, top, rdNear, rdFar);
+#elif defined(GL_VERSION_1_1)
+  glOrtho(left, right, bottom, top, rdNear, rdFar);
+#endif
+
   assert(GL_NO_ERROR == glGetError());
   glMatrixMode(GL_MODELVIEW);
 }
 
-void CRender::Perspactive(double fovy, double aspect, double near, double far)
+void CRender::Perspactive(const double& rdFovy, const double& rdAspect, const double& rdNear, const double& rdFar)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  double top = tan(M_PI * fovy * 0.5 / 360.0) * near;
+  double top = tan(M_PI * rdFovy * 0.5 / 360.0) * rdNear;
   double bottom = 0.0 - top;
 
-  double right = top * aspect;
+  double right = top * rdAspect;
   double left = 0.0 - right;
 
+#if defined(GL_VERSION_ES_CM_1_1)
   glFrustumf(left, right, bottom, top, near, far);
+#elif defined(GL_VERSION_1_1)
+  glFrustum(left, right, bottom, top, rdNear, rdFar);
+#endif
+
   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
   assert(GL_NO_ERROR == glGetError());
   glMatrixMode(GL_MODELVIEW);

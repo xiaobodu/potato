@@ -15,7 +15,11 @@ namespace asset {
 bool check_if_png(const char *file_name)
 {
   FILE *fp = NULL;
+#if defined(CXX_GNU)
   if ((fp = fopen(file_name, "rb")) == NULL) return false;
+#elif defined(CXX_MSVC)
+  if (fopen_s(&fp, file_name, "rb") || fp == NULL) return false;
+#endif
   char buf[PNG_BYTES_TO_CHECK];
   bool is_png = false;
   if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK)
@@ -38,7 +42,11 @@ void read_png(const char *file_name, unsigned int& riWidth, unsigned int& riHeig
   rpBuffer = NULL;
 
   FILE *fp = NULL;
+#if defined(CXX_GNU)
   if ((fp = fopen(file_name, "rb")) == NULL) return;
+#elif defined(CXX_MSVC)
+  if (fopen_s(&fp, file_name, "rb") || fp == NULL) return;
+#endif
 
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
   if (NULL != png_ptr)

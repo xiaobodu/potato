@@ -2,6 +2,8 @@
 
 #include "asset.h"
 
+#include "base.h"
+
 #include <string>
 #include <map>
 

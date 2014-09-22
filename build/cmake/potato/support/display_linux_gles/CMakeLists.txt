@@ -4,7 +4,7 @@ project(display_gles)
 
 set(SRC_PATH_display_gles ${SRC_PATH_support}/display_linux_gles)
 
-set(INC_PATH_LIST
+set(INC_PATH_LIST_base
   ${SRC_PATH_potato}
   ${SRC_PATH_potato}/engine
   ${SRC_PATH_display_gles}

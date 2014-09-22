@@ -49,7 +49,9 @@ include_directories(${INC_PATH_LIST})
 
 add_library(scene SHARED ${SRC_FILE_LIST})
 
+if(OS_IS_LINUX)
 set(LINK_FILE_LIST
   dl
   )
+endif()
 target_link_libraries(scene ${LINK_FILE_LIST})

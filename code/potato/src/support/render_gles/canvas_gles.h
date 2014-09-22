@@ -2,7 +2,12 @@
 
 #include "render.h"
 
+#if defined(CXX_GNU)
 #include <GLES/gl.h>
+#elif defined(CXX_MSVC)
+#include <Windows.h>
+#include <GL/gl.h>
+#endif
 
 #define RECT_VERTEX_NUM              4
 #define RECT_VERTEX_FLOAT_NUM        3

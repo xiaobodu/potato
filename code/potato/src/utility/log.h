@@ -56,12 +56,21 @@ TEXT_STYLE_BGCOLOR_BLUE, TEXT_STYLE_BGCOLOR_MAGENTA, TEXT_STYLE_BGCOLOR_CYAN, TE
 #endif
 
 #define TEXT_BUFFER_SIZE_MAX            1024
+#if defined(CXX_GNU)
 #define GET_ARGS_TEXT(text, result)\
     char result[TEXT_BUFFER_SIZE_MAX];\
     va_list args;\
     va_start(args, rcText);\
     vsprintf(result, rcText, args);\
     va_end(args)
+#elif defined(CXX_MSVC)
+#define GET_ARGS_TEXT(text, result)\
+    char result[TEXT_BUFFER_SIZE_MAX];\
+    va_list args;\
+    va_start(args, rcText);\
+    vsprintf_s(result, TEXT_BUFFER_SIZE_MAX, rcText, args);\
+    va_end(args)
+#endif
 
 class Log
 {

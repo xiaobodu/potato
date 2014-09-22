@@ -1,7 +1,13 @@
 #include "transform_gles.h"
 
-#include <GLES/gl.h>
 #include <memory.h>
+#if defined(CXX_GNU)
+#include <GLES/gl.h>
+#elif defined(CXX_MSVC)
+#include <Windows.h>
+#include <GL/gl.h>
+#endif
+
 
 namespace c4g{
 namespace render {

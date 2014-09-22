@@ -26,7 +26,7 @@ public:
 
 private:
   void SetView(const int& riWidth, const int& riHeight, const double& rdNear, const double& rdFar);
-  void Perspactive(double fovy, double aspect, double near, double far);
+  void Perspactive(const double& rdFovy, const double& rdAspect, const double& rdNear, const double& rdFar);
 
 private:
   render::ICanvas* m_pCanvas;

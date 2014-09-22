@@ -29,10 +29,16 @@ add_definitions(-DDATA_PATH="${ROOT_PATH}/data")
 
 ADD_EXECUTABLE (t001 ${CODE_FILE_LIST})
 
+if(OS_IS_LINUX)
 set(LINK_FILE_LIST
   potato
   dl
   )
+elseif(OS_IS_WINDOWS)
+set(LINK_FILE_LIST
+  ${OUT_PATH}/lib/Release/potato.lib
+  )
+endif()
 target_link_libraries(t001 ${LINK_FILE_LIST})
 
 # build dependicies

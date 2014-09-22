@@ -11,6 +11,10 @@
 # define NULL 0
 #endif
 
+#if defined(CXX_MSVC)
+#define __PRETTY_FUNCTION__		__FUNCTION__
+#endif
+
 /// declare the function of library
 #define FUNC_API_TYPE(function_name)          function_name##Func
 #define FUNC_API_DECLARE(function_name, class_class, config_class)\

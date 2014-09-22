@@ -10,7 +10,7 @@
 namespace c4g {
 namespace thread {
 
-void *DoWorkFuncPtr(void* pData)
+void DoWorkFunc(void* pData)
 {
   assert(NULL != pData);
 
@@ -42,7 +42,7 @@ void DoJob(thread::IWorker* pWorkers[], const int& riCount)
   /// create a thread for every workers
   for (i = 0; i < riCount; ++i)
   {
-    assert(0 == pthread_create(&threads[i], &attr, DoWorkFuncPtr, (void* )pWorkers[i]));
+    assert(0 == pthread_create(&threads[i], &attr, DoWorkFunc, (void* )pWorkers[i]));
   }
 
   pthread_attr_destroy(&attr);

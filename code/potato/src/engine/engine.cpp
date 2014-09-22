@@ -1,5 +1,9 @@
 #include <cassert>
+#if defined(OS_IS_LINUX)
 #include <unistd.h>
+#elif defined(OS_IS_WINDOWS)
+#include <windows.h>
+#endif
 #include <string>
 
 #include <rapidjson/document.h>

@@ -30,7 +30,14 @@ include_directories(${INC_PATH_LIST})
 
 add_library(render_gles SHARED ${SRC_FILE_LIST})
 
+if(OS_IS_LINUX)
 set(LINK_FILE_LIST
   GLESv1_CM
   )
+elseif(OS_IS_WINDOWS)
+set(LINK_FILE_LIST
+  opengl32.lib
+  )
+endif()
+
 target_link_libraries(render_gles ${LINK_FILE_LIST})

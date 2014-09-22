@@ -7,7 +7,12 @@
 
 #include <cassert>
 #include <memory.h>
+#if defined(CXX_GNU)
 #include <GLES/gl.h>
+#elif defined(CXX_MSVC)
+#include <Windows.h>
+#include <GL/gl.h>
+#endif
 
 namespace c4g{
 namespace render {
@@ -104,8 +109,10 @@ void CCanvas::DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const f
   m_aTexCoord[6] = rGlyph.r;
   m_aTexCoord[7] = rGlyph.b;
 
+#if defined(GL_VERSION_ES_CM_1_1)
   //glActiveTexture(GL_TEXTURE0);
   glClientActiveTexture(GL_TEXTURE0);
+#endif
   glBindTexture(GL_TEXTURE_2D, rGlyph.id);
   glTexCoordPointer(2, GL_FLOAT, 0, m_aTexCoord);
   glVertexPointer(3, GL_FLOAT, 0, m_aVertex);
