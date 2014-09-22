@@ -19,10 +19,10 @@ before_build:
   - unzip pthreads-w32-2-9-1-release.zip
   - cd ..
   - cd code/external/zlib
-  - cmake -G "Visual Studio 11" ./
+  - cmake -G "Visual Studio 11" .
   - msbuild zlib.sln /p:Configuration=Release
   - cd ../libpng
-  - cmake -G "Visual Studio 11" -D PNG_DEBUG=FALSE -D PNG_SHARED=FALSE -D PNG_TESTS=FALSE ./
+  - cmake -G "Visual Studio 11" -D PNG_DEBUG=FALSE -D PNG_SHARED=FALSE -D PNG_TESTS=FALSE .
   - msbuild libpng.sln /p:Configuration=Release
   - cd ../tinycc
   - @set /p VERSION= < VERSION

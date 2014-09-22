@@ -31,7 +31,11 @@ bool check_if_png(const char *file_name)
     is_png = (0 != (!png_sig_cmp((png_bytep)buf, (png_size_t)0, PNG_BYTES_TO_CHECK)));
   }
 
-  fclose(fp);
+  if (NULL != fp)
+  {
+    fclose(fp);
+    fp = NULL;
+  }
   return is_png;
 }
 
@@ -82,7 +86,11 @@ void read_png(const char *file_name, unsigned int& riWidth, unsigned int& riHeig
 
     png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
   }
-  fclose(fp);
+  if (NULL != fp)
+  {
+    fclose(fp);
+    fp = NULL;
+  }
 }
 
 CFilePNG& CFilePNG::Instance()
