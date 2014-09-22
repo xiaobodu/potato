@@ -10,3 +10,6 @@
 [submodule "code/external/libpng"]
 	path = code/external/libpng
 	url = http://git.code.sf.net/p/libpng/code
+[submodule "code/external/zlib"]
+	path = code/external/zlib
+	url = https://github.com/madler/zlib
