@@ -1,14 +1,17 @@
 platform:
   - x86
 
+branches:
+  only:
+    - master
+
 configuration:
   - Release
 
 install:
-  - cinst install wget
-  - cinst install cmake
-  - cinst install qt-sdk-windows-x86-msvc2010_opengl
-  - cinst install Devbox-UnZip
+  - cinst cmake
+  - cinst qt-sdk-windows-x86-msvc2010_opengl
+  - cinst Devbox-UnZip
 
 before_build:
   - mkdir out
@@ -17,6 +20,13 @@ before_build:
   - cd out
   - wget ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip
   - unzip pthreads-w32-2-9-1-release.zip
+  - cd ..
+  - cd code/external/zlib
+  - cmake -G "Visual Studio 11" .
+  - msbuild zlib.sln /p:Configuration=Release
+  - cd ../libpng
+  - cmake -G "Visual Studio 11" -D PNG_DEBUG=FALSE -D PNG_SHARED=FALSE -D PNG_TESTS=FALSE .
+  - msbuild libpng.sln /p:Configuration=Release
 
 build:
   project: out/make/all.sln
