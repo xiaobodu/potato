@@ -9,6 +9,7 @@ configuration:
   - Release
 
 install:
+  - cinst wget
   - cinst cmake
   - cinst qt-sdk-windows-x86-msvc2010_opengl
   - cinst Devbox-UnZip
@@ -22,11 +23,15 @@ before_build:
   - unzip pthreads-w32-2-9-1-release.zip
   - cd ..
   - cd code/external/zlib
-  - cmake -G "Visual Studio 11" .
+  - cmake -G "Visual Studio 11" ./
   - msbuild zlib.sln /p:Configuration=Release
   - cd ../libpng
-  - cmake -G "Visual Studio 11" -D PNG_DEBUG=FALSE -D PNG_SHARED=FALSE -D PNG_TESTS=FALSE .
+  - cmake -G "Visual Studio 11" -D PNG_DEBUG=FALSE -D PNG_SHARED=FALSE -D PNG_TESTS=FALSE ./
   - msbuild libpng.sln /p:Configuration=Release
+  - @set /p VERSION= < VERSION
+  - echo>config.h #define TCC_VERSION "%VERSION%"
+  - cd ../../../
+  - cmake -G "Visual Studio 11" -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_CXX_COMPILER_ID=MSVC -D ZLIB_INCLUDE_DIR=code\external\zlib -D ZLIB_LIBRARY=code\external\zlib\Release
 
 build:
   project: out/make/all.sln
