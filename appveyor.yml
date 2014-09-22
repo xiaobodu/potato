@@ -24,7 +24,7 @@ before_build:
   - cd ../libpng
   - cmake -G "Visual Studio 11" -D PNG_DEBUG=FALSE -D PNG_SHARED=FALSE -D PNG_TESTS=FALSE .
   - msbuild libpng.sln /p:Configuration=Release
-  - cd ../tinycc
+#  - cd ../tinycc
   - @set /p VERSION= < VERSION
   - echo>config.h #define TCC_VERSION "%VERSION%"
   - cd ../../../
@@ -32,3 +32,4 @@ before_build:
 
 build:
   project: out/make/all.sln
+
