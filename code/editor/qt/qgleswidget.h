@@ -6,11 +6,7 @@
 #include <QtOpenGL/QGLWidget>
 #include <QtCore/QBasicTimer>
 
-#if defined(CXX_GNU)
 #include <EGL/egl.h>
-#elif defined(CXX_MSVC)
-#include <Windows.h>
-#endif
 
 namespace c4g {
 namespace core {

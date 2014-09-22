@@ -7,14 +7,9 @@
 #include "qgleswidget.h"
 #include "../editor_common.h"
 
-#if defined(CXX_GNU)
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <GLES/gl.h>
-#elif defined(CXX_MSVC)
-#include <Windows.h>
-#include <GL/gl.h>
-#endif
 #include <cassert>
 #include <unistd.h>
 #include <sys/time.h>
