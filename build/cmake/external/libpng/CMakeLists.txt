@@ -14,7 +14,7 @@ set(INC_PATH_LIST
 elseif(OS_IS_WINDOWS)
 set(INC_PATH_LIST
   ${CODE_PATH_libpng}
-  ${ROOT_PATH}/${ZLIB_INCLUDE_DIR}
+  ${CODE_PATH_external}/zlib
   )
 endif()
 

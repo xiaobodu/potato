@@ -18,7 +18,7 @@ set(INC_PATH_LIST
   ${SRC_PATH_potato}
   ${SRC_PATH_potato}/engine
   ${CODE_PATH}/external/libpng
-  ${ROOT_PATH}/${ZLIB_INCLUDE_DIR}
+  ${CODE_PATH}/external/zlib
   ${SRC_PATH_asset}
   )
 endif()
