@@ -4,7 +4,6 @@ project(png C)
 
 # needed packages
 find_package(ZLIB REQUIRED)
-include_directories(${ZLIB_INCLUDE_DIR})
 
 set(CODE_PATH_libpng ${CODE_PATH_external}/libpng)
 
@@ -15,7 +14,7 @@ set(INC_PATH_LIST
 elseif(OS_IS_WINDOWS)
 set(INC_PATH_LIST
   ${CODE_PATH_libpng}
-  ${ZLIB_INCLUDE_DIR}
+  ${ROOT_PATH}/${ZLIB_INCLUDE_DIR}
   )
 endif()
 
@@ -41,20 +40,14 @@ set(libpng_sources
 
 add_definitions(-DPNG_CONFIGURE_LIBPNG)
 
-if(MSVC)
-  add_definitions(-DPNG_NO_MODULEDEF -D_CRT_SECURE_NO_DEPRECATE)
-else(MSVC)
-  add_definitions(-DZLIB_DLL)
-endif(MSVC)
-
 add_definitions(-DLIBPNG_NO_MMX)
 add_definitions(-DPNG_NO_MMX_CODE)
 add_definitions(-DPNG_NO_FLOATING_POINT_SUPPORTED)
 
-set(LIBRARY_OUTPUT_PATH
-  "${OUT_PATH}/lib"
-  )
-
 include_directories(${INC_PATH_LIST})
+
+set(LIBRARY_OUTPUT_PATH
+  ${OUT_PATH}/lib
+  )
 
 add_library(png STATIC ${libpng_sources})
