@@ -10,7 +10,7 @@
 namespace c4g {
 namespace thread {
 
-void DoWorkFunc(void* pData)
+void* DoWorkFunc(void* pData)
 {
   assert(NULL != pData);
 
@@ -20,6 +20,7 @@ void DoWorkFunc(void* pData)
 
   /// terminate the thread
   pthread_exit(NULL);
+  return NULL;
 }
 
 void DoJob(thread::IWorker* pWorkers[], const int& riCount)
