@@ -1,12 +1,11 @@
 potato
 ======
 
-A light weight 2D mobile engine. It belongs to [Code4Game][].
+a light weight 2D mobile engine. It belongs to [Code4Game][].
 
+----------------------------
 
-#### Status
-
-Still in developing.
+version: in develop
 
 [![Build Status](https://travis-ci.org/code4game/potato.svg)](https://travis-ci.org/code4game/potato)
 [![Build status](https://ci.appveyor.com/api/projects/status/l563xi5j23vep2wg)](https://ci.appveyor.com/project/alexchicn/potato)
@@ -33,7 +32,7 @@ Build
 
 ### Ready
 
-Need [Git][], [CMake][], [Qt][] for the editor.
+Need [Git][], [CMake][], and [Qt][].
 
 * Into `build` directory.
 * Run `ready.sh`. (Initialize and update submodule)
