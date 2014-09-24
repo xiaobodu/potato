@@ -23,17 +23,30 @@ set(INC_PATH_LIST
   )
 endif()
 
-set(SRC_FILE_LIST
+set(SRC_FILE_LIST_base
   ${SRC_PATH_support}/../engine/asset.h
   ${SRC_PATH_asset}/asset.cpp
   ${SRC_PATH_asset}/file_png.cpp
   )
+  
+if(OS_IS_LINUX)
+set(SRC_FILE_LIST
+  ${SRC_FILE_LIST_base}
+  )
+elseif(OS_IS_WINDOWS)
+set(SRC_FILE_LIST
+  ${SRC_FILE_LIST_base}
+  ${SRC_PATH_asset}/asset.def
+  )
+endif()
 
 source_group("source" FILES ${SRC_FILE_LIST})
 
 set(LIBRARY_OUTPUT_PATH
   ${OUT_PATH}/lib
   )
+
+link_directories(${OUT_PATH}/lib/Release)
 
 include_directories(${INC_PATH_LIST})
 

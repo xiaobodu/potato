@@ -6,6 +6,11 @@
 #include "utility/file.h"
 #include "utility/log.h"
 
+#if defined(CXX_MSVC)
+#include <crtdbg.h>
+#endif
+
+
 #if !defined(BUILD_ANDROID)
 #include "common.h"
 
@@ -137,6 +142,10 @@ core::IEngine*& Potato::GetEngine()
 #if !defined(BUILD_ANDROID)
 int main(int argc, char* argv[])
 {
+#if defined(CXX_MSVC)
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
   std::string libr_path;
   std::string data_path;
   std::string file;

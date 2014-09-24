@@ -11,7 +11,7 @@ set(INC_PATH_LIST
   ${CODE_PATH}/external/rapidjson/include
   )
 
-set(SRC_FILE_LIST
+set(SRC_FILE_LIST_base
   ${SRC_PATH_render_gles}/render_gles.h
   ${SRC_PATH_render_gles}/render_gles.cpp
   ${SRC_PATH_render_gles}/canvas_gles.h
@@ -21,6 +21,17 @@ set(SRC_FILE_LIST
   ${SRC_PATH_render_gles}/blend_gles.h
   ${SRC_PATH_render_gles}/blend_gles.cpp
   )
+  
+if(OS_IS_LINUX)
+set(SRC_FILE_LIST
+  ${SRC_FILE_LIST_base}
+  )
+elseif(OS_IS_WINDOWS)
+set(SRC_FILE_LIST
+  ${SRC_FILE_LIST_base}
+  ${SRC_PATH_render_gles}/render_gles.def
+  )
+endif()
 
 source_group("source" FILES ${SRC_FILE_LIST})
 

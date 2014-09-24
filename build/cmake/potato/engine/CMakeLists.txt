@@ -21,7 +21,7 @@ elseif(OS_IS_WINDOWS)
     )
 endif()
 
-set(SRC_FILE_LIST
+set(SRC_FILE_LIST_base
   ${SRC_PATH_engine}/base.h
   ${SRC_PATH_engine}/display.h
   ${SRC_PATH_engine}/render.h
@@ -36,6 +36,17 @@ set(SRC_FILE_LIST
   ${SRC_PATH_potato}/utility/sharedlibrary.h
   ${SRC_PATH_potato}/utility/sharedlibrary.cpp
   )
+
+if(OS_IS_LINUX)
+set(SRC_FILE_LIST
+  ${SRC_FILE_LIST_base}
+  )
+elseif(OS_IS_WINDOWS)
+set(SRC_FILE_LIST
+  ${SRC_FILE_LIST_base}
+  ${SRC_PATH_engine}/engine.def
+  )
+endif()
 
 source_group("source" FILES ${SRC_FILE_LIST})
 

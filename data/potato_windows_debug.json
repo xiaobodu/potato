@@ -1,0 +1,6 @@
+{
+  "engine":{
+    "library":"lib/Debug/engine.dll",
+    "configure":"config/engine_windows_debug.json"
+  }
+}

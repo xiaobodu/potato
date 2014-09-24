@@ -11,7 +11,7 @@ set(INC_PATH_LIST
   ${CODE_PATH}/external/rapidjson/include
   )
 
-set(SRC_FILE_LIST
+set(SRC_FILE_LIST_base
   ${SRC_PATH_support}/../engine/scene.h
   ${SRC_PATH_scene}/scene_base.h
   ${SRC_PATH_scene}/scene_impl.h
@@ -40,6 +40,17 @@ set(SRC_FILE_LIST
   ${SRC_PATH_potato}/utility/sharedlibrary.h
   ${SRC_PATH_potato}/utility/sharedlibrary.cpp
   )
+  
+if(OS_IS_LINUX)
+set(SRC_FILE_LIST
+  ${SRC_FILE_LIST_base}
+  )
+elseif(OS_IS_WINDOWS)
+set(SRC_FILE_LIST
+  ${SRC_FILE_LIST_base}
+  ${SRC_PATH_scene}/scene.def
+  )
+endif()
 
 source_group("source" FILES ${SRC_FILE_LIST})
 

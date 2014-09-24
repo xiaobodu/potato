@@ -1,24 +1,23 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(flash)
+project(display_gles)
 
-set(SRC_PATH_flash ${SRC_PATH_support}/flash)
+set(SRC_PATH_display_gles ${SRC_PATH_support}/display_windows_gles)
 
 set(INC_PATH_LIST
   ${SRC_PATH_potato}
   ${SRC_PATH_potato}/engine
-  ${SRC_PATH_flash}
+  ${SRC_PATH_display_gles}
+  ${CODE_PATH}/external/rapidjson/include
   )
 
 set(SRC_FILE_LIST_base
-  ${SRC_PATH_support}/../engine/flash.h
-  ${SRC_PATH_flash}/flash_impl.h
-  ${SRC_PATH_flash}/flash_base.h
-  ${SRC_PATH_flash}/flash.cpp
-  ${SRC_PATH_flash}/effect_rotate.h
-  ${SRC_PATH_flash}/effect_rotate.cpp
-  ${SRC_PATH_flash}/effect_blend.h
-  ${SRC_PATH_flash}/effect_blend.cpp
+  ${SRC_PATH_potato}/engine/input.h
+  ${SRC_PATH_potato}/engine/input.cpp
+  ${SRC_PATH_potato}/engine/sensor.h
+  ${SRC_PATH_potato}/engine/sensor.cpp
+  ${SRC_PATH_display_gles}/display_windows_gles.h
+  ${SRC_PATH_display_gles}/display_windows_gles.cpp
   ${SRC_PATH_potato}/utility/file.h
   ${SRC_PATH_potato}/utility/log.h
   ${SRC_PATH_potato}/utility/sharedlibrary.h
@@ -32,7 +31,7 @@ set(SRC_FILE_LIST
 elseif(OS_IS_WINDOWS)
 set(SRC_FILE_LIST
   ${SRC_FILE_LIST_base}
-  ${SRC_PATH_flash}/flash.def
+  ${SRC_PATH_display_gles}/display_gles.def
   )
 endif()
 
@@ -42,11 +41,9 @@ set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
 
 include_directories(${INC_PATH_LIST})
 
-add_library(flash SHARED ${SRC_FILE_LIST})
+add_library(display_gles SHARED ${SRC_FILE_LIST})
 
-if(OS_IS_LINUX)
 set(LINK_FILE_LIST
-  dl
+  opengl32
   )
-endif()
-target_link_libraries(flash ${LINK_FILE_LIST})
+target_link_libraries(display_gles ${LINK_FILE_LIST})

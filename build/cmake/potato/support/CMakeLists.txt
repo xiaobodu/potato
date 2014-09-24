@@ -6,6 +6,8 @@ set(SRC_PATH_support ${SRC_PATH_potato}/support)
 
 if (OS_IS_LINUX)
 add_subdirectory(display_linux_gles)
+elseif(OS_IS_WINDOWS)
+add_subdirectory(display_windows_gles)
 endif()
 
 add_subdirectory(render_gles)

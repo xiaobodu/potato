@@ -1,0 +1,4 @@
+LIBRARY   display_gles
+EXPORTS
+    CreateDisplay         @1
+    DestroyDisplay        @2

@@ -1,0 +1,10 @@
+{
+  "display":{
+    "library":"lib/Debug/display_gles.dll",
+    "configure":"config/display_windows_debug.json"
+  },
+  "scene":{
+    "library":"lib/Debug/scene.dll",
+    "configure":"config/scene_windows_debug.json"
+  }
+}

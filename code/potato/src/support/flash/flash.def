@@ -1,0 +1,4 @@
+LIBRARY   flash
+EXPORTS
+    CreateFlash         @1
+    DestroyFlash        @2

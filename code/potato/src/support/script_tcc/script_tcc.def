@@ -1,0 +1,4 @@
+LIBRARY   script_tcc
+EXPORTS
+    CreateScript         @1
+    DestroyScript        @2

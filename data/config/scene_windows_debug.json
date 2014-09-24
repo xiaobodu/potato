@@ -1,0 +1,14 @@
+{
+  "asset":{
+    "library":"lib/Debug/asset.dll",
+    "configure":"config/asset.json"
+  },
+  "flash":{
+    "library":"lib/Debug/flash.dll",
+    "configure":"config/flash.json"
+  },
+  "script":{
+    "library":"lib/Debug/script_tcc.dll",
+    "configure":"config/script.json"
+  }
+}

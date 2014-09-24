@@ -11,11 +11,22 @@ set(INC_PATH_LIST
   ${SRC_PATH_script_tcc}
   )
 
-set(SRC_FILE_LIST
+set(SRC_FILE_LIST_base
   ${SRC_PATH_support}/../engine/script.h
   ${SRC_PATH_script_tcc}/script_impl.h
   ${SRC_PATH_script_tcc}/script.cpp
   )
+  
+if(OS_IS_LINUX)
+set(SRC_FILE_LIST
+  ${SRC_FILE_LIST_base}
+  )
+elseif(OS_IS_WINDOWS)
+set(SRC_FILE_LIST
+  ${SRC_FILE_LIST_base}
+  ${SRC_PATH_script_tcc}/script_tcc.def
+  )
+endif()
 
 source_group("source" FILES ${SRC_FILE_LIST})
 

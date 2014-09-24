@@ -35,9 +35,15 @@ set(LINK_FILE_LIST
   dl
   )
 elseif(OS_IS_WINDOWS)
-set(LINK_FILE_LIST
-  ${OUT_PATH}/lib/Release/potato.lib
-  )
+  if(BUILD_DEBUG)
+    set(LINK_FILE_LIST
+      ${OUT_PATH}/lib/Debug/potato.lib
+      )
+  else()
+    set(LINK_FILE_LIST
+      ${OUT_PATH}/lib/Release/potato.lib
+      )
+  endif()
 endif()
 target_link_libraries(t001 ${LINK_FILE_LIST})
 

@@ -1,0 +1,4 @@
+LIBRARY   engine
+EXPORTS
+    CreateEngine         @1
+    DestroyEngine        @2

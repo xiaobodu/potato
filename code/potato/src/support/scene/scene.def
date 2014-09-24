@@ -1,0 +1,4 @@
+LIBRARY   scene
+EXPORTS
+    CreateScene         @1
+    DestroyScene        @2
