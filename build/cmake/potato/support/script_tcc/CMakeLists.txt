@@ -42,9 +42,23 @@ set(LINK_FILE_LIST
   tinycc
   )
 elseif(OS_IS_WINDOWS)
-set(LINK_FILE_LIST
-  ${OUT_PATH}/lib/Release/tinycc.lib
-  )
+  if(BUILD_DEBUG)
+    set(LINK_FILE_LIST
+      ${OUT_PATH}/lib/Debug/tinycc.lib
+      )
+  elseif(BUILD_MINSIZEREL)
+    set(LINK_FILE_LIST
+      ${OUT_PATH}/lib/MinSizeRel/tinycc.lib
+      )
+  elseif(BUILD_RELEASE)
+    set(LINK_FILE_LIST
+      ${OUT_PATH}/lib/Release/tinycc.lib
+      )
+  elseif(BUILD_RELWITHDEBINFO)
+    set(LINK_FILE_LIST
+      ${OUT_PATH}/lib/RelWithDebInfo/tinycc.lib
+      )
+  endif()
 endif()
 target_link_libraries(script_tcc ${LINK_FILE_LIST})
 

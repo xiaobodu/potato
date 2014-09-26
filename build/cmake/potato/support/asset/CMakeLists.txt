@@ -59,10 +59,27 @@ set(LINK_FILE_LIST
   z
   )
 elseif(OS_IS_WINDOWS)
-set(LINK_FILE_LIST
-  ${OUT_PATH}/lib/Release/png.lib
-  ${ZLIB_LIBRARY}
-  )
+  if(BUILD_DEBUG)
+    set(LINK_FILE_LIST
+      ${OUT_PATH}/lib/Debug/png.lib
+      ${ZLIB_LIBRARY}
+      )
+  elseif(BUILD_MINSIZEREL)
+    set(LINK_FILE_LIST
+      ${OUT_PATH}/lib/MinSizeRel/png.lib
+      ${ZLIB_LIBRARY}
+      )
+  elseif(BUILD_RELEASE)
+    set(LINK_FILE_LIST
+      ${OUT_PATH}/lib/Release/png.lib
+      ${ZLIB_LIBRARY}
+      )
+  elseif(BUILD_RELWITHDEBINFO)
+    set(LINK_FILE_LIST
+      ${OUT_PATH}/lib/RelWithDebInfo/png.lib
+      ${ZLIB_LIBRARY}
+      )
+  endif()
 endif()
 target_link_libraries(asset ${LINK_FILE_LIST})
 

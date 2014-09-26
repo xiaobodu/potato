@@ -5,6 +5,7 @@
 #include "display.h"
 #include "input.h"
 
+#include <Windows.h>
 
 namespace c4g {
 namespace core {
@@ -16,7 +17,7 @@ class CSharedLibraryManager;
 }
 
 namespace display {
-namespace linux_gles {
+namespace windows_gles {
 
 class CDisplay: public core::IDisplay
 {
@@ -27,11 +28,18 @@ public:
 public:
   virtual void Run(core::IScene* const& rpScene);
 
+public:
+  void Resize(const int& riWidth, const int& riHeight);
+
 protected:
-  void CreateWindow();
-  void DestroyWindow();
+  bool CreateOsWindow();
+  void DestroyOsWindow();
 
 private:
+  HGLRC m_pRC;
+  HDC m_pDC;
+  HWND m_pWnd;
+  HINSTANCE m_pInstance;
   bool m_bIsRunning;
 
   std::string m_sTitle;
@@ -42,6 +50,7 @@ private:
   core::IRender*        m_pRender;
   utility::CSharedLibraryManager* m_pLibraryManager;
 
+  core::IScene*         m_pScene;
   display::CInput       m_oInput;
 };
 
