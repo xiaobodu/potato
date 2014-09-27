@@ -26,6 +26,14 @@
 struct android_app;
 #endif
 
+#if defined(C4G_API_EXPORT)
+# define C4G_API      __declspec(dllexport)
+#elif defined(C4G_API_IMPORT)
+# define C4G_API      __declspec(dllimport)
+#else
+# define C4G_API
+#endif
+
 namespace c4g {
 
 namespace base {

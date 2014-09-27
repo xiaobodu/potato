@@ -4,6 +4,8 @@ project(render_gles)
 
 set(SRC_PATH_render_gles ${SRC_PATH_support}/render_gles)
 
+add_definitions(-DC4G_API_EXPORT)
+
 set(INC_PATH_LIST
   ${SRC_PATH_potato}
   ${SRC_PATH_potato}/engine

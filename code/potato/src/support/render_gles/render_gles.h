@@ -8,7 +8,7 @@ namespace c4g {
 namespace render {
 namespace gles {
 
-class CRender : public core::IRender
+class C4G_API CRender : public core::IRender
 {
 public:
   CRender(const base::Config& roConfig);

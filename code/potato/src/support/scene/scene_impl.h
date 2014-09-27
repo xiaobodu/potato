@@ -17,7 +17,7 @@ namespace scene {
 
 class IPanel;
 
-class CScene : public ISceneImpl
+class C4G_API CScene : public ISceneImpl
 {
 public:
   explicit CScene(const base::Config& roConfig);

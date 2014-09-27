@@ -13,8 +13,6 @@ endif()
 
 
 if(OS_IS_WINDOWS)
-  set(CMAKE_C_FLAGS "/fPIC")
-  set(CMAKE_CXX_FLAGS "/fPIC")
 elseif(OS_IS_LINUX)
   set(CMAKE_C_FLAGS "-fPIC")
   set(CMAKE_CXX_FLAGS "-fPIC")
@@ -22,9 +20,16 @@ endif()
 
 add_definitions(-DLIBR_PATH="${ROOT_PATH}/out")
 add_definitions(-DDATA_PATH="${ROOT_PATH}/data")
-add_definitions(-DQT_OPENGL_ES -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB)
+if(CXX_GCC)
+  add_definitions(-DQT_OPENGL_ES)
+elseif(CXX_MSVC)
+  #add_definitions(-DQT_OPENGL_ES -DQT_NO_OPENGL_ES -DQT_OPENGL_ES_2 -DQT_NO_OPENGL_ES_2)
+endif()
+add_definitions(-DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB)
 
-set(INC_PATH_LIST
+add_definitions(-DC4G_API_IMPORT)
+
+set(INC_PATH_LIST_base
   ${QT_SDK_INC_PATH}
   ${CODE_PATH}/potato/src
   ${CODE_PATH}/potato/src/engine
@@ -33,6 +38,17 @@ set(INC_PATH_LIST
   ${CODE_PATH}/external/rapidjson/include
   ${CODE_PATH_editor}/qt
   )
+
+if(CXX_GNU)
+set(INC_PATH_LIST
+  ${INC_PATH_LIST_base}
+  )
+elseif(CXX_MSVC)
+set(INC_PATH_LIST
+  ${INC_PATH_LIST_base}
+  ${QT_SDK_INC_PATH}/QtANGLE
+  )
+endif()
 
 set(SRC_FILE_LIST
   ${CODE_PATH_editor}/editor.h
@@ -102,13 +118,14 @@ add_executable(editor ${SRC_FILE_LIST})
 
 if(OS_IS_WINDOWS)
 set(LINK_FILE_LIST
-  render_gles
+  render_gles.lib
+  scene.lib
   qtmain.lib
   Qt5Core.lib
   Qt5Gui.lib
   Qt5Widgets.lib
   Qt5OpenGL.lib
-  gl.lib
+  opengl32.lib
   )
 elseif(OS_IS_LINUX)
 set(LINK_FILE_LIST

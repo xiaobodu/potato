@@ -8,11 +8,11 @@
 #include "utility/file.h"
 #include "utility/log.h"
 #include "utility/sharedlibrary.h"
+#include "utility/datetime.h"
 
 #include <cassert>
 #include <gl/GL.h>
-//#include <unistd.h>
-//#include <sys/time.h>
+#include <windowsx.h>
 
 FUNC_API_TYPEDEF(CreateRender, c4g::core::IRender, const c4g::base::Config);
 FUNC_API_TYPEDEF(DestroyRender, c4g::core::IRender, const c4g::base::Config);
@@ -20,6 +20,8 @@ FUNC_API_TYPEDEF(DestroyRender, c4g::core::IRender, const c4g::base::Config);
 namespace c4g {
 namespace display {
 namespace windows_gles {
+
+CDisplay* CDisplay::instance_ptr = NULL;
 
 CDisplay::CDisplay(const base::Config& roConfig)
   : m_pRC(NULL)
@@ -33,6 +35,8 @@ CDisplay::CDisplay(const base::Config& roConfig)
   , m_pLibraryManager(NULL)
   , m_pScene(NULL)
 {
+  CDisplay::instance_ptr = this;
+
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 
   m_pLibraryManager = new utility::CSharedLibraryManager();
@@ -59,8 +63,8 @@ CDisplay::CDisplay(const base::Config& roConfig)
   assert(configure.IsString());
 
   m_sTitle = jtitle.GetString();
-  m_iWidth = jwidth.GetInt();
-  m_iHeight = jheight.GetInt();
+  m_iMinWidth = m_iWidth = jwidth.GetInt();
+  m_iMinHeight = m_iHeight = jheight.GetInt();
 
   m_oConfigRender._sLibrPath = roConfig._sLibrPath;
   m_oConfigRender._sDataPath = roConfig._sDataPath;
@@ -86,6 +90,8 @@ CDisplay::~CDisplay()
   m_pLibraryManager = NULL;
 
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+
+  CDisplay::instance_ptr = NULL;
 }
 
 void CDisplay::Run(core::IScene* const& rpScene)
@@ -102,12 +108,21 @@ void CDisplay::Run(core::IScene* const& rpScene)
     rpScene->Load(m_pRender, "scene/root.json");
     rpScene->Resize(m_iWidth, m_iHeight);
 
+#if !defined(BUILD_COVERALLS)
     MSG msg;
     msg.hwnd = m_pWnd;
     msg.message = WM_USER;
     msg.wParam = MSGF_USER;
     msg.lParam = (LPARAM)this;
     DispatchMessage(&msg);
+
+    SYSTEMTIME time;
+    GetLocalTime(&time);
+    double second = time::ConvertTime(time);
+    double second_temp = 0.0;
+    double second_delta = 0.0;
+    double second_sleep = 0.0;
+    double second_per_frame_min = 1.0 / 60.0;
 
     bool is_running = true;
     while (is_running)
@@ -126,9 +141,21 @@ void CDisplay::Run(core::IScene* const& rpScene)
       }
       else
       {
-        if (m_pRender->Render(0, rpScene))
+        GetLocalTime(&time);
+        second_temp = second;
+        second = time::ConvertTime(time);
+        second_delta = second - second_temp;
+        if (m_pRender->Render(static_cast<float>(second_delta), rpScene))
         {
           SwapBuffers(m_pDC);
+        }
+
+        GetLocalTime(&time);
+        second_sleep = second_per_frame_min - (time::ConvertTime(time) - second);
+        if (0.001 < second_sleep)
+        {
+          //printf("%d time: s-%f | temp-%f | delta-%f | spf-%f | sleep-%f\n", ++count, second, second_temp, second_delta, second_per_frame_min, second_sleep);
+          Sleep(static_cast<DWORD>(second_sleep * 1000));
         }
       }
     }
@@ -136,6 +163,7 @@ void CDisplay::Run(core::IScene* const& rpScene)
     m_pScene = NULL;
     m_pRender->End();
   }
+#endif
 
   DestroyOsWindow();
 }
@@ -149,15 +177,14 @@ void CDisplay::Resize(const int& riWidth, const int& riHeight)
   if (NULL != m_pScene) m_pScene->Resize(m_iWidth, m_iHeight);
 }
 
+void CDisplay::Handle(const display::CInput& roInput)
+{
+  if (NULL != m_pScene) m_pScene->Handle(&roInput);
+}
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-  static CDisplay* s_pDisplay = NULL;
-  if (WM_USER == uMsg && MSGF_USER == wParam)
-  {
-    s_pDisplay = reinterpret_cast<CDisplay*>(lParam);
-    return 0;
-  }
-  if (NULL != s_pDisplay)
+  if (NULL != CDisplay::instance_ptr)
   {
     switch (uMsg)
     {
@@ -166,9 +193,62 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_CLOSE:
       PostQuitMessage(0);
       return 0;
+
+    case WM_GETMINMAXINFO: {
+      LPMINMAXINFO mm_info = (LPMINMAXINFO)lParam;
+      mm_info->ptMinTrackSize.x = CDisplay::instance_ptr->MinWidth();
+      mm_info->ptMinTrackSize.y = CDisplay::instance_ptr->MinHeight();
+      } return 0;
+
     case WM_SIZE:
-      s_pDisplay->Resize(LOWORD(lParam), HIWORD(lParam));
+      CDisplay::instance_ptr->Resize(LOWORD(lParam), HIWORD(lParam));
       return 0;
+
+    case WM_KEYDOWN: {
+      display::CInput& input = CDisplay::instance_ptr->Input();
+      input.type = EInputType_Key;
+      input.event = EInputEvent_Down;
+      (*input[C4G_INPUT_KEY_KEYCODE]) = static_cast<int>(wParam);
+      CDisplay::instance_ptr->Handle(input);
+      } return 0;
+
+    case WM_KEYUP: {
+      display::CInput& input = CDisplay::instance_ptr->Input();
+      input.type = EInputType_Key;
+      input.event = EInputEvent_Up;
+      (*input[C4G_INPUT_KEY_KEYCODE]) = static_cast<int>(wParam);
+      CDisplay::instance_ptr->Handle(input);
+      } return 0;
+
+    case WM_MOUSEMOVE: {
+      display::CInput& input = CDisplay::instance_ptr->Input();
+      input.type = EInputType_Touch;
+      input.event = EInputEvent_Move;
+      (*input[C4G_INPUT_TOUCH_COUNT]) = 1;
+      (*input[C4G_INPUT_TOUCH_X]) = static_cast<float>(GET_X_LPARAM(lParam));
+      (*input[C4G_INPUT_TOUCH_Y]) = static_cast<float>(GET_X_LPARAM(lParam));
+      CDisplay::instance_ptr->Handle(input);
+      } return 0;
+
+    case WM_LBUTTONDOWN: {
+      display::CInput& input = CDisplay::instance_ptr->Input();
+      input.type = EInputType_Touch;
+      input.event = EInputEvent_Down;
+      (*input[C4G_INPUT_TOUCH_COUNT]) = 1;
+      (*input[C4G_INPUT_TOUCH_X]) = static_cast<float>(GET_X_LPARAM(lParam));
+      (*input[C4G_INPUT_TOUCH_Y]) = static_cast<float>(GET_X_LPARAM(lParam));
+      CDisplay::instance_ptr->Handle(input);
+      } return 0;
+
+    case WM_LBUTTONUP: {
+      display::CInput& input = CDisplay::instance_ptr->Input();
+      input.type = EInputType_Touch;
+      input.event = EInputEvent_Up;
+      (*input[C4G_INPUT_TOUCH_COUNT]) = 1;
+      (*input[C4G_INPUT_TOUCH_X]) = static_cast<float>(GET_X_LPARAM(lParam));
+      (*input[C4G_INPUT_TOUCH_Y]) = static_cast<float>(GET_X_LPARAM(lParam));
+      CDisplay::instance_ptr->Handle(input);
+      } return 0;
     }
   }
   return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -197,9 +277,9 @@ bool CDisplay::CreateOsWindow()
   }
   RECT rect;
   rect.left = 0;
-  rect.right = 480;
+  rect.right = m_iWidth;
   rect.top = 0;
-  rect.bottom = 800;
+  rect.bottom = m_iHeight;
   DWORD dw_style = WS_OVERLAPPEDWINDOW;
   DWORD dw_exstyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
   if (!AdjustWindowRectEx(&rect, dw_style, FALSE, dw_exstyle)) return false;
@@ -268,6 +348,11 @@ void CDisplay::DestroyOsWindow()
   {
     UnregisterClass("potato", m_pInstance);
   }
+}
+
+display::CInput& CDisplay::Input()
+{
+  return m_oInput;
 }
 
 }

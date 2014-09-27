@@ -58,6 +58,7 @@ else()
   message(FATAL_ERROR "Sorry, it don't support to compile by ${CMAKE_CXX_COMPILER_ID} in ${CMAKE_SYSTEM_NAME}")
 endif()
 
+SET (C4G_BUILD_EDITOR ${C4G_BUILD_EDITOR} CACHE BOOL "Generate the potato editor" FORCE)
 
 # define path
 set(ROOT_PATH "${all_SOURCE_DIR}/../..")
@@ -67,7 +68,7 @@ set(OUT_PATH "${ROOT_PATH}/out")
 # add sub-project
 add_subdirectory(external)
 add_subdirectory(potato)
-if(CXX_GNU)
+if(C4G_BUILD_EDITOR)
 add_subdirectory(editor)
 endif()
 add_subdirectory(test)

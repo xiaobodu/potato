@@ -33,7 +33,7 @@ namespace scene {
 
 class IPanel;
 
-class ISceneImpl : public core::IScene
+class C4G_API ISceneImpl : public core::IScene
 {
 public:
   virtual ~ISceneImpl() { ; }

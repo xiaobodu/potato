@@ -22,6 +22,9 @@ namespace windows_gles {
 class CDisplay: public core::IDisplay
 {
 public:
+  static CDisplay* instance_ptr;
+
+public:
   explicit CDisplay(const base::Config& roConfig);
   virtual ~CDisplay();
 
@@ -29,11 +32,19 @@ public:
   virtual void Run(core::IScene* const& rpScene);
 
 public:
+  inline const int& MinWidth() const { return m_iMinWidth; }
+  inline const int& MinHeight() const { return m_iMinHeight; }
+  inline const int& Width() const { return m_iWidth; }
+  inline const int& Height() const { return m_iHeight; }
   void Resize(const int& riWidth, const int& riHeight);
+  void Handle(const display::CInput& roInput);
 
 protected:
   bool CreateOsWindow();
   void DestroyOsWindow();
+
+public:
+  display::CInput& Input();
 
 private:
   HGLRC m_pRC;
@@ -43,6 +54,8 @@ private:
   bool m_bIsRunning;
 
   std::string m_sTitle;
+  int m_iMinWidth;
+  int m_iMinHeight;
   int m_iWidth;
   int m_iHeight;
 

@@ -19,7 +19,7 @@ class ICanvas;
 
 namespace core {
 
-class IScene
+class C4G_API IScene
 {
 public:
   virtual ~IScene()

@@ -9,7 +9,7 @@ namespace core{
 
 class IScene;
 
-class IRender
+class C4G_API IRender
 {
 public:
   virtual ~IRender() { ; }

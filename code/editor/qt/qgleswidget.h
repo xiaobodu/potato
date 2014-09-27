@@ -6,7 +6,11 @@
 #include <QtOpenGL/QGLWidget>
 #include <QtCore/QBasicTimer>
 
+#if defined(CXX_GNU)
 #include <EGL/egl.h>
+#elif defined(CXX_MSVC)
+#include <Windows.h>
+#endif
 
 namespace c4g {
 namespace core {
@@ -37,19 +41,26 @@ public:
 
 public:
   virtual bool create(const QGLContext* shareContext = 0);
-  virtual void makeCurrent();
-  virtual void doneCurrent();
-  virtual void swapBuffers() const;
 
 protected:
   virtual bool chooseContext(const QGLContext* shareContext = 0);
 
+public:
+  virtual void makeCurrent();
+  virtual void doneCurrent();
+  virtual void swapBuffers() const;
+
 private:
   QGLESWidget* m_pWidget;
+#if defined(CXX_GNU)
   EGLConfig m_pGLConfig;
   EGLDisplay m_pGLDisplay;
   EGLContext m_pGLContext;
   EGLSurface m_pGLSurface;
+#elif defined(CXX_MSVC)
+  HGLRC m_pRC;
+  HDC m_pDC;
+#endif
 };
 
 class QGLESWidget : public QGLWidget
@@ -84,7 +95,11 @@ private:
   float m_fHeight;
   display::CInput       m_oInput;
 
+#if defined(CXX_GNU)
   timeval time;
+#elif defined(CXX_MSVC)
+  SYSTEMTIME time;
+#endif
   double second;
   double second_temp;
   double second_delta;

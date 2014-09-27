@@ -4,6 +4,8 @@ project(scene)
 
 set(SRC_PATH_scene ${SRC_PATH_support}/scene)
 
+add_definitions(-DC4G_API_EXPORT)
+
 set(INC_PATH_LIST
   ${SRC_PATH_potato}
   ${SRC_PATH_potato}/engine

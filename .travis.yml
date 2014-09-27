@@ -30,7 +30,7 @@ before_script:
   - mkdir -p out/lib
   - mkdir -p out/make
   - cd out/make
-  - cmake -D CMAKE_BUILD_TYPE=Release -D QT_SDK_PATH=/usr -D USE_COVERALLS=TRUE ../../build/cmake/
+  - cmake -D C4G_BUILD_EDITOR=TRUE -D CMAKE_BUILD_TYPE=Release -D QT_SDK_PATH=/usr -D USE_COVERALLS=TRUE ../../build/cmake/
   - cd ../../
 
 script:
