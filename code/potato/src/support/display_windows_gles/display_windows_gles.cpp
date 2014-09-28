@@ -159,11 +159,12 @@ void CDisplay::Run(core::IScene* const& rpScene)
         }
       }
     }
+#endif
+
     rpScene->Unload(m_pRender);
     m_pScene = NULL;
     m_pRender->End();
   }
-#endif
 
   DestroyOsWindow();
 }
