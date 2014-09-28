@@ -41,21 +41,12 @@ void CRender::Start()
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
-  GLenum err = glGetError();
-  const GLubyte* err_msg = glGetString(err);
-  //assert(GL_NO_ERROR == glGetError());
   glShadeModel(GL_SMOOTH);
-  err = glGetError();
-  //assert(GL_NO_ERROR == glGetError());
   glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
-  err = glGetError();
-  //assert(GL_NO_ERROR == glGetError());
 
   // it is not necessary to cull the face
   //glEnable(GL_CULL_FACE);
   glEnable(GL_DITHER);
-  err = glGetError();
-  //assert(GL_NO_ERROR == glGetError());
   /// just 2d render, don't test the depth
   //glEnable(GL_DEPTH_TEST);
   //glDepthFunc(GL_LEQUAL);

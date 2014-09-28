@@ -72,7 +72,7 @@ void CAsset::VisitImageInfo(core::IAsset::IImageInfoVisitor* const& rpVisitor) c
 
 void CAsset::ClearImageInfo()
 {
-  if (0 >= m_mImageInfo.size()) return;
+  if (m_mImageInfo.empty()) return;
   m_mImageInfo.clear();
 }
 
