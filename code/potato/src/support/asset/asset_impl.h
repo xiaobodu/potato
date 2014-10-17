@@ -18,15 +18,15 @@ namespace asset{
 class CAsset : public core::IAsset
 {
 public:
-  explicit CAsset(const c4g::base::Config& roConfig);
+  explicit CAsset();
   virtual ~CAsset();
 
-private:
-  c4g::base::Config m_oConfig;
+public:
+  virtual bool Initialize(core::MString2Module& rmModule);
 
 public:
-  virtual void LoadFile(const std::string& rsFileName, std::string& rsFileContext, bool bIsAbsolutePath = false);
-  virtual void LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer, bool bIsAbsolutePath = false);
+  virtual void LoadFile(const std::string& rsFullFileName, std::string& rsFileContext);
+  virtual void LoadImage(const std::string& rsFullFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer);
   virtual void PushImageInfo(const std::string& rsId, const int& riWidth, const int& riHeight, const unsigned int& riId);
   virtual bool FindImageInfo(const std::string& rsId, int& riWidth, int& riHeight, unsigned int& riId) const;
   virtual void VisitImageInfo(core::IAsset::IImageInfoVisitor* const& rpVisitor) const;

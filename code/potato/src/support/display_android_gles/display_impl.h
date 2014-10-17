@@ -24,8 +24,11 @@ namespace android_gles {
 class CDisplay: public core::IDisplay
 {
 public:
-  explicit CDisplay(const base::Config& roConfig);
+  explicit CDisplay();
   virtual ~CDisplay();
+
+public:
+  virtual bool Initialize(core::MString2Module& rmModule);
 
 public:
   virtual void BindAndroidApp(struct android_app* pApp);
@@ -52,10 +55,8 @@ private:
   bool          m_bIsEGLReady;
   bool          m_bCanRender;
 
-  base::Config          m_oConfigRender;
   core::IRender*        m_pRender;
   core::IScene*         m_pScene;
-  utility::CSharedLibraryManager* m_pLibraryManager;
 
   // android
   struct android_app*           m_pApp;

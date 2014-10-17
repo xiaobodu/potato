@@ -8,6 +8,7 @@ set(INC_PATH_LIST
   ${SRC_PATH_potato}
   ${SRC_PATH_potato}/engine
   ${SRC_PATH_flash}
+  ${CODE_PATH}/external/rapidjson/include
   )
 
 set(SRC_FILE_LIST_base
@@ -21,8 +22,6 @@ set(SRC_FILE_LIST_base
   ${SRC_PATH_flash}/effect_blend.cpp
   ${SRC_PATH_potato}/utility/file.h
   ${SRC_PATH_potato}/utility/log.h
-  ${SRC_PATH_potato}/utility/sharedlibrary.h
-  ${SRC_PATH_potato}/utility/sharedlibrary.cpp
   )
   
 if(OS_IS_LINUX)
@@ -38,7 +37,7 @@ endif()
 
 source_group("source" FILES ${SRC_FILE_LIST})
 
-set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
+set(LIBRARY_OUTPUT_PATH ${OUT_PATH}/bin)
 
 include_directories(${INC_PATH_LIST})
 

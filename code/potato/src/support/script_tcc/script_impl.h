@@ -12,8 +12,11 @@ namespace script {
 class CScript : public core::IScript
 {
 public:
-  explicit CScript(const base::Config& roConfig);
+  explicit CScript();
   virtual ~CScript();
+
+public:
+  virtual bool Initialize(core::MString2Module& rmModule);
 
 public:
   virtual void New(script::AHandler* const& rpHandler);

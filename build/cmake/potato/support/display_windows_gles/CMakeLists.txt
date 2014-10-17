@@ -37,7 +37,7 @@ endif()
 
 source_group("source" FILES ${SRC_FILE_LIST})
 
-set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
+set(LIBRARY_OUTPUT_PATH ${OUT_PATH}/bin)
 
 include_directories(${INC_PATH_LIST})
 

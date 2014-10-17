@@ -1,8 +1,8 @@
 #pragma once
 
-#include "common.h"
-
 #include "base.h"
+
+#define MODULE_TYPE_FLASH    "flash"
 
 namespace c4g {
 
@@ -17,14 +17,19 @@ class IEffect;
 
 namespace core {
 
-class IFlash
+class C4G_API IFlash : public IModule
 {
 public:
+  explicit IFlash()
+    : IModule(MODULE_TYPE_FLASH)
+  {
+    ;
+  }
   virtual ~IFlash() { ; }
 
 public:
   virtual flash::IEffect* New(const std::string& rsName) const = 0;
-  virtual void Load(const std::string& rsFileName) = 0;
+  virtual void Load(const std::string& rsFullFileName) = 0;
 };
 
 }
@@ -55,6 +60,3 @@ public:
 
 }
 }
-
-FUNC_API_DECLARE(CreateFlash, c4g::core::IFlash, const c4g::base::Config);
-FUNC_API_DECLARE(DestroyFlash, c4g::core::IFlash, const c4g::base::Config);

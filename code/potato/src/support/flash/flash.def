@@ -1,4 +1,4 @@
 LIBRARY   flash
 EXPORTS
-    CreateFlash         @1
-    DestroyFlash        @2
+    CreateModule         @1
+    DestroyModule        @2

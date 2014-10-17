@@ -1,6 +1,8 @@
 #pragma once
 
-#include "common.h"
+#include "base.h"
+
+#define MODULE_TYPE_SCENE    "scene"
 
 namespace c4g {
 
@@ -19,15 +21,21 @@ class ICanvas;
 
 namespace core {
 
-class C4G_API IScene
+class C4G_API IScene : public IModule
 {
 public:
+  explicit IScene()
+    : IModule(MODULE_TYPE_SCENE)
+  {
+    ;
+  }
   virtual ~IScene()
   {
     ;
   }
 
 public:
+  virtual void SetDataPath(const std::string& rsDataPath) = 0;
   virtual bool Load(core::IRender* const& rpRender, const std::string& rsFileName, bool bIsAbsolutePath = false) = 0;
   virtual bool Unload(core::IRender* const& rpRender) = 0;
   virtual bool Resize(const int& riWidth, const int& riHeight) = 0;
@@ -40,6 +48,3 @@ public:
 }
 
 }
-
-FUNC_API_DECLARE(CreateScene, c4g::core::IScene, const c4g::base::Config);
-FUNC_API_DECLARE(DestroyScene, c4g::core::IScene, const c4g::base::Config);

@@ -6,7 +6,6 @@
 #elif defined(CXX_GNU)
 #include <dlfcn.h>
 #endif
-#include <cassert>
 #include <iostream>
 
 namespace c4g {
@@ -20,12 +19,11 @@ CSharedLibraryHandler::CSharedLibraryHandler(const std::string& rsFileName)
 #elif defined(CXX_GNU)
   m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
 #endif
-  //utility::Log::Instance().Info("%s: %s res:%d", __PRETTY_FUNCTION__, rsFileName.c_str(), m_pLib);
-  assert(m_pLib != NULL);
 }
 
 CSharedLibraryHandler::~CSharedLibraryHandler()
 {
+  if (NULL == m_pLib) return;
 #if defined(CXX_MSVC)
   FreeLibrary((HMODULE)m_pLib);
 #elif defined(CXX_GNU)
@@ -35,13 +33,12 @@ CSharedLibraryHandler::~CSharedLibraryHandler()
 
 void* CSharedLibraryHandler::GetFunc(const std::string& rsFuncName)
 {
+  void* func_ptr = NULL;
 #if defined(CXX_MSVC)
-  void* func_ptr = GetProcAddress((HMODULE)m_pLib, rsFuncName.c_str());
+  func_ptr = GetProcAddress((HMODULE)m_pLib, rsFuncName.c_str());
 #elif defined(CXX_GNU)
-  void* func_ptr = dlsym(m_pLib, rsFuncName.c_str());
+  func_ptr = dlsym(m_pLib, rsFuncName.c_str());
 #endif
-  //utility::Log::Instance().Info("%s: %s res:%d", __PRETTY_FUNCTION__, rsFuncName.c_str(), m_pLib);
-  assert(func_ptr != NULL);
   m_mapFuncName2FunPtr.insert(std::make_pair(rsFuncName, func_ptr));
   return func_ptr;
 }

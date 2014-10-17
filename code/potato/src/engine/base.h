@@ -132,3 +132,6 @@ public:
 
 }
 }
+
+FUNC_API_DECLARE(CreateModule, c4g::core::IModule);
+FUNC_API_DECLARE(DestroyModule, c4g::core::IModule);

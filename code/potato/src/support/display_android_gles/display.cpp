@@ -3,7 +3,7 @@
 #include <android/window.h>
 #include <android_native_app_glue.h>
 
-#include "display_android_gles.h"
+#include "display_impl.h"
 
 #include "render.h"
 #include "scene.h"
@@ -16,14 +16,11 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-FUNC_API_TYPEDEF(CreateRender, c4g::core::IRender, const c4g::base::Config);
-FUNC_API_TYPEDEF(DestroyRender, c4g::core::IRender, const c4g::base::Config);
-
 namespace c4g {
 namespace display {
 namespace android_gles {
 
-CDisplay::CDisplay(const base::Config& roConfig)
+CDisplay::CDisplay()
   : m_pGLDisplay(EGL_NO_DISPLAY)
   , m_pGLSurface(EGL_NO_SURFACE)
   , m_pGLContext(EGL_NO_CONTEXT)
@@ -32,67 +29,26 @@ CDisplay::CDisplay(const base::Config& roConfig)
   , m_bIsRunning(false), m_bIsEGLReady(false), m_bCanRender(false)
   , m_pRender(NULL)
   , m_pScene(NULL)
-  , m_pLibraryManager(NULL)
   , m_pApp(NULL)
   , m_pSensorManager(NULL)
   , m_pAccelerometerSensor(NULL)
   , m_pAccelerometerSensorEventQueue(NULL)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
-
-  m_pLibraryManager = new utility::CSharedLibraryManager();
-
-#if defined(BUILD_ANDROID)
-  std::string file_context = roConfig._sConfigureContext.c_str();
-#else
-  std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
-#endif
-
-  rapidjson::Document jdoc;
-  jdoc.Parse(file_context.c_str());
-  assert(jdoc.IsObject());
-
-  m_oConfigRender._sLibrPath = roConfig._sLibrPath;
-  m_oConfigRender._sDataPath = roConfig._sDataPath;
-
-  const rapidjson::Value& render = jdoc["render"];
-  assert(render.IsObject());
-  const rapidjson::Value& library = render["library"];
-  m_oConfigRender._sLibraryFile = library.GetString();
-
-#if defined(BUILD_ANDROID)
-  m_oConfigRender._sConfigureContext = "\
-{\
-\"render\":{\
-  \"library\":\"lib/librender_gles.so\"\
-}\
-}";
-#else
-  assert(library.IsString());
-  const rapidjson::Value& configure = render["configure"];
-  assert(configure.IsString());
-  m_oConfigRender._sConfigureFile = configure.GetString();
-#endif
-
-  typedef FUNC_API_TYPE(CreateRender) CreateRenderFuncPtr;
-  /// load the shared library
-  CreateRenderFuncPtr func_create_func_ptr = m_pLibraryManager->GetFunc<CreateRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(CreateRender));
-  /// create the display with configure
-  func_create_func_ptr(m_pRender, m_oConfigRender);
 }
 
 CDisplay::~CDisplay()
 {
-  /// load the shared library
-  typedef FUNC_API_TYPE(DestroyRender) DestroyRenderFuncPtr;
-  DestroyRenderFuncPtr func_destroy_func_ptr = m_pLibraryManager->GetFunc<DestroyRenderFuncPtr>(m_oConfigRender.GetLibraryFile(), TOSTRING(DestroyRender));
-  /// create the display with configure
-  func_destroy_func_ptr(m_pRender, m_oConfigRender);
-
-  delete m_pLibraryManager;
-  m_pLibraryManager = NULL;
+  m_pRender = NULL;
 
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
+}
+
+bool CDisplay::Initialize(core::MString2Module& rmModule)
+{
+  m_pRender = core::IModule::Find<core::IRender>(rmModule, MODULE_TYPE_RENDER);
+  m_pRender->Initialize(rmModule);
+  return true;
 }
 
 void CDisplay::BindAndroidApp(struct android_app* pApp)
@@ -556,14 +512,14 @@ int CDisplay::Sensor(ASensorEvent* pEvent)
 }
 }
 
-bool CreateDisplay(c4g::core::IDisplay*& rpDisplay, const c4g::base::Config& roConfig)
+bool CreateModule(c4g::core::IModule*& rpDisplay)
 {
   assert(rpDisplay == NULL);
-  rpDisplay = new c4g::display::android_gles::CDisplay(roConfig);
+  rpDisplay = new c4g::display::android_gles::CDisplay();
   return true;
 }
 
-bool DestroyDisplay(c4g::core::IDisplay*& rpDisplay, const c4g::base::Config& roConfig)
+bool DestroyModule(c4g::core::IModule*& rpDisplay)
 {
   assert(rpDisplay != NULL);
   delete rpDisplay;

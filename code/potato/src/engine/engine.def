@@ -1,4 +1,4 @@
 LIBRARY   engine
 EXPORTS
-    CreateEngine         @1
-    DestroyEngine        @2
+    CreateModule         @1
+    DestroyModule        @2

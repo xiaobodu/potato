@@ -2,6 +2,7 @@
   "type":"panel",
   "value":{
     "id":"root",
+  	"flash": "flash/root.json",
     "assets":[
       {
         "type":"image",

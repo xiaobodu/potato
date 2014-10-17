@@ -24,7 +24,7 @@ void error_callback(void *opaque, const char *msg)
   c4g::utility::Log::Instance().Error(msg);
 }
 
-CScript::CScript(const base::Config& roConfig)
+CScript::CScript()
 {
   ;
 }
@@ -40,6 +40,12 @@ CScript::~CScript()
     handler_ptr->OnDeleteSubstance();
   }
   m_mSubstance.clear();
+}
+
+bool CScript::Initialize(core::MString2Module& rmModule)
+{
+  //TODO:
+  return true;
 }
 
 void CScript::New(script::AHandler* const& rpHandler)
@@ -113,15 +119,15 @@ void* const CSubstance::GetSymbol(const std::string& rsFuncName)
 }
 }
 
-bool CreateScript(c4g::core::IScript*& rpScript, const c4g::base::Config& roConfig)
+bool CreateModule(c4g::core::IModule*& rpScript)
 {
   assert(rpScript == NULL);
   if (NULL != rpScript) return false;
-  rpScript = new c4g::script::CScript(roConfig);
+  rpScript = new c4g::script::CScript();
   return true;
 }
 
-bool DestroyScript(c4g::core::IScript*& rpScript, const c4g::base::Config& roConfig)
+bool DestroyModule(c4g::core::IModule*& rpScript)
 {
   assert(rpScript != NULL);
   if (NULL == rpScript) return false;

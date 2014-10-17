@@ -10,11 +10,9 @@ namespace c4g{
 
 namespace asset{
 
-CAsset::CAsset(const c4g::base::Config& roConfig)
+CAsset::CAsset()
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
-
-  m_oConfig = roConfig;
 }
 
 CAsset::~CAsset()
@@ -22,16 +20,20 @@ CAsset::~CAsset()
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
-void CAsset::LoadFile(const std::string& rsFileName, std::string& rsFileContext, bool bIsAbsolutePath /*= false*/)
+bool CAsset::Initialize(core::MString2Module& rmModule)
 {
-  if (bIsAbsolutePath) rsFileContext = utility::ReadFile(rsFileName);
-  else rsFileContext = utility::ReadFile(m_oConfig._sDataPath + "/" + rsFileName);
+  return true;
 }
 
-void CAsset::LoadImage(const std::string& rsFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer, bool bIsAbsolutePath /*= false*/)
+void CAsset::LoadFile(const std::string& rsFullFileName, std::string& rsFileContext)
 {
-  if (bIsAbsolutePath) CFilePNG::Instance().Load(rsFileName);
-  else CFilePNG::Instance().Load(m_oConfig._sDataPath + "/" + rsFileName);
+  rsFileContext = utility::ReadFile(rsFullFileName);
+}
+
+void CAsset::LoadImage(const std::string& rsFullFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer)
+{
+  //TODO:
+  CFilePNG::Instance().Load(rsFullFileName);
 
   riWidth = static_cast<int>(CFilePNG::Instance().GetWidth());
   riHeight = static_cast<int>(CFilePNG::Instance().GetHeight());
@@ -81,18 +83,18 @@ void CAsset::ClearImageInfo()
 }
 
 
-bool CreateAsset(c4g::core::IAsset*& rpAsset, const c4g::base::Config& roConfig)
+bool CreateModule(c4g::core::IModule*& rpAsset)
 {
   assert(rpAsset == NULL);
   if (rpAsset != NULL)
   {
     return false;
   }
-  rpAsset = new c4g::asset::CAsset(roConfig);
+  rpAsset = new c4g::asset::CAsset();
   return true;
 }
 
-bool DestroyAsset(c4g::core::IAsset*& rpAsset, const c4g::base::Config& roConfig)
+bool DestroyModule(c4g::core::IModule*& rpAsset)
 {
   assert(rpAsset != NULL);
   if (NULL == rpAsset)

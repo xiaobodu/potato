@@ -110,6 +110,13 @@ bool CPanel::CBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& ro
   assert(jvalue.IsObject());
   if (!jvalue.IsObject()) return false;
 
+  if (jvalue.HasMember("flash"))
+  {
+    const rapidjson::Value& jflash = jvalue["flash"];
+    assert(jflash.IsString());
+    rpScene->GetFlashPtr()->Load(rpScene->GetDataPath() + "/" + jflash.GetString());
+  }
+
   if (!CWidgetBuilder::instance.Do(rpScene, jvalue, rpPanel))
   {
     return false;

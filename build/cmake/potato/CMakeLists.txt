@@ -12,7 +12,6 @@ set(SRC_PATH_potato "${CODE_PATH_potato}/src")
 set(INC_PATH_LIST
   ${INC_PATH_potato}
   ${SRC_PATH_potato}
-  ${CODE_PATH}/external/rapidjson/include
   )
 
 include_directories(${INC_PATH_LIST})

@@ -1,18 +1,12 @@
-#include "canvas_gles.h"
+#include "canvas.h"
 
 #include "base.h"
 #include "scene.h"
-#include "transform_gles.h"
-#include "blend_gles.h"
+#include "transform.h"
+#include "blend.h"
 
 #include <cassert>
 #include <memory.h>
-#if defined(CXX_GNU)
-#include <GLES/gl.h>
-#elif defined(CXX_MSVC)
-#include <Windows.h>
-#include <GL/gl.h>
-#endif
 
 namespace c4g{
 namespace render {

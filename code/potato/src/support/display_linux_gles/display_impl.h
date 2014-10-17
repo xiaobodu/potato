@@ -24,8 +24,11 @@ namespace linux_gles {
 class CDisplay: public core::IDisplay
 {
 public:
-  explicit CDisplay(const base::Config& roConfig);
+  explicit CDisplay();
   virtual ~CDisplay();
+
+public:
+  virtual bool Initialize(core::MString2Module& rmModule);
 
 public:
   virtual void Run(core::IScene* const& rpScene);
@@ -50,9 +53,7 @@ private:
   int m_iWidth;
   int m_iHeight;
 
-  base::Config          m_oConfigRender;
   core::IRender*        m_pRender;
-  utility::CSharedLibraryManager* m_pLibraryManager;
 
   display::CInput       m_oInput;
 };

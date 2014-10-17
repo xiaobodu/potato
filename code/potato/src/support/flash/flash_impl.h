@@ -12,12 +12,15 @@ class IEffectType;
 class CFlash : public core::IFlash
 {
 public:
-  CFlash(const c4g::base::Config& roConfig);
+  CFlash();
   virtual ~CFlash();
 
 public:
+  virtual bool Initialize(core::MString2Module& rmModule);
+
+public:
   virtual IEffect* New(const std::string& rsId) const;
-  virtual void Load(const std::string& rsFileName);
+  virtual void Load(const std::string& rsFullFileName);
 
 protected:
   void Push(const std::string& rsId, flash::IEffect* const& rpEffect);

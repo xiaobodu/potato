@@ -1,8 +1,10 @@
 #pragma once
 
-#include "common.h"
+#include "base.h"
 
 #include <cassert>
+
+#define MODULE_TYPE_SCRIPT    "script"
 
 namespace c4g {
 
@@ -13,9 +15,14 @@ class AHandler;
 
 namespace core {
 
-class IScript
+class C4G_API IScript : public IModule
 {
 public:
+  explicit IScript()
+    : IModule(MODULE_TYPE_SCRIPT)
+  {
+    ;
+  }
   virtual ~IScript()
   {
     ;
@@ -88,6 +95,3 @@ protected:
 }
 
 }
-
-FUNC_API_DECLARE(CreateScript, c4g::core::IScript, const c4g::base::Config);
-FUNC_API_DECLARE(DestroyScript, c4g::core::IScript, const c4g::base::Config);

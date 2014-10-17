@@ -1,6 +1,6 @@
 #include <QtGui/QMouseEvent>
 
-#include "render_gles.h"
+#include "render_impl.h"
 #include "scene_impl.h"
 #include "panel.h"
 #include "utility/datetime.h"
@@ -207,23 +207,8 @@ QGLESWidget::QGLESWidget(QWidget* pParent /*= NULL*/)
   , second_sleep(0.0)
   , second_per_frame_min(0.0)
 {
-  c4g::base::Config config;
-  config._sLibrPath = LIBR_PATH;
-  config._sDataPath = DATA_PATH;
-
-#if defined(CXX_GNU)
-  config._sConfigureFile = "config/render.json";
-#elif defined(CXX_MSVC)
-  config._sConfigureFile = "config/render_windows_debug.json";
-#endif
-  m_pRender = new render::gles::CRender(config);
-
-#if defined(CXX_GNU)
-  config._sConfigureFile = "config/scene.json";
-#elif defined(CXX_MSVC)
-  config._sConfigureFile = "config/scene_windows_debug.json";
-#endif
-  m_pScene = new scene::CScene(config);
+  m_pRender = new render::gles::CRender();
+  m_pScene = new scene::CScene();
 }
 
 QGLESWidget::~QGLESWidget()
@@ -310,7 +295,7 @@ void QGLESWidget::paintGL()
   second = time.tv_sec * 1.0 + time.tv_usec / 1000000.0;
 #elif defined(CXX_MSVC)
   second = time::ConvertTime(time);
-#endif;
+#endif
   second_delta = second - second_temp;
 
   m_pRender->Render(second_delta, m_pScene);

@@ -43,7 +43,7 @@ endif()
 source_group("source" FILES ${SRC_FILE_LIST})
 
 set(LIBRARY_OUTPUT_PATH
-  ${OUT_PATH}/lib
+  ${OUT_PATH}/bin
   )
 
 link_directories(${OUT_PATH}/lib/Release)

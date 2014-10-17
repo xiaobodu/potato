@@ -1,13 +1,13 @@
-#include "render_gles.h"
+#include "render_impl.h"
 
 #include "scene.h"
-#include "canvas_gles.h"
+#include "canvas.h"
 
 #include "utility/log.h"
 
 #include <cassert>
 #include <cmath>
-#if defined(CXX_GNU)
+#if defined(CXX_GNU) || defined(BUILD_ANDROID)
 #include <GLES/gl.h>
 #elif defined(CXX_MSVC)
 #include <GL/gl.h>
@@ -21,7 +21,7 @@ namespace c4g {
 namespace render {
 namespace gles {
 
-CRender::CRender(const base::Config& roConfig)
+CRender::CRender()
   : m_pCanvas(NULL)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
@@ -35,6 +35,12 @@ CRender::~CRender()
   m_pCanvas = NULL;
 
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
+}
+
+bool CRender::Initialize(core::MString2Module& rmModule)
+{
+  //TODO:
+  return true;
 }
 
 void CRender::Start()
@@ -152,15 +158,15 @@ void CRender::Perspactive(const double& rdFovy, const double& rdAspect, const do
 }
 }
 
-bool CreateRender(c4g::core::IRender*& rpRender, const c4g::base::Config& roConfig)
+bool CreateModule(c4g::core::IModule*& rpRender)
 {
   assert(rpRender == NULL);
   if (NULL != rpRender) return false;
-  rpRender = new c4g::render::gles::CRender(roConfig);
+  rpRender = new c4g::render::gles::CRender();
   return true;
 }
 
-bool DestroyRender(c4g::core::IRender*& rpRender, const c4g::base::Config& roConfig)
+bool DestroyModule(c4g::core::IModule*& rpRender)
 {
   assert(rpRender != NULL);
   if (NULL == rpRender) return false;

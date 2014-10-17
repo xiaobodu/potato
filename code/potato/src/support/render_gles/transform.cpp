@@ -1,7 +1,7 @@
-#include "transform_gles.h"
+#include "transform.h"
 
 #include <memory.h>
-#if defined(CXX_GNU)
+#if defined(CXX_GNU) || defined(BUILD_ANDROID)
 #include <GLES/gl.h>
 #elif defined(CXX_MSVC)
 #include <Windows.h>

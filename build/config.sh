@@ -12,5 +12,5 @@ mkdir -p ../out/lib
 mkdir -p ../out/make
 
 cd ../out/make/
-cmake -D CMAKE_BUILD_TYPE=Debug -D QT_SDK_PATH=/usr -D USE_COVERALLS=FALSE ../../build/cmake/
+cmake -D CMAKE_BUILD_TYPE=Debug -D QT_SDK_PATH=/usr -D USE_COVERALLS=FALSE -D C4G_BUILD_EDITOR=TRUE ../../build/cmake/
 cd ../../build/

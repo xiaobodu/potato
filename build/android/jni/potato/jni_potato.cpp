@@ -197,7 +197,7 @@ void potato_main(android_app* pApp, const std::string& rsNativeClassName, const 
   std::string libr_path = NativeHelper::Instance().GetLibraryPath();
   std::string data_path = NativeHelper::Instance().GetExternalPath();
   std::string config = "{\"engine\":{\"library\":\"lib/libengine.so\"}}";
-  c4g::Potato::Instance().Initialize(libr_path, data_path, config);
+  c4g::Potato::Instance().Initialize(data_path);
 
   NativeHelper::Instance().HasReady();
 

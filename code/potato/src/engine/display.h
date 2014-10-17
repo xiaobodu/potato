@@ -3,14 +3,21 @@
 #include "common.h"
 #include "base.h"
 
+#define MODULE_TYPE_DISPLAY    "display"
+
 namespace c4g {
 namespace core {
 
 class IScene;
 
-class IDisplay
+class C4G_API IDisplay : public IModule
 {
 public:
+  explicit IDisplay()
+    : IModule(MODULE_TYPE_DISPLAY)
+  {
+    ;
+  }
   virtual ~IDisplay()
   {
     ;
@@ -70,6 +77,3 @@ public:
 
 } // end of namespace display
 } // end of namespace c4g
-
-FUNC_API_DECLARE(CreateDisplay, c4g::core::IDisplay, const c4g::base::Config);
-FUNC_API_DECLARE(DestroyDisplay, c4g::core::IDisplay, const c4g::base::Config);

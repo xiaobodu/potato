@@ -1,6 +1,0 @@
-{
-  "engine":{
-    "library":"lib/libengine.so",
-    "configure":"config/engine.json"
-  }
-}

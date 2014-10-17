@@ -7,7 +7,6 @@ set(SRC_PATH_engine ${SRC_PATH_potato}/engine)
 set(INC_PATH_LIST_base
   ${INC_PATH_potato}
   ${SRC_PATH_engine}
-  ${CODE_PATH}/external/rapidjson/include
   )
 
 if(OS_IS_LINUX)
@@ -33,8 +32,6 @@ set(SRC_FILE_LIST_base
   ${SRC_PATH_potato}/utility/thread.cpp
   ${SRC_PATH_potato}/utility/file.h
   ${SRC_PATH_potato}/utility/log.h
-  ${SRC_PATH_potato}/utility/sharedlibrary.h
-  ${SRC_PATH_potato}/utility/sharedlibrary.cpp
   )
 
 if(OS_IS_LINUX)
@@ -50,7 +47,7 @@ endif()
 
 source_group("source" FILES ${SRC_FILE_LIST})
 
-set(LIBRARY_OUTPUT_PATH "${OUT_PATH}/lib")
+set(LIBRARY_OUTPUT_PATH ${OUT_PATH}/bin)
 
 include_directories(${INC_PATH_LIST})
 

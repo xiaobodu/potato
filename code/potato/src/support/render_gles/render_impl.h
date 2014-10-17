@@ -11,8 +11,11 @@ namespace gles {
 class C4G_API CRender : public core::IRender
 {
 public:
-  CRender(const base::Config& roConfig);
+  CRender();
   virtual ~CRender();
+
+public:
+  virtual bool Initialize(core::MString2Module& rmModule);
 
 public:
   virtual void Start();

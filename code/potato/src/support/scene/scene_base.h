@@ -47,7 +47,6 @@ public:
   virtual void BindScript(script::AHandler* const& rpHandler) = 0;
 
 public:
-  virtual void SetDataPath(const std::string& rsDataPath) = 0;
   virtual const std::string& GetDataPath() const = 0;
   virtual IPanel* const& GetPanel() = 0;
 };

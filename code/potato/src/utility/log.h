@@ -56,7 +56,7 @@ TEXT_STYLE_BGCOLOR_BLUE, TEXT_STYLE_BGCOLOR_MAGENTA, TEXT_STYLE_BGCOLOR_CYAN, TE
 #endif
 
 #define TEXT_BUFFER_SIZE_MAX            1024
-#if defined(CXX_GNU)
+#if defined(CXX_GNU) ||  defined(BUILD_ANDROID)
 #define GET_ARGS_TEXT(text, result)\
     char result[TEXT_BUFFER_SIZE_MAX];\
     va_list args;\

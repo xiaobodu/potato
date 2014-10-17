@@ -91,17 +91,18 @@ set(SRC_FILE_LIST
 
 include_directories(${INC_PATH_LIST})
 
+set(LINK_PATH_LIST_base
+  ${OUT_PATH}/bin
+  )
 
 if(OS_IS_WINDOWS)
 set(LINK_PATH_LIST
-  ${OUT_PATH}/bin
-  ${OUT_PATH}/lib
+  ${LINK_PATH_LIST_base}
   ${QT_SDK_PATH}/lib
   )
 elseif(OS_IS_LINUX)
 set(LINK_PATH_LIST
-  ${OUT_PATH}/bin
-  ${OUT_PATH}/lib
+  ${LINK_PATH_LIST_base}
   #${QT_SDK_PATH}/lib/x86_64-linux-gnu
   )
 endif()
@@ -118,7 +119,7 @@ add_executable(editor ${SRC_FILE_LIST})
 
 if(OS_IS_WINDOWS)
 set(LINK_FILE_LIST
-  render_gles.lib
+  render.lib
   scene.lib
   qtmain.lib
   Qt5Core.lib
@@ -130,7 +131,7 @@ set(LINK_FILE_LIST
 elseif(OS_IS_LINUX)
 set(LINK_FILE_LIST
   png
-  render_gles
+  render
   scene
   Qt5Core
   Qt5Gui

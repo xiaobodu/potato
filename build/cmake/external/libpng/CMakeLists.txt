@@ -46,8 +46,6 @@ add_definitions(-DPNG_NO_FLOATING_POINT_SUPPORTED)
 
 include_directories(${INC_PATH_LIST})
 
-set(LIBRARY_OUTPUT_PATH
-  ${OUT_PATH}/lib
-  )
+set(LIBRARY_OUTPUT_PATH ${OUT_PATH}/lib)
 
 add_library(png STATIC ${libpng_sources})

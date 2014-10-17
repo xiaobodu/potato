@@ -3,7 +3,7 @@
 
 #include <string>
 
-extern void GetConfig(std::string& rsLibrPath, std::string& rsDataPath, std::string& rsFile);
+extern bool GetConfig(std::string& rsDataPath);
 
 #if defined(BUILD_ANDROID)
 #include "common.h"
@@ -24,12 +24,12 @@ protected:
   virtual ~Potato();
 
 public:
-  Potato& Initialize(const std::string& rsLibrPath, const std::string& rsDataPath, const std::string& rsConfig);
+  Potato& Initialize(const std::string& rsDataPath);
   core::IEngine*& GetEngine();
 
 private:
-  base::Config m_oConfigEngine;
   core::IEngine* m_pEngine;
+  core::MString2Module m_mModule;
 };
 
 }

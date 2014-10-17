@@ -1,17 +1,22 @@
 #pragma once
 
-#include "common.h"
-
 #include "base.h"
+
+#define MODULE_TYPE_RENDER    "render"
 
 namespace c4g{
 namespace core{
 
 class IScene;
 
-class C4G_API IRender
+class C4G_API IRender : public IModule
 {
 public:
+  explicit IRender()
+    : IModule(MODULE_TYPE_RENDER)
+  {
+    ;
+  }
   virtual ~IRender() { ; }
 
 public:
@@ -80,6 +85,3 @@ public:
 
 }
 }
-
-FUNC_API_DECLARE(CreateRender, c4g::core::IRender, const c4g::base::Config);
-FUNC_API_DECLARE(DestroyRender, c4g::core::IRender, const c4g::base::Config);

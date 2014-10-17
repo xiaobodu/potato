@@ -20,10 +20,14 @@ class IPanel;
 class C4G_API CScene : public ISceneImpl
 {
 public:
-  explicit CScene(const base::Config& roConfig);
+  explicit CScene();
   virtual ~CScene();
 
 public:
+  virtual bool Initialize(core::MString2Module& rmModule);
+
+public:
+  virtual void SetDataPath(const std::string& rsDataPath);
   virtual bool Load(core::IRender* const& rpRender, const std::string& rsFileName, bool bIsAbsolutePath = false);
   virtual bool Unload(core::IRender* const& rpRender);
   virtual bool Resize(const int& riWidth, const int& riHeight);
@@ -36,21 +40,16 @@ public:
   virtual core::IAsset* const& GetAssetPtr();
   virtual core::IFlash* const& GetFlashPtr();
   virtual void BindScript(script::AHandler* const& rpHandler);
-  virtual void SetDataPath(const std::string& rsDataPath);
   virtual const std::string& GetDataPath() const;
   virtual IPanel* const& GetPanel();
 
 public:
 
 private:
-  base::Config          m_oConfig;
-  base::Config          m_oConfigAsset;
+  std::string           m_sDataPath;
   core::IAsset*         m_pAsset;
-  base::Config          m_oConfigFlash;
   core::IFlash*         m_pFlash;
-  base::Config          m_oConfigScript;
   core::IScript*        m_pScript;
-  utility::CSharedLibraryManager* m_pLibraryManager;
 
   IPanel* m_pPanel;
   bool m_bNeedFlush;

@@ -13,28 +13,12 @@
 namespace c4g {
 namespace flash {
 
-CFlash::CFlash(const c4g::base::Config& roConfig)
+CFlash::CFlash()
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
-#if defined(BUILD_ANDROID)
-  std::string file_context = roConfig._sConfigureContext.c_str();
-#else
-  std::string file_context = utility::ReadFile(roConfig.GetConfigureFile());
-#endif
-
   PushType(CEffectTypeRotate::name, new CEffectTypeRotate);
   PushType(CEffectTypeBlend::name, new CEffectTypeBlend);
-
-  rapidjson::Document jdoc;
-  jdoc.Parse(file_context.c_str());
-  assert(jdoc.IsObject());
-
-  const rapidjson::Value& jdata = jdoc["data"];
-  if (jdata.IsString())
-  {
-    Load(roConfig._sDataPath + "/" + jdata.GetString());
-  }
 }
 
 CFlash::~CFlash()
@@ -64,9 +48,15 @@ CFlash::~CFlash()
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
-void CFlash::Load(const std::string& rsFileName)
+bool CFlash::Initialize(core::MString2Module& rmModule)
 {
-  std::string file_context = utility::ReadFile(rsFileName);
+  //TODO:
+  return true;
+}
+
+void CFlash::Load(const std::string& rsFullFileName)
+{
+  std::string file_context = utility::ReadFile(rsFullFileName);
 
   rapidjson::Document jdoc;
   jdoc.Parse(file_context.c_str());
@@ -134,18 +124,18 @@ const flash::IEffectType* const CFlash::GetType(const std::string& rsName) const
 }
 
 
-bool CreateFlash(c4g::core::IFlash*& rpFlash, const c4g::base::Config& roConfig)
+bool CreateModule(c4g::core::IModule*& rpFlash)
 {
   assert(rpFlash == NULL);
   if (rpFlash != NULL)
   {
     return false;
   }
-  rpFlash = new c4g::flash::CFlash(roConfig);
+  rpFlash = new c4g::flash::CFlash();
   return true;
 }
 
-bool DestroyFlash(c4g::core::IFlash*& rpFlash, const c4g::base::Config& roConfig)
+bool DestroyModule(c4g::core::IModule*& rpFlash)
 {
   assert(rpFlash != NULL);
   if (NULL == rpFlash)
