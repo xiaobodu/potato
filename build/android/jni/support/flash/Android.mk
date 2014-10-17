@@ -9,7 +9,7 @@ REAL_ROOT_PATH := $(LOCAL_PATH)/../../../../../
 REAL_CODE_PATH := $(REAL_ROOT_PATH)/code/
 
 LOCAL_MODULE    		:= flash
-LOCAL_CFLAGS 			:= -Wall -fPIC -DBUILD_ANDROID -DBUILD_DEBUG
+LOCAL_CFLAGS 			:= -Wall -fPIC -DBUILD_ANDROID -DBUILD_DEBUG -DCXX_GNU -DC4G_API_EXPORT
 
 LOCAL_CPP_FEATURES 		:= rtti exceptions
 
@@ -20,7 +20,6 @@ LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/external/rapidjson/include
 LOCAL_SRC_FILES 		:= $(CODE_PATH)/potato/src/support/flash/flash.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/flash/effect_rotate.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/flash/effect_blend.cpp
-LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/sharedlibrary.cpp
 
 LOCAL_LDLIBS    		:= -ldl -llog -lGLESv1_CM
 

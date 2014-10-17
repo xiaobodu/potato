@@ -21,14 +21,14 @@ namespace c4g {
 class Potato
 {
 public:
-  static Potato& Instance();
+  static Potato& Instance(const std::string& rsLibrPath = ".");
 
 protected:
-  Potato();
+  Potato(const std::string& rsLibrPath = ".");
   virtual ~Potato();
 
 public:
-  Potato& Initialize(const std::string& rsDataPath);
+  Potato& Initialize();
   core::IEngine*& GetEngine();
 
 private:
@@ -43,19 +43,21 @@ namespace c4g {
 
 static utility::CSharedLibraryManager gs_SharedLibraryManager;
 
-Potato& Potato::Instance()
+Potato& Potato::Instance(const std::string& rsLibrPath /*= "."*/)
 {
-  static Potato s_potato;
+  static Potato s_potato(rsLibrPath);
   return s_potato;
 }
 
-Potato::Potato()
+Potato::Potato(const std::string& rsLibrPath /*= "."*/)
   : m_pEngine(NULL)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
+  C4G_LOG_INFO("the library path - %s", rsLibrPath.c_str());
+
   std::vector<std::string> file_list;
-  if (utility::GetListFiles(".", file_list) && !file_list.empty())
+  if (utility::GetListFiles(rsLibrPath, file_list) && !file_list.empty())
   {
     std::vector<std::string>::iterator it = file_list.begin();
     std::vector<std::string>::iterator it_end = file_list.end();
@@ -93,17 +95,19 @@ Potato::~Potato()
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
-Potato& Potato::Initialize(const std::string& rsDataPath)
+Potato& Potato::Initialize()
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   m_pEngine = core::IModule::Find<core::IEngine>(m_mModule, MODULE_TYPE_ENGINE);
-  m_pEngine->Initialize(m_mModule);
+  if (NULL != m_pEngine) m_pEngine->Initialize(m_mModule);
   return *this;
 }
 
 core::IEngine*& Potato::GetEngine()
 {
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
+
   assert(NULL != m_pEngine);
   return m_pEngine;
 }
@@ -122,8 +126,8 @@ int main(int argc, char* argv[])
   {
     return 0;
   }
-  c4g::core::IEngine*& engine_ptr = c4g::Potato::Instance().Initialize(data_path).GetEngine();
-  engine_ptr->Run(data_path);
+  c4g::core::IEngine*& engine_ptr = c4g::Potato::Instance().Initialize().GetEngine();
+  if (NULL != engine_ptr) engine_ptr->Run(data_path);
   return 0;
 }
 #endif

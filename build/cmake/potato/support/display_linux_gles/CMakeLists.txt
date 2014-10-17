@@ -25,6 +25,8 @@ set(LIBRARY_OUTPUT_PATH ${OUT_PATH}/bin)
 
 include_directories(${INC_PATH_LIST})
 
+add_definitions(-DC4G_API_EXPORT)
+
 add_library(display SHARED ${SRC_FILE_LIST})
 
 set(LINK_FILE_LIST

@@ -9,7 +9,7 @@ REAL_ROOT_PATH := $(LOCAL_PATH)/../../../../../
 REAL_CODE_PATH := $(REAL_ROOT_PATH)/code/
 
 LOCAL_MODULE    		:= scene
-LOCAL_CFLAGS 			:= -Wall -fPIC -DBUILD_ANDROID -DBUILD_DEBUG
+LOCAL_CFLAGS 			:= -Wall -fPIC -DBUILD_ANDROID -DBUILD_DEBUG -DCXX_GNU -DC4G_API_EXPORT
 
 LOCAL_CPP_FEATURES 		:= rtti exceptions
 
@@ -28,7 +28,6 @@ LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/scene/process.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/engine/input.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/engine/sensor.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/mathematics.cpp
-LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/utility/sharedlibrary.cpp
 
 LOCAL_LDLIBS    		:= -ldl -llog
 

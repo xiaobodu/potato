@@ -17,14 +17,14 @@ namespace c4g {
 class Potato
 {
 public:
-  static Potato& Instance();
+  static Potato& Instance(const std::string& rsLibrPath = ".");
 
 protected:
-  Potato();
+  explicit Potato(const std::string& rsLibrPath = ".");
   virtual ~Potato();
 
 public:
-  Potato& Initialize(const std::string& rsDataPath);
+  Potato& Initialize();
   core::IEngine*& GetEngine();
 
 private:

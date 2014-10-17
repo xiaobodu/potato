@@ -12,7 +12,7 @@ public abstract class PNativeHelper implements IPNativeHelper {
 	public String GetLibraryPath() {
 		assert null != PActivity.instance : "the instance of PActivity is null";
 		try {
-			return PActivity.instance.getPackageManager().getApplicationInfo(PActivity.instance.getPackageName(), 0).dataDir;
+			return PActivity.instance.getPackageManager().getApplicationInfo(PActivity.instance.getPackageName(), 0).dataDir + "/lib";
 		} catch (NameNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

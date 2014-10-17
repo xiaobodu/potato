@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
-#if defined(CXX_GNU)
+#if defined(CXX_GNU) || defined(BUILD_ANDROID)
 #include <dirent.h>
 #include <sys/stat.h>
 #endif
@@ -52,7 +52,7 @@ bool GetListFiles(const std::string& rsPath, std::vector<std::string>& rsvFile)
   } while (FindNextFile(dir, &file_data));
 
   FindClose(dir);
-#elif defined(CXX_GNU)
+#elif defined(CXX_GNU) || defined(BUILD_ANDROID)
   DIR* dir_ptr;
   struct dirent *ent;
   class stat st;

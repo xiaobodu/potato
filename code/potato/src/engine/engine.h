@@ -27,7 +27,7 @@ public:
 
 public:
 #if defined(BUILD_ANDROID)
-  virtual void Run(android_app* pApp);
+  virtual void Run(const std::string& rsDataPath, android_app* pApp);
 #else
   virtual void Run(const std::string& rsDataPath);
 #endif

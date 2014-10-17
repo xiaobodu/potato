@@ -67,17 +67,17 @@ private:
 };*/
 
 #if defined(BUILD_ANDROID)
-void CEngine::Run(android_app* pApp)
+void CEngine::Run(const std::string& rsDataPath, android_app* pApp)
 #else
 void CEngine::Run(const std::string& rsDataPath)
 #endif
 {
   utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 
+  m_pScene->SetDataPath(rsDataPath);
+
 #if defined(BUILD_ANDROID)
   m_pDisplay->BindAndroidApp(pApp);
-#else
-  m_pScene->SetDataPath(rsDataPath);
 #endif
   m_pDisplay->Run(m_pScene);
 

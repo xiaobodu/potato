@@ -50,6 +50,8 @@ link_directories(${OUT_PATH}/lib/Release)
 
 include_directories(${INC_PATH_LIST})
 
+add_definitions(-DC4G_API_EXPORT)
+
 add_library(asset SHARED ${SRC_FILE_LIST})
 
 
