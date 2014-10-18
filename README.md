@@ -1,7 +1,7 @@
 potato
 ======
 
-a light weight 2D mobile engine. It belongs to [Code4Game][].
+a light weight 2d mobile game engine. It belongs to [Code4Game][].
 
 ----------------------------
 
