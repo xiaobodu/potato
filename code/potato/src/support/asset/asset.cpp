@@ -30,7 +30,7 @@ void CAsset::LoadFile(const std::string& rsFullFileName, std::string& rsFileCont
   rsFileContext = utility::ReadFile(rsFullFileName);
 }
 
-void CAsset::LoadImage(const std::string& rsFullFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer)
+void CAsset::LoadImagePNG(const std::string& rsFullFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer)
 {
   //TODO:
   CFilePNG::Instance().Load(rsFullFileName);

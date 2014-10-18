@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>potato</id>
+        <version>0.0.2</version>
+        <title>potato</title>
+        <authors>Alex Chi</authors>
+        <owners>Code 4 Game</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>a light weight 2d game engine</description>
+        <releaseNotes>Just try to use nuget</releaseNotes>
+        <copyright>2014</copyright>
+    </metadata>
+    <files>
+        <file src="data\config\display_windows_debug.json" target="data\config\display_windows_debug.json" />
+        <file src="data\config\engine_windows_debug.json" target="data\config\engine_windows_debug.json" />
+        <file src="data\flash\root.json" target="data\flash\root.json" />
+        <file src="data\res\earth.png" target="data\res\earth.png" />
+        <file src="data\scene\main.json" target="data\scene\main.json" />
+        <file src="data\scene\root.json" target="data\scene\root.json" />
+        <file src="data\potato_windows_debug.json" target="data\potato_windows_debug.json" />
+        <file src="lib\asset.dll" target="lib\asset.dll" />
+        <file src="tools\editor.exe" target="tools\editor.exe" />
+        <file src="tools\t001.exe" target="tools\t001.exe" />
+    </files>
+</package>

@@ -24,7 +24,7 @@ set(SRC_FILE_LIST
 elseif(OS_IS_WINDOWS)
 set(SRC_FILE_LIST
   ${SRC_FILE_LIST_base}
-  ${SRC_PATH_script}/script_tcc.def
+  ${SRC_PATH_script}/script.def
   )
 endif()
 

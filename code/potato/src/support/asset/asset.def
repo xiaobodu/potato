@@ -1,4 +1,4 @@
 LIBRARY   asset
 EXPORTS
-    CreateAsset         @1
-    DestroyAsset        @2
+    CreateModule         @1
+    DestroyModule        @2

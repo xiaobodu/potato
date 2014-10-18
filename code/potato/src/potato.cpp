@@ -57,13 +57,17 @@ Potato::Potato(const std::string& rsLibrPath /*= "."*/)
   C4G_LOG_INFO("the library path - %s", rsLibrPath.c_str());
 
   std::vector<std::string> file_list;
+#if defined(CXX_MSVC)
+  if (utility::GetListFiles(rsLibrPath, file_list, "*.dll") && !file_list.empty())
+#else
   if (utility::GetListFiles(rsLibrPath, file_list) && !file_list.empty())
+#endif
   {
     std::vector<std::string>::iterator it = file_list.begin();
     std::vector<std::string>::iterator it_end = file_list.end();
     for (; it != it_end; ++it)
     {
-      C4G_LOG_INFO("try to load the module file - %s", (*it).c_str());
+      //C4G_LOG_INFO("try to load the module file - %s", (*it).c_str());
       core::IModule::CreateModuleFuncPtr create_func_ptr = gs_SharedLibraryManager.GetFunc<core::IModule::CreateModuleFuncPtr>(*it, TOSTRING(CreateModule));
       core::IModule::DestroyModuleFuncPtr destroy_func_ptr = gs_SharedLibraryManager.GetFunc<core::IModule::DestroyModuleFuncPtr>(*it, TOSTRING(DestroyModule));
       if (NULL == create_func_ptr || NULL == destroy_func_ptr) continue;
@@ -73,7 +77,7 @@ Potato::Potato(const std::string& rsLibrPath /*= "."*/)
       module_ptr->m_pCreateFunc = create_func_ptr;
       module_ptr->m_pDestroyFunc = destroy_func_ptr;
       m_mModule.insert(std::make_pair(module_ptr->type, module_ptr));
-      C4G_LOG_INFO("success to load the module file -%s", (*it).c_str());
+      //C4G_LOG_INFO("success to load the module file -%s", (*it).c_str());
     }
   }
 }

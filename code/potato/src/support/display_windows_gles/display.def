@@ -1,4 +1,4 @@
-LIBRARY   scene
+LIBRARY   display_gles
 EXPORTS
     CreateModule         @1
     DestroyModule        @2

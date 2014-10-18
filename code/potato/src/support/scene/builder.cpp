@@ -250,7 +250,7 @@ bool CAssetsBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roCo
       int width = 0;
       int height = 0;
       unsigned char* buffer_ptr = NULL;
-      rpScene->GetAssetPtr()->LoadImage(rpScene->GetDataPath() + "/" + jfile.GetString(), width, height, buffer_ptr);
+      rpScene->GetAssetPtr()->LoadImagePNG(rpScene->GetDataPath() + "/" + jfile.GetString(), width, height, buffer_ptr);
       if (NULL == m_pRender) continue;
       int texid = m_pRender->GenerateTexId(width, height, buffer_ptr);
       rpScene->GetAssetPtr()->PushImageInfo(jid.GetString(), width, height, texid);

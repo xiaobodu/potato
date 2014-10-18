@@ -26,7 +26,7 @@ public:
 
 public:
   virtual void LoadFile(const std::string& rsFullFileName, std::string& rsFileContext);
-  virtual void LoadImage(const std::string& rsFullFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer);
+  virtual void LoadImagePNG(const std::string& rsFullFileName, int& riWidth, int& riHeight, unsigned char*& rpBuffer);
   virtual void PushImageInfo(const std::string& rsId, const int& riWidth, const int& riHeight, const unsigned int& riId);
   virtual bool FindImageInfo(const std::string& rsId, int& riWidth, int& riHeight, unsigned int& riId) const;
   virtual void VisitImageInfo(core::IAsset::IImageInfoVisitor* const& rpVisitor) const;

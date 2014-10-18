@@ -70,15 +70,12 @@ bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName,
   //TODO:
   CAssetsBuilder::instance.BindRender(rpRender);
 
-  C4G_LOG_INFO("%s 1", __PRETTY_FUNCTION__);
   std::string file_context = "";
   if (bIsAbsolutePath) file_context = utility::ReadFile(rsFileName);
   else file_context = utility::ReadFile(m_sDataPath + "/" + rsFileName);
-  C4G_LOG_INFO("%s 2 %s", __PRETTY_FUNCTION__, m_sDataPath.c_str());
   rapidjson::Document jdoc;
   jdoc.Parse(file_context.c_str());
 
-  C4G_LOG_INFO("%s 3", __PRETTY_FUNCTION__);
   CPanel::builder.Do(this, jdoc, m_pPanel);
   return true;
 }

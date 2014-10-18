@@ -33,9 +33,9 @@ struct android_app;
 
 #if defined(CXX_MSVC)
 # if defined(C4G_API_EXPORT)
-#  define C4G_API      __declspec(dllexport)
+#  define C4G_API     __declspec(dllexport)
 # elif defined(C4G_API_IMPORT)
-#  define C4G_API      __declspec(dllimport)
+#  define C4G_API     __declspec(dllimport)
 # else
 #   define C4G_API
 # endif
@@ -44,6 +44,11 @@ struct android_app;
 #endif
 
 #define MODULE_TYPE_ENGINE    "engine"
+
+#if defined(CXX_MSVC)
+// stl export
+//template class C4G_API std::basic_string<char, std::char_traits<char>, std::allocator<char> >;
+#endif
 
 namespace c4g {
 namespace core {

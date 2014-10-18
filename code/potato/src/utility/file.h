@@ -6,6 +6,8 @@
 #if defined(CXX_GNU) || defined(BUILD_ANDROID)
 #include <dirent.h>
 #include <sys/stat.h>
+#elif defined(CXX_MSVC)
+#include <Windows.h>
 #endif
 
 
@@ -21,13 +23,13 @@ std::string ReadFile(const std::string& rsPathFile)
   return file_buffer.str();
 }
 
-bool GetListFiles(const std::string& rsPath, std::vector<std::string>& rsvFile)
+bool GetListFiles(const std::string& rsPath, std::vector<std::string>& rsvFile, const std::string& rsFilter = "*")
 {
-#if defined(CXX_MSVC0)
+#if defined(CXX_MSVC)
   HANDLE dir;
   WIN32_FIND_DATA file_data;
 
-  if ((dir = FindFirstFile((directory + "/*").c_str(), &file_data)) == INVALID_HANDLE_VALUE)
+  if ((dir = FindFirstFile((rsPath + "/" + rsFilter).c_str(), &file_data)) == INVALID_HANDLE_VALUE)
   {
     return false; /* No files found */
   }
