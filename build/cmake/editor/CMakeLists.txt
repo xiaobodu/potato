@@ -187,7 +187,7 @@ QT_GENERATE_UIC(${CODE_PATH_editor} aboutdialog qt qaboutdialog)
 
 # build dependicies
 set(DEP_PROJ_LIST
-  render_gles
+  render
   scene
   editor_moc_cpp
   editor_mainwindow_ui_h

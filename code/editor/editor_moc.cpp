@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'editor.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.2.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.3.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'editor.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.2.1. It"
+#error "This file was generated using the moc from 5.3.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,12 +20,12 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_c4g__potato__Editor_t {
     QByteArrayData data[8];
-    char stringdata[123];
+    char stringdata[122];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    offsetof(qt_meta_stringdata_c4g__potato__Editor_t, stringdata) + ofs \
-        - idx * sizeof(QByteArrayData) \
+    qptrdiff(offsetof(qt_meta_stringdata_c4g__potato__Editor_t, stringdata) + ofs \
+        - idx * sizeof(QByteArrayData)) \
     )
 static const qt_meta_stringdata_c4g__potato__Editor_t qt_meta_stringdata_c4g__potato__Editor = {
     {
@@ -41,7 +41,7 @@ QT_MOC_LITERAL(7, 103, 18)
     "c4g::potato::Editor\0ToLoadScene\0\0"
     "sScenePath\0OnMenuBarPotatoNew\0"
     "OnMenuBarPotatoOpen\0OnMenuBarPotatoSave\0"
-    "OnMenuBarHelpAbout\0"
+    "OnMenuBarHelpAbout"
 };
 #undef QT_MOC_LITERAL
 
@@ -59,13 +59,13 @@ static const uint qt_meta_data_c4g__potato__Editor[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   39,    2, 0x06,
+       1,    1,   39,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,   42,    2, 0x0a,
-       5,    0,   43,    2, 0x0a,
-       6,    0,   44,    2, 0x0a,
-       7,    0,   45,    2, 0x0a,
+       4,    0,   42,    2, 0x0a /* Public */,
+       5,    0,   43,    2, 0x0a /* Public */,
+       6,    0,   44,    2, 0x0a /* Public */,
+       7,    0,   45,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    3,

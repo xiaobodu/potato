@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'qpropertywidget.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.2.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.3.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'qpropertywidget.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.2.1. It"
+#error "This file was generated using the moc from 5.3.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,12 +20,12 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_c4g__qt__QPropertyWidget_t {
     QByteArrayData data[7];
-    char stringdata[81];
+    char stringdata[80];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    offsetof(qt_meta_stringdata_c4g__qt__QPropertyWidget_t, stringdata) + ofs \
-        - idx * sizeof(QByteArrayData) \
+    qptrdiff(offsetof(qt_meta_stringdata_c4g__qt__QPropertyWidget_t, stringdata) + ofs \
+        - idx * sizeof(QByteArrayData)) \
     )
 static const qt_meta_stringdata_c4g__qt__QPropertyWidget_t qt_meta_stringdata_c4g__qt__QPropertyWidget = {
     {
@@ -39,7 +39,7 @@ QT_MOC_LITERAL(6, 69, 10)
     },
     "c4g::qt::QPropertyWidget\0UpdateWidget\0"
     "\0QTreeWidgetItem*\0pItem\0iColum\0"
-    "LostWidget\0"
+    "LostWidget"
 };
 #undef QT_MOC_LITERAL
 
@@ -57,8 +57,8 @@ static const uint qt_meta_data_c4g__qt__QPropertyWidget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    2,   24,    2, 0x0a,
-       6,    0,   29,    2, 0x0a,
+       1,    2,   24,    2, 0x0a /* Public */,
+       6,    0,   29,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 3, QMetaType::Int,    4,    5,
