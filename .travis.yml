@@ -1,7 +1,3 @@
-branches:
-  only:
-    - master
-
 language: cpp
 
 compiler:
@@ -10,6 +6,8 @@ compiler:
 before_install:
   - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
   - sudo apt-get update
+
+install:
   - sudo apt-get install cppcheck valgrind libgles1-mesa-dev qt5-default
   - sudo pip install cpp-coveralls
 
@@ -42,6 +40,24 @@ after_success:
   - ./out/bin/t001
   - coveralls --exclude build/ --exclude data/ --exclude doc/ --exclude code/external/ --exclude out/make/external/ --exclude out/make/CMakeFiles/ --gcov-options '\-lp'
 #  - valgrind --leak-check=yes out/bin/test
+
+before_deploy:
+  - cd out
+  - mkdir -p potato
+  - mkdir -p potato/bin
+  - cp -r ./bin/* potato/bin
+  - cp -r ../data potato/
+  - tar -czf potato.$TRAVIS_TAG.tar.gz ./potato/
+  - cd ../
+
+deploy:
+  provider: releases
+  api-key: $GITHUB_TOKEN
+  file: "out/potato.$TRAVIS_TAG.tar.gz"
+  skip_cleanup: true
+  on:
+    tags: true
+    all_branches: true
 
 notifications:
   email:
