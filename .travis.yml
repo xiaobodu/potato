@@ -24,7 +24,7 @@ after_success:
   - build/travis/to_after_success.sh
 
 before_deploy:
-  - build/travis/before_deploy.sh
+  - build/travis/to_before_deploy.sh
 
 deploy:
   provider: releases
