@@ -9,6 +9,8 @@ env:
     - PLATFORM=linux RUN_COVERALLS=true
 
 before_install:
+  - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+  - sudo apt-get update
   - build/travis/to_before_install.sh
 
 install:
