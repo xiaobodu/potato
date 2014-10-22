@@ -3,59 +3,36 @@ language: cpp
 compiler:
   - gcc
 
+env:
+  matrix:
+    - PLATFORM=linux DEPLOY_RELEASE=true
+    - PLATFORM=linux RUN_COVERALLS=true
+
 before_install:
-  - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
-  - sudo apt-get update
+  - build/travis/to_before_install.sh
 
 install:
-  - sudo apt-get install cppcheck valgrind libgles1-mesa-dev qt5-default
-  - sudo pip install cpp-coveralls
+  - build/travis/to_install.sh
 
 before_script:
-  - cppcheck code/editor code/potato code/test -I code/editor/ -I code/potato/ -I code/potato/inc -I code/potato/src -I code/potato/src/engine -I code/test/ --quiet --error-exitcode=1
-  - git submodule init
-  - git submodule update
-  - cd code/external/
-  - cd tinycc/
-  - ./configure
-  - cd ../
-  - cd libpng/
-  - cmake ./
-  - cd ../
-  - cd ../../
-  - mkdir -p out
-  - mkdir -p out/bin
-  - mkdir -p out/lib
-  - mkdir -p out/make
-  - cd out/make
-  - cmake -D C4G_BUILD_EDITOR=TRUE -D CMAKE_BUILD_TYPE=Release -D QT_SDK_PATH=/usr -D USE_COVERALLS=TRUE ../../build/cmake/
-  - cd ../../
+  - build/travis/to_before_script.sh
 
 script:
-  - cd out/make/
-  - make
-  - cd ../../
+  - build/travis/to_script.sh
 
 after_success:
-  - ./out/bin/t001
-  - coveralls --exclude build/ --exclude data/ --exclude doc/ --exclude code/external/ --exclude out/make/external/ --exclude out/make/CMakeFiles/ --gcov-options '\-lp'
-#  - valgrind --leak-check=yes out/bin/test
+  - build/travis/to_after_success.sh
 
 before_deploy:
-  - cd out
-  - mkdir -p potato
-  - mkdir -p potato/bin
-  - cp -r ./bin/* potato/bin
-  - cp -r ../data potato/
-  - tar -czf potato.$TRAVIS_TAG.tar.gz ./potato/
-  - cd ../
+  - build/travis/before_deploy.sh
 
 deploy:
   provider: releases
   api-key: $GITHUB_TOKEN
-  file: "out/potato.$TRAVIS_TAG.tar.gz"
+  file: "out/potato.$TRAVIS_TAG.$TRAVIS_OS_NAME.tar.gz"
   skip_cleanup: true
   on:
+    condition: $DEPLOY_RELEASE = true
     tags: true
     all_branches: true
 
