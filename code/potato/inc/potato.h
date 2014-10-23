@@ -2,8 +2,11 @@
 #pragma once
 
 #include <string>
+#include <map>
 
-extern bool GetConfig(std::string& rsDataPath);
+typedef std::map<std::string, std::string> TMapStr2Str;
+
+extern bool GetConfig(TMapStr2Str& rmConfig);
 
 #if defined(BUILD_ANDROID)
 #include "common.h"

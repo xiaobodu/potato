@@ -1,7 +1,9 @@
 echo ">>> after success"
 
 if [ "$RUN_COVERALLS"x = "true"x ]; then
-  ./out/bin/t001
+  cd build/
+  run_test.sh
+  cd ../
   coveralls --exclude build/ --exclude data/ --exclude doc/ --exclude code/external/ --exclude out/make/external/ --exclude out/make/CMakeFiles/ --gcov-options '\-lp'
 else
   echo "< don't run anything for coveralls >"

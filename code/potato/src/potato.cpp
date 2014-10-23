@@ -39,6 +39,8 @@ private:
 }
 #endif
 
+#include <map>
+
 namespace c4g {
 
 static utility::CSharedLibraryManager gs_SharedLibraryManager;
@@ -116,21 +118,55 @@ core::IEngine*& Potato::GetEngine()
   return m_pEngine;
 }
 
+void ParseArgs(TMapStr2Str& rmArgs, const int& riSize, const char* const paArgv[], int iPos)
+{
+  if (iPos >= riSize) return;
+  if ('-' != paArgv[iPos][0] || '-' != paArgv[iPos][1]) return;
+
+  std::string key;
+  key.append(paArgv[iPos] + 2);
+  ++iPos;
+
+  std::string value;
+  while (iPos < riSize)
+  {
+    if ('-' == paArgv[iPos][0] && '-' == paArgv[iPos][1]) break;
+    if (!value.empty()) value.append(" ");
+    value.append(paArgv[iPos]);
+    ++iPos;
+  }
+  rmArgs.insert(std::make_pair(key, value));
+
+  ParseArgs(rmArgs, riSize, paArgv, iPos);
+}
+
 }
 
 #if !defined(BUILD_ANDROID)
 int main(int argc, char* argv[])
 {
 #if defined(CXX_MSVC)
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+  _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-  std::string data_path;
-  if (!GetConfig(data_path))
+  TMapStr2Str args;
+  if (!GetConfig(args))
   {
     return 0;
   }
-  c4g::core::IEngine*& engine_ptr = c4g::Potato::Instance().Initialize().GetEngine();
+
+  c4g::ParseArgs(args, argc - 1, argv + 1, 0);
+
+  TMapStr2Str::const_iterator cit_module = args.find("module");
+  TMapStr2Str::const_iterator cit_data = args.find("data");
+  if (cit_module == args.end() || cit_data == args.end())
+  {
+    printf("Usage: ** --module [PATH] --data [PATH]\n");
+    return 0;
+  }
+  std::string module_path = cit_module->second;
+  std::string data_path = cit_data->second;
+  c4g::core::IEngine*& engine_ptr = c4g::Potato::Instance(module_path).Initialize().GetEngine();
   if (NULL != engine_ptr) engine_ptr->Run(data_path);
   return 0;
 }

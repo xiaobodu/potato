@@ -2,8 +2,8 @@
 
 #include <string>
 
-bool GetConfig(std::string& rsDataPath)
+bool GetConfig(TMapStr2Str& rmConfig)
 {
-  rsDataPath = DATA_PATH;
+  //rmConfig.insert(std::make_pair("data", DATA_PATH));
   return true;
 }
