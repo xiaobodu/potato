@@ -1,11 +1,17 @@
+echo ">>> script"
+
 if [ -z $TRAVIS_TAG ]; then
-if [ "$RUN_COVERALLS"x = "true"x ]; then
-  cd out/make/
-  make
-  cd ../../
+if [ "$DEPLOY_RELEASE"x != "true"x ]; then
+  exit
 fi
-elif [ "$DEPLOY_RELEASE"x = "true"x ]; then
-  cd out/make/
-  make
-  cd ../../
+else
+if [ "$RUN_COVERALLS"x != "true"x ]; then
+  exit
 fi
+fi
+
+cd out/make/
+make
+cd ../../
+
+echo "<<< script"
