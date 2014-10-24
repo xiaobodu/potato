@@ -1,6 +1,15 @@
 echo ">>> before deploy"
 
-if [ -n "$TRAVIS_TAG"x ]; then
+if [ -z "$TRAVIS_TAG"x ]; then
+if [ "$DEPLOY_RELEASE"x != "true"x ]; then
+  exit
+fi
+else
+if [ "$RUN_COVERALLS"x != "true"x ]; then
+  exit
+fi
+fi
+
 if [ "$DEPLOY_RELEASE"x = "true"x ]; then
   cd out
   mkdir -p potato
@@ -9,7 +18,6 @@ if [ "$DEPLOY_RELEASE"x = "true"x ]; then
   cp -r ../data potato/
   tar -czf potato.$TRAVIS_TAG.$TRAVIS_OS_NAME.tar.gz ./potato/
   cd ../
-fi
 else
   echo "< don't deploy anything >"
 fi
