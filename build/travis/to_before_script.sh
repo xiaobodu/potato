@@ -1,8 +1,16 @@
-if [ -n "$TRAVIS_TAG"x ]; then
-if [ "$RUN_COVERALLS"x != "true"x ]; then
-  exit
+echo ">>> before script"
+
+if [ -z "$TRAVIS_TAG"x ]; then
+if [ "$DEPLOY_RELEASE"x = "true"x ]; then
+  VALID=ok
 fi
-elif [ "$DEPLOY_RELEASE"x != "true"x ]; then
+else
+if [ "$RUN_COVERALLS"x = "true"x ]; then
+  VALID=ok
+fi
+fi
+
+if [ "$VALID"x != "ok"x ]; then
   exit
 fi
 
@@ -28,3 +36,5 @@ else
 cmake -D C4G_BUILD_EDITOR=TRUE -D CMAKE_BUILD_TYPE=Release -D QT_SDK_PATH=/usr ../../build/cmake/
 fi
 cd ../../
+
+echo "<<< before script"
