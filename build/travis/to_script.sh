@@ -1,6 +1,6 @@
 echo ">>> script"
 
-if [ -z "$TRAVIS_TAG"x ]; then
+if [ "$TRAVIS_TAG" ]; then
 if [ "$DEPLOY_RELEASE"x = "true"x ]; then
   VALID=ok
 fi
