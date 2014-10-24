@@ -8,6 +8,8 @@
 #include "qgleswidget.h"
 #include "../editor_common.h"
 
+#include <string>
+#include <map>
 #include <cassert>
 #if defined(CXX_GNU)
 #include <X11/Xlib.h>
@@ -21,11 +23,12 @@
 #include <QtGui/QWindow>
 #endif
 
+#include <QtWidgets/QApplication>
+
 namespace c4g {
 namespace qt {
 
 QGLESFormat QGLESFormat::instance;
-
 
 QGLESFormat::QGLESFormat()
     : QGLFormat()
@@ -222,6 +225,11 @@ QGLESWidget::~QGLESWidget()
   m_pRender->End();
   delete m_pRender;
   m_pRender = NULL;
+}
+
+void QGLESWidget::Initialize(core::MString2Module& rmModule)
+{
+  m_pScene->Initialize(rmModule);
 }
 
 void QGLESWidget::ToLoadScene(QString sScenePath)

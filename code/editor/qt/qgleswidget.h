@@ -71,6 +71,9 @@ public:
   QGLESWidget(QWidget* pParent = NULL);
   virtual ~QGLESWidget();
 
+public:
+  void Initialize(core::MString2Module& rmModule);
+
 public Q_SLOTS:
   void ToLoadScene(QString sScenePath);
 

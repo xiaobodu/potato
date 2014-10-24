@@ -1,7 +1,7 @@
 potato
 ======
 
-a light weight 2d mobile game engine. It belongs to [Code4Game][].
+a light weight mobile game engine. It belongs to [Code4Game][].
 
 ----------------------------
 
@@ -70,14 +70,8 @@ Run
   * In the editor, open the `data/` directory to load the scene.
 
 
-Log
+Log & Next
 ---
-
-Please see [LOG.md][].
-
-
-Next
-----
 
 Please see [Trello][].
 

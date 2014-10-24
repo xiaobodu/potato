@@ -14,8 +14,8 @@ endif()
 
 if(OS_IS_WINDOWS)
 elseif(OS_IS_LINUX)
-  set(CMAKE_C_FLAGS "-fPIC")
-  set(CMAKE_CXX_FLAGS "-fPIC")
+#  set(CMAKE_C_FLAGS "-fPIC")
+#  set(CMAKE_CXX_FLAGS "-fPIC")
 endif()
 
 add_definitions(-DLIBR_PATH="${ROOT_PATH}/out")
@@ -87,6 +87,8 @@ set(SRC_FILE_LIST
   ${CODE_PATH_editor}/qt/qaboutdialog_moc.cpp
   ${CODE_PATH}/potato/src/engine/input.h
   ${CODE_PATH}/potato/src/engine/input.cpp
+  ${CODE_PATH}/potato/src/utility/sharedlibrary.h
+  ${CODE_PATH}/potato/src/utility/sharedlibrary.cpp
   )
 
 include_directories(${INC_PATH_LIST})
