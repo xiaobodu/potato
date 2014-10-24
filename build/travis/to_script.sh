@@ -1,6 +1,6 @@
 echo ">>> script"
 
-if [ -z $TRAVIS_TAG ]; then
+if [ -z "$TRAVIS_TAG"x ]; then
 if [ "$DEPLOY_RELEASE"x != "true"x ]; then
   exit
 fi

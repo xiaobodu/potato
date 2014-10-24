@@ -1,4 +1,4 @@
-if [ -n $TRAVIS_TAG ]; then
+if [ -n "$TRAVIS_TAG"x ]; then
 if [ "$RUN_COVERALLS"x != "true"x ]; then
   exit
 fi

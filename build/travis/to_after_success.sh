@@ -1,6 +1,6 @@
 echo ">>> after success"
 
-if [ -z $TRAVIS_TAG ]; then
+if [ -z "$TRAVIS_TAG"x ]; then
 if [ "$RUN_COVERALLS"x = "true"x ]; then
   build/run_test.sh
   coveralls --exclude build/ --exclude data/ --exclude doc/ --exclude code/external/ --exclude out/make/external/ --exclude out/make/CMakeFiles/ --gcov-options '\-lp'

@@ -1,6 +1,6 @@
 echo ">>> before deploy"
 
-if [ -n $TRAVIS_TAG ]; then
+if [ -n "$TRAVIS_TAG"x ]; then
 if [ "$DEPLOY_RELEASE"x = "true"x ]; then
   cd out
   mkdir -p potato
