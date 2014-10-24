@@ -26,7 +26,16 @@ Editor::Editor(QWidget* pParent /*= NULL*/)
 
 Editor::~Editor()
 {
-  ;
+  if (!m_mModule.empty())
+  {
+    core::MString2Module::iterator it = m_mModule.begin();
+    core::MString2Module::iterator it_end = m_mModule.end();
+    for (; it != it_end; ++it)
+    {
+      core::IModule::Destroy(it->second);
+    }
+    m_mModule.clear();
+  }
 }
 
 bool Editor::Initialize(const int& riSize, const char* const paArgv[])

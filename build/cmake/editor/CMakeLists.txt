@@ -121,8 +121,8 @@ add_executable(editor ${SRC_FILE_LIST})
 
 if(OS_IS_WINDOWS)
 set(LINK_FILE_LIST
-  render.lib
-  scene.lib
+#  render.lib
+#  scene.lib
   qtmain.lib
   Qt5Core.lib
   Qt5Gui.lib
@@ -132,9 +132,10 @@ set(LINK_FILE_LIST
   )
 elseif(OS_IS_LINUX)
 set(LINK_FILE_LIST
+  dl
   png
-  render
-  scene
+#  render
+#  scene
   Qt5Core
   Qt5Gui
   Qt5Widgets

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "input.h"
-#include "scene_impl.h"
 
 #include <QtOpenGL/QGLWidget>
 #include <QtCore/QBasicTimer>
@@ -15,7 +14,9 @@
 namespace c4g {
 namespace core {
 class IRender;
-class IScene;
+}
+namespace scene {
+class ISceneImpl;
 }
 
 namespace qt {
@@ -91,8 +92,8 @@ protected:
   void paintGL();
 
 private:
-  core::IRender* m_pRender;
-  scene::ISceneImpl* m_pScene;
+  c4g::core::IRender* m_pRender;
+  c4g::scene::ISceneImpl* m_pScene;
   QBasicTimer timer;
   float m_fWidth;
   float m_fHeight;

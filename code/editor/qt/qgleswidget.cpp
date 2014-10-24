@@ -210,25 +210,28 @@ QGLESWidget::QGLESWidget(QWidget* pParent /*= NULL*/)
   , second_sleep(0.0)
   , second_per_frame_min(0.0)
 {
-  m_pRender = new render::gles::CRender();
-  m_pScene = new scene::CScene();
+  //m_pRender = new render::gles::CRender();
+  //m_pScene = new scene::CScene();
 }
 
 QGLESWidget::~QGLESWidget()
 {
   doneCurrent();
 
-  m_pScene->Unload(m_pRender);
+  /*m_pScene->Unload(m_pRender);
   delete m_pScene;
   m_pScene = NULL;
 
   m_pRender->End();
   delete m_pRender;
-  m_pRender = NULL;
+  m_pRender = NULL;*/
 }
 
 void QGLESWidget::Initialize(core::MString2Module& rmModule)
 {
+  m_pRender = c4g::core::IModule::Find<c4g::core::IRender>(rmModule, MODULE_TYPE_RENDER);
+  m_pRender->Initialize(rmModule);
+  m_pScene = c4g::core::IModule::Find<c4g::scene::ISceneImpl>(rmModule, MODULE_TYPE_SCENE);
   m_pScene->Initialize(rmModule);
 }
 
