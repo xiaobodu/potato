@@ -40,7 +40,11 @@ void CBlend::Minus(const base::SColor& rsColor, const base::Color::Flags& rcFlag
 
 void CBlend::Multiply(const base::SColor& rstColor, const base::Color::Flags& rcFlags)
 {
-  glColor4ub(rstColor.r, rstColor.g, rstColor.b, rstColor.a);
+  // didn't implement `glColor4ub` in Android Emulator, will report the error if call it
+  //glColor4ub(rstColor.r, rstColor.g, rstColor.b, rstColor.a);
+
+  //TODO: change the r/g/b/a of `SColor` to float?
+  glColor4f(rstColor.r / (0xFF * 1.0f), rstColor.g / (0xFF * 1.0f), rstColor.b / (0xFF * 1.0f), rstColor.a / (0xFF * 1.0f));
 }
 
 }
