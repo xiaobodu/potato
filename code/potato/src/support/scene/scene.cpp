@@ -72,7 +72,7 @@ bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName,
 
   std::string file_context = "";
   if (bIsAbsolutePath) file_context = utility::ReadFile(rsFileName);
-  else file_context = utility::ReadFile(m_sDataPath + "/" + rsFileName);
+  else file_context = utility::ReadFile(std::string(*m_sDataPath) + "/" + rsFileName);
   rapidjson::Document jdoc;
   jdoc.Parse(file_context.c_str());
 
@@ -206,9 +206,9 @@ void CScene::BindScript(script::AHandler* const& rpHandler)
   m_pScript->New(rpHandler);
 }
 
-const std::string& CScene::GetDataPath() const
+const char* const CScene::GetDataPath() const
 {
-  return m_sDataPath;
+  return *m_sDataPath;
 }
 
 IPanel* const& CScene::GetPanel()

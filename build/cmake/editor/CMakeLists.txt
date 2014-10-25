@@ -27,7 +27,7 @@ elseif(CXX_MSVC)
 endif()
 add_definitions(-DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB)
 
-add_definitions(-DC4G_API_IMPORT)
+#add_definitions(-DC4G_API_IMPORT)
 
 set(INC_PATH_LIST_base
   ${QT_SDK_INC_PATH}

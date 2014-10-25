@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <map>
+#include <cassert>
 
 #define ENGINE_NAME     "potato"
 #define ENGINE_VERSION_MAX  0
@@ -54,15 +55,75 @@ namespace c4g {
 namespace core {
 
 class C4G_API IModule;
-typedef std::map<std::string, IModule*> MString2Module;
 
 FUNC_API_TYPEDEF(CreateModule, IModule);
 FUNC_API_TYPEDEF(DestroyModule, IModule);
 
+template<unsigned int size>
+class C4G_API Name
+{
+public:
+  explicit Name()
+  {
+    memset(m_acBuffer, 0, sizeof(char) * size);
+  }
+  explicit Name(const std::string& rsValue)
+  {
+    assert(rsValue.length() < (sizeof(char) * size - 1));
+    memset(m_acBuffer, 0, sizeof(char) * size);
+    memcpy(m_acBuffer, rsValue.data(), sizeof(char) * rsValue.length());
+  }
+  explicit Name(const Name<size>& rOther)
+  {
+    memcpy(m_acBuffer, rOther.m_acBuffer, sizeof(char) * size);
+  }
+
+public:
+  Name<size>& operator=(const Name<size>& rOther)
+  {
+    memcpy(m_acBuffer, rOther.m_acBuffer, sizeof(char) * size);
+    return (*this);
+  }
+  Name<size>& operator=(const std::string& rsValue)
+  {
+    assert(rsValue.length() < (sizeof(char) * size - 1));
+    memset(m_acBuffer, 0, sizeof(char) * size);
+    memcpy(m_acBuffer, rsValue.data(), sizeof(char) * rsValue.length());
+    return (*this);
+  }
+  bool operator==(const Name<size>& rOther) const
+  {
+    for (int i = 0; i < size; ++i)
+    {
+      if (rOther.m_acBuffer[i] != m_acBuffer[i]) return false;
+    }
+    return true;
+  }
+  bool operator<(const Name<size>& rOther) const
+  {
+    for (int i = 0; i < size; ++i)
+    {
+      if (rOther.m_acBuffer[i] < m_acBuffer[i]) return true;
+    }
+    return false;
+  }
+  const char* const operator*() const
+  {
+    return m_acBuffer;
+  }
+
+private:
+  char m_acBuffer[size];
+
+public:
+  static Name<size> None;
+};
+typedef std::map<std::string, IModule*> MString2Module;
+
 class C4G_API IModule
 {
 public:
-  const std::string type;
+  const Name<32> type;
   typedef FUNC_API_TYPE(core::CreateModule) CreateModuleFuncPtr;
   CreateModuleFuncPtr m_pCreateFunc;
   typedef FUNC_API_TYPE(core::DestroyModule) DestroyModuleFuncPtr;

@@ -40,13 +40,14 @@ public:
   virtual core::IAsset* const& GetAssetPtr();
   virtual core::IFlash* const& GetFlashPtr();
   virtual void BindScript(script::AHandler* const& rpHandler);
-  virtual const std::string& GetDataPath() const;
+  virtual const char* const GetDataPath() const;
   virtual IPanel* const& GetPanel();
 
 public:
 
 private:
-  std::string           m_sDataPath;
+  core::Name<64>        m_sDataPath;
+  //std::string           m_sDataPath;
   core::IAsset*         m_pAsset;
   core::IFlash*         m_pFlash;
   core::IScript*        m_pScript;

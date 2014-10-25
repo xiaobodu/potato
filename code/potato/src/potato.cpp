@@ -78,7 +78,7 @@ Potato::Potato(const std::string& rsLibrPath /*= "."*/)
       if (NULL == module_ptr) continue;
       module_ptr->m_pCreateFunc = create_func_ptr;
       module_ptr->m_pDestroyFunc = destroy_func_ptr;
-      m_mModule.insert(std::make_pair(module_ptr->type, module_ptr));
+      m_mModule.insert(std::make_pair(*module_ptr->type, module_ptr));
       //C4G_LOG_INFO("success to load the module file -%s", (*it).c_str());
     }
   }

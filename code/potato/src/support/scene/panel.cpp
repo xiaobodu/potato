@@ -114,7 +114,7 @@ bool CPanel::CBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& ro
   {
     const rapidjson::Value& jflash = jvalue["flash"];
     assert(jflash.IsString());
-    rpScene->GetFlashPtr()->Load(rpScene->GetDataPath() + "/" + jflash.GetString());
+    rpScene->GetFlashPtr()->Load(std::string(rpScene->GetDataPath()) + "/" + jflash.GetString());
   }
 
   if (!CWidgetBuilder::instance.Do(rpScene, jvalue, rpPanel))

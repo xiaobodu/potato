@@ -25,6 +25,7 @@ endif()
 
 set(SRC_FILE_LIST_base
   ${SRC_PATH_support}/../engine/asset.h
+  ${SRC_PATH_asset}/asset_impl.h
   ${SRC_PATH_asset}/asset.cpp
   ${SRC_PATH_asset}/file_png.cpp
   )
