@@ -57,7 +57,7 @@ Run
 #### t001
 
 - For Linux
-  * Just run the `out/bin/t001`.
+  * Just run the `./build/run_test.sh`.
 
 
 - For Android
@@ -68,8 +68,8 @@ Run
 #### editor
 
 - For Linux
-  * Just run the `out/bin/editor`.
-  * In the editor, open the `data/` directory to load the scene.
+  * Just run the `./build/run_editor.sh`.
+  * In the editor, open the `data/` directory by top-menu item - `Potato/Open` or Ctrl+O, then will load a test scene.
 
 
 Log & Next
