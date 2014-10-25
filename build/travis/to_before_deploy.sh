@@ -14,6 +14,9 @@ if [ "$VALID"x != "ok"x ]; then
   exit
 fi
 
+# run command with exit error-code
+set -e
+
 if [ "$DEPLOY_RELEASE"x = "true"x ]; then
   cd out
   mkdir -p potato

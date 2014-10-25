@@ -14,6 +14,9 @@ if [ "$VALID"x != "ok"x ]; then
   exit
 fi
 
+# run command with exit error-code
+set -e
+
 if [ "$RUN_COVERALLS"x = "true"x ]; then
   build/run_test.sh
   coveralls --exclude build/ --exclude data/ --exclude doc/ --exclude code/external/ --exclude out/make/external/ --exclude out/make/CMakeFiles/ --gcov-options '\-lp'

@@ -14,6 +14,9 @@ if [ "$VALID"x != "ok"x ]; then
   exit
 fi
 
+# run command with exit error-code
+set -e
+
 cd out/make/
 make
 cd ../../

@@ -14,6 +14,9 @@ if [ "$VALID"x != "ok"x ]; then
   exit
 fi
 
+# run command with exit error-code
+set -e
+
 sudo apt-get install cppcheck valgrind libgles1-mesa-dev qt5-default
 sudo pip install cpp-coveralls
 
