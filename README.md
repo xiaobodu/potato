@@ -1,5 +1,6 @@
 potato
 ======
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/code4game/potato?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 a light weight mobile game engine. It belongs to [Code4Game][].
 
