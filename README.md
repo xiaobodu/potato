@@ -24,7 +24,7 @@ version: in develop
   * [**Linux**](#linux)
   * [**Android**](#android)
 * [**Run**](#run)
-  * [**t001**](#t001)
+  * [**test**](#test)
   * [**editor**](#editor)
 * [**Log**](#log)
 
@@ -54,15 +54,15 @@ Need [Git][], [CMake][], and [Qt][].
 Run
 ---
 
-#### t001
+#### test
 
 - For Linux
   * Just run the `./build/run_test.sh`.
 
 
 - For Android
-  * Copy all files/directories from `data/` to the `t001/` of sd card in the device.
-  * Install the unsigned package - `android/t001.apk` into the device.
+  * Copy all files/directories from `data/` to the `test/` of sd card in the device.
+  * Import the android/libpotato and android/test to eclipse.
 
 
 #### editor

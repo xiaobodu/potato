@@ -7,7 +7,7 @@
 #include "utility/log.h"
 
 #define NATIVE_CLASS_NAME "android/app/NativeActivity"
-#define HELPER_CLASS_NAME "io/c4g/potato/test/t001/NativeHelper"
+#define HELPER_CLASS_NAME "io/c4g/potato/test/NativeHelper"
 
 void android_main(struct android_app* state)
 {
