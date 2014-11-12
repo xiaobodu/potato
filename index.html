@@ -39,18 +39,24 @@
         </div>
 
         <h1>
-<a name="potato" class="anchor" href="#potato"><span class="octicon octicon-link"></span></a>potato</h1>
+<a id="potato" class="anchor" href="#potato" aria-hidden="true"><span class="octicon octicon-link"></span></a>potato</h1>
 
-<p>a light weight 2D mobile engine. It belongs to <a href="http://c4g.io/" title="Code 4 Game">Code4Game</a>.</p>
+<p>a light weight mobile game engine. It belongs to <a href="http://c4g.io/" title="Code 4 Game">Code4Game</a>.</p>
 
-<hr><p>version: in develop</p>
+<p><a href="https://gitter.im/code4game/potato?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a></p>
+
+<hr>
+
+<p>version: in develop</p>
 
 <p><a href="https://travis-ci.org/code4game/potato"><img src="https://travis-ci.org/code4game/potato.svg" alt="Build Status"></a>
 <a href="https://ci.appveyor.com/project/alexchicn/potato"><img src="https://ci.appveyor.com/api/projects/status/l563xi5j23vep2wg" alt="Build status"></a>
 <a href="https://coveralls.io/r/code4game/potato?branch=master"><img src="https://coveralls.io/repos/code4game/potato/badge.png?branch=master" alt="Coverage Status"></a></p>
 
-<hr><h2>
-<a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h2>
+<hr>
+
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
 
 <ul>
 <li>
@@ -66,16 +72,18 @@
 <a href="#run"><strong>Run</strong></a>
 
 <ul>
-<li><a href="#t001"><strong>t001</strong></a></li>
+<li><a href="#test"><strong>test</strong></a></li>
 <li><a href="#editor"><strong>editor</strong></a></li>
 </ul>
 </li>
 <li><a href="#log"><strong>Log</strong></a></li>
-</ul><h2>
-<a name="build" class="anchor" href="#build"><span class="octicon octicon-link"></span></a>Build</h2>
+</ul>
+
+<h2>
+<a id="build" class="anchor" href="#build" aria-hidden="true"><span class="octicon octicon-link"></span></a>Build</h2>
 
 <h3>
-<a name="ready" class="anchor" href="#ready"><span class="octicon octicon-link"></span></a>Ready</h3>
+<a id="ready" class="anchor" href="#ready" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ready</h3>
 
 <p>Need <a href="http://git-scm.com/" title="Git">Git</a>, <a href="http://cmake.org/" title="CMake">CMake</a>, and <a href="http://qt-project.org/" title="Qt">Qt</a>.</p>
 
@@ -83,56 +91,61 @@
 <li>Into <code>build</code> directory.</li>
 <li>Run <code>ready.sh</code>. (Initialize and update submodule)</li>
 <li>Run <code>config.sh</code> (Create Makefile by CMake)</li>
-</ul><h3>
-<a name="linux" class="anchor" href="#linux"><span class="octicon octicon-link"></span></a>Linux</h3>
+</ul>
+
+<h3>
+<a id="linux" class="anchor" href="#linux" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linux</h3>
 
 <ul>
 <li>Run <code>make.sh</code> (Build all projects include static/shared library, third library, test)</li>
-</ul><h3>
-<a name="android" class="anchor" href="#android"><span class="octicon octicon-link"></span></a>Android</h3>
+</ul>
+
+<h3>
+<a id="android" class="anchor" href="#android" aria-hidden="true"><span class="octicon octicon-link"></span></a>Android</h3>
 
 <ul>
 <li>Run <code>make-android.sh</code> (Build all projects include static/shared library, third library, test)</li>
-</ul><h2>
-<a name="run" class="anchor" href="#run"><span class="octicon octicon-link"></span></a>Run</h2>
+</ul>
+
+<h2>
+<a id="run" class="anchor" href="#run" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run</h2>
 
 <h4>
-<a name="t001" class="anchor" href="#t001"><span class="octicon octicon-link"></span></a>t001</h4>
+<a id="test" class="anchor" href="#test" aria-hidden="true"><span class="octicon octicon-link"></span></a>test</h4>
 
 <ul>
 <li>
 <p>For Linux</p>
 
 <ul>
-<li>Just run the <code>out/bin/t001</code>.</li>
+<li>Just run the <code>./build/run_test.sh</code>.</li>
 </ul>
 </li>
 <li>
 <p>For Android</p>
 
 <ul>
-<li>Copy all files/directories from <code>data/</code> to the <code>t001/</code> of sd card in the device.</li>
-<li>Install the unsigned package - <code>android/t001.apk</code> into the device.</li>
+<li>Copy all files/directories from <code>data/</code> to the <code>test/</code> of sd card in the device.</li>
+<li>Import the android/libpotato and android/test to eclipse.</li>
 </ul>
 </li>
-</ul><h4>
-<a name="editor" class="anchor" href="#editor"><span class="octicon octicon-link"></span></a>editor</h4>
+</ul>
+
+<h4>
+<a id="editor" class="anchor" href="#editor" aria-hidden="true"><span class="octicon octicon-link"></span></a>editor</h4>
 
 <ul>
 <li>For Linux
 
 <ul>
-<li>Just run the <code>out/bin/editor</code>.</li>
-<li>In the editor, open the <code>data/</code> directory to load the scene.</li>
+<li>Just run the <code>./build/run_editor.sh</code>.</li>
+<li>In the editor, open the <code>data/</code> directory by top-menu item - <code>Potato/Open</code> or Ctrl+O, then will load a test scene.</li>
 </ul>
 </li>
-</ul><h2>
-<a name="log" class="anchor" href="#log"><span class="octicon octicon-link"></span></a>Log</h2>
-
-<p>Please see <a href="https://github.com/code4game/potato/blob/master/LOG.md" title="Log">LOG.md</a>.</p>
+</ul>
 
 <h2>
-<a name="next" class="anchor" href="#next"><span class="octicon octicon-link"></span></a>Next</h2>
+<a id="log--next" class="anchor" href="#log--next" aria-hidden="true"><span class="octicon octicon-link"></span></a>Log &amp; Next</h2>
 
 <p>Please see <a href="https://trello.com/code4game/" title="Plan">Trello</a>.</p>
       </section>
