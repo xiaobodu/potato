@@ -157,11 +157,12 @@ int main(int argc, char* argv[])
 
   c4g::ParseArgs(args, argc - 1, argv + 1, 0);
 
+  TMapStr2Str::const_iterator cit_appname = args.find("appname");
   TMapStr2Str::const_iterator cit_module = args.find("module");
   TMapStr2Str::const_iterator cit_data = args.find("data");
   if (cit_module == args.end() || cit_data == args.end())
   {
-    printf("Usage: ** --module [PATH] --data [PATH]\n");
+    printf("Usage: %s --module [PATH] --data [PATH]\n", cit_appname->second.c_str());
     return 0;
   }
   std::string module_path = cit_module->second;

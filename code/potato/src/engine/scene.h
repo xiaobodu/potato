@@ -1,6 +1,8 @@
 #pragma once
 
-#include "base.h"
+#include <string>
+
+#include "../common.h"
 
 #define MODULE_TYPE_SCENE    "scene"
 
@@ -15,8 +17,8 @@ class ISensor;
 }
 
 namespace render {
-struct Glyph;
 class ICanvas;
+class ISpace;
 }
 
 namespace core {
@@ -40,7 +42,7 @@ public:
   virtual bool Unload(core::IRender* const& rpRender) = 0;
   virtual bool Resize(const int& riWidth, const int& riHeight) = 0;
   virtual bool Tick(const float& rfDelta) = 0;
-  virtual bool Draw(render::ICanvas* const& rpCanvas) = 0;
+  virtual bool Draw(core::IRender* const& rpRender) = 0;
   virtual bool Handle(const display::IInput* const& rpInput) = 0;
   virtual bool Refresh(const display::ISensor* const& rpSensor) = 0;
 };

@@ -1,10 +1,19 @@
 #pragma once
 
+#include <stddef.h>
+
+#include "../common.h"
 #include "base.h"
 
 #define MODULE_TYPE_RENDER    "render"
 
 namespace c4g{
+
+namespace render{
+class ICanvas;
+class ISpace;
+}
+
 namespace core{
 
 class IScene;
@@ -28,6 +37,8 @@ public:
 public:
   virtual unsigned int GenerateTexId(const int& riWidth, const int& riHeight, const unsigned char* const& rpBuffer) = 0;
   virtual void DeleteTexId(const int& riCount, const unsigned int* const& rpiTexId) = 0;
+  virtual render::ICanvas* const& Canvas() = 0;
+  virtual render::ISpace* const& Space() = 0;
 };
 
 }
@@ -71,16 +82,33 @@ public:
   virtual void PostDo() = 0;
 };
 
-class ICanvas
+class IEffect
+{
+public:
+  virtual ~IEffect() { ; }
+
+public:
+  virtual void EffectBegin(IProcess* const& rpProcess) = 0;
+  virtual void EffectEnd(IProcess* const& rpProcess) = 0;
+};
+
+class ICanvas : public IEffect
 {
 public:
   virtual ~ICanvas() { ; }
 
 public:
-  virtual void EffectBegin(IProcess* const& rpProcess) = 0;
-  virtual void EffectEnd(IProcess* const& rpProcess) = 0;
   virtual void DrawGlyph(const base::Glyph& rGlyph, IProcess* const& rpProcess = NULL) = 0;
   virtual void DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess = NULL) = 0;
+};
+
+class ISpace : public IEffect
+{
+public:
+  virtual ~ISpace() { ; }
+
+public:
+  virtual void DrawModel(const base::Model& rModel, IProcess* const& rpProcess = NULL) = 0;
 };
 
 }

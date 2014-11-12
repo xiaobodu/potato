@@ -2,6 +2,7 @@
 
 #include "scene.h"
 #include "canvas.h"
+#include "space.h"
 
 #include "utility/log.h"
 
@@ -23,16 +24,20 @@ namespace gles {
 
 CRender::CRender()
   : m_pCanvas(NULL)
+  , m_pSpace(NULL)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   m_pCanvas = new CCanvas();
+  m_pSpace = new CSpace();
 }
 
 CRender::~CRender()
 {
   delete m_pCanvas;
   m_pCanvas = NULL;
+  delete m_pSpace;
+  m_pSpace = NULL;
 
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
@@ -80,7 +85,7 @@ bool CRender::Render(const float& rfDelta, core::IScene* const& rpScene)
 
   if (NULL != rpScene && rpScene->Tick(rfDelta))
   {
-    return rpScene->Draw(m_pCanvas);
+    return rpScene->Draw(this);
   }
 
   return false;
@@ -105,6 +110,16 @@ unsigned int CRender::GenerateTexId(const int& riWidth, const int& riHeight, con
 void CRender::DeleteTexId(const int& riCount, const unsigned int* const& rpiTexId)
 {
   glDeleteTextures(riCount, rpiTexId);
+}
+
+render::ICanvas* const& CRender::Canvas()
+{
+  return m_pCanvas;
+}
+
+render::ISpace* const& CRender::Space()
+{
+  return m_pSpace;
 }
 
 void CRender::SetView(const int& riWidth, const int& riHeight, const double& rdNear, const double& rdFar)

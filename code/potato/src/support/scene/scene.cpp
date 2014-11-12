@@ -147,11 +147,12 @@ bool CScene::Tick(const float& rfDelta)
   return res;
 }
 
-bool CScene::Draw(render::ICanvas* const& rpCanvas)
+bool CScene::Draw(core::IRender* const& rpRender)
 {
+  assert(rpRender && rpRender->Canvas() && rpRender->Space());
   for (int i = C4G_LAYER_MIN; i < C4G_LAYER_MAX; ++i)
   {
-    if (m_pPanel->layer == i) m_pPanel->Draw(i, rpCanvas);
+    if (m_pPanel->layer == i) m_pPanel->Draw(i, rpRender->Canvas());
   }
   return true;
 }

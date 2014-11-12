@@ -18,6 +18,8 @@ set(SRC_FILE_LIST_base
   ${SRC_PATH_render}/render.cpp
   ${SRC_PATH_render}/canvas.h
   ${SRC_PATH_render}/canvas.cpp
+  ${SRC_PATH_render}/space.h
+  ${SRC_PATH_render}/space.cpp
   ${SRC_PATH_render}/transform.h
   ${SRC_PATH_render}/transform.cpp
   ${SRC_PATH_render}/blend.h

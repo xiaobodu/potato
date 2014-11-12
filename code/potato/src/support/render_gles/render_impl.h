@@ -26,6 +26,8 @@ public:
 public:
   virtual unsigned int GenerateTexId(const int& riWidth, const int& riHeight, const unsigned char* const& rpBuffer);
   virtual void DeleteTexId(const int& riCount, const unsigned int* const& rpiTexId);
+  virtual render::ICanvas* const& Canvas();
+  virtual render::ISpace* const& Space();
 
 private:
   void SetView(const int& riWidth, const int& riHeight, const double& rdNear, const double& rdFar);
@@ -33,6 +35,7 @@ private:
 
 private:
   render::ICanvas* m_pCanvas;
+  render::ISpace* m_pSpace;
 };
 
 } // gles

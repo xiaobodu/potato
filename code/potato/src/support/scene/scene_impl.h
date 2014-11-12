@@ -32,7 +32,7 @@ public:
   virtual bool Unload(core::IRender* const& rpRender);
   virtual bool Resize(const int& riWidth, const int& riHeight);
   virtual bool Tick(const float& rfDelta);
-  virtual bool Draw(render::ICanvas* const& rpCanvas);
+  virtual bool Draw(core::IRender* const& rpRender);
   virtual bool Handle(const display::IInput* const& rpInput);
   virtual bool Refresh(const display::ISensor* const& rpSensor);
 

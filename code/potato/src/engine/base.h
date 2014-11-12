@@ -14,11 +14,25 @@ typedef struct Glyph
   unsigned int id;
 
   Glyph()
-      : l(0), r(0), t(0), b(0), id(0)
+    : l(0), r(0), t(0), b(0), id(0)
   {
     ;
   }
 } SGlyph;
+
+typedef struct Model
+{
+  void* vertex;
+  void* coord;
+  int size;
+  int tex_id;
+
+  Model()
+    : vertex(NULL), coord(NULL), size(0), tex_id(-1)
+  {
+    ;
+  }
+} SModel;
 
 typedef struct Color
 {
