@@ -1,5 +1,6 @@
 echo ">>> install"
-cinst cmake
+cd ../../
 cinst wget
 cinst Devbox-UnZip
+cd build/appveyor/
 echo "<<< install"

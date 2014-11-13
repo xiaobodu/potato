@@ -6,14 +6,20 @@ configuration:
   - Release
 
 install:
-  - build/appveyor/to_install.bat
+  - cd build/appveyor/
+  - to_install.bat
+  - cd ../../
 
 before_build:
-  - build/appveyor/to_before_build.bat
+  - cd build/appveyor/
+  - to_before_build.bat
+  - cd ../../
 
 build:
   project: out/msbuild/all.sln
 
 after_build:
-  - build/appveyor/to_after_build.bat
+  - cd build/appveyor/
+  - to_after_build.bat
+  - cd ../../
 

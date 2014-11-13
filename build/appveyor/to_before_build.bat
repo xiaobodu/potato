@@ -1,4 +1,5 @@
 echo ">>> before build"
+cd ../../
 git submodule init
 git submodule update
 mkdir out
@@ -18,4 +19,5 @@ cd ../out/msbuild/
 echo "||| generate the potato solution"
 cmake -G "Visual Studio 11" -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_CXX_COMPILER_ID=MSVC -D ZLIB_INCLUDE_DIR=code/external/zlib -D ZLIB_LIBRARY=../../code/external/zlib/Release/zlibstatic.lib ../../build/cmake
 cd ../../
+cd build/appveyor/
 echo "<<< before build"
