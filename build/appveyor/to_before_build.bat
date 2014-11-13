@@ -3,8 +3,6 @@ git submodule init
 git submodule update
 mkdir out
 cd out
-mkdir bin
-mkdir lib
 mkdir msbuild
 wget ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip
 unzip -oq pthreads-w32-2-9-1-release.zip -d pthreads-w32-2-9-1-release
