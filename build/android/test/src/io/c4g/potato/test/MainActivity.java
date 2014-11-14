@@ -2,6 +2,7 @@ package io.c4g.potato.test;
 
 import io.c4g.potato.IPNativeHelper;
 import io.c4g.potato.PActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -53,5 +54,5 @@ public class MainActivity extends PActivity {
 	public IPNativeHelper getHelper() {
 		return NativeHelper.instance;
 	}
-
+	
 }

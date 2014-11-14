@@ -9,6 +9,10 @@ public class NativeHelper extends PNativeHelper {
 	public String GetAppName() {
 		return "t001";
 	}
+	
+	public String GetAssetsPath() {
+		return "data/";
+	}
 
 	public void HasReady() {
 		//
