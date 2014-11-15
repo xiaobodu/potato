@@ -34,21 +34,20 @@ Build
 
 ### Ready
 
-Need [Git][], [CMake][], and [Qt][].
-
-* Into `build` directory.
-* Run `ready.sh`. (Initialize and update submodule)
-* Run `config.sh` (Create Makefile by CMake)
+Please install [Git][], [CMake][], and [Qt][].
 
 
 ### Linux
 
+* Into `build` directory.
+* Run `linux-ready.sh`. (Initialize and update submodule)
+* Run `linux-config.sh` (Create Makefile by CMake)
 * Run `make.sh` (Build all projects include static/shared library, third library, test)
 
 
-### Android
-
-* Run `make-android-release.sh` (Build all projects include static/shared library, third library, test)
+### Android (in Linux)
+* Need two environment variables - ANDROID_HOME and NDK_HOME
+* Run `android-make-release.sh` (Build all projects include some static/shared libraries, some third libraries, and `test`)
 
 
 Run
@@ -57,18 +56,20 @@ Run
 #### test
 
 - For Linux
-  * Just run the `./build/run_test.sh`.
+  * Run the `./build/linux-run-test.sh`.
 
 
 - For Android
-  * Copy all files/directories from `data/` to the `test/` of sd card in the device.
-  * Import the android/libpotato and android/test to eclipse.
+  * Call `./build/android-generate-release.sh` to build all static/shared libraries and generate `.apk` file.
+  * Call `adb install ./build/android/test/bin/test-release.apk` to install the test app to your android device.
+  * Copy all files/directories from `data/` to the `test/` of sd card in your android device.
+  * At last, run the `test` in android system.
 
 
 #### editor
 
 - For Linux
-  * Just run the `./build/run_editor.sh`.
+  * Just run the `./build/linux-run-editor.sh`.
   * In the editor, open the `data/` directory by top-menu item - `Potato/Open` or Ctrl+O, then will load a test scene.
 
 
