@@ -1,3 +1,5 @@
+#/usr/bin/env bash
+
 echo ">>> script"
 
 if [ "$TRAVIS_TAG" ]; then

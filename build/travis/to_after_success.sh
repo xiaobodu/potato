@@ -1,3 +1,5 @@
+#/usr/bin/env bash
+
 echo ">>> after success"
 
 if [ "$TRAVIS_TAG" ]; then
@@ -18,7 +20,7 @@ fi
 set -e
 
 if [ "$RUN_COVERALLS"x = "true"x ]; then
-  build/run_test.sh
+  build/linux-run-test.sh
   coveralls --exclude build/ --exclude data/ --exclude doc/ --exclude code/external/ --exclude out/make/external/ --exclude out/make/CMakeFiles/ --gcov-options '\-lp'
 else
   echo "< don't run anything for coveralls >"

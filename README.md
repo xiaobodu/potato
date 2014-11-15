@@ -48,7 +48,7 @@ Need [Git][], [CMake][], and [Qt][].
 
 ### Android
 
-* Run `make-android.sh` (Build all projects include static/shared library, third library, test)
+* Run `make-android-release.sh` (Build all projects include static/shared library, third library, test)
 
 
 Run

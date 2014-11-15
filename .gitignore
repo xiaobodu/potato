@@ -26,6 +26,7 @@
 
 # for eclipse
 .*project
+.settings/
 
 # for output
 out/

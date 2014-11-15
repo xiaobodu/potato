@@ -1,3 +1,5 @@
+#/usr/bin/env bash
+
 echo ">>> before install"
 
 if [ "$TRAVIS_TAG" ]; then

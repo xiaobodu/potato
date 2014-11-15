@@ -1,3 +1,5 @@
+#/usr/bin/env bash
+
 echo ">>> install"
 
 if [ "$TRAVIS_TAG" ]; then
