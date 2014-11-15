@@ -77,6 +77,7 @@ bool CScene::Load(core::IRender* const& rpRender, const std::string& rsFileName,
   jdoc.Parse(file_context.c_str());
 
   CPanel::builder.Do(this, jdoc, m_pPanel);
+
   return true;
 }
 

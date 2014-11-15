@@ -6,7 +6,6 @@
 #include <android/asset_manager_jni.h>
 #include <android_native_app_glue.h>
 
-#include "../io_c4g_potato_PNativeHelper.h"
 #include "potato.h"
 #include "utility/log.h"
 #include "utility/sharedlibrary.h"
@@ -65,8 +64,7 @@ public:
 public:
   virtual std::string GetLibraryPath();
   virtual std::string GetExternalPath();
-  virtual std::string GetAssetsPath();
-  virtual void RequestAssetManager();
+  virtual AAssetManager* GetAssetManager();
   virtual void HasReady();
 
 protected:
@@ -166,31 +164,19 @@ std::string NativeHelper::GetExternalPath()
   return res_str;
 }
 
-std::string NativeHelper::GetAssetsPath()
+AAssetManager* NativeHelper::GetAssetManager()
 {
   scope::ThreadMutex jni_env = scope::ThreadMutex(&m_Mutex, m_pActivity);
-  JNIEnv*& env = jni_env.GetEnv();
+  JNIEnv*& env_ptr = jni_env.GetEnv();
 
   assert(m_bIsReady);
-  jmethodID method_id = env->GetMethodID(m_JNIClass, "GetAssetsPath", "()Ljava/lang/String;");
+  jmethodID method_id = env_ptr->GetMethodID(m_JNIClass, "GetAssetManager", "()Landroid/content/res/AssetManager;");
   assert(NULL != method_id);
-  jstring res = (jstring)env->CallObjectMethod(m_JNIObject, method_id);
-  const char* c_res = env->GetStringUTFChars(res, NULL);
-  assert(NULL != c_res);
-  std::string res_str = std::string(c_res);
-  env->ReleaseStringUTFChars(res, c_res);
-  return res_str;
-}
+  jobject asset_manager_obj = env_ptr->CallObjectMethod(m_JNIObject, method_id);
 
-void NativeHelper::RequestAssetManager()
-{
-  scope::ThreadMutex jni_env = scope::ThreadMutex(&m_Mutex, m_pActivity);
-  JNIEnv*& env = jni_env.GetEnv();
-
-  assert(m_bIsReady);
-  jmethodID method_id = env->GetMethodID(m_JNIClass, "RequestAssetManager", "()V");
-  assert(NULL != method_id);
-  env->CallVoidMethod(m_JNIObject, method_id);
+  AAssetManager* asset_mgr_ptr = AAssetManager_fromJava(env_ptr, asset_manager_obj);
+  assert(NULL != asset_mgr_ptr);
+  return asset_mgr_ptr;
 }
 
 void NativeHelper::HasReady()
@@ -232,20 +218,11 @@ void potato_main(android_app* pApp, const std::string& rsNativeClassName, const 
 
   NativeHelper::Instance().HasReady();
 
-  NativeHelper::Instance().RequestAssetManager();
+  AAssetManager* asset_manager_ptr = NativeHelper::Instance().GetAssetManager();
+  C4G_LOG_INFO("%s: asset_manager_ptr = %d", __PRETTY_FUNCTION__, asset_manager_ptr);
 
   c4g::core::IEngine*& engine_ptr = c4g::Potato::Instance().GetEngine();
-  C4G_LOG_INFO("engine: %d", engine_ptr);
+  C4G_LOG_INFO("%s: engine_ptr = %d", __PRETTY_FUNCTION__, engine_ptr);
   assert(NULL != engine_ptr);
   if (NULL != engine_ptr) engine_ptr->Run(data_path, pApp);
-}
-
-JNIEXPORT void JNICALL Java_io_c4g_potato_PNativeHelper_ResponseAssetManager(JNIEnv* pEnv, jclass oClass, jobject oAssetManager)
-{
-  C4G_LOG_INFO("response asset manager start");
-  AAssetManager* asset_mgr_ptr = AAssetManager_fromJava(pEnv, oAssetManager);
-
-  C4G_LOG_INFO("response asset manager %d", asset_mgr_ptr);
-  //TOCHECK
-  if (!asset_mgr_ptr) return;
 }

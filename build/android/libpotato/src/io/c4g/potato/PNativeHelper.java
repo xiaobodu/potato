@@ -2,7 +2,6 @@ package io.c4g.potato;
 
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
-import android.os.Environment;
 
 public abstract class PNativeHelper implements IPNativeHelper {
 	
@@ -21,26 +20,9 @@ public abstract class PNativeHelper implements IPNativeHelper {
 		return "";
 	}
 
-	public String GetExternalPath() {
-		/*try {
-			Thread.sleep(15000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		return Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + GetAppName();
+	public AssetManager GetAssetManager() {
+		if (PActivity.instance == null) return null;
+		return PActivity.instance.getAssets();
 	}
-
-	public void RequestAssetManager() {
-		if (PActivity.instance == null) return;
-		
-		//ResponseAssetManager(PActivity.instance.getAssets());
-	}
-	
-	/*static {
-		System.loadLibrary("libpotato");
-	}
-	
-	public static native void ResponseAssetManager(AssetManager asset_manager);*/
 
 }
