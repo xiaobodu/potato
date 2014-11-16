@@ -61,7 +61,7 @@ Run
 
 - For Android
   * Call `./build/android-generate-release.sh` to build all static/shared libraries and generate `.apk` file.
-  * Call `adb install ./build/android/test/bin/test-release.apk` to install the test app to your android device.
+  * Call `adb install -r ./build/android/test/bin/test-release.apk` to install the test app to your android device.
   * Copy all files/directories from `data/` to the `test/` of sd card in your android device.
   * At last, run the `test` in android system.
 
