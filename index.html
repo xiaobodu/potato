@@ -85,26 +85,24 @@
 <h3>
 <a id="ready" class="anchor" href="#ready" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ready</h3>
 
-<p>Need <a href="http://git-scm.com/" title="Git">Git</a>, <a href="http://cmake.org/" title="CMake">CMake</a>, and <a href="http://qt-project.org/" title="Qt">Qt</a>.</p>
-
-<ul>
-<li>Into <code>build</code> directory.</li>
-<li>Run <code>ready.sh</code>. (Initialize and update submodule)</li>
-<li>Run <code>config.sh</code> (Create Makefile by CMake)</li>
-</ul>
+<p>Please install <a href="http://git-scm.com/" title="Git">Git</a>, <a href="http://cmake.org/" title="CMake">CMake</a>, and <a href="http://qt-project.org/" title="Qt">Qt</a>.</p>
 
 <h3>
 <a id="linux" class="anchor" href="#linux" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linux</h3>
 
 <ul>
+<li>Into <code>build</code> directory.</li>
+<li>Run <code>linux-ready.sh</code>. (Initialize and update submodule)</li>
+<li>Run <code>linux-config.sh</code> (Create Makefile by CMake)</li>
 <li>Run <code>make.sh</code> (Build all projects include static/shared library, third library, test)</li>
 </ul>
 
 <h3>
-<a id="android" class="anchor" href="#android" aria-hidden="true"><span class="octicon octicon-link"></span></a>Android</h3>
+<a id="android-in-linux" class="anchor" href="#android-in-linux" aria-hidden="true"><span class="octicon octicon-link"></span></a>Android (in Linux)</h3>
 
 <ul>
-<li>Run <code>make-android.sh</code> (Build all projects include static/shared library, third library, test)</li>
+<li>Need two environment variables - ANDROID_HOME and NDK_HOME</li>
+<li>Run <code>android-make-release.sh</code> (Build all projects include some static/shared libraries, some third libraries, and <code>test</code>)</li>
 </ul>
 
 <h2>
@@ -118,15 +116,17 @@
 <p>For Linux</p>
 
 <ul>
-<li>Just run the <code>./build/run_test.sh</code>.</li>
+<li>Run the <code>./build/linux-run-test.sh</code>.</li>
 </ul>
 </li>
 <li>
 <p>For Android</p>
 
 <ul>
-<li>Copy all files/directories from <code>data/</code> to the <code>test/</code> of sd card in the device.</li>
-<li>Import the android/libpotato and android/test to eclipse.</li>
+<li>Call <code>./build/android-generate-release.sh</code> to build all static/shared libraries and generate <code>.apk</code> file.</li>
+<li>Call <code>adb install -r ./build/android/test/bin/test-release.apk</code> to install the test app to your android device.</li>
+<li>Copy all files/directories from <code>data/</code> to the <code>test/</code> of sd card in your android device.</li>
+<li>At last, run the <code>test</code> in android system.</li>
 </ul>
 </li>
 </ul>
@@ -138,7 +138,7 @@
 <li>For Linux
 
 <ul>
-<li>Just run the <code>./build/run_editor.sh</code>.</li>
+<li>Just run the <code>./build/linux-run-editor.sh</code>.</li>
 <li>In the editor, open the <code>data/</code> directory by top-menu item - <code>Potato/Open</code> or Ctrl+O, then will load a test scene.</li>
 </ul>
 </li>
