@@ -1,4 +1,4 @@
-LIBRARY   script_tcc
+LIBRARY   script
 EXPORTS
     CreateModule         @1
     DestroyModule        @2

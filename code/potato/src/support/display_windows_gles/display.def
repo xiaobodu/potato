@@ -1,4 +1,4 @@
-LIBRARY   display_gles
+LIBRARY   display
 EXPORTS
     CreateModule         @1
     DestroyModule        @2

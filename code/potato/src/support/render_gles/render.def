@@ -1,4 +1,4 @@
-LIBRARY   render_gles
+LIBRARY   render
 EXPORTS
     CreateModule         @1
     DestroyModule        @2
