@@ -4,9 +4,14 @@
 [submodule "code/external/tinycc"]
 	path = code/external/tinycc
 	url = https://github.com/code4game/tinycc
-[submodule "code/external/libpng"]
-	path = code/external/libpng
-	url = http://git.code.sf.net/p/libpng/code
 [submodule "code/external/zlib"]
 	path = code/external/zlib
 	url = https://github.com/madler/zlib
+[submodule "code/external/freetype2"]
+	path = code/external/freetype2
+	url = https://github.com/code4game/freetype2.git
+	branch = STABLE
+[submodule "code/external/libpng"]
+	path = code/external/libpng
+	url = http://git.code.sf.net/p/libpng/code
+	branch = libpng15
