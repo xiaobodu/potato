@@ -11,6 +11,8 @@ if(OS_IS_LINUX)
 set(INC_PATH_LIST
   ${SRC_PATH_potato}
   ${SRC_PATH_potato}/engine
+  ${CODE_PATH}/external/libpng
+  ${CODE_PATH}/external/zlib
   ${SRC_PATH_asset}
   )
 elseif(OS_IS_WINDOWS)
@@ -58,7 +60,7 @@ add_library(asset SHARED ${SRC_FILE_LIST})
 
 if(OS_IS_LINUX)
 set(LINK_FILE_LIST
-  png12
+  png
   z
   )
 elseif(OS_IS_WINDOWS)
