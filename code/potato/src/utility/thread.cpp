@@ -3,7 +3,7 @@
  * \brief the implement for the thread.h file
  */
 #include <cassert>
-#include <pthread.h>
+//#include <pthread.h>
 
 #include "thread.h"
 
@@ -12,20 +12,20 @@ namespace thread {
 
 void* DoWorkFunc(void* pData)
 {
-  assert(NULL != pData);
+  /*assert(NULL != pData);
 
   /// force to cast
   IWorker* worker_ptr = reinterpret_cast<IWorker*>(pData);
   worker_ptr->Do();
 
   /// terminate the thread
-  pthread_exit(NULL);
-  return NULL;
+  pthread_exit(NULL);*/
+  return nullptr;
 }
 
 void DoJob(thread::IWorker* pWorkers[], const int& riCount)
 {
-  if (0 >= riCount)
+  /*if (0 >= riCount)
   {
     return;
   }
@@ -55,7 +55,7 @@ void DoJob(thread::IWorker* pWorkers[], const int& riCount)
   }
 
   /// free the memory of thread array
-  delete[] threads;
+  delete[] threads;*/
 
   /// terminate the thread
   //pthread_exit(NULL);

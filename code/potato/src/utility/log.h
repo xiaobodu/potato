@@ -222,7 +222,7 @@ public:
     case EStyle_BGColor_Cyan:
     case EStyle_BGColor_White:
 #if defined(OS_IS_LINUX)
-      fprintf(stdout, "[%s%s"TEXT_STYLE_END"] %s%s"TEXT_STYLE_END"\n", TextStyleCode[eStyle], rcTitle, TextStyleCode[eStyle], result);
+      fprintf(stdout, "[%s%s" TEXT_STYLE_END "] %s%s" TEXT_STYLE_END "\n", TextStyleCode[eStyle], rcTitle, TextStyleCode[eStyle], result);
 #else
       fprintf(stdout, "[%s] %s\n", rcTitle, result);
 #endif

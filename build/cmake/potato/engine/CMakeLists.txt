@@ -55,12 +55,10 @@ add_library(engine SHARED ${SRC_FILE_LIST})
 
 if(OS_IS_LINUX)
 set(LINK_FILE_LIST
-  pthread
   dl
   )
 elseif(OS_IS_WINDOWS)
 set(LINK_FILE_LIST
-  ${OUT_PATH}/pthreads-w32-2-9-1-release/Pre-built.2/lib/x86/pthreadVC2.lib
   )
 endif()
 target_link_libraries(engine ${LINK_FILE_LIST})
