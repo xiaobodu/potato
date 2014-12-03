@@ -192,32 +192,29 @@ void CDisplay::CreateWindow()
   assert(NULL != m_pDisplay);
 
   m_pGLDisplay = eglGetDisplay(m_pDisplay);
-  assert(EGL_NO_DISPLAY != m_pGLDisplay);
   assert(EGL_SUCCESS == eglGetError());
+  assert(EGL_NO_DISPLAY != m_pGLDisplay);
 
   EGLint egl_major, egl_minor;
   EGLBoolean res = eglInitialize(m_pGLDisplay, &egl_major, &egl_minor);
-  assert(res);
+  assert(res && EGL_SUCCESS == eglGetError());
   if (!res) return;
+  printf("egl version: %d %d\n", egl_major, egl_minor);
 
   int num_configs = 0;
   res = eglGetConfigs(m_pGLDisplay, &m_pGLConfig, 1, &num_configs);
-  assert(res);
-  //assert(eglChooseConfig(m_pGLDisplay, attribs, &m_pGLConfig, 1, &num_configs));
-  assert(NULL != m_pGLConfig && num_configs > 0);
+  assert(res && NULL != m_pGLConfig && num_configs > 0);
 
-  /*int value = 0;
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_COLOR_BUFFER_TYPE, &value));
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_RED_SIZE, &value));
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_GREEN_SIZE, &value));
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_BLUE_SIZE, &value));
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_ALPHA_SIZE, &value));
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_BUFFER_SIZE, &value));
-  assert(eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_DEPTH_SIZE, &value));*/
+  const char* c_vendor = eglQueryString(m_pGLDisplay, EGL_VENDOR);
+  printf("egl vendor: %s\n", c_vendor);
+  const char* c_version = eglQueryString(m_pGLDisplay, EGL_VERSION);
+  printf("egl version: %s\n", c_version);
+  const char* c_extensions = eglQueryString(m_pGLDisplay, EGL_EXTENSIONS);
+  printf("egl extensions: %s\n", c_extensions);
 
   EGLint vid = 0;
   res = eglGetConfigAttrib(m_pGLDisplay, m_pGLConfig, EGL_NATIVE_VISUAL_ID, &vid);
-  assert(res);
+  assert(res && EGL_SUCCESS == eglGetError());
 
   XVisualInfo* visual_info_ptr;
   XVisualInfo visual_info;
@@ -267,12 +264,14 @@ void CDisplay::CreateWindow()
   eglBindAPI(EGL_OPENGL_ES_API);
 
   m_pGLSurface = eglCreateWindowSurface(m_pGLDisplay, m_pGLConfig, m_lWindow, NULL);
+  assert(EGL_SUCCESS == eglGetError());
   assert(EGL_NO_SURFACE != m_pGLSurface);
 
   static const EGLint ctx_attribs[] = {
       EGL_CONTEXT_CLIENT_VERSION, 1,
       EGL_NONE };
   m_pGLContext = eglCreateContext(m_pGLDisplay, m_pGLConfig, EGL_NO_CONTEXT, ctx_attribs);
+  assert(EGL_SUCCESS == eglGetError());
   assert(EGL_NO_CONTEXT != m_pGLContext);
 
   //TODO: how to release all memory about x window
