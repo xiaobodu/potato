@@ -19,7 +19,11 @@ fi
 # run command with exit error-code
 set -e
 
-sudo apt-get install cppcheck valgrind libgles1-mesa-dev qt5-default gcc-4.8
+if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
+if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+sudo apt-get install cppcheck valgrind libgles1-mesa-dev qt5-default
 sudo pip install cpp-coveralls
+
+$CXX --version
 
 echo "<<< install"
