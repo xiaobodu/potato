@@ -42,7 +42,7 @@ Please install [Git][], [CMake][], and [Qt][].
 * Into `build` directory.
 * Run `linux-ready.sh`. (Initialize and update submodule)
 * Run `linux-config.sh` (Create Makefile by CMake)
-* Run `make.sh` (Build all projects include static/shared library, third library, test)
+* Run `linux-make.sh` (Build all projects include static/shared library, third library, test)
 
 
 ### Android (in Linux)
