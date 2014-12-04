@@ -16,6 +16,8 @@ if [ "$VALID"x != "ok"x ]; then
   exit
 fi
 
+if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
+	
 cppcheck code/editor code/potato code/test -I code/editor/ -I code/potato/ -I code/potato/inc -I code/potato/src -I code/potato/src/engine -I code/test/ --quiet --error-exitcode=1
 git submodule init
 git submodule update
