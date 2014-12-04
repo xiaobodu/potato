@@ -1,6 +1,6 @@
 echo ">>> install"
-cd ../../
-cinst wget
-cinst Devbox-UnZip
-cd build/appveyor/
+REM cd ../../
+REM cinst wget
+REM cinst Devbox-UnZip
+REM cd build/appveyor/
 echo "<<< install"

@@ -16,7 +16,6 @@ if(OS_IS_LINUX)
 elseif(OS_IS_WINDOWS)
   set(INC_PATH_LIST
     ${INC_PATH_LIST_base}
-    ${OUT_PATH}/pthreads-w32-2-9-1-release/Pre-built.2/include
     )
 endif()
 
