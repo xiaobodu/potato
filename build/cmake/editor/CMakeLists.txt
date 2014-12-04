@@ -4,7 +4,7 @@ project(editor)
 
 set(CODE_PATH_editor ${CODE_PATH}/editor)
 
-set(QT_SDK_PATH "${QT_SDK_PATH}" CACHE STRING "Add the Qt SDK path" FORCE)
+set(QT_SDK_PATH "${QT_SDK_PATH}" CACHE PATH "Add the Qt SDK path" FORCE)
 if(OS_IS_WINDOWS)
   set(QT_SDK_INC_PATH ${QT_SDK_PATH}/include)
 elseif(OS_IS_LINUX)
