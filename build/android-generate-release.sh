@@ -4,7 +4,7 @@ cd $(dirname $0)
 
 export PATH=$PATH:$ANDROID_HOME:$NDK_HOME
 
-cd ./android/test/
+cd ./android/demo/
 ant clean
 ./../../android-make-release.sh clean
 ./../../android-make-release.sh

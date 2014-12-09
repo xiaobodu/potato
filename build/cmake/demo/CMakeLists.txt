@@ -1,18 +1,18 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(test)
+project(demo)
 
-set(CODE_PATH_test ${CODE_PATH}/test)
+set(CODE_PATH_demo ${CODE_PATH}/demo)
 
 set(INC_PATH_LIST
   ${CODE_PATH}/potato/inc
-  ${CODE_PATH_test}
+  ${CODE_PATH_demo}
   )
 include_directories(${INC_PATH_LIST})
 
 set(CODE_FILE_LIST
-  ${CODE_PATH_test}/test.h
-  ${CODE_PATH_test}/test.cpp
+  ${CODE_PATH_demo}/demo.h
+  ${CODE_PATH_demo}/demo.cpp
   )
 source_group("source" FILES ${CODE_FILE_LIST})
 
@@ -24,9 +24,9 @@ link_directories(${LINK_PATH_LIST})
 
 set(EXECUTABLE_OUTPUT_PATH ${OUT_PATH}/bin)
 
-add_definitions(-DAPP_NAME="test")
+add_definitions(-DAPP_NAME="demo")
 
-add_executable(test ${CODE_FILE_LIST})
+add_executable(demo ${CODE_FILE_LIST})
 
 if(OS_IS_LINUX)
 set(LINK_FILE_LIST
@@ -44,10 +44,10 @@ elseif(OS_IS_WINDOWS)
       )
   endif()
 endif()
-target_link_libraries(test ${LINK_FILE_LIST})
+target_link_libraries(demo ${LINK_FILE_LIST})
 
 # build dependicies
 set(DEP_PROJ_LIST
   potato
   )
-add_dependencies(test ${DEP_PROJ_LIST})
+add_dependencies(demo ${DEP_PROJ_LIST})

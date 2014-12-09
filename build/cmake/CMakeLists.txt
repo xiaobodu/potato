@@ -77,5 +77,5 @@ add_subdirectory(potato)
 if(C4G_BUILD_EDITOR)
 add_subdirectory(editor)
 endif()
-add_subdirectory(test)
+add_subdirectory(demo)
 

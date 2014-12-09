@@ -1,4 +1,4 @@
-package io.c4g.potato.test;
+package io.c4g.potato.demo;
 
 import io.c4g.potato.IPNativeHelper;
 import io.c4g.potato.PActivity;

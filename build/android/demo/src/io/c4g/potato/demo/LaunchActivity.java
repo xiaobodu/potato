@@ -1,6 +1,6 @@
-package io.c4g.potato.test;
+package io.c4g.potato.demo;
 
-import io.c4g.potato.test.R;
+import io.c4g.potato.demo.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

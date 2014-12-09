@@ -1,4 +1,4 @@
-package io.c4g.potato.test;
+package io.c4g.potato.demo;
 
 import android.os.Environment;
 import io.c4g.potato.PNativeHelper;
@@ -8,7 +8,7 @@ public class NativeHelper extends PNativeHelper {
 	public static NativeHelper instance = new NativeHelper();
 
 	public String GetAppName() {
-		return "test";
+		return "demo";
 	}
 
 	public String GetExternalPath() {
