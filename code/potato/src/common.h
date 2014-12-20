@@ -4,6 +4,7 @@
 #include <cstring>
 #include <iostream>
 #include <map>
+#include <memory>
 
 #define ENGINE_NAME     "potato"
 #define ENGINE_VERSION_MAX  0

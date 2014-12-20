@@ -7,11 +7,14 @@
 
 #define MODULE_TYPE_RENDER    "render"
 
+#define C4G_DIM_NUM   3
+
 namespace c4g{
 
 namespace render{
-class ICanvas;
-class ISpace;
+  class ICamera;
+  class ICanvas;
+  class ISpace;
 }
 
 namespace core{
@@ -37,6 +40,7 @@ public:
 public:
   virtual unsigned int GenerateTexId(const int& riWidth, const int& riHeight, const unsigned char* const& rpBuffer) = 0;
   virtual void DeleteTexId(const int& riCount, const unsigned int* const& rpiTexId) = 0;
+  virtual render::ICamera* const& Camera() = 0;
   virtual render::ICanvas* const& Canvas() = 0;
   virtual render::ISpace* const& Space() = 0;
 };
@@ -44,6 +48,22 @@ public:
 }
 
 namespace render{
+
+  class ICamera
+  {
+  public:
+    virtual ~ICamera() { ; }
+
+  public:
+    virtual void Pos(const float afPos[C4G_DIM_NUM]) = 0;
+    virtual void At(const float afAt[C4G_DIM_NUM]) = 0;
+    virtual void Near(const float& rfNear) = 0;
+    virtual void Far(const float& rfFar) = 0;
+
+  public:
+    virtual bool Tick(const float& rfDelta) = 0;
+    virtual void Project() = 0;
+  };
 
 class ITransform
 {

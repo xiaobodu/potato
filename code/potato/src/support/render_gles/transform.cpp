@@ -35,7 +35,7 @@ void CTransform::Translate(const float& rfX, const float& rfY, const float& rfZ 
 {
   //TODO: use matrix
   //NOTE: reverse the y axis
-  glTranslatef(rfX, -rfY, rfZ);
+  glTranslatef(rfX, rfY, rfZ);
 }
 
 void CTransform::Scale(const float& rfX, const float& rfY, const float& rfZ /*= 1.0f*/)

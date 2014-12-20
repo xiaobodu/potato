@@ -11,11 +11,14 @@ set(INC_PATH_LIST
   ${SRC_PATH_potato}/engine
   ${SRC_PATH_render}
   ${CODE_PATH}/external/rapidjson/include
+  ${CODE_PATH}/external/glm
   )
 
 set(SRC_FILE_LIST_base
   ${SRC_PATH_render}/render_impl.h
   ${SRC_PATH_render}/render.cpp
+  ${SRC_PATH_render}/camera.h
+  ${SRC_PATH_render}/camera.cpp
   ${SRC_PATH_render}/canvas.h
   ${SRC_PATH_render}/canvas.cpp
   ${SRC_PATH_render}/space.h
@@ -39,13 +42,22 @@ endif()
 
 source_group("source" FILES ${SRC_FILE_LIST})
 
+set(SRC_FILE_LIST_other
+  ${SRC_PATH_potato}/utility/glmwrapper.h
+  )
+
+source_group("other" FILES ${SRC_FILE_LIST_other})
+
 set(LIBRARY_OUTPUT_PATH ${OUT_PATH}/bin)
 
 include_directories(${INC_PATH_LIST})
 
 add_definitions(-DC4G_API_EXPORT)
 
-add_library(render SHARED ${SRC_FILE_LIST})
+add_library(render SHARED
+  ${SRC_FILE_LIST}
+  ${SRC_FILE_LIST_other}
+  )
 
 if(OS_IS_LINUX)
 set(LINK_FILE_LIST

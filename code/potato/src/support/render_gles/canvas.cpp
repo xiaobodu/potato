@@ -41,8 +41,8 @@ public:
 
 CCanvas::CCanvas()
 {
-  memset(m_aVertex, 0, sizeof(GLfloat) * RECT_VERTEX_NUM * RECT_VERTEX_FLOAT_NUM);
-  memset(m_aTexCoord, 0, sizeof(GLfloat) * RECT_VERTEX_NUM * RECT_TEXCOORD_FLOAT_NUM);
+  ::memset(m_aVertex, 0, sizeof(GLfloat) * RECT_VERTEX_NUM * RECT_VERTEX_FLOAT_NUM);
+  ::memset(m_aTexCoord, 0, sizeof(GLfloat) * RECT_VERTEX_NUM * RECT_TEXCOORD_FLOAT_NUM);
   //m_aIndice = { 0, 1, 2, 2, 1, 3 };
   m_aIndice[0] = 0;
   m_aIndice[1] = 1;
@@ -51,7 +51,7 @@ CCanvas::CCanvas()
   m_aIndice[4] = 1;
   m_aIndice[5] = 3;
 
-  memset(m_aVertexLine, 0, sizeof(GLfloat) * RECT_VERTEX_NUM * RECT_VERTEX_FLOAT_NUM);
+  ::memset(m_aVertexLine, 0, sizeof(GLfloat) * RECT_VERTEX_NUM * RECT_VERTEX_FLOAT_NUM);
   m_aIndiceLine[0] = 0;
   m_aIndiceLine[1] = 1;
   m_aIndiceLine[2] = 2;
@@ -65,14 +65,14 @@ CCanvas::~CCanvas()
 
 void CCanvas::EffectBegin(IProcess* const& rpProcess)
 {
-  glPushMatrix();
+  //glPushMatrix();
 
-  if (NULL != rpProcess) rpProcess->Do(&CTransform::Instance(m_aVertex));
+  //if (NULL != rpProcess) rpProcess->Do(&CTransform::Instance(m_aVertex));
 }
 
 void CCanvas::EffectEnd(IProcess* const& rpProcess)
 {
-  glPopMatrix();
+  //glPopMatrix();
 }
 
 void CCanvas::DrawGlyph(const base::Glyph& rGlyph, IProcess* const& rpProcess)
@@ -86,13 +86,40 @@ void CCanvas::DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const f
 
   glPushMatrix();
 
-  if (NULL != rpProcess) rpProcess->Do(&CTransform::Instance(m_aVertex));
-  if (NULL != rpProcess) rpProcess->Do(&CBlend::Instance());
+  //if (NULL != rpProcess) rpProcess->Do(&CTransform::Instance(m_aVertex));
+  //if (NULL != rpProcess) rpProcess->Do(&CBlend::Instance());
 
+  //glTranslatef(-240.0f, 400.0f, -3.0f);
+  glTranslatef(0.0f, 0.0f, -100.0f);
+  //glScalef(0.0f, 0.8f, 1.00f);
+
+  // 0  1   2
+  // 3  4   5
+  // 6  7   8
+  // 9  10  11
   m_aVertex[3] = rfWidth;
   m_aVertex[7] = -rfHeight;
   m_aVertex[9] = rfWidth;
   m_aVertex[10] = -rfHeight;
+
+  /*m_aVertex[0] = -rfWidth * 0.5f;
+  m_aVertex[1] = rfHeight * 0.5f;
+  m_aVertex[3] = rfWidth * 0.5f;
+  m_aVertex[4] = rfHeight * 0.5f;
+  m_aVertex[6] = rfWidth * 0.5f;
+  m_aVertex[7] = -rfHeight * 0.5f;
+  m_aVertex[9] = -rfWidth * 0.5f;
+  m_aVertex[10] = -rfHeight * 0.5f;*/
+
+  /*m_aVertex[3] = 1.0f;
+  m_aVertex[7] = 1.0f;
+  m_aVertex[9] = 1.0f;
+  m_aVertex[10] = 1.0f;*/
+
+  /*m_aVertex[3] = 0.5f;
+  m_aVertex[7] = -0.5f;
+  m_aVertex[9] = 0.5f;
+  m_aVertex[10] = -0.5f;*/
 
   m_aTexCoord[0] = rGlyph.l;
   m_aTexCoord[1] = rGlyph.t;
