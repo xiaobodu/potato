@@ -19,7 +19,7 @@ public:
 
 public:
   virtual void Start();
-  virtual bool Resize(const int& riWidth, const int& riHeight);
+  virtual bool Resize(const int32_t& riWidth, const int32_t& riHeight);
   virtual bool Render(const float& rfDeltaTime, core::IScene* const& rpScene);
   virtual void End();
 
@@ -31,20 +31,9 @@ public:
   virtual render::ISpace* const& Space();
 
 private:
-  void SetView(const int32_t& riWidth, const int32_t& riHeight, const float& rfFovy, const float& rfNear, const float& rfFar);
-  void Ortho(const float& rfWidth, const float& rfHeight, const float& rfFar);
-  void Frustum(const float& rfWidth, const float& rfHeight, const float& rfFovy, const float& rfNear, const float& rfFar);
-
-private:
   render::ICamera* m_pCamera;
   render::ICanvas* m_pCanvas;
   render::ISpace* m_pSpace;
-
-private:
-  void SetFrustum(float l, float r, float b, float t, float n, float f);
-  const float* GetTranspose();
-  float m[16];
-  float tm[16];
 };
 
 } // gles

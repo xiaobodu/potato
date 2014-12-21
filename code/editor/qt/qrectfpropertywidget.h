@@ -19,12 +19,12 @@ public:
 
 public:
   QString GetTitle() const;
-  void UpdateRectF(const c4g::scene::RectF& rRectF);
+  void UpdateRectF(const c4g::math::RectF& rRectF);
 
 private:
   Ui::RectFPropertyWidget m_oUi;
   QString m_sTitle;
-  c4g::scene::RectF m_Data;
+  c4g::math::RectF m_Data;
 };
 
 }

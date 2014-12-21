@@ -19,12 +19,12 @@ CLayout::~CLayout()
   ;
 }
 
-void CLayout::Resize(const RectF& roConfig, const RectF& roResized, IWidget* const& rpWidget) const
+void CLayout::Resize(const math::RectF& roConfig, const math::RectF& roResized, IWidget* const& rpWidget) const
 {
   CLayout::Resize(type, roConfig, roResized, rpWidget);
 }
 
-void CLayout::Resize(const ELayoutType& reType, const RectF& roConfig, const RectF& roResized, IWidget* const& rpWidget)
+void CLayout::Resize(const ELayoutType& reType, const math::RectF& roConfig, const math::RectF& roResized, IWidget* const& rpWidget)
 {
   if (NULL == rpWidget || !roConfig || !roResized) return;
 
@@ -42,7 +42,7 @@ void CLayout::Resize(const ELayoutType& reType, const RectF& roConfig, const Rec
     } break;
 
   case ELayoutType_FitIn: {
-    RectF config_new(roConfig);
+    math::RectF config_new(roConfig);
     float ratio_config = roConfig.w / roConfig.h;
     float ratio_resized = roResized.w / roResized.h;
     if (ratio_config < ratio_resized)
@@ -59,7 +59,7 @@ void CLayout::Resize(const ELayoutType& reType, const RectF& roConfig, const Rec
     } break;
 
   case ELayoutType_FitOut: {
-    RectF config_new(roConfig);
+    math::RectF config_new(roConfig);
     float ratio_config = roConfig.w / roConfig.h;
     float ratio_resized = roResized.w / roResized.h;
     if (ratio_config > ratio_resized)

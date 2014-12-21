@@ -71,13 +71,15 @@ void CRender::Start()
   glEnable(GL_DITHER);
 }
 
-bool CRender::Resize(const int& riWidth, const int& riHeight)
+bool CRender::Resize(const int32_t& riWidth, const int32_t& riHeight)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
-  glViewport(0, 0, riWidth, riHeight);
+  m_pCamera->Size(riWidth, riHeight);
 
-  SetView(riWidth, riHeight, 45.0f, 1.0f, 3000.0f);
+  //glViewport(0, 0, riWidth, riHeight);
+
+  //SetView(riWidth, riHeight, 45.0f, 1.0f, 3000.0f);
   //glFlush();
 
   return true;
@@ -136,7 +138,7 @@ render::ISpace* const& CRender::Space()
   return m_pSpace;
 }
 
-void CRender::SetView(const int32_t& riWidth, const int32_t& riHeight, const float& rfFovy, const float& rfNear, const float& rfFar)
+/*void CRender::SetView(const int32_t& riWidth, const int32_t& riHeight, const float& rfFovy, const float& rfNear, const float& rfFar)
 {
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
@@ -171,7 +173,7 @@ void CRender::Ortho(const float& rfWidth, const float& rfHeight, const float& rf
   tm[2] = 0.0f; tm[6] = 0.0f; tm[10] = -2.0f / (f - n); tm[14] = -1.0f * (f + n) / (f - n);
   tm[3] = 0.0f; tm[7] = 0.0f; tm[11] = 0.0f; tm[15] = 1;
   glLoadMatrixf(tm);
-  glRotatef(120.0f, 1.0f, 0.0f, 0.0f);
+  //glRotatef(120.0f, 1.0f, 0.0f, 0.0f);
 #endif
 
   assert(GL_NO_ERROR == glGetError());
@@ -222,16 +224,7 @@ void CRender::SetFrustum(float l, float r, float b, float t, float n, float f)
   m[11] = -(2 * f * n) / (f - n);
   m[14] = -1;
   m[15] = 0;
-}
-
-const float* CRender::GetTranspose()
-{
-  tm[0] = m[0];   tm[1] = m[4];   tm[2] = m[8];   tm[3] = m[12];
-  tm[4] = m[1];   tm[5] = m[5];   tm[6] = m[9];   tm[7] = m[13];
-  tm[8] = m[2];   tm[9] = m[6];   tm[10] = m[10];  tm[11] = m[14];
-  tm[12] = m[3];   tm[13] = m[7];   tm[14] = m[11];  tm[15] = m[15];
-  return tm;
-}
+}*/
 
 }
 }

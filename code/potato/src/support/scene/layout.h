@@ -31,7 +31,7 @@ public:
   }
 
 public:
-  virtual void Resize(const RectF& roConfig, const RectF& roResized, IWidget* const& rpWidget) const = 0;
+  virtual void Resize(const math::RectF& roConfig, const math::RectF& roResized, IWidget* const& rpWidget) const = 0;
 };
 
 class CLayout : public ILayout
@@ -41,10 +41,10 @@ public:
   virtual ~CLayout();
 
 public:
-  virtual void Resize(const RectF& roConfig, const RectF& roResized, IWidget* const& rpWidget) const;
+  virtual void Resize(const math::RectF& roConfig, const math::RectF& roResized, IWidget* const& rpWidget) const;
 
 public:
-  static void Resize(const ELayoutType& reType, const RectF& roConfig, const RectF& roResized, IWidget* const& rpWidget);
+  static void Resize(const ELayoutType& reType, const math::RectF& roConfig, const math::RectF& roResized, IWidget* const& rpWidget);
 
 public:
   class CBuilder : public TBuilder<ILayout* const>

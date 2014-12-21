@@ -68,13 +68,13 @@ public:
   static CGlyphListBuilder instance;
 };
 
-class CRectFBuilder : public TBuilder<RectF>
+class CRectFBuilder : public TBuilder<math::RectF>
 {
 private:
   CRectFBuilder();
 
 public:
-  virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, RectF& rRectF) const;
+  virtual bool Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, math::RectF& rRectF) const;
 
 public:
   static CRectFBuilder instance;

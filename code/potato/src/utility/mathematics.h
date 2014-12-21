@@ -1,13 +1,17 @@
 #pragma once
 
+#include <cstdint>
+#include <cmath>
+
+#include <cassert>
+
 #define C4G_MATH_MAX(a, b)          (((a) > (b)) ? (a) : (b))
 #define C4G_MATH_MIN(a, b)          (((a) < (b)) ? (a) : (b))
 
 #define C4G_GET_MID_RATIO(a1, b1, a2, b2, x1) ((((b1) - (a1)) == 0) ? (x1) : ((x1) * ((b2) - (a2)) / ((b1) - (a1))))
 
 namespace c4g {
-namespace scene {
-
+namespace math {
 
 template<typename TType>
 class Vect2
@@ -32,6 +36,107 @@ public:
 typedef Vect2<int>       Vect2I;
 typedef Vect2<float>     Vect2F;
 typedef Vect2<double>    Vect2D;
+
+template<typename TType>
+class Vect3
+{
+public:
+  TType x;
+  TType y;
+  TType z;
+
+public:
+  explicit Vect3(const TType& rtX, const TType& rtY, const TType& rtZ)
+    : x(rtX), y(rtY), z(rtZ)
+  {
+    ;
+  }
+  explicit Vect3(const Vect3& roOther)
+  {
+    x = roOther.x;
+    y = roOther.y;
+    z = roOther.z;
+  }
+
+public:
+  TType& operator[](int iIndex)
+  {
+    switch (iIndex)
+    {
+    case 0: return x;
+    case 1: return y;
+    case 2: return z;
+    }
+    assert(0);
+    return x;
+  }
+
+public:
+  Vect3<TType>& operator/=(const TType& rtD)
+  {
+    assert(rtD != 0);
+    if (rtD != 0) return *this;
+    x /= rtD;
+    y /= rtD;
+    z /= rtD;
+    return *this;
+  }
+
+public:
+  TType Length() const
+  {
+    return sqrt(x * x + y * y + z * z);
+  }
+};
+
+typedef Vect3<int32_t>        Vect3I;
+typedef Vect3<float>          Vect3F;
+typedef Vect3<double>         Vect3D;
+
+template<typename TType>
+class Matr4x4
+{
+public:
+  explicit Matr4x4()
+  {
+    ::memset(m_aData, 0, sizeof(TType) * 4 * 4);
+    ::memset(m_aTData, 0, sizeof(TType) * 4 * 4);
+  }
+
+public:
+  const TType* const D()
+  {
+    return m_aData;
+  }
+
+  const TType* const TD()
+  {
+    for (uint8_t i = 0; i < 4; ++i)
+    {
+      m_aTData[0 * 4 + i] = m_aData[i * 4 + 0];
+      m_aTData[1 * 4 + i] = m_aData[i * 4 + 1];
+      m_aTData[2 * 4 + i] = m_aData[i * 4 + 2];
+      m_aTData[3 * 4 + i] = m_aData[i * 4 + 3];
+    }
+    return m_aTData;
+  }
+
+public:
+  TType& operator[](int iIndex)
+  {
+    assert(!(iIndex < 0 || iIndex >= 4 * 4));
+    if (iIndex < 0 || iIndex >= 4 * 4) return m_aData[0];
+    return m_aData[iIndex];
+  }
+
+private:
+  TType m_aData[4 * 4];
+  TType m_aTData[4 * 4];
+};
+
+typedef Matr4x4<int32_t>      Matr4x4I;
+typedef Matr4x4<float>        Matr4x4F;
+typedef Matr4x4<double>       Matr4x4D;
 
 template<typename TType>
 class Rect

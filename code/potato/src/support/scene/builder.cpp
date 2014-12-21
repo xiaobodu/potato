@@ -95,12 +95,12 @@ bool CGlyphListBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& r
 
 
 CRectFBuilder::CRectFBuilder()
-  : TBuilder<RectF>("rectf")
+  : TBuilder<math::RectF>("rectf")
 {
   ;
 }
 
-bool CRectFBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, RectF& rRectF) const
+bool CRectFBuilder::Do(ISceneImpl* const& rpScene, const rapidjson::Value& roConfig, math::RectF& rRectF) const
 {
   const rapidjson::Value& jleft = roConfig["l"];
   assert(jleft.IsDouble());

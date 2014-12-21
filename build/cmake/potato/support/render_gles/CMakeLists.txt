@@ -43,7 +43,8 @@ endif()
 source_group("source" FILES ${SRC_FILE_LIST})
 
 set(SRC_FILE_LIST_other
-  ${SRC_PATH_potato}/utility/glmwrapper.h
+  ${SRC_PATH_potato}/utility/mathematics.h
+  ${SRC_PATH_potato}/utility/mathematics.cpp
   )
 
 source_group("other" FILES ${SRC_FILE_LIST_other})

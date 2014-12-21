@@ -124,8 +124,8 @@ public:
   bool visible;
   bool input;
   bool sensor;
-  RectF dst;
-  RectF dst_config;
+  math::RectF dst;
+  math::RectF dst_config;
   ISceneImpl* const scene;
   IWidget* parent;
 

@@ -24,7 +24,7 @@ QString QRectFPropertyWidget::GetTitle() const
   return str;
 }
 
-void QRectFPropertyWidget::UpdateRectF(const c4g::scene::RectF& rRectF)
+void QRectFPropertyWidget::UpdateRectF(const c4g::math::RectF& rRectF)
 {
   m_Data = rRectF;
 

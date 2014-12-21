@@ -33,7 +33,7 @@ public:
 
 public:
   virtual void Start() = 0;
-  virtual bool Resize(const int& riWidth, const int& riHeight) = 0;
+  virtual bool Resize(const int32_t& riWidth, const int32_t& riHeight) = 0;
   virtual bool Render(const float& rfDeltaTime, IScene* const& rpScene) = 0;
   virtual void End() = 0;
 
@@ -55,6 +55,7 @@ namespace render{
     virtual ~ICamera() { ; }
 
   public:
+    virtual void Size(const int32_t& riWidth, const int32_t& riHeight) = 0;
     virtual void Pos(const float afPos[C4G_DIM_NUM]) = 0;
     virtual void At(const float afAt[C4G_DIM_NUM]) = 0;
     virtual void Near(const float& rfNear) = 0;
@@ -63,6 +64,10 @@ namespace render{
   public:
     virtual bool Tick(const float& rfDelta) = 0;
     virtual void Project() = 0;
+
+  public:
+    virtual void View2World(const float afView[C4G_DIM_NUM], float afWorld[C4G_DIM_NUM]) = 0;
+    virtual void World2View(const float afWorld[C4G_DIM_NUM], float afView[C4G_DIM_NUM]) = 0;
   };
 
 class ITransform
