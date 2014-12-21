@@ -16,11 +16,17 @@ if [ "$VALID"x != "ok"x ]; then
   exit
 fi
 
+# run command with exit error-code
+set -e
+
 if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
-	
+
+echo "=== cppcheck"
 cppcheck code/editor code/potato code/demo -I code/editor/ -I code/potato/ -I code/potato/inc -I code/potato/src -I code/potato/src/engine -I code/demo/ --quiet --error-exitcode=1
+echo "=== git submodule"
 git submodule init
 git submodule update
+
 cd code/external/
 cd tinycc/
 ./configure
