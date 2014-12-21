@@ -10,19 +10,13 @@
       "id":"sun"
     },
     "dst":{
-      "l":-50.0,
-      "t":-50.0,
-      "r":50.0,
-      "b":50.0
+      "l":-75.0,
+      "t":-75.0,
+      "r":75.0,
+      "b":75.0
     },
     "layer":0,
     "visible":true,
-    "effects":[
-      {
-        "id":"p",
-        "name":"blend_moon"
-      }
-    ],
     "script":"void draw() { /*log_info(\"hello draw in script\");*/ }"
   }
 }

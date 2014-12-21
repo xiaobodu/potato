@@ -41,10 +41,10 @@
       }
     ],
     "dst":{
-      "l":0.0,
-      "t":0.0,
-      "r":480.0,
-      "b":800.0
+      "l":-240.0,
+      "t":-400.0,
+      "r":240.0,
+      "b":400.0
     },
     "layer":0,
     "visible":true,
@@ -53,106 +53,8 @@
     },
     "widgets":[
       {
-        "type":"panel",
-        "value":{
-          "id":"sub",
-          "dst":{
-            "l":240.0,
-            "t":400.0,
-            "r":480.0,
-            "b":800.0
-          },
-          "layer":0,
-          "visible":true,
-          "layout":{
-            "type":"fitin"
-          },
-          "effects":[
-            {
-              "id":"p",
-              "name":"rotate_sun"
-            }
-          ],
-          "widgets":[
-            {
-              "type":"file",
-              "value":"scene/main.json"
-            },
-            {
-              "type":"panel",
-              "value":{
-                "id":"suba",
-                "dst":{
-                  "l":150.0,
-                  "t":0.0,
-                  "r":250.0,
-                  "b":50.0
-                },
-                "layer":0,
-                "visible":true,
-                "layout":{
-                  "type":"scale"
-                },
-                "effects":[
-                  {
-                    "id":"p",
-                    "name":"rotate_earth"
-                  }
-                ],
-                "widgets":[
-                  {
-                    "type":"image",
-                    "value":{
-                      "id":"earth",
-                      "src":{
-                        "l":0.0,
-                        "t":0.0,
-                        "r":512.0,
-                        "b":512.0,
-                        "id":"earth"
-                      },
-                      "dst":{
-                        "l":-25.0,
-                        "t":-25.0,
-                        "r":25.0,
-                        "b":25.0
-                      },
-                      "layer":0,
-                      "visible":true,
-                      "effects":[
-                        {
-                          "id":"p",
-                          "name":"blend_moon"
-                        }
-                      ]
-                    }
-                  },
-                  {
-                    "type":"image",
-                    "value":{
-                      "id":"moon",
-                      "src":{
-                        "l":0.0,
-                        "t":0.0,
-                        "r":1024.0,
-                        "b":1024.0,
-                        "id":"moon"
-                      },
-                      "dst":{
-                        "l":30.0,
-                        "t":-10.0,
-                        "r":50.0,
-                        "b":10.0
-                      },
-                      "layer":0,
-                      "visible":true
-                    }
-                  }
-                ]
-              }
-            }
-          ]
-        }
+        "type":"file",
+        "value":"scene/main.json"
       }
     ]
   }

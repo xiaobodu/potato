@@ -36,6 +36,6 @@ private:
   render::ISpace* m_pSpace;
 };
 
-} // gles
-} // render
-} // ac
+}
+}
+}
