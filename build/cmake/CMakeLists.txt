@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(potato)
+project(potato-all)
 
 # define/check environment
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
