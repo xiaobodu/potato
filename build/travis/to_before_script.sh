@@ -32,6 +32,10 @@ cd tinycc/
 ./configure
 cd ../
 cd libpng/
+#./configure
+echo "=== cmake version"
+cmake --version
+ls -a
 cmake ./
 cd ../
 cd ../../
