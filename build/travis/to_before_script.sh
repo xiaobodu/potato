@@ -32,12 +32,7 @@ cd tinycc/
 ./configure
 cd ../
 cd libpng/
-#./configure
-echo "=== cmake version"
-cmake --version
-cat CMakeLists.txt
-ls -a
-cat png.h
+echo "=== generate the libpng makefile by cmake"
 cmake ./
 cd ../
 cd ../../
@@ -46,6 +41,7 @@ mkdir -p out/bin
 mkdir -p out/lib
 mkdir -p out/make
 cd out/make
+echo "=== generate the potato makefile by cmake"
 if [ "$RUN_COVERALLS"x = "true"x ]; then
 cmake -D C4G_BUILD_EDITOR=TRUE -D CMAKE_BUILD_TYPE=Release -D QT_SDK_PATH=/usr -D USE_COVERALLS=TRUE ../../build/cmake/
 else
