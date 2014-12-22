@@ -35,7 +35,9 @@ cd libpng/
 #./configure
 echo "=== cmake version"
 cmake --version
+cat CMakeLists.txt
 ls -a
+cat png.h
 cmake ./
 cd ../
 cd ../../
