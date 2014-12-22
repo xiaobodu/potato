@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory.h>
+
 #include <cstdint>
 #include <cmath>
 
@@ -233,7 +235,7 @@ namespace math {
 
     TVect4<TType> operator*(const TVect4<TType>& rOther)
     {
-      TVect4 res(*this);
+      TVect4<TType> res(*this);
       res *= rOther;
       return res;
     }
@@ -342,7 +344,7 @@ namespace math {
       }
       return true;
     }
-    bool operator^(const TVect2& roVect)
+    bool operator^(const TVect2<TType>& roVect)
     {
       if (roVect.x < l || roVect.x > r) return false;
       if (roVect.y < t || roVect.y > b) return false;

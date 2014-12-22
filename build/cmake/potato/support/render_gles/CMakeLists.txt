@@ -11,7 +11,6 @@ set(INC_PATH_LIST
   ${SRC_PATH_potato}/engine
   ${SRC_PATH_render}
   ${CODE_PATH}/external/rapidjson/include
-  ${CODE_PATH}/external/glm
   )
 
 set(SRC_FILE_LIST_base

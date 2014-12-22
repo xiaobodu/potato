@@ -15,7 +15,3 @@
 	path = code/external/libpng
 	url = http://git.code.sf.net/p/libpng/code
 	branch = libpng15
-[submodule "code/external/glm"]
-	path = code/external/glm
-	url = https://github.com/g-truc/glm.git
-	branch = 0.9.6
