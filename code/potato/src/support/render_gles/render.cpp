@@ -80,6 +80,7 @@ bool CRender::Resize(const int32_t& riWidth, const int32_t& riHeight)
   return true;
 }
 
+#if (defined(GL_VERSION_1_1) && defined(BUILD_DEBUG))
 void DrawAxis(float afAxis[3])
 {
   glBegin(GL_LINES);
@@ -141,6 +142,7 @@ void DrawSomeAxises()
   axis_arr[2] = -200.0f;
   DrawAxis(axis_arr);
 }
+#endif
 
 bool CRender::Render(const float& rfDelta, core::IScene* const& rpScene)
 {
@@ -151,7 +153,9 @@ bool CRender::Render(const float& rfDelta, core::IScene* const& rpScene)
   {
     if (!!m_pCamera && m_pCamera->Tick(rfDelta)) m_pCamera->Project();
 
+#if (defined(GL_VERSION_1_1) && defined(BUILD_DEBUG))
     DrawSomeAxises();
+#endif
     return rpScene->Draw(this);
   }
   return false;

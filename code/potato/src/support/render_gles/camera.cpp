@@ -25,10 +25,10 @@ namespace gles {
 
   CCamera::CCamera()
     : m_bReCalculate(true)
-    , m_fNear(Default_Near)
-    , m_fFar(Default_Far)
     , m_iWidth(Default_Screen_Width)
     , m_iHeight(Default_Screen_Height)
+    , m_fNear(Default_Near)
+    , m_fFar(Default_Far)
     , m_v3Pos(Default_Vec3_Position[0], Default_Vec3_Position[1], Default_Vec3_Position[2])
     , m_v3At(Default_Vec3_LookAt[0], Default_Vec3_LookAt[1], Default_Vec3_LookAt[2])
     , m_v3Up(Default_Vec3_LookUp[0], Default_Vec3_LookUp[1], Default_Vec3_LookUp[2])
@@ -119,7 +119,6 @@ namespace gles {
   {
     math::Vect4F pos_in_world(afModel[0], afModel[1], afModel[2], 1.0f);
 
-    math::Matr4x4F mvp = m_m4x4MVP;
     math::Vect4F res = m_m4x4MVP * pos_in_world;
     afProj[0] = res.x * m_iWidth * 0.5f;
     afProj[1] = res.y * m_iHeight * 0.5f;

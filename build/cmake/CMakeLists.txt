@@ -67,7 +67,7 @@ endif()
 SET (C4G_BUILD_EDITOR ${C4G_BUILD_EDITOR} CACHE BOOL "Generate the potato editor" FORCE)
 
 # define path
-set(ROOT_PATH "${all_SOURCE_DIR}/../..")
+set(ROOT_PATH "${potato-all_SOURCE_DIR}/../..")
 set(CODE_PATH "${ROOT_PATH}/code")
 set(OUT_PATH "${ROOT_PATH}/out")
 
