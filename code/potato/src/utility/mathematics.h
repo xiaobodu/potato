@@ -1,7 +1,5 @@
 #pragma once
 
-#include <memory.h>
-
 #include <cstdint>
 #include <cmath>
 
@@ -14,8 +12,7 @@
 
 #define C4G_GET_MID_RATIO(a1, b1, a2, b2, x1) ((((b1) - (a1)) == 0) ? (x1) : ((x1) * ((b2) - (a2)) / ((b1) - (a1))))
 
-namespace c4g {
-namespace math {
+namespace c4g { namespace math {
 
   template<typename TType>
   class TVect2
@@ -25,19 +22,38 @@ namespace math {
     TType y;
 
   public:
-    explicit TVect2(const TType& rtX, const TType& rtY)
+    TVect2()
+      : x(0), y(0)
+    {
+      ;
+    }
+    TVect2(const TType& rtV)
+      : x(rtV), y(rtV)
+    {
+      ;
+    }
+    TVect2(const TType& rtX, const TType& rtY)
       : x(rtX), y(rtY)
     {
       ;
     }
-    explicit TVect2(const TVect2& roOther)
+    TVect2(const TVect2& rOther)
     {
-      x = roOther.x;
-      y = roOther.y;
+      for (uint8_t i = 0; i < 2; i++) (*this)[i] = rOther[i];
     }
 
   public:
     TType& operator[](int iIndex)
+    {
+      switch (iIndex)
+      {
+      case 0: return x;
+      case 1: return y;
+      }
+      assert(0);
+      return x;
+    }
+    const TType& operator[](int iIndex) const
     {
       switch (iIndex)
       {
@@ -62,16 +78,24 @@ namespace math {
     TType z;
 
   public:
-    explicit TVect3(const TType& rtX, const TType& rtY, const TType& rtZ)
+    TVect3()
+      : x(0), y(0), z(0)
+    {
+      ;
+    }
+    TVect3(const TType& rtV)
+      : x(rtV), y(rtV), z(rtV)
+    {
+      ;
+    }
+    TVect3(const TType& rtX, const TType& rtY, const TType& rtZ)
       : x(rtX), y(rtY), z(rtZ)
     {
       ;
     }
-    explicit TVect3(const TVect3& roOther)
+    TVect3(const TVect3& rOther)
     {
-      x = roOther.x;
-      y = roOther.y;
-      z = roOther.z;
+      for (uint8_t i = 0; i < 3; i++) (*this)[i] = rOther[i];
     }
 
   public:
@@ -86,22 +110,72 @@ namespace math {
       assert(0);
       return x;
     }
+    const TType& operator[](int iIndex) const
+    {
+      switch (iIndex)
+      {
+      case 0: return x;
+      case 1: return y;
+      case 2: return z;
+      }
+      assert(0);
+      return x;
+    }
 
   public:
     TVect3& operator/=(const TType& rtD)
     {
-      assert(rtD != 0);
-      if (rtD != 0) return *this;
+      assert(!(rtD == 0));
+      if (rtD == 0) return *this;
       x /= rtD;
       y /= rtD;
       z /= rtD;
       return *this;
+    }
+    TVect3& operator*=(const TVect3& rOther)
+    {
+      (*this) = ((*this) * rOther);
+      return *this;
+    }
+    TVect3 operator+(const TVect3& rOther) const
+    {
+      TVect3 res(*this);
+      res.x = x + rOther.x;
+      res.y = y + rOther.y;
+      res.z = z + rOther.z;
+      return res;
+    }
+    TVect3 operator-(const TVect3& rOther) const
+    {
+      TVect3 res(*this);
+      res.x = x - rOther.x;
+      res.y = y - rOther.y;
+      res.z = z - rOther.z;
+      return res;
+    }
+    TVect3 operator*(const TVect3& rOther) const
+    {
+      TVect3 res(*this);
+      res.x = y * rOther.z - rOther.y * z;
+      res.y = z * rOther.x - rOther.z * x;
+      res.z = x * rOther.y - rOther.x * y;
+      return res;
+    }
+    TType Dot(const TVect3& rOther)
+    {
+      return x * rOther.x + y * rOther.y + z * rOther.z;
     }
 
   public:
     TType Length() const
     {
       return sqrt(x * x + y * y + z * z);
+    }
+    TVect3& Normalize()
+    {
+      TType len = Length();
+      if (len == 0) return *this;
+      return ((*this) /= len);
     }
   };
 
@@ -119,21 +193,40 @@ namespace math {
     TType w;
 
   public:
-    explicit TVect4(const TType& rtX, const TType& rtY, const TType& rtZ, const TType& rtW)
+    TVect4()
+      : x(0), y(0), z(0), w(0)
+    {
+      ;
+    }
+    TVect4(const TType& rtV)
+      : x(rtV), y(rtV), z(rtV), w(rtV)
+    {
+      ;
+    }
+    TVect4(const TType& rtX, const TType& rtY, const TType& rtZ, const TType& rtW)
       : x(rtX), y(rtY), z(rtZ), w(rtW)
     {
       ;
     }
-    explicit TVect4(const TVect4& roOther)
+    TVect4(const TVect4& rOther)
     {
-      x = roOther.x;
-      y = roOther.y;
-      z = roOther.z;
-      w = roOther.w;
+      for (uint8_t i = 0; i < 4; i++) (*this)[i] = rOther[i];
     }
 
   public:
-    TType& operator[](int iIndex)
+    TType& operator[](uint8_t iIndex)
+    {
+      switch (iIndex)
+      {
+      case 0: return x;
+      case 1: return y;
+      case 2: return z;
+      case 3: return w;
+      }
+      assert(0);
+      return x;
+    }
+    const TType& operator[](uint8_t iIndex) const
     {
       switch (iIndex)
       {
@@ -147,6 +240,14 @@ namespace math {
     }
 
   public:
+    TVect4& operator=(const TVect4& roOther)
+    {
+      x = roOther.x;
+      y = roOther.y;
+      z = roOther.z;
+      w = roOther.w;
+      return *this;
+    }
     TVect4& operator/=(const TType& rtD)
     {
       assert(rtD != 0);
@@ -173,12 +274,16 @@ namespace math {
   class TMatr4x4
   {
   public:
-    explicit TMatr4x4()
+    TMatr4x4()
     {
       ::memset(m_aData, 0, sizeof(TType) * 4 * 4);
-      ::memset(m_aTData, 0, sizeof(TType) * 4 * 4);
     }
-    explicit TMatr4x4(const TMatr4x4& rOther)
+    TMatr4x4(const TType& rV)
+    {
+      ::memset(m_aData, 0, sizeof(TType) * 4 * 4);
+      for (uint8_t i = 0; i < 4; i++) m_aData[C4G_MATRIX_INDEX(4, i, i)] = rV;
+    }
+    TMatr4x4(const TMatr4x4& rOther)
     {
       ::memcpy(m_aData, rOther.m_aData, sizeof(TType) * 4 * 4);
     }
@@ -201,6 +306,19 @@ namespace math {
       return m_aTData;
     }
 
+    TMatr4x4& T()
+    {
+      for (uint8_t i = 0; i < 4; i++)
+      {
+        m_aTData[C4G_MATRIX_INDEX(4, 0, i)] = m_aData[C4G_MATRIX_INDEX(4, i, 0)];
+        m_aTData[C4G_MATRIX_INDEX(4, 1, i)] = m_aData[C4G_MATRIX_INDEX(4, i, 1)];
+        m_aTData[C4G_MATRIX_INDEX(4, 2, i)] = m_aData[C4G_MATRIX_INDEX(4, i, 2)];
+        m_aTData[C4G_MATRIX_INDEX(4, 3, i)] = m_aData[C4G_MATRIX_INDEX(4, i, 3)];
+      }
+      ::memcpy(m_aData, m_aTData, sizeof(TType) * 4 * 4);
+      return (*this);
+    }
+
   public:
     TType& operator[](int iIndex)
     {
@@ -214,7 +332,6 @@ namespace math {
     {
       for (uint8_t i = 0; i < 4 * 4; i++) m_aData[i] = rOther.m_aData[i];
     }
-
     TMatr4x4& operator*=(const TMatr4x4& rOther)
     {
       TType temp_data[4 * 4];
@@ -232,11 +349,21 @@ namespace math {
       }
       return *this;
     }
-
-    TVect4<TType> operator*(const TVect4<TType>& rOther)
+    TMatr4x4 operator*(const TMatr4x4& rOther)
     {
-      TVect4<TType> res(*this);
-      res *= rOther;
+      TMatr4x4 res(*this);
+      return (res *= rOther);
+    }
+    TVect4<TType> operator*(const TVect4<TType>& rOther) const
+    {
+      TVect4<TType> res;
+      for (uint8_t i = 0; i < 4; i++)
+      {
+        res[i] += m_aData[C4G_MATRIX_INDEX(4, i, 0)] * rOther.x;
+        res[i] += m_aData[C4G_MATRIX_INDEX(4, i, 1)] * rOther.y;
+        res[i] += m_aData[C4G_MATRIX_INDEX(4, i, 2)] * rOther.z;
+        res[i] += m_aData[C4G_MATRIX_INDEX(4, i, 3)] * rOther.w;
+      }
       return res;
     }
 
@@ -384,5 +511,4 @@ namespace math {
   typedef TRect<float>     RectF;
   typedef TRect<double>    RectD;
 
-}
-}
+}}

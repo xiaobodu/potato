@@ -10,12 +10,13 @@ namespace gles {
 
   class CCamera : public ICamera
   {
+    static const float Default_Near;
+    static const float Default_Far;
     static const int32_t Default_Screen_Width;
     static const int32_t Default_Screen_Height;
     static const float Default_Vec3_Position[C4G_DIM_NUM];
     static const float Default_Vec3_LookAt[C4G_DIM_NUM];
-    static const float Default_Near;
-    static const float Default_Far;
+    static const float Default_Vec3_LookUp[C4G_DIM_NUM];
 
   public:
     CCamera();
@@ -33,8 +34,8 @@ namespace gles {
     virtual void Project();
 
   public:
-    virtual void View2World(const float afView[C4G_DIM_NUM], float afWorld[C4G_DIM_NUM]);
-    virtual void World2View(const float afWorld[C4G_DIM_NUM], float afView[C4G_DIM_NUM]);
+    virtual void MVP(const float afModel[C4G_DIM_NUM], float afProj[C4G_DIM_NUM]) const;
+    virtual void PVM(const float afProj[C4G_DIM_NUM], float afModel[C4G_DIM_NUM]) const;
 
   private:
     bool Calculate();
@@ -43,11 +44,14 @@ namespace gles {
     bool m_bReCalculate;
     int32_t m_iWidth;
     int32_t m_iHeight;
-    math::Vect3F m_v3Pos;
-    math::Vect3F m_v3At;
-    math::Matr4x4F m_m4x4Proj;
     float m_fNear;
     float m_fFar;
+    math::Vect3F m_v3Pos;
+    math::Vect3F m_v3At;
+    math::Vect3F m_v3Up;
+    math::Matr4x4F m_m4x4Proj;
+    math::Matr4x4F m_m4x4View;
+    math::Matr4x4F m_m4x4MVP;
   };
 
 }

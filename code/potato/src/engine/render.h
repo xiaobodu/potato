@@ -66,8 +66,8 @@ namespace render{
     virtual void Project() = 0;
 
   public:
-    virtual void View2World(const float afView[C4G_DIM_NUM], float afWorld[C4G_DIM_NUM]) = 0;
-    virtual void World2View(const float afWorld[C4G_DIM_NUM], float afView[C4G_DIM_NUM]) = 0;
+    virtual void MVP(const float afModel[C4G_DIM_NUM], float afProj[C4G_DIM_NUM]) const = 0;
+    virtual void PVM(const float afProj[C4G_DIM_NUM], float afModel[C4G_DIM_NUM]) const = 0;
   };
 
 class ITransform

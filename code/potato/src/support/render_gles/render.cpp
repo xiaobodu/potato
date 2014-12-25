@@ -77,12 +77,69 @@ bool CRender::Resize(const int32_t& riWidth, const int32_t& riHeight)
 
   m_pCamera->Size(riWidth, riHeight);
 
-  //glViewport(0, 0, riWidth, riHeight);
-
-  //SetView(riWidth, riHeight, 45.0f, 1.0f, 3000.0f);
-  //glFlush();
-
   return true;
+}
+
+void DrawAxis(float afAxis[3])
+{
+  glBegin(GL_LINES);
+  glColor3f(1.0f, 0.0f, 0.0f);
+  glVertex3f(afAxis[0], afAxis[1], afAxis[2]);
+  glVertex3f(afAxis[0] + 100.0f, afAxis[1], afAxis[2]);
+  glColor3f(0.0f, 1.0f, 0.0f);
+  glVertex3f(afAxis[0], afAxis[1], afAxis[2]);
+  glVertex3f(afAxis[0], afAxis[1] + 100.0f, afAxis[2]);
+  glColor3f(0.0f, 0.0f, 1.0f);
+  glVertex3f(afAxis[0], afAxis[1], afAxis[2]);
+  glVertex3f(afAxis[0], afAxis[1], afAxis[2] + 100.0f);
+  if ((afAxis[0] + afAxis[1] + afAxis[2]) > 0.0f)
+  {
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glVertex3f(afAxis[0], afAxis[1], afAxis[2]);
+    glVertex3f(afAxis[0] - 50.0f, afAxis[1] - 50.0f, afAxis[2] - 50.0f);
+  }
+  else
+  {
+    glColor3f(0.0f, 0.0f, .0f);
+    glVertex3f(afAxis[0], afAxis[1], afAxis[2]);
+    glVertex3f(afAxis[0] - 50.0f, afAxis[1] - 50.0f, afAxis[2] - 50.0f);
+  }
+  glEnd();
+}
+
+void DrawSomeAxises()
+{
+  float axis_arr[3];
+
+  axis_arr[0] = 200.0f;
+  axis_arr[1] = 0.0f;
+  axis_arr[2] = 0.0f;
+  DrawAxis(axis_arr);
+
+  axis_arr[0] = -200.0f;
+  axis_arr[1] = 0.0f;
+  axis_arr[2] = 0.0f;
+  DrawAxis(axis_arr);
+
+  axis_arr[0] = 0.0f;
+  axis_arr[1] = 200.0f;
+  axis_arr[2] = 0.0f;
+  DrawAxis(axis_arr);
+
+  axis_arr[0] = 0.0f;
+  axis_arr[1] = -200.0f;
+  axis_arr[2] = 0.0f;
+  DrawAxis(axis_arr);
+
+  axis_arr[0] = 0.0f;
+  axis_arr[1] = 0.0f;
+  axis_arr[2] = 200.0f;
+  DrawAxis(axis_arr);
+
+  axis_arr[0] = 0.0f;
+  axis_arr[1] = 0.0f;
+  axis_arr[2] = -200.0f;
+  DrawAxis(axis_arr);
 }
 
 bool CRender::Render(const float& rfDelta, core::IScene* const& rpScene)
@@ -90,15 +147,13 @@ bool CRender::Render(const float& rfDelta, core::IScene* const& rpScene)
   glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glLoadIdentity();
+  if (!!rpScene && rpScene->Tick(rfDelta))
+  {
+    if (!!m_pCamera && m_pCamera->Tick(rfDelta)) m_pCamera->Project();
 
-  static GLfloat rot = 0;
-  rot += rfDelta * 10.0f;
-  //glRotatef(rot, 0.0f, 1.0f, 0.0f);
-
-  if (!!m_pCamera && m_pCamera->Tick(rfDelta)) m_pCamera->Project();
-  if (!!rpScene && rpScene->Tick(rfDelta)) return rpScene->Draw(this);
-
+    DrawSomeAxises();
+    return rpScene->Draw(this);
+  }
   return false;
 }
 
