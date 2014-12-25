@@ -16,7 +16,7 @@ before_build:
   - cd ../../
 
 build:
-  project: out/msbuild/all.sln
+  project: out/msbuild/potato-all.sln
 
 after_build:
   - cd build/appveyor/

@@ -19,6 +19,7 @@ LOCAL_C_INCLUDES 		+= $(REAL_CODE_PATH)/external/rapidjson/include
 
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/render_gles/render.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/render_gles/canvas.cpp
+LOCAL_SRC_FILES     += $(CODE_PATH)/potato/src/support/render_gles/camera.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/render_gles/space.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/render_gles/transform.cpp
 LOCAL_SRC_FILES 		+= $(CODE_PATH)/potato/src/support/render_gles/blend.cpp
