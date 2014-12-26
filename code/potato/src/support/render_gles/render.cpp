@@ -38,20 +38,20 @@ CRender::CRender()
   C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   m_pCamera = new CCamera();
-  m_pCanvas = new CCanvas();
-  m_pSpace = new CSpace();
+  m_pCanvas = new CCanvas(m_pCamera);
+  m_pSpace = new CSpace(m_pCamera);
 }
 
 CRender::~CRender()
 {
-  delete m_pCamera;
-  m_pCamera = nullptr;
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
+
   delete m_pCanvas;
   m_pCanvas = nullptr;
   delete m_pSpace;
   m_pSpace = nullptr;
-
-  C4G_LOG_INFO(__PRETTY_FUNCTION__);
+  delete m_pCamera;
+  m_pCamera = nullptr;
 }
 
 bool CRender::Initialize(core::MString2Module& rmModule)

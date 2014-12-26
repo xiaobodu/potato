@@ -28,14 +28,14 @@ CDisplay::CDisplay()
   , m_iHeight(800)
   , m_pRender(NULL)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
 CDisplay::~CDisplay()
 {
-  m_pRender = NULL;
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  m_pRender = nullptr;
 }
 
 bool CDisplay::Initialize(core::MString2Module& rmModule)
@@ -47,7 +47,7 @@ bool CDisplay::Initialize(core::MString2Module& rmModule)
 
 void CDisplay::Run(core::IScene* const& rpScene)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   CreateWindow();
 

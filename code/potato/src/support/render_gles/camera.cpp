@@ -149,7 +149,7 @@ namespace gles {
     /// calculate project matrix
     {
       float r = m_iWidth * 0.5f; float l = -r;
-      float b = m_iHeight * 0.5f; float t = -b;
+      float b = m_iHeight * -0.5f; float t = -b;
       float f = m_fFar; float n = m_fNear;
 
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 0)] = 2.0f / (r - l);

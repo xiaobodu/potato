@@ -20,7 +20,7 @@ fi
 set -e
 
 if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
-sudo apt-get install cppcheck valgrind libgles1-mesa-dev qt5-default
+sudo apt-get install cppcheck valgrind libgles1-mesa-dev qt5-default ggcov
 sudo pip install cpp-coveralls
 
 echo "<<< install"

@@ -1,11 +1,15 @@
 #include "space.h"
 
+#include <cassert>
+
 namespace c4g{
 namespace render {
 namespace gles {
 
-CSpace::CSpace()
+CSpace::CSpace(ICamera* const pCamera)
+  : m_pCamera(pCamera)
 {
+  assert(!!pCamera);
   ;
 }
 

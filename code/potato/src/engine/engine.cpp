@@ -23,19 +23,21 @@ CEngine::CEngine()
   : m_pDisplay(NULL)
   , m_pScene(NULL)
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 }
 
 CEngine::~CEngine()
 {
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
+  
   m_pScene = NULL;
   m_pDisplay = NULL;
-
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
 }
 
 bool CEngine::Initialize(core::MString2Module& rmModule)
 {
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
+
   m_pScene = IModule::Find<core::IScene>(rmModule, MODULE_TYPE_SCENE);
   m_pScene->Initialize(rmModule);
   m_pDisplay = IModule::Find<core::IDisplay>(rmModule, MODULE_TYPE_DISPLAY);
@@ -72,7 +74,7 @@ void CEngine::Run(const std::string& rsDataPath, android_app* pApp)
 void CEngine::Run(const std::string& rsDataPath)
 #endif
 {
-  utility::Log::Instance().Info(__PRETTY_FUNCTION__);
+  C4G_LOG_INFO(__PRETTY_FUNCTION__);
 
   m_pScene->SetDataPath(rsDataPath);
 

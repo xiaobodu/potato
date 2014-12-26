@@ -16,13 +16,16 @@ namespace gles {
 class CSpace : public ISpace
 {
 public:
-  CSpace();
+  explicit CSpace(ICamera* const pCamera);
   virtual ~CSpace();
 
 public:
   virtual void EffectBegin(IProcess* const& rpProcess);
   virtual void EffectEnd(IProcess* const& rpProcess);
   virtual void DrawModel(const base::Model& rModel, IProcess* const& rpProcess = NULL);
+
+private:
+  ICamera* m_pCamera;
 };
 
 }

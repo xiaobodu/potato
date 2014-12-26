@@ -22,7 +22,7 @@ namespace gles {
 class CCanvas : public ICanvas
 {
 public:
-  CCanvas();
+  explicit CCanvas(ICamera* const pCamera);
   virtual ~CCanvas();
 
 public:
@@ -32,6 +32,7 @@ public:
   virtual void DrawGlyph(const base::Glyph& rGlyph, const float& rfWidth, const float& rfHeight, IProcess* const& rpProcess = NULL);
 
 private:
+  ICamera* const m_pCamera;
   GLfloat m_aVertex[RECT_VERTEX_NUM * RECT_VERTEX_FLOAT_NUM];
   GLfloat m_aTexCoord[RECT_VERTEX_NUM * RECT_TEXCOORD_FLOAT_NUM];
   GLubyte m_aIndice[RECT_INDICE_INT_NUM];
