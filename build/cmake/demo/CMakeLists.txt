@@ -49,5 +49,12 @@ target_link_libraries(demo ${LINK_FILE_LIST})
 # build dependicies
 set(DEP_PROJ_LIST
   potato
+  engine
+  display
+  render
+  asset
+  scene
+  flash
+  script
   )
 add_dependencies(demo ${DEP_PROJ_LIST})

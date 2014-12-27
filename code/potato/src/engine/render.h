@@ -49,17 +49,24 @@ public:
 
 namespace render{
 
+  typedef enum enmProjectType {
+    EProjectType_Ortho,
+    EProjectType_Perspective,
+  } EProjectType;
+
   class ICamera
   {
   public:
     virtual ~ICamera() { ; }
 
   public:
+    virtual void Type(const EProjectType& reType) = 0;
     virtual void Size(const int32_t& riWidth, const int32_t& riHeight) = 0;
-    virtual void Pos(const float afPos[C4G_DIM_NUM]) = 0;
-    virtual void At(const float afAt[C4G_DIM_NUM]) = 0;
     virtual void Near(const float& rfNear) = 0;
     virtual void Far(const float& rfFar) = 0;
+    virtual void FOV(const float& rfFOV) = 0;
+    virtual void Pos(const float afPos[C4G_DIM_NUM]) = 0;
+    virtual void At(const float afAt[C4G_DIM_NUM]) = 0;
 
   public:
     virtual bool Tick(const float& rfDelta) = 0;

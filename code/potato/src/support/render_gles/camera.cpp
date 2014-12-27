@@ -15,20 +15,23 @@ namespace c4g {
 namespace render {
 namespace gles {
 
-  const float CCamera::Default_Near = 1.0f;
-  const float CCamera::Default_Far = 1000.0f;
   const int32_t CCamera::Default_Screen_Width = 300;
   const int32_t CCamera::Default_Screen_Height = 300;
+  const float CCamera::Default_Near = 1.0f;
+  const float CCamera::Default_Far = 1000.0f;
   const float CCamera::Default_Vec3_Position[C4G_DIM_NUM] = { 0.0f, 0.0f, 0.0f };
-  const float CCamera::Default_Vec3_LookAt[C4G_DIM_NUM] = { 0.0f, 0.0f, 1.0f };
+  const float CCamera::Default_Vec3_LookAt[C4G_DIM_NUM] = { 0.0f, 0.0f, -1.0f };
   const float CCamera::Default_Vec3_LookUp[C4G_DIM_NUM] = { 0.0f, 1.0f, 0.0f };
+  const float CCamera::Default_FOV = 45.0f;
 
   CCamera::CCamera()
     : m_bReCalculate(true)
+    , m_eType(EProjectType_Perspective)
     , m_iWidth(Default_Screen_Width)
     , m_iHeight(Default_Screen_Height)
     , m_fNear(Default_Near)
     , m_fFar(Default_Far)
+    , m_fFOV(Default_FOV)
     , m_v3Pos(Default_Vec3_Position[0], Default_Vec3_Position[1], Default_Vec3_Position[2])
     , m_v3At(Default_Vec3_LookAt[0], Default_Vec3_LookAt[1], Default_Vec3_LookAt[2])
     , m_v3Up(Default_Vec3_LookUp[0], Default_Vec3_LookUp[1], Default_Vec3_LookUp[2])
@@ -44,6 +47,13 @@ namespace gles {
     //
   }
 
+  void CCamera::Type(const EProjectType& reType)
+  {
+    if (reType != EProjectType_Ortho && reType != EProjectType_Perspective) return;
+    m_bReCalculate |= (m_eType != reType);
+    m_eType = reType;
+  }
+
   void CCamera::Size(const int32_t& riWidth, const int32_t& riHeight)
   {
     if (riWidth <= 0 || riHeight <= 0) return;
@@ -52,6 +62,27 @@ namespace gles {
     m_iWidth = riWidth;
     m_bReCalculate |= (m_iHeight != riHeight);
     m_iHeight = riHeight;
+  }
+
+  void CCamera::Near(const float& rfNear)
+  {
+    if (rfNear < 0.0f) return;
+    m_bReCalculate |= (m_fNear != rfNear);
+    m_fNear = rfNear;
+  }
+
+  void CCamera::Far(const float& rfFar)
+  {
+    if (rfFar < 0.0f) return;
+    m_bReCalculate |= (m_fFar != rfFar);
+    m_fFar = rfFar;
+  }
+
+  void CCamera::FOV(const float& rfFOV)
+  {
+    if (rfFOV <= 0.0f) return;
+    m_bReCalculate |= (m_fFOV != rfFOV);
+    m_fFOV = rfFOV;
   }
 
   void CCamera::Pos(const float afPos[C4G_DIM_NUM])
@@ -72,20 +103,6 @@ namespace gles {
     }
     /// normalize
     m_v3At /= m_v3At.Length();
-  }
-
-  void CCamera::Near(const float& rfNear)
-  {
-    if (rfNear < 0.0f) return;
-    m_bReCalculate |= (m_fNear != rfNear);
-    m_fNear = rfNear;
-  }
-
-  void CCamera::Far(const float& rfFar)
-  {
-    if (rfFar < 0.0f) return;
-    m_bReCalculate |= (m_fFar != rfFar);
-    m_fFar = rfFar;
   }
 
   bool CCamera::Tick(const float& rfDelta)
@@ -146,7 +163,8 @@ namespace gles {
       m_m4x4View[C4G_MATRIX_INDEX(4, 2, 3)] = 1.0f * axis_z.Dot(m_v3At);
     }
 
-    /// calculate project matrix
+    /// calculate the ortho project matrix
+    if (m_eType == EProjectType_Ortho)
     {
       float r = m_iWidth * 0.5f; float l = -r;
       float b = m_iHeight * -0.5f; float t = -b;
@@ -164,13 +182,45 @@ namespace gles {
 
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 0)] = 0.0f;
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 1)] = 0.0f;
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 2)] = 2.0f / (f - n);
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 2)] = -2.0f / (f - n);
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 3)] = -1.0f * (f + n) / (f - n);
 
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 0)] = 0.0f;
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 1)] = 0.0f;
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 2)] = 0.0f;
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 3)] = 1.0f;
+    }
+    /// calculate the perspective project matrix
+    else if (m_eType == EProjectType_Perspective)
+    {
+      float fov = m_fFOV;
+      float f = m_fFar; float n = m_fNear;
+      float t = tan(fov) * n; float b = -t;
+      float r = t * m_iWidth / m_iHeight; float l = -r;
+
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 0)] = 2.0f * n / (r - l);
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 1)] = 0.0f;
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 2)] = (r + l) / (r - l);
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 3)] = 0.0f;
+
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 1, 0)] = 0.0f;
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 1, 1)] = 2.0f * n / (t - b);
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 1, 2)] = (t + b) / (t - b);
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 1, 3)] = 0.0f;
+
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 0)] = 0.0f;
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 1)] = 0.0f;
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 2)] = -1.0f * (f + n) / (f - n);
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 3)] = -2.0f * f * n / (f - n);
+
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 0)] = 0.0f;
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 1)] = 0.0f;
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 2)] = -1.0f;
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 3)] = 0.0f;
+    }
+    else
+    {
+      assert(0);
     }
 
     m_m4x4MVP = m_m4x4View * m_m4x4Proj;
