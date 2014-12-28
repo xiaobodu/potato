@@ -1,10 +1,10 @@
 #include "sharedlibrary.h"
 #include "log.h"
 
-#if defined(CXX_MSVC)
-#include <Windows.h>
-#elif defined(CXX_GNU)
-#include <dlfcn.h>
+#if defined(CXX_GNU) || defined(CXX_CLANG)
+# include <dlfcn.h>
+#elif defined(CXX_MSVC)
+# include <Windows.h>
 #endif
 #include <iostream>
 
@@ -14,30 +14,30 @@ namespace utility {
 CSharedLibraryHandler::CSharedLibraryHandler(const std::string& rsFileName)
     : m_pLib(NULL)
 {
-#if defined(CXX_MSVC)
-  m_pLib = LoadLibrary(rsFileName.c_str());
-#elif defined(CXX_GNU)
+#if defined(CXX_GNU) || defined(CXX_CLANG)
   m_pLib = dlopen(rsFileName.c_str(), RTLD_LAZY);
+#elif defined(CXX_MSVC)
+  m_pLib = LoadLibrary(rsFileName.c_str());
 #endif
 }
 
 CSharedLibraryHandler::~CSharedLibraryHandler()
 {
   if (NULL == m_pLib) return;
-#if defined(CXX_MSVC)
-  FreeLibrary((HMODULE)m_pLib);
-#elif defined(CXX_GNU)
+#if defined(CXX_GNU) || defined(CXX_CLANG)
   dlclose(m_pLib);
+#elif defined(CXX_MSVC)
+  FreeLibrary((HMODULE)m_pLib);
 #endif
 }
 
 void* CSharedLibraryHandler::GetFunc(const std::string& rsFuncName)
 {
   void* func_ptr = NULL;
-#if defined(CXX_MSVC)
-  func_ptr = GetProcAddress((HMODULE)m_pLib, rsFuncName.c_str());
-#elif defined(CXX_GNU)
+#if defined(CXX_GNU) || defined(CXX_CLANG)
   func_ptr = dlsym(m_pLib, rsFuncName.c_str());
+#elif defined(CXX_MSVC)
+  func_ptr = GetProcAddress((HMODULE)m_pLib, rsFuncName.c_str());
 #endif
   m_mapFuncName2FunPtr.insert(std::make_pair(rsFuncName, func_ptr));
   return func_ptr;

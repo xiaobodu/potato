@@ -2,7 +2,7 @@
 
 #include "render.h"
 
-#if defined(CXX_GNU) || defined(BUILD_ANDROID)
+#if defined(CXX_GNU)
 #include <GLES/gl.h>
 #elif defined(CXX_MSVC)
 #include <Windows.h>

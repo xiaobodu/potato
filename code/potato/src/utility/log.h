@@ -56,16 +56,14 @@ TEXT_STYLE_BGCOLOR_BLUE, TEXT_STYLE_BGCOLOR_MAGENTA, TEXT_STYLE_BGCOLOR_CYAN, TE
 #endif
 
 #define TEXT_BUFFER_SIZE_MAX            1024
-#if defined(CXX_GNU) ||  defined(BUILD_ANDROID)
+#if defined(CXX_GNU) || defined(CXX_CLANG)
 #define GET_ARGS_TEXT(text, result)\
-    char result[TEXT_BUFFER_SIZE_MAX];\
     va_list args;\
     va_start(args, text);\
     vsprintf(result, text, args);\
     va_end(args)
 #elif defined(CXX_MSVC)
 #define GET_ARGS_TEXT(text, result)\
-    char result[TEXT_BUFFER_SIZE_MAX];\
     va_list args;\
     va_start(args, text);\
     vsprintf_s(result, TEXT_BUFFER_SIZE_MAX, text, args);\
@@ -121,6 +119,7 @@ protected:
 public:
   void Fatal(const char* const & rcText, ...) const
   {
+    char result[TEXT_BUFFER_SIZE_MAX];
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
     LOGF("[FATA] %s", result);
@@ -131,6 +130,7 @@ public:
 
   void Error(const char* const & rcText, ...) const
   {
+    char result[TEXT_BUFFER_SIZE_MAX];
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
     LOGE("[ERRO] %s", result);
@@ -141,6 +141,7 @@ public:
 
   void Warning(const char* const & rcText, ...) const
   {
+    char result[TEXT_BUFFER_SIZE_MAX];
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
     LOGW("[WARN] %s", result);
@@ -151,6 +152,7 @@ public:
 
   void System(const char* const & rcText, ...) const
   {
+    char result[TEXT_BUFFER_SIZE_MAX];
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
     LOGV("[SYST] %s", result);
@@ -161,6 +163,7 @@ public:
 
   void Info(const char* const & rcText, ...) const
   {
+    char result[TEXT_BUFFER_SIZE_MAX];
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
     LOGI("[INFO] %s", result);
@@ -171,6 +174,7 @@ public:
 
   void Debug(const char* const & rcText, ...) const
   {
+    char result[TEXT_BUFFER_SIZE_MAX];
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
     LOGD("[DEBU] %s", result);
@@ -181,6 +185,7 @@ public:
 
   void User(const char* const & rcText, ...) const
   {
+    char result[TEXT_BUFFER_SIZE_MAX];
     GET_ARGS_TEXT(rcText, result);
 #if defined(BUILD_ANDROID)
     LOGV("[USER] %s", result);
@@ -196,6 +201,7 @@ public:
     assert(rcTitle != NULL);
     assert(rcText != NULL);
 
+    char result[TEXT_BUFFER_SIZE_MAX];
     GET_ARGS_TEXT(rcText, result);
 
     switch (eStyle)
@@ -254,13 +260,12 @@ public:
 #define C4G_LOG_FATAL(...)      c4g::utility::Log::Instance().Fatal(__VA_ARGS__)
 #define C4G_LOG_ERROR(...)      c4g::utility::Log::Instance().Error(__VA_ARGS__)
 #define C4G_LOG_WARNING(...)    c4g::utility::Log::Instance().Warning(__VA_ARGS__)
-#if defined(BUILD_DEBUG)
 #define C4G_LOG_SYSTEM(...)     c4g::utility::Log::Instance().System(__VA_ARGS__)
+#if defined(BUILD_DEBUG)
 #define C4G_LOG_INFO(...)       c4g::utility::Log::Instance().Info(__VA_ARGS__)
 #define C4G_LOG_DEBUG(...)      c4g::utility::Log::Instance().Debug(__VA_ARGS__)
 #define C4G_LOG_USER(...)       c4g::utility::Log::Instance().User(__VA_ARGS__)
 #else
-#define C4G_LOG_SYSTEM(...)
 #define C4G_LOG_INFO(...)
 #define C4G_LOG_DEBUG(...)
 #define C4G_LOG_USER(...)

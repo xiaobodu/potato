@@ -15,7 +15,7 @@ namespace asset {
 bool check_if_png(const char *file_name)
 {
   FILE *fp = NULL;
-#if defined(CXX_GNU)
+#if defined(CXX_GNU) || defined(CXX_CLANG)
   if ((fp = fopen(file_name, "rb")) == NULL) return false;
 #elif defined(CXX_MSVC)
   if (fopen_s(&fp, file_name, "rb") || fp == NULL) return false;
@@ -46,7 +46,7 @@ void read_png(const char *file_name, unsigned int& riWidth, unsigned int& riHeig
   rpBuffer = NULL;
 
   FILE *fp = NULL;
-#if defined(CXX_GNU)
+#if defined(CXX_GNU) || defined(CXX_CLANG)
   if ((fp = fopen(file_name, "rb")) == NULL) return;
 #elif defined(CXX_MSVC)
   if (fopen_s(&fp, file_name, "rb") || fp == NULL) return;
