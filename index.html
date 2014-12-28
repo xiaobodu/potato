@@ -41,7 +41,7 @@
         <h1>
 <a id="potato" class="anchor" href="#potato" aria-hidden="true"><span class="octicon octicon-link"></span></a>potato</h1>
 
-<p>a light weight mobile game engine. It belongs to <a href="http://c4g.io/" title="Code 4 Game">Code4Game</a>.</p>
+<p>a light weight mobile game engine.</p>
 
 <p><a href="https://gitter.im/code4game/potato?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a></p>
 
@@ -85,48 +85,55 @@
 <h3>
 <a id="ready" class="anchor" href="#ready" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ready</h3>
 
-<p>Please install <a href="http://git-scm.com/" title="Git">Git</a>, <a href="http://cmake.org/" title="CMake">CMake</a>, and <a href="http://qt-project.org/" title="Qt">Qt</a>.</p>
+<p>Please install <a href="http://git-scm.com/" title="Git">Git</a>, <a href="http://cmake.org/" title="CMake">CMake</a>, and <a href="http://qt-project.org/" title="Qt5">Qt5</a>.</p>
 
 <h3>
 <a id="linux" class="anchor" href="#linux" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linux</h3>
 
 <ul>
-<li>Into <code>build</code> directory.</li>
-<li>Run <code>linux-ready.sh</code>. (Initialize and update submodule)</li>
-<li>Run <code>linux-config.sh</code> (Create Makefile by CMake)</li>
-<li>Run <code>linux-make.sh</code> (Build all projects include static/shared library, third library, test)</li>
+<li>Into <code>./build</code> directory.</li>
+<li>Run <code>./linux-ready.sh</code>. (Initialize and Update submodule)</li>
+<li>Run <code>./linux-config.sh</code> + <code>DEBUG</code> or <code>RELEASE</code> (Configure the project and Create Makefile by CMake)</li>
+<li>Run <code>./linux-make.sh</code> (Build all projects include static/shared library, third library, demo)</li>
 </ul>
+
+<h3>
+<a id="windows" class="anchor" href="#windows" aria-hidden="true"><span class="octicon octicon-link"></span></a>Windows</h3>
+
+<p>coming soon</p>
 
 <h3>
 <a id="android-in-linux" class="anchor" href="#android-in-linux" aria-hidden="true"><span class="octicon octicon-link"></span></a>Android (in Linux)</h3>
 
 <ul>
 <li>Need two environment variables - ANDROID_HOME and NDK_HOME</li>
-<li>Run <code>android-make-release.sh</code> (Build all projects include some static/shared libraries, some third libraries, and <code>test</code>)</li>
+<li>Run <code>./build/android-make-release.sh</code> (Build all projects include some static/shared libraries, some third libraries, and <code>demo</code>)</li>
 </ul>
 
 <h2>
 <a id="run" class="anchor" href="#run" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run</h2>
 
 <h4>
-<a id="test" class="anchor" href="#test" aria-hidden="true"><span class="octicon octicon-link"></span></a>test</h4>
+<a id="demo" class="anchor" href="#demo" aria-hidden="true"><span class="octicon octicon-link"></span></a>demo</h4>
 
 <ul>
 <li>
 <p>For Linux</p>
 
 <ul>
-<li>Run the <code>./build/linux-run-test.sh</code>.</li>
+<li>Run the <code>./build/linux-run-demo.sh</code>.</li>
 </ul>
 </li>
+<li><p>For Windows
+coming soon</p></li>
 <li>
-<p>For Android</p>
+<p>For Android (in Linux)</p>
 
 <ul>
 <li>Call <code>./build/android-generate-release.sh</code> to build all static/shared libraries and generate <code>.apk</code> file.</li>
-<li>Call <code>adb install -r ./build/android/test/bin/test-release.apk</code> to install the test app to your android device.</li>
-<li>Copy all files/directories from <code>data/</code> to the <code>test/</code> of sd card in your android device.</li>
-<li>At last, run the <code>test</code> in android system.</li>
+<li>Call <code>adb install -r ./build/android/demo/bin/demo-release.apk</code> to install the demo app to your android device.</li>
+<li>Copy all files/directories from <code>data/</code> to the <code>demo/</code> of the sd card in your android device.</li>
+<li>At last, run the <code>demo</code> application in android system.</li>
 </ul>
 </li>
 </ul>
@@ -135,19 +142,27 @@
 <a id="editor" class="anchor" href="#editor" aria-hidden="true"><span class="octicon octicon-link"></span></a>editor</h4>
 
 <ul>
-<li>For Linux
+<li>
+<p>For Linux</p>
 
 <ul>
 <li>Just run the <code>./build/linux-run-editor.sh</code>.</li>
-<li>In the editor, open the <code>data/</code> directory by top-menu item - <code>Potato/Open</code> or Ctrl+O, then will load a test scene.</li>
+<li>In the editor, open the <code>data/</code> directory by top-menu item - <code>Potato/Open</code> or Ctrl+O, then will load a demo scene.</li>
 </ul>
 </li>
+<li><p>For Windows
+coming soon</p></li>
 </ul>
 
 <h2>
 <a id="log--next" class="anchor" href="#log--next" aria-hidden="true"><span class="octicon octicon-link"></span></a>Log &amp; Next</h2>
 
 <p>Please see <a href="https://trello.com/code4game/" title="Plan">Trello</a>.</p>
+
+<h2>
+<a id="license-mit" class="anchor" href="#license-mit" aria-hidden="true"><span class="octicon octicon-link"></span></a>License (MIT)</h2>
+
+<p>Please see the <code>LICENSE</code> file in detail.</p>
       </section>
 
     </div>
