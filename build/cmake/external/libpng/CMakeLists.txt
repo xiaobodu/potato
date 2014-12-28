@@ -7,7 +7,7 @@ find_package(ZLIB REQUIRED)
 
 set(CODE_PATH_libpng ${CODE_PATH_external}/libpng)
 
-if(OS_IS_LINUX)
+if(OS_IS_LINUX OR OS_IS_DARWIN)
 set(INC_PATH_LIST
   ${CODE_PATH_libpng}
   )

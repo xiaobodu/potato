@@ -43,7 +43,7 @@ set(SRC_FILE_LIST_base
   ${SRC_PATH_potato}/utility/sharedlibrary.cpp
   )
   
-if(OS_IS_LINUX)
+if(OS_IS_LINUX OR OS_IS_DARWIN)
 set(SRC_FILE_LIST
   ${SRC_FILE_LIST_base}
   )
@@ -72,7 +72,7 @@ add_library(scene SHARED
   ${SRC_FILE_LIST_other}
   )
 
-if(OS_IS_LINUX)
+if(OS_IS_LINUX OR OS_IS_DARWIN)
 set(LINK_FILE_LIST
   dl
   )

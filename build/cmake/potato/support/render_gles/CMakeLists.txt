@@ -28,7 +28,7 @@ set(SRC_FILE_LIST_base
   ${SRC_PATH_render}/blend.cpp
   )
   
-if(OS_IS_LINUX)
+if(OS_IS_LINUX OR OS_IS_DARWIN)
 set(SRC_FILE_LIST
   ${SRC_FILE_LIST_base}
   )
@@ -59,7 +59,7 @@ add_library(render SHARED
   ${SRC_FILE_LIST_other}
   )
 
-if(OS_IS_LINUX)
+if(OS_IS_LINUX OR OS_IS_DARWIN)
 set(LINK_FILE_LIST
   GLESv1_CM
   )

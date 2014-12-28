@@ -21,7 +21,7 @@ set(tinycc_src_core
   ${CODE_PATH_tinycc}/x86_64-asm.h
 )
 
-if(OS_IS_LINUX)
+if(OS_IS_LINUX OR OS_IS_DARWIN)
   set(tinycc_sources
     ${tinycc_src_core}
   )

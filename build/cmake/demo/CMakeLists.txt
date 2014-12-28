@@ -28,7 +28,7 @@ add_definitions(-DAPP_NAME="demo")
 
 add_executable(demo ${CODE_FILE_LIST})
 
-if(OS_IS_LINUX)
+if(OS_IS_LINUX OR OS_IS_DARWIN)
 set(LINK_FILE_LIST
   potato
   dl

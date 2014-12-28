@@ -24,7 +24,7 @@ set(SRC_FILE_LIST_base
   ${SRC_PATH_potato}/utility/log.h
   )
   
-if(OS_IS_LINUX)
+if(OS_IS_LINUX OR OS_IS_DARWIN)
 set(SRC_FILE_LIST
   ${SRC_FILE_LIST_base}
   )
@@ -45,7 +45,7 @@ add_definitions(-DC4G_API_EXPORT)
 
 add_library(flash SHARED ${SRC_FILE_LIST})
 
-if(OS_IS_LINUX)
+if(OS_IS_LINUX OR OS_IS_DARWIN)
 set(LINK_FILE_LIST
   dl
   )
