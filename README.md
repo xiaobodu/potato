@@ -1,7 +1,7 @@
 potato
 ======
 
-a light weight mobile game engine. It belongs to [Code4Game][].
+a light weight mobile game engine.
 
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/code4game/potato?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -34,20 +34,25 @@ Build
 
 ### Ready
 
-Please install [Git][], [CMake][], and [Qt][].
+Please install [Git][], [CMake][], and [Qt5][].
 
 
 ### Linux
 
-* Into `build` directory.
-* Run `linux-ready.sh`. (Initialize and update submodule)
-* Run `linux-config.sh` (Create Makefile by CMake)
-* Run `linux-make.sh` (Build all projects include static/shared library, third library, demo)
+* Into `./build` directory.
+* Run `./linux-ready.sh`. (Initialize and Update submodule)
+* Run `./linux-config.sh` + `DEBUG` or `RELEASE` (Configure the project and Create Makefile by CMake)
+* Run `./linux-make.sh` (Build all projects include static/shared library, third library, demo)
+
+
+### Windows
+
+coming soon
 
 
 ### Android (in Linux)
 * Need two environment variables - ANDROID_HOME and NDK_HOME
-* Run `android-make-release.sh` (Build all projects include some static/shared libraries, some third libraries, and `demo`)
+* Run `./build/android-make-release.sh` (Build all projects include some static/shared libraries, some third libraries, and `demo`)
 
 
 Run
@@ -59,11 +64,15 @@ Run
   * Run the `./build/linux-run-demo.sh`.
 
 
-- For Android
+- For Windows
+  coming soon
+
+
+- For Android (in Linux)
   * Call `./build/android-generate-release.sh` to build all static/shared libraries and generate `.apk` file.
   * Call `adb install -r ./build/android/demo/bin/demo-release.apk` to install the demo app to your android device.
-  * Copy all files/directories from `data/` to the `demo/` of sd card in your android device.
-  * At last, run the `demo` in android system.
+  * Copy all files/directories from `data/` to the `demo/` of the sd card in your android device.
+  * At last, run the `demo` application in android system.
 
 
 #### editor
@@ -72,6 +81,9 @@ Run
   * Just run the `./build/linux-run-editor.sh`.
   * In the editor, open the `data/` directory by top-menu item - `Potato/Open` or Ctrl+O, then will load a demo scene.
 
+- For Windows
+  coming soon
+
 
 Log & Next
 ---
@@ -79,9 +91,15 @@ Log & Next
 Please see [Trello][].
 
 
+License (MIT)
+---
+
+Please see the `LICENSE` file in detail.
+
+
 [CMake]: http://cmake.org/ "CMake"
 [Git]: http://git-scm.com/ "Git"
-[Qt]: http://qt-project.org/ "Qt"
-[Code4Game]: http://c4g.io/ "Code 4 Game"
+[Qt5]: http://qt-project.org/ "Qt5"
+[code4game]: http://c4g.io/ "code 4 game"
 [LOG.md]: https://github.com/code4game/potato/blob/master/LOG.md "Log"
 [Trello]: https://trello.com/code4game/ "Plan"
