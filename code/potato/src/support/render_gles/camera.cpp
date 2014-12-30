@@ -170,7 +170,7 @@ namespace gles {
       float b = m_iHeight * -0.5f; float t = -b;
       float f = m_fFar; float n = m_fNear;
 
-      /*m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 0)] = 2.0f / (r - l);
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 0)] = 2.0f / (r - l);
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 1)] = 0.0f;
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 2)] = 0.0f;
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 3)] = -1.0f * (r + l) / (r - l);
@@ -188,27 +188,7 @@ namespace gles {
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 0)] = 0.0f;
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 1)] = 0.0f;
       m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 2)] = 0.0f;
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 3)] = 1.0f;*/
-
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 0)] = -2.0f * n / (r - l);
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 1)] = 0.0f;
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 2)] = (r + l) / (r - l);
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 0, 3)] = 0.0f;
-
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 1, 0)] = 0.0f;
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 1, 1)] = -2.0f * n / (t - b);
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 1, 2)] = (t + b) / (t - b);
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 1, 3)] = 0.0f;
-
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 0)] = 0.0f;
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 1)] = 0.0f;
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 2)] = (n + f) / (n - f);
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 2, 3)] = -2.0f * n * f / (n - f);
-
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 0)] = 0.0f;
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 1)] = 0.0f;
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 2)] = -1.0f;
-      m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 3)] = 0.0f;
+      m_m4x4Proj[C4G_MATRIX_INDEX(4, 3, 3)] = 1.0f;
     }
     /// calculate the perspective project matrix
     else if (m_eType == EProjectType_Perspective)
